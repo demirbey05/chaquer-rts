@@ -23,8 +23,9 @@ bytes32 constant CastleOwnableTableId = _tableId;
 library CastleOwnable {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](1);
+    SchemaType[] memory _schema = new SchemaType[](2);
     _schema[0] = SchemaType.ADDRESS;
+    _schema[1] = SchemaType.UINT256;
 
     return SchemaLib.encode(_schema);
   }
@@ -38,8 +39,9 @@ library CastleOwnable {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](1);
-    _fieldNames[0] = "value";
+    string[] memory _fieldNames = new string[](2);
+    _fieldNames[0] = "owner";
+    _fieldNames[1] = "gameID";
     return ("CastleOwnable", _fieldNames);
   }
 
@@ -65,8 +67,8 @@ library CastleOwnable {
     _store.setMetadata(_tableId, _tableName, _fieldNames);
   }
 
-  /** Get value */
-  function get(bytes32 key) internal view returns (address value) {
+  /** Get owner */
+  function getOwner(bytes32 key) internal view returns (address owner) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
@@ -74,8 +76,8 @@ library CastleOwnable {
     return (address(Bytes.slice20(_blob, 0)));
   }
 
-  /** Get value (using the specified store) */
-  function get(IStore _store, bytes32 key) internal view returns (address value) {
+  /** Get owner (using the specified store) */
+  function getOwner(IStore _store, bytes32 key) internal view returns (address owner) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
@@ -83,25 +85,104 @@ library CastleOwnable {
     return (address(Bytes.slice20(_blob, 0)));
   }
 
-  /** Set value */
-  function set(bytes32 key, address value) internal {
+  /** Set owner */
+  function setOwner(bytes32 key, address owner) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((value)));
+    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((owner)));
   }
 
-  /** Set value (using the specified store) */
-  function set(IStore _store, bytes32 key, address value) internal {
+  /** Set owner (using the specified store) */
+  function setOwner(IStore _store, bytes32 key, address owner) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((value)));
+    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((owner)));
+  }
+
+  /** Get gameID */
+  function getGameID(bytes32 key) internal view returns (uint256 gameID) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
+    return (uint256(Bytes.slice32(_blob, 0)));
+  }
+
+  /** Get gameID (using the specified store) */
+  function getGameID(IStore _store, bytes32 key) internal view returns (uint256 gameID) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
+    return (uint256(Bytes.slice32(_blob, 0)));
+  }
+
+  /** Set gameID */
+  function setGameID(bytes32 key, uint256 gameID) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((gameID)));
+  }
+
+  /** Set gameID (using the specified store) */
+  function setGameID(IStore _store, bytes32 key, uint256 gameID) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((gameID)));
+  }
+
+  /** Get the full data */
+  function get(bytes32 key) internal view returns (address owner, uint256 gameID) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = StoreSwitch.getRecord(_tableId, _keyTuple, getSchema());
+    return decode(_blob);
+  }
+
+  /** Get the full data (using the specified store) */
+  function get(IStore _store, bytes32 key) internal view returns (address owner, uint256 gameID) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = _store.getRecord(_tableId, _keyTuple, getSchema());
+    return decode(_blob);
+  }
+
+  /** Set the full data using individual values */
+  function set(bytes32 key, address owner, uint256 gameID) internal {
+    bytes memory _data = encode(owner, gameID);
+
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.setRecord(_tableId, _keyTuple, _data);
+  }
+
+  /** Set the full data using individual values (using the specified store) */
+  function set(IStore _store, bytes32 key, address owner, uint256 gameID) internal {
+    bytes memory _data = encode(owner, gameID);
+
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.setRecord(_tableId, _keyTuple, _data);
+  }
+
+  /** Decode the tightly packed blob using this table's schema */
+  function decode(bytes memory _blob) internal pure returns (address owner, uint256 gameID) {
+    owner = (address(Bytes.slice20(_blob, 0)));
+
+    gameID = (uint256(Bytes.slice32(_blob, 20)));
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(address value) internal view returns (bytes memory) {
-    return abi.encodePacked(value);
+  function encode(address owner, uint256 gameID) internal view returns (bytes memory) {
+    return abi.encodePacked(owner, gameID);
   }
 
   /** Encode keys as a bytes32 array using this table's schema */

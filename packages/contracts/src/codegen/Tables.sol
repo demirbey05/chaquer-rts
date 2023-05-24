@@ -7,4 +7,4 @@ import { ArmyConfig, ArmyConfigData, ArmyConfigTableId } from "./tables/ArmyConf
 import { ArmyOwnable, ArmyOwnableTableId } from "./tables/ArmyOwnable.sol";
 import { CastleOwnable, CastleOwnableTableId } from "./tables/CastleOwnable.sol";
 import { MapConfig, MapConfigTableId } from "./tables/MapConfig.sol";
-import { Position, PositionData, PositionTableId } from "./tables/Position.sol";
+import { Position, PositionTableId } from "./tables/Position.sol";

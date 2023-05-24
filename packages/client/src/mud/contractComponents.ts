@@ -13,6 +13,7 @@ export function defineContractComponents(world: World) {
           numSwordsman: RecsType.Number,
           numArcher: RecsType.Number,
           numCavalry: RecsType.Number,
+          gameID: RecsType.BigInt,
         },
         {
           metadata: {
@@ -27,7 +28,8 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
-          value: RecsType.String,
+          owner: RecsType.String,
+          gameID: RecsType.BigInt,
         },
         {
           metadata: {
@@ -42,7 +44,8 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
-          value: RecsType.String,
+          owner: RecsType.String,
+          gameID: RecsType.BigInt,
         },
         {
           metadata: {
@@ -76,6 +79,7 @@ export function defineContractComponents(world: World) {
         {
           x: RecsType.Number,
           y: RecsType.Number,
+          gameID: RecsType.BigInt,
         },
         {
           metadata: {

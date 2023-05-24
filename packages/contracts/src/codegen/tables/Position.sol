@@ -20,17 +20,13 @@ import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCou
 bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16(""), bytes16("Position")));
 bytes32 constant PositionTableId = _tableId;
 
-struct PositionData {
-  uint32 x;
-  uint32 y;
-}
-
 library Position {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](2);
+    SchemaType[] memory _schema = new SchemaType[](3);
     _schema[0] = SchemaType.UINT32;
     _schema[1] = SchemaType.UINT32;
+    _schema[2] = SchemaType.UINT256;
 
     return SchemaLib.encode(_schema);
   }
@@ -44,9 +40,10 @@ library Position {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](2);
+    string[] memory _fieldNames = new string[](3);
     _fieldNames[0] = "x";
     _fieldNames[1] = "y";
+    _fieldNames[2] = "gameID";
     return ("Position", _fieldNames);
   }
 
@@ -140,8 +137,42 @@ library Position {
     _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((y)));
   }
 
+  /** Get gameID */
+  function getGameID(bytes32 key) internal view returns (uint256 gameID) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
+    return (uint256(Bytes.slice32(_blob, 0)));
+  }
+
+  /** Get gameID (using the specified store) */
+  function getGameID(IStore _store, bytes32 key) internal view returns (uint256 gameID) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
+    return (uint256(Bytes.slice32(_blob, 0)));
+  }
+
+  /** Set gameID */
+  function setGameID(bytes32 key, uint256 gameID) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.setField(_tableId, _keyTuple, 2, abi.encodePacked((gameID)));
+  }
+
+  /** Set gameID (using the specified store) */
+  function setGameID(IStore _store, bytes32 key, uint256 gameID) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.setField(_tableId, _keyTuple, 2, abi.encodePacked((gameID)));
+  }
+
   /** Get the full data */
-  function get(bytes32 key) internal view returns (PositionData memory _table) {
+  function get(bytes32 key) internal view returns (uint32 x, uint32 y, uint256 gameID) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
@@ -150,7 +181,7 @@ library Position {
   }
 
   /** Get the full data (using the specified store) */
-  function get(IStore _store, bytes32 key) internal view returns (PositionData memory _table) {
+  function get(IStore _store, bytes32 key) internal view returns (uint32 x, uint32 y, uint256 gameID) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
@@ -159,8 +190,8 @@ library Position {
   }
 
   /** Set the full data using individual values */
-  function set(bytes32 key, uint32 x, uint32 y) internal {
-    bytes memory _data = encode(x, y);
+  function set(bytes32 key, uint32 x, uint32 y, uint256 gameID) internal {
+    bytes memory _data = encode(x, y, gameID);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
@@ -169,8 +200,8 @@ library Position {
   }
 
   /** Set the full data using individual values (using the specified store) */
-  function set(IStore _store, bytes32 key, uint32 x, uint32 y) internal {
-    bytes memory _data = encode(x, y);
+  function set(IStore _store, bytes32 key, uint32 x, uint32 y, uint256 gameID) internal {
+    bytes memory _data = encode(x, y, gameID);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
@@ -178,26 +209,18 @@ library Position {
     _store.setRecord(_tableId, _keyTuple, _data);
   }
 
-  /** Set the full data using the data struct */
-  function set(bytes32 key, PositionData memory _table) internal {
-    set(key, _table.x, _table.y);
-  }
-
-  /** Set the full data using the data struct (using the specified store) */
-  function set(IStore _store, bytes32 key, PositionData memory _table) internal {
-    set(_store, key, _table.x, _table.y);
-  }
-
   /** Decode the tightly packed blob using this table's schema */
-  function decode(bytes memory _blob) internal pure returns (PositionData memory _table) {
-    _table.x = (uint32(Bytes.slice4(_blob, 0)));
+  function decode(bytes memory _blob) internal pure returns (uint32 x, uint32 y, uint256 gameID) {
+    x = (uint32(Bytes.slice4(_blob, 0)));
 
-    _table.y = (uint32(Bytes.slice4(_blob, 4)));
+    y = (uint32(Bytes.slice4(_blob, 4)));
+
+    gameID = (uint256(Bytes.slice32(_blob, 8)));
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(uint32 x, uint32 y) internal view returns (bytes memory) {
-    return abi.encodePacked(x, y);
+  function encode(uint32 x, uint32 y, uint256 gameID) internal view returns (bytes memory) {
+    return abi.encodePacked(x, y, gameID);
   }
 
   /** Encode keys as a bytes32 array using this table's schema */

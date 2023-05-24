@@ -29,11 +29,16 @@ contract MapInitTest is MudV2Test {
 
   function testInitData() public {
     uint256 gameID = 1;
+    uint256 terrainLength = MapConfig.lengthTerrain(world,1);
+    assertEq(0, terrainLength);
     bytes memory map1 = bytes(vm.readFile("test/mock_data/full_data.txt"));
     world.initMapData(gameID,50,50,map1);
     (uint32 width, uint32 height, bytes memory terrainData) = MapConfig.get(world,gameID);
     assertEq(terrainData,map1);
     assertEq(width * height, map1.length);
+    terrainLength = MapConfig.lengthTerrain(world,1);
+    assertEq(50 * 50, terrainLength);
+
   }
 
   function testSecondInitRevert() public {

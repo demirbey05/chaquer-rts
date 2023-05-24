@@ -1,4 +1,5 @@
 import { mudConfig } from "@latticexyz/world/register";
+import { resolveTableId } from "@latticexyz/config";
 
 export default mudConfig({
   tables: {
@@ -7,11 +8,24 @@ export default mudConfig({
         numSwordsman: "uint32",
         numArcher: "uint32",
         numCavalry: "uint32",
+        gameID: "uint256",
       },
       dataStruct: true,
     },
-    ArmyOwnable: "address",
-    CastleOwnable: "address",
+    ArmyOwnable: {
+      schema: {
+        owner: "address",
+        gameID: "uint256",
+      },
+      dataStruct: false,
+    },
+    CastleOwnable: {
+      schema: {
+        owner: "address",
+        gameID: "uint256",
+      },
+      dataStruct: false,
+    },
     MapConfig: {
       keySchema: {
         gameID: "uint256",
@@ -27,8 +41,26 @@ export default mudConfig({
       schema: {
         x: "uint32",
         y: "uint32",
+        gameID: "uint256",
       },
-      dataStruct: true,
+      dataStruct: false,
     },
   },
+  modules: [
+    {
+      name: "KeysWithValueModule",
+      root: true,
+      args: [resolveTableId("Position")],
+    },
+    {
+      name: "KeysWithValueModule",
+      root: true,
+      args: [resolveTableId("CastleOwnable")],
+    },
+    {
+      name: "KeysWithValueModule",
+      root: true,
+      args: [resolveTableId("ArmyOwnable")],
+    },
+  ],
 });

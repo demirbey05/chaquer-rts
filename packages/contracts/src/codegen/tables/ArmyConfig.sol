@@ -24,15 +24,17 @@ struct ArmyConfigData {
   uint32 numSwordsman;
   uint32 numArcher;
   uint32 numCavalry;
+  uint256 gameID;
 }
 
 library ArmyConfig {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](3);
+    SchemaType[] memory _schema = new SchemaType[](4);
     _schema[0] = SchemaType.UINT32;
     _schema[1] = SchemaType.UINT32;
     _schema[2] = SchemaType.UINT32;
+    _schema[3] = SchemaType.UINT256;
 
     return SchemaLib.encode(_schema);
   }
@@ -46,10 +48,11 @@ library ArmyConfig {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](3);
+    string[] memory _fieldNames = new string[](4);
     _fieldNames[0] = "numSwordsman";
     _fieldNames[1] = "numArcher";
     _fieldNames[2] = "numCavalry";
+    _fieldNames[3] = "gameID";
     return ("ArmyConfig", _fieldNames);
   }
 
@@ -177,6 +180,40 @@ library ArmyConfig {
     _store.setField(_tableId, _keyTuple, 2, abi.encodePacked((numCavalry)));
   }
 
+  /** Get gameID */
+  function getGameID(bytes32 key) internal view returns (uint256 gameID) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 3);
+    return (uint256(Bytes.slice32(_blob, 0)));
+  }
+
+  /** Get gameID (using the specified store) */
+  function getGameID(IStore _store, bytes32 key) internal view returns (uint256 gameID) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 3);
+    return (uint256(Bytes.slice32(_blob, 0)));
+  }
+
+  /** Set gameID */
+  function setGameID(bytes32 key, uint256 gameID) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.setField(_tableId, _keyTuple, 3, abi.encodePacked((gameID)));
+  }
+
+  /** Set gameID (using the specified store) */
+  function setGameID(IStore _store, bytes32 key, uint256 gameID) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.setField(_tableId, _keyTuple, 3, abi.encodePacked((gameID)));
+  }
+
   /** Get the full data */
   function get(bytes32 key) internal view returns (ArmyConfigData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
@@ -196,8 +233,8 @@ library ArmyConfig {
   }
 
   /** Set the full data using individual values */
-  function set(bytes32 key, uint32 numSwordsman, uint32 numArcher, uint32 numCavalry) internal {
-    bytes memory _data = encode(numSwordsman, numArcher, numCavalry);
+  function set(bytes32 key, uint32 numSwordsman, uint32 numArcher, uint32 numCavalry, uint256 gameID) internal {
+    bytes memory _data = encode(numSwordsman, numArcher, numCavalry, gameID);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
@@ -206,8 +243,15 @@ library ArmyConfig {
   }
 
   /** Set the full data using individual values (using the specified store) */
-  function set(IStore _store, bytes32 key, uint32 numSwordsman, uint32 numArcher, uint32 numCavalry) internal {
-    bytes memory _data = encode(numSwordsman, numArcher, numCavalry);
+  function set(
+    IStore _store,
+    bytes32 key,
+    uint32 numSwordsman,
+    uint32 numArcher,
+    uint32 numCavalry,
+    uint256 gameID
+  ) internal {
+    bytes memory _data = encode(numSwordsman, numArcher, numCavalry, gameID);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
@@ -217,12 +261,12 @@ library ArmyConfig {
 
   /** Set the full data using the data struct */
   function set(bytes32 key, ArmyConfigData memory _table) internal {
-    set(key, _table.numSwordsman, _table.numArcher, _table.numCavalry);
+    set(key, _table.numSwordsman, _table.numArcher, _table.numCavalry, _table.gameID);
   }
 
   /** Set the full data using the data struct (using the specified store) */
   function set(IStore _store, bytes32 key, ArmyConfigData memory _table) internal {
-    set(_store, key, _table.numSwordsman, _table.numArcher, _table.numCavalry);
+    set(_store, key, _table.numSwordsman, _table.numArcher, _table.numCavalry, _table.gameID);
   }
 
   /** Decode the tightly packed blob using this table's schema */
@@ -232,11 +276,18 @@ library ArmyConfig {
     _table.numArcher = (uint32(Bytes.slice4(_blob, 4)));
 
     _table.numCavalry = (uint32(Bytes.slice4(_blob, 8)));
+
+    _table.gameID = (uint256(Bytes.slice32(_blob, 12)));
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(uint32 numSwordsman, uint32 numArcher, uint32 numCavalry) internal view returns (bytes memory) {
-    return abi.encodePacked(numSwordsman, numArcher, numCavalry);
+  function encode(
+    uint32 numSwordsman,
+    uint32 numArcher,
+    uint32 numCavalry,
+    uint256 gameID
+  ) internal view returns (bytes memory) {
+    return abi.encodePacked(numSwordsman, numArcher, numCavalry, gameID);
   }
 
   /** Encode keys as a bytes32 array using this table's schema */
