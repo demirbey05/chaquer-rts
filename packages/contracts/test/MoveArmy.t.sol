@@ -24,50 +24,38 @@ contract MoveArmyTest is NakamoTest {
         assertEq(y,2);
     }
     function testMoveAnotherArmy() public {
-    vm.startPrank(alice);
-    settleSystem.executeTyped(38, 40);
-    armySettle.execute(abi.encode(37, 40, 33, 33, 34));
-    vm.stopPrank();
-    vm.startPrank(bob);
-    uint256 foreignArmy = armyOwnable.getEntitiesWithValue(alice)[0];
+    bytes32 armyID = TestUtils.settleArmy(world,36,1,33,33,33,user1,1);
     vm.expectRevert(MoveArmy__NoAuthorized.selector);
-    moveArmy.execute(abi.encode(foreignArmy, 38, 40));
-    vm.stopPrank();
-  }
+    TestUtils.moveArmy(world,armyID,38,2,user2,1);
+
+    } 
+    function testWrongGameIDArmy() public {
+    bytes32 armyID = TestUtils.settleArmy(world,36,1,33,33,33,user1,1);
+    vm.expectRevert(MoveArmy__NoAuthorized.selector);
+    TestUtils.moveArmy(world,armyID,38,2,user1,2);
+
+    } 
 
     function testMoveTooFar() public {
-    vm.startPrank(alice);
-    settleSystem.executeTyped(38, 40);
-    armySettle.execute(abi.encode(37, 40, 33, 33, 34));
-    uint256 armyID = armyOwnable.getEntitiesWithValue(alice)[0];
+    bytes32 armyID = TestUtils.settleArmy(world,36,1,33,33,33,user1,1);
     vm.expectRevert(MoveArmy__TooFar.selector);
-    moveArmy.execute(abi.encode(armyID, 41, 40));
-    vm.stopPrank();
+    TestUtils.moveArmy(world,armyID,31,2,user1,1);
+
     }
 
   function testTileIsNotEmpty() public {
-    vm.startPrank(alice);
-    settleSystem.executeTyped(38, 40);
-    armySettle.execute(abi.encode(37, 40, 33, 33, 34));
-    uint256 armyID = armyOwnable.getEntitiesWithValue(alice)[0];
+    bytes32 armyID = TestUtils.settleArmy(world,36,1,33,33,33,user1,1);
     vm.expectRevert(MoveArmy__TileIsNotEmpty.selector);
-    moveArmy.execute(abi.encode(armyID, 38, 40));
-    vm.stopPrank();
+    TestUtils.moveArmy(world,armyID,35,1,user1,1);
+
    }
 
   function testTileIsNotEmptyArmy() public {
-    vm.startPrank(alice);
-    settleSystem.executeTyped(38, 40);
-    armySettle.execute(abi.encode(37, 40, 33, 33, 34));
-    vm.stopPrank();
-    vm.startPrank(bob);
-    settleSystem.executeTyped(39, 40);
-    armySettle.execute(abi.encode(38, 41, 33, 33, 34));
-    uint256 armyID = armyOwnable.getEntitiesWithValue(bob)[0];
+    bytes32 armyID = TestUtils.settleArmy(world,36,1,33,33,33,user1,1);
+    TestUtils.settleCastle(world,38,1,1,user2);
+    bytes32 armyIDTwo = TestUtils.settleArmy(world,37,1,33,33,33,user2,1);
     vm.expectRevert(MoveArmy__TileIsNotEmpty.selector);
-    moveArmy.execute(abi.encode(armyID, 37, 40));
-
-    vm.stopPrank();
+    TestUtils.moveArmy(world,armyIDTwo,36,1,user2,1);
   }
 
 

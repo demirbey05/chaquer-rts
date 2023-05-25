@@ -89,5 +89,38 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    CastleSiegeResult: (() => {
+      const tableId = new TableId("", "CastleSiegeResul");
+      return defineComponent(
+        world,
+        {
+          winner: RecsType.String,
+          loser: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    BattleResult: (() => {
+      const tableId = new TableId("", "BattleResult");
+      return defineComponent(
+        world,
+        {
+          winner: RecsType.String,
+          loser: RecsType.String,
+          isDraw: RecsType.Boolean,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
   };
 }

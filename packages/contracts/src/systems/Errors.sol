@@ -31,3 +31,10 @@ error MoveArmy__NoAuthorized();
 error MoveArmy__TooFar();
 error MoveArmy__TileIsNotEmpty();
 error MoveArmy__WrongTerrainType();
+
+//Attack System Errors
+error AttackSystem__ArmyNotBelongYou();
+error AttackSystem__TooAwayToAttack();
+error AttackSystem__NoArmy();
+error AttackSystem__NoFriendFire();
+error AttackSystem__WrongGameID();

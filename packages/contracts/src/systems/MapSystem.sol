@@ -3,7 +3,6 @@ pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import {MapConfig,Position,PositionTableId,CastleOwnable,ArmyOwnable,ArmyConfig,ArmyConfigData} from "../codegen/Tables.sol";
-import { query, QueryFragment, QueryType } from "@latticexyz/world/src/modules/keysintable/query.sol";
 import {LibQueries} from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import {LibMath} from "../libraries/LibMath.sol";

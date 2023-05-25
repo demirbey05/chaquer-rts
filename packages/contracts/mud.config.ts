@@ -45,6 +45,21 @@ export default mudConfig({
       },
       dataStruct: false,
     },
+    CastleSiegeResult:{
+      schema:{
+        winner:"address",
+        loser:"address"
+      },
+      ephemeral:true,
+    },
+    BattleResult:{
+      schema:{
+        winner:"address",
+        loser:"address",
+        isDraw:"bool",
+      },
+      ephemeral:true
+    }
   },
   modules: [
     {
@@ -62,5 +77,10 @@ export default mudConfig({
       root: true,
       args: [resolveTableId("ArmyOwnable")],
     },
+    {
+      name: "KeysInTableModule",
+      root: true,
+      args: [resolveTableId("ArmyOwnable")],
+    }
   ],
 });

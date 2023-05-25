@@ -1,0 +1,76 @@
+//SPDX-License-Identifier:MIT
+pragma solidity ^0.8.0;
+
+import { System } from "@latticexyz/world/src/System.sol";
+import "./Errors.sol";
+import { ArmyOwnable ,BattleResult,ArmyOwnable,Position,ArmyConfig,ArmyConfigData} from "../codegen/Tables.sol";
+import { LibMath, LibAttack, BattleScore } from "../libraries/Libraries.sol";
+
+contract AttackCaptureSystem is System {
+  function attackToArmy(
+    bytes32 armyOne,
+    bytes32 armyTwo,
+    uint256 gameID
+  ) public returns (uint256){
+    (address owner, uint256 gameIDArmy) = ArmyOwnable.get(armyOne);
+    (address ownerTwo, uint256 gameIDArmyTwo) = ArmyOwnable.get(armyTwo);
+    ArmyConfigData memory  armyOneConfig = ArmyConfig.get(armyOne);
+    ArmyConfigData memory  armyTwoConfig = ArmyConfig.get(armyTwo);
+    address sender = _msgSender();
+
+    if ((owner != sender) || (gameIDArmy != gameID)) {
+      revert AttackSystem__ArmyNotBelongYou();
+    }
+    if (gameID != gameIDArmyTwo) {
+      revert AttackSystem__WrongGameID();
+    }
+    if (LibMath.distanceBetween(armyOne, armyTwo) > 3) {
+      revert AttackSystem__TooAwayToAttack();
+    }
+    if (owner == ownerTwo) {
+      revert AttackSystem__NoFriendFire();
+    }
+
+    BattleScore memory battleScore = LibAttack.calculateBattleScores(armyOneConfig, armyTwoConfig);
+
+    if (battleScore.scoreArmyOne > battleScore.scoreArmyTwo) {
+      ArmyConfig.deleteRecord(armyTwo);
+      ArmyOwnable.deleteRecord(armyTwo);
+      Position.deleteRecord(armyTwo);
+
+      ArmyConfigData memory newConfig = ArmyConfigData(
+        armyOneConfig.numSwordsman >> 1,
+        armyOneConfig.numArcher >> 1,
+        armyOneConfig.numCavalry >> 1,
+        gameID
+      );
+      ArmyConfig.set(armyOne, newConfig);
+
+      BattleResult.emitEphemeral(keccak256(abi.encodePacked(block.timestamp,armyTwo,armyOne,battleScore.scoreArmyTwo)),owner,ownerTwo,false);
+      return 1;
+    } else if (battleScore.scoreArmyOne < battleScore.scoreArmyTwo) {
+      ArmyConfig.deleteRecord(armyOne);
+      ArmyOwnable.deleteRecord(armyOne);
+      Position.deleteRecord(armyOne);
+
+      ArmyConfigData memory newConfig = ArmyConfigData(
+        armyTwoConfig.numSwordsman >> 1,
+        armyTwoConfig.numArcher >> 1,
+        armyTwoConfig.numCavalry >> 1,
+        gameID
+      );
+      ArmyConfig.set(armyTwo, newConfig);
+      BattleResult.emitEphemeral(keccak256(abi.encodePacked(block.timestamp,armyTwo,armyOne,battleScore.scoreArmyTwo)),ownerTwo,owner,false);
+      return 2;
+    } else {
+      ArmyConfig.deleteRecord(armyTwo);
+      ArmyOwnable.deleteRecord(armyTwo);
+      Position.deleteRecord(armyTwo);
+      ArmyConfig.deleteRecord(armyOne);
+      ArmyOwnable.deleteRecord(armyOne);
+      Position.deleteRecord(armyOne);
+      BattleResult.emitEphemeral(keccak256(abi.encodePacked(block.timestamp,armyTwo,armyOne,battleScore.scoreArmyTwo)),ownerTwo,owner,true);
+      return 0;
+    }
+  }
+}

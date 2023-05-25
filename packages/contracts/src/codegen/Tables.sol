@@ -8,3 +8,5 @@ import { ArmyOwnable, ArmyOwnableTableId } from "./tables/ArmyOwnable.sol";
 import { CastleOwnable, CastleOwnableTableId } from "./tables/CastleOwnable.sol";
 import { MapConfig, MapConfigTableId } from "./tables/MapConfig.sol";
 import { Position, PositionTableId } from "./tables/Position.sol";
+import { CastleSiegeResult, CastleSiegeResultData, CastleSiegeResultTableId } from "./tables/CastleSiegeResult.sol";
+import { BattleResult, BattleResultData, BattleResultTableId } from "./tables/BattleResult.sol";
