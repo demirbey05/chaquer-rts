@@ -23,14 +23,16 @@ bytes32 constant CastleSiegeResultTableId = _tableId;
 struct CastleSiegeResultData {
   address winner;
   address loser;
+  bool isDraw;
 }
 
 library CastleSiegeResult {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](2);
+    SchemaType[] memory _schema = new SchemaType[](3);
     _schema[0] = SchemaType.ADDRESS;
     _schema[1] = SchemaType.ADDRESS;
+    _schema[2] = SchemaType.BOOL;
 
     return SchemaLib.encode(_schema);
   }
@@ -44,9 +46,10 @@ library CastleSiegeResult {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](2);
+    string[] memory _fieldNames = new string[](3);
     _fieldNames[0] = "winner";
     _fieldNames[1] = "loser";
+    _fieldNames[2] = "isDraw";
     return ("CastleSiegeResult", _fieldNames);
   }
 
@@ -73,8 +76,8 @@ library CastleSiegeResult {
   }
 
   /** Emit the ephemeral event using individual values */
-  function emitEphemeral(bytes32 key, address winner, address loser) internal {
-    bytes memory _data = encode(winner, loser);
+  function emitEphemeral(bytes32 key, address winner, address loser, bool isDraw) internal {
+    bytes memory _data = encode(winner, loser, isDraw);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
@@ -83,8 +86,8 @@ library CastleSiegeResult {
   }
 
   /** Emit the ephemeral event using individual values (using the specified store) */
-  function emitEphemeral(IStore _store, bytes32 key, address winner, address loser) internal {
-    bytes memory _data = encode(winner, loser);
+  function emitEphemeral(IStore _store, bytes32 key, address winner, address loser, bool isDraw) internal {
+    bytes memory _data = encode(winner, loser, isDraw);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
@@ -94,22 +97,28 @@ library CastleSiegeResult {
 
   /** Emit the ephemeral event using the data struct */
   function emitEphemeral(bytes32 key, CastleSiegeResultData memory _table) internal {
-    emitEphemeral(key, _table.winner, _table.loser);
+    emitEphemeral(key, _table.winner, _table.loser, _table.isDraw);
   }
 
   /** Emit the ephemeral event using the data struct (using the specified store) */
   function emitEphemeral(IStore _store, bytes32 key, CastleSiegeResultData memory _table) internal {
-    emitEphemeral(_store, key, _table.winner, _table.loser);
+    emitEphemeral(_store, key, _table.winner, _table.loser, _table.isDraw);
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(address winner, address loser) internal view returns (bytes memory) {
-    return abi.encodePacked(winner, loser);
+  function encode(address winner, address loser, bool isDraw) internal view returns (bytes memory) {
+    return abi.encodePacked(winner, loser, isDraw);
   }
 
   /** Encode keys as a bytes32 array using this table's schema */
   function encodeKeyTuple(bytes32 key) internal pure returns (bytes32[] memory _keyTuple) {
     _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
+  }
+}
+
+function _toBool(uint8 value) pure returns (bool result) {
+  assembly {
+    result := value
   }
 }

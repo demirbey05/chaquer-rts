@@ -38,3 +38,10 @@ error AttackSystem__TooAwayToAttack();
 error AttackSystem__NoArmy();
 error AttackSystem__NoFriendFire();
 error AttackSystem__WrongGameID();
+
+
+//Capture System Errors 
+error CaptureSystem__TooFarToAttack();
+error CaptureSystem__NoAuthorization();
+error CaptureSystem__FriendFireNotAllowed();
+error CaptureSystem__NonMatchedGameID();

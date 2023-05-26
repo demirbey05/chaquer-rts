@@ -2,7 +2,12 @@
 
 pragma solidity ^0.8.0;
 import { BattleResult, RemainingData } from "./Types.sol";
+import "./Libraries.sol";
+import {CastleOwnable,Position} from "../codegen/Tables.sol";
+import { IStore } from "@latticexyz/store/src/IStore.sol";
+
 error ErrorInCalculatingBattleScores();
+
 
 
 function findRemainings(BattleResult memory result) pure returns (RemainingData memory remainings) {
@@ -84,4 +89,25 @@ function calculateArmyScore(BattleResult memory battleResult, RemainingData memo
   } else {
     result = -100;
   }
+}
+
+library LibUtils{
+  function findSurroundingArmies(IStore world,bytes32 castleID, uint256 gameID) internal view  returns (bytes32[] memory){
+
+    address owner = CastleOwnable.getOwner(castleID);
+    
+    bytes32[] memory allArmies = LibQueries.getOwnedArmyIDs( world, owner, gameID);
+    bytes32[] memory ownerArmiesSurroundCastle = new bytes32[](allArmies.length);
+    (uint32 xCastle,uint32 yCastle,) = Position.get(castleID);
+    uint current = 0;
+    for (uint i = 0; i < allArmies.length; i++) {
+      (uint32 xArmy,uint32 yArmy, ) = Position.get(allArmies[i]);
+      if (LibMath.manhattan(xCastle,yCastle,xArmy,yArmy) <= 3) {
+        ownerArmiesSurroundCastle[current] = allArmies[i];
+        current++;
+      }
+    }
+    return ownerArmiesSurroundCastle;
+  }
+
 }

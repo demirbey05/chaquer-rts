@@ -30,4 +30,10 @@ library LibQueries {
         bytes32[] memory entities = getKeysWithValue(world,ArmyOwnableTableId, ArmyOwnable.encode(ownerCandidate,gameID));
         return entities.length;
     }
+    function getOwnedArmyIDs(IStore world,address owner,uint256 gameID) internal view returns (bytes32[] memory){
+        bytes32[] memory entities= getKeysWithValue(world,ArmyOwnableTableId, ArmyOwnable.encode(owner,gameID));
+        return entities;
+
+
+    }
 }

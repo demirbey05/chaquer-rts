@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 import { IWorld } from "../../src/codegen/world/IWorld.sol";
-import {ArmyConfigData,PositionTableId,ArmyOwnableTableId} from "../../src/codegen/Tables.sol";
+import {ArmyOwnable,ArmyConfigData} from "../../src/codegen/Tables.sol";
 import {Vm} from "forge-std/Vm.sol";
 import { hasKey } from "@latticexyz/world/src/modules/keysintable/hasKey.sol";
 
@@ -55,9 +55,15 @@ library TestUtils {
         vm.stopPrank();
     }
     function isArmyExist(IWorld world,bytes32 armyID) internal returns(bool){
-        bytes32[] memory keyTuple = new bytes32[](1);
-        keyTuple[0] = armyID;
-        bool isPosition = hasKey(world, PlayerTableId, keyTuple);
+        address owner = ArmyOwnable.getOwner(world,armyID);
 
+        return owner != address(0);
+
+    }
+    function attackCastle(IWorld world,bytes32 armyOne,bytes32 castleID,address user)internal returns (uint256){
+        vm.startPrank(user);
+        uint256 result = world.captureCastle(armyOne,castleID);
+        vm.stopPrank();
+        return result;
     }
 }

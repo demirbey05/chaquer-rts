@@ -96,6 +96,7 @@ export function defineContractComponents(world: World) {
         {
           winner: RecsType.String,
           loser: RecsType.String,
+          isDraw: RecsType.Boolean,
         },
         {
           metadata: {

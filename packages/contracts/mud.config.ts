@@ -48,7 +48,8 @@ export default mudConfig({
     CastleSiegeResult:{
       schema:{
         winner:"address",
-        loser:"address"
+        loser:"address",
+        isDraw:"bool"
       },
       ephemeral:true,
     },
