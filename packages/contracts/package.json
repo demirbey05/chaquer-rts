@@ -29,7 +29,8 @@
     "@latticexyz/std-contracts": "2.0.0-alpha.1.197",
     "@latticexyz/store": "2.0.0-alpha.1.197",
     "@latticexyz/world": "2.0.0-alpha.1.197",
-    "ethers": "^5.7.2"
+    "ethers": "^5.7.2",
+    "snapsync": "link:@latticexyz/world/snapsync"
   },
   "devDependencies": {
     "@typechain/ethers-v5": "^10.2.0",

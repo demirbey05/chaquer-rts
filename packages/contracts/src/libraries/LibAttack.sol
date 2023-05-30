@@ -45,19 +45,16 @@ library LibAttack {
       defenderArmy.numArcher += currentArmy.numArcher;
       defenderArmy.numCavalry += currentArmy.numCavalry;
     }
-
-    
-
     BattleScore memory battleScore = calculateBattleScores(attackerArmy, defenderArmy);
 
     if (battleScore.scoreArmyOne > battleScore.scoreArmyTwo) {
-      for (uint i = 0; i < defenderArmies.length; i++) {
+      for (uint i = 0; i < defenderArmies.length; i++) {        
         if (defenderArmies[i] == bytes32(0)) {
           continue;
         }
-        ArmyOwnable.deleteRecord(defenderArmies[i]);
         ArmyConfig.deleteRecord(defenderArmies[i]);
         Position.deleteRecord(defenderArmies[i]);
+        ArmyOwnable.deleteRecord(defenderArmies[i]);
       }
       ArmyConfigData memory newConfig = ArmyConfigData(
         attackerArmy.numSwordsman >> 1,

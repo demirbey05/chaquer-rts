@@ -1,6 +1,7 @@
 import { mudConfig } from "@latticexyz/world/register";
 import { resolveTableId } from "@latticexyz/config";
 
+
 export default mudConfig({
   tables: {
     ArmyConfig: {
@@ -78,10 +79,5 @@ export default mudConfig({
       root: true,
       args: [resolveTableId("ArmyOwnable")],
     },
-    {
-      name: "KeysInTableModule",
-      root: true,
-      args: [resolveTableId("ArmyOwnable")],
-    }
   ],
 });
