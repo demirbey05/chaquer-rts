@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 export function useCastlePositionByAddress(address: any) {
   const { components } = useMUD();
 
-  const castleEntity = useEntityQuery([HasValue(components.CastleOwnable, { value: address })]);
+  const castleEntity = useEntityQuery([HasValue(components.CastleOwnable, { owner: address })]);
 
   const [castlePositions, setCastlePositions] = useState<any>();
   const value = useObservableValue(components.CastleOwnable.update$);

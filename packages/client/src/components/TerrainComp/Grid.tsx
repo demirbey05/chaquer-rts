@@ -42,7 +42,6 @@ export function Grid(data: DataProp) {
   const columns = Array.from({ length: width }, (v, i) => i);
 
   const { components, systemCalls } = useMUD();
-  const { abiCoder } = useTerrain();
   const { setAttackFromArmyPosition,
     setAttackToArmyPosition,
     isAttackStage,

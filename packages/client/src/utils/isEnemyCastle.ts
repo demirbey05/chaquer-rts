@@ -1,3 +1,5 @@
+import { stringifyWrapper } from "./stringifyWrapper";
+
 export const isEnemyCastle = (
   position: any,
   myCastlePosition: any[],
@@ -6,7 +8,7 @@ export const isEnemyCastle = (
   if (myCastlePosition && castlePositions) {
     const filteredArray = castlePositions.filter((element: any) =>
       myCastlePosition.every(
-        (pos) => JSON.stringify(pos) !== JSON.stringify(element)
+        (pos) => stringifyWrapper(pos) !== stringifyWrapper(element)
       )
     );
     return filteredArray.some(

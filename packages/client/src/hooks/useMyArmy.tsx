@@ -8,8 +8,9 @@ export function useMyArmy(address: any) {
 
   // Get Army entities
   const armyEntities = useEntityQuery([
-    HasValue(components.ArmyOwnable, { value: address }),
+    HasValue(components.ArmyOwnable, { owner: address }),
   ]);
+
 
   // Transform army positions and store in separate state
   const [armyPositions, setArmyPositions] = useState<any[]>([]);
