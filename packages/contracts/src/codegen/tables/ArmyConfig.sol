@@ -81,7 +81,7 @@ library ArmyConfig {
   /** Get numSwordsman */
   function getNumSwordsman(bytes32 key) internal view returns (uint32 numSwordsman) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
     return (uint32(Bytes.slice4(_blob, 0)));
@@ -90,7 +90,7 @@ library ArmyConfig {
   /** Get numSwordsman (using the specified store) */
   function getNumSwordsman(IStore _store, bytes32 key) internal view returns (uint32 numSwordsman) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
     return (uint32(Bytes.slice4(_blob, 0)));
@@ -99,7 +99,7 @@ library ArmyConfig {
   /** Set numSwordsman */
   function setNumSwordsman(bytes32 key, uint32 numSwordsman) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((numSwordsman)));
   }
@@ -107,7 +107,7 @@ library ArmyConfig {
   /** Set numSwordsman (using the specified store) */
   function setNumSwordsman(IStore _store, bytes32 key, uint32 numSwordsman) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((numSwordsman)));
   }
@@ -115,7 +115,7 @@ library ArmyConfig {
   /** Get numArcher */
   function getNumArcher(bytes32 key) internal view returns (uint32 numArcher) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
     return (uint32(Bytes.slice4(_blob, 0)));
@@ -124,7 +124,7 @@ library ArmyConfig {
   /** Get numArcher (using the specified store) */
   function getNumArcher(IStore _store, bytes32 key) internal view returns (uint32 numArcher) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
     return (uint32(Bytes.slice4(_blob, 0)));
@@ -133,7 +133,7 @@ library ArmyConfig {
   /** Set numArcher */
   function setNumArcher(bytes32 key, uint32 numArcher) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((numArcher)));
   }
@@ -141,7 +141,7 @@ library ArmyConfig {
   /** Set numArcher (using the specified store) */
   function setNumArcher(IStore _store, bytes32 key, uint32 numArcher) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((numArcher)));
   }
@@ -149,7 +149,7 @@ library ArmyConfig {
   /** Get numCavalry */
   function getNumCavalry(bytes32 key) internal view returns (uint32 numCavalry) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
     return (uint32(Bytes.slice4(_blob, 0)));
@@ -158,7 +158,7 @@ library ArmyConfig {
   /** Get numCavalry (using the specified store) */
   function getNumCavalry(IStore _store, bytes32 key) internal view returns (uint32 numCavalry) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
     return (uint32(Bytes.slice4(_blob, 0)));
@@ -167,7 +167,7 @@ library ArmyConfig {
   /** Set numCavalry */
   function setNumCavalry(bytes32 key, uint32 numCavalry) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     StoreSwitch.setField(_tableId, _keyTuple, 2, abi.encodePacked((numCavalry)));
   }
@@ -175,7 +175,7 @@ library ArmyConfig {
   /** Set numCavalry (using the specified store) */
   function setNumCavalry(IStore _store, bytes32 key, uint32 numCavalry) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     _store.setField(_tableId, _keyTuple, 2, abi.encodePacked((numCavalry)));
   }
@@ -183,7 +183,7 @@ library ArmyConfig {
   /** Get gameID */
   function getGameID(bytes32 key) internal view returns (uint256 gameID) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 3);
     return (uint256(Bytes.slice32(_blob, 0)));
@@ -192,7 +192,7 @@ library ArmyConfig {
   /** Get gameID (using the specified store) */
   function getGameID(IStore _store, bytes32 key) internal view returns (uint256 gameID) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 3);
     return (uint256(Bytes.slice32(_blob, 0)));
@@ -201,7 +201,7 @@ library ArmyConfig {
   /** Set gameID */
   function setGameID(bytes32 key, uint256 gameID) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     StoreSwitch.setField(_tableId, _keyTuple, 3, abi.encodePacked((gameID)));
   }
@@ -209,7 +209,7 @@ library ArmyConfig {
   /** Set gameID (using the specified store) */
   function setGameID(IStore _store, bytes32 key, uint256 gameID) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     _store.setField(_tableId, _keyTuple, 3, abi.encodePacked((gameID)));
   }
@@ -217,7 +217,7 @@ library ArmyConfig {
   /** Get the full data */
   function get(bytes32 key) internal view returns (ArmyConfigData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getRecord(_tableId, _keyTuple, getSchema());
     return decode(_blob);
@@ -226,7 +226,7 @@ library ArmyConfig {
   /** Get the full data (using the specified store) */
   function get(IStore _store, bytes32 key) internal view returns (ArmyConfigData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     bytes memory _blob = _store.getRecord(_tableId, _keyTuple, getSchema());
     return decode(_blob);
@@ -237,7 +237,7 @@ library ArmyConfig {
     bytes memory _data = encode(numSwordsman, numArcher, numCavalry, gameID);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     StoreSwitch.setRecord(_tableId, _keyTuple, _data);
   }
@@ -254,7 +254,7 @@ library ArmyConfig {
     bytes memory _data = encode(numSwordsman, numArcher, numCavalry, gameID);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     _store.setRecord(_tableId, _keyTuple, _data);
   }
@@ -293,13 +293,13 @@ library ArmyConfig {
   /** Encode keys as a bytes32 array using this table's schema */
   function encodeKeyTuple(bytes32 key) internal pure returns (bytes32[] memory _keyTuple) {
     _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
   }
 
   /* Delete all data for given keys */
   function deleteRecord(bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     StoreSwitch.deleteRecord(_tableId, _keyTuple);
   }
@@ -307,7 +307,7 @@ library ArmyConfig {
   /* Delete all data for given keys (using the specified store) */
   function deleteRecord(IStore _store, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     _store.deleteRecord(_tableId, _keyTuple);
   }

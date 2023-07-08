@@ -1,5 +1,5 @@
 {
-  "name": "mud-template-react",
+  "name": "chaquer-rts",
   "private": true,
   "scripts": {
     "build": "pnpm recursive run build",

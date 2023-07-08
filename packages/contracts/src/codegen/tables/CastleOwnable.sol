@@ -70,7 +70,7 @@ library CastleOwnable {
   /** Get owner */
   function getOwner(bytes32 key) internal view returns (address owner) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
     return (address(Bytes.slice20(_blob, 0)));
@@ -79,7 +79,7 @@ library CastleOwnable {
   /** Get owner (using the specified store) */
   function getOwner(IStore _store, bytes32 key) internal view returns (address owner) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
     return (address(Bytes.slice20(_blob, 0)));
@@ -88,7 +88,7 @@ library CastleOwnable {
   /** Set owner */
   function setOwner(bytes32 key, address owner) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((owner)));
   }
@@ -96,7 +96,7 @@ library CastleOwnable {
   /** Set owner (using the specified store) */
   function setOwner(IStore _store, bytes32 key, address owner) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((owner)));
   }
@@ -104,7 +104,7 @@ library CastleOwnable {
   /** Get gameID */
   function getGameID(bytes32 key) internal view returns (uint256 gameID) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
     return (uint256(Bytes.slice32(_blob, 0)));
@@ -113,7 +113,7 @@ library CastleOwnable {
   /** Get gameID (using the specified store) */
   function getGameID(IStore _store, bytes32 key) internal view returns (uint256 gameID) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
     return (uint256(Bytes.slice32(_blob, 0)));
@@ -122,7 +122,7 @@ library CastleOwnable {
   /** Set gameID */
   function setGameID(bytes32 key, uint256 gameID) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((gameID)));
   }
@@ -130,7 +130,7 @@ library CastleOwnable {
   /** Set gameID (using the specified store) */
   function setGameID(IStore _store, bytes32 key, uint256 gameID) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((gameID)));
   }
@@ -138,7 +138,7 @@ library CastleOwnable {
   /** Get the full data */
   function get(bytes32 key) internal view returns (address owner, uint256 gameID) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getRecord(_tableId, _keyTuple, getSchema());
     return decode(_blob);
@@ -147,7 +147,7 @@ library CastleOwnable {
   /** Get the full data (using the specified store) */
   function get(IStore _store, bytes32 key) internal view returns (address owner, uint256 gameID) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     bytes memory _blob = _store.getRecord(_tableId, _keyTuple, getSchema());
     return decode(_blob);
@@ -158,7 +158,7 @@ library CastleOwnable {
     bytes memory _data = encode(owner, gameID);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     StoreSwitch.setRecord(_tableId, _keyTuple, _data);
   }
@@ -168,7 +168,7 @@ library CastleOwnable {
     bytes memory _data = encode(owner, gameID);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     _store.setRecord(_tableId, _keyTuple, _data);
   }
@@ -188,13 +188,13 @@ library CastleOwnable {
   /** Encode keys as a bytes32 array using this table's schema */
   function encodeKeyTuple(bytes32 key) internal pure returns (bytes32[] memory _keyTuple) {
     _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
   }
 
   /* Delete all data for given keys */
   function deleteRecord(bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     StoreSwitch.deleteRecord(_tableId, _keyTuple);
   }
@@ -202,7 +202,7 @@ library CastleOwnable {
   /* Delete all data for given keys (using the specified store) */
   function deleteRecord(IStore _store, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32((key));
+    _keyTuple[0] = key;
 
     _store.deleteRecord(_tableId, _keyTuple);
   }
