@@ -21,9 +21,8 @@ const scrollToDiv = (targetId: any) => {
 };
 
 function ArmyInfoModal() {
-    const {userWallet} = usePlayer()
+    const { userWallet } = usePlayer()
     const myArmyPosition: any = useMyArmy(userWallet!.address.toLocaleLowerCase())[0];
-    
 
     // Find the army on the map
     const handleClick = (targetId: any) => {
@@ -39,11 +38,13 @@ function ArmyInfoModal() {
 
     // Army Info Drag-able functions
     const [pos, setPos] = useState({ x: 0, y: 0 });
+    const [pos3, setPos3] = useState(0);
+    const [pos4, setPos4] = useState(0);
 
     const dragMouseDown = (e: any) => {
         e.preventDefault();
-        const pos3 = e.clientX;
-        const pos4 = e.clientY;
+        setPos3(e.clientX);
+        setPos4(e.clientY);
 
         const elementDrag = (e: any) => {
             e.preventDefault();
@@ -52,8 +53,8 @@ function ArmyInfoModal() {
             const newX = pos.x - dx;
             const newY = pos.y - dy;
             setPos({ x: newX, y: newY });
-            pos3 = e.clientX;
-            pos4 = e.clientY;
+            setPos3(e.clientX);
+            setPos4(e.clientY);
         };
 
         const closeDragElement = () => {
