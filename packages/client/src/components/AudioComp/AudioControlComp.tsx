@@ -7,13 +7,6 @@ import { FaPlay, FaStop } from 'react-icons/fa'
 function AudioControlComp() {
     const [isPlaying, setIsPlaying] = useState(true);
 
-    useEffect(() => {
-        setIsPlaying(true); // Start playing the audio when the component mounts
-        return () => {
-            setIsPlaying(false); // Stop playing the audio when the component unmounts
-        };
-    }, []);
-
     const handlePlay = () => {
         setIsPlaying(true);
     };
@@ -49,7 +42,7 @@ function AudioControlComp() {
                     <Button colorScheme='red' variant='outline' style={{ height: "40px" }} onClick={handleStop} data-bs-dismiss="offcanvas" aria-label="Close"><FaStop /></Button>
                 </div>
             </div>
-            {isPlaying && <audio src={soundTrack} autoPlay />}
+            <audio src={soundTrack} muted={isPlaying} loop autoPlay controls />
         </div >
     );
 }

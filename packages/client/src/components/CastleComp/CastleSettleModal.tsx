@@ -19,6 +19,7 @@ function CastleSettleModal() {
     setIsCastleSettled(true);
     if (tx) {
       setCastle({ x: tempCastle.x, y: tempCastle.y });
+      await tx.wait();
       setIsCastleDeployedBefore(true)
     }
   };
