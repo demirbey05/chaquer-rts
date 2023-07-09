@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 import { useMUD } from "../../MUDContext";
 import { flatten2D } from "../../utils/terrainArray";
 import { ethers } from "ethers";
-import { useComponentValue } from "@latticexyz/react";
 
 function Menu() {
   const {

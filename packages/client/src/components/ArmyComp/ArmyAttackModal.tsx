@@ -6,10 +6,10 @@ import { findIDFromPosition } from "../../utils/armyID";
 import { ethers } from "ethers";
 import { useToast } from '@chakra-ui/react'
 import { useAttack } from "../../context/AttackContext";
+import { useScoreTable } from "../../hooks/useScoreTable";
 
 function ArmyAttackModal() {
   const { components,systemCalls } = useMUD();
-  const { abiCoder } = useTerrain();
   const { setMyArmyConfig,
     setEnemyArmyConfig,
     myArmyConfig,
