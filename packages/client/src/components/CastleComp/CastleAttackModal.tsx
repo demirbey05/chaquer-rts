@@ -6,10 +6,10 @@ import { ethers } from "ethers";
 import { useMUD } from "../../MUDContext";
 import { useToast } from '@chakra-ui/react'
 import { useAttack } from "../../context/AttackContext";
+import { findCastleCloseArmies } from "../../utils/findCastleCloseArmies";
 
 function CastleAttackModal() {
   const { components, systemCalls} = useMUD();
-  const { abiCoder } = useTerrain();
   const { setMyArmyConfig,
     setEnemyArmyConfig,
     myArmyConfig,
@@ -36,6 +36,11 @@ function CastleAttackModal() {
       components.Position,
     )];
 
+    const acc = findCastleCloseArmies(attackToCastleId[0],components.Position,components.CastleOwnable,components.ArmyOwnable,components.ArmyConfig)
+    console.log("acc is")
+    console.log(acc)
+
+    findCastleCloseArmies(attackToCastleId[0],components.Position,components.CastleOwnable,components.ArmyOwnable,components.ArmyConfig)
     if (attackFromArmyId.length != 1 || attackToCastleId.length != 1) {
       console.log("attackFromArmyID or attackToCastleID lengths are greater than 1")
       return
