@@ -1,12 +1,13 @@
-import { awaitStreamValue } from "@latticexyz/utils";
+import { awaitStreamValue, uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
+import { Entity } from "@latticexyz/recs";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
   { worldSend, txReduced$, singletonEntity }: SetupNetworkResult,
-  { MapConfig }: ClientComponents
+  { Position }: ClientComponents
 ) {
 
   const initMapDataSystem = async (gameID: number, width: number, height: number, terrain: string) => {
@@ -45,6 +46,13 @@ export function createSystemCalls(
   }
 
   const moveArmy = async (armyID:string,x:number ,y:number ,gameID:number) => {
+
+
+    const positionId = uuid()
+    Position.addOverride(positionId,{
+      entity:armyID as Entity,
+      value:{x,y}
+    })
     try {
       const tx = await worldSend("armyMove", [armyID,x,y,gameID]);
       await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
@@ -52,6 +60,8 @@ export function createSystemCalls(
     } catch (e) {
       console.log(e);
       return null
+    } finally{
+      Position.removeOverride(positionId)
     }
   }
 

@@ -161,7 +161,7 @@ export function Grid(data: DataProp) {
           if (movingArmyIdMap !== null) {
             movingArmyId.current = [...movingArmyIdMap][0];
           }
-
+          setIsArmyMoveStage(false);
           if (toArmyPosition.current && isArmyMoveStage) {
             const tx = await systemCalls.moveArmy(
               movingArmyId.current,
@@ -176,7 +176,7 @@ export function Grid(data: DataProp) {
             document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
             document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "";
 
-            setIsArmyMoveStage(false);
+            
             setIsAttackStage(false);
             setFromArmyPosition(undefined);
             toArmyPosition.current = { x: -1, y: -1 };
