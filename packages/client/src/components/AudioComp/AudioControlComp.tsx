@@ -1,18 +1,43 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import soundTrack from '../../sounds/chaquerSoundTrack.mp3'
 import { Button } from "@chakra-ui/react";
 import { SettingsIcon } from '@chakra-ui/icons'
 import { FaPlay, FaStop } from 'react-icons/fa'
 
 function AudioControlComp() {
-    const [isPlaying, setIsPlaying] = useState(true);
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    const audioRef = useRef<any>();
+
+    useEffect(() => {
+        const audioElement = audioRef.current;
+
+        const handleEnded = () => {
+            if (audioElement) {
+                audioElement.currentTime = 0; // Reset the playback to the beginning
+                audioElement.play(); // Start playing again
+            }
+        };
+
+        if (audioElement) {
+            audioElement.addEventListener('ended', handleEnded);
+            audioElement.play(); // Start playing initially
+        }
+
+        // Clean up the event listener on component unmount
+        return () => {
+            if (audioElement) {
+                audioElement.removeEventListener('ended', handleEnded);
+            }
+        };
+    }, []);
 
     const handlePlay = () => {
-        setIsPlaying(true);
+        setIsPlaying(false);
     };
 
     const handleStop = () => {
-        setIsPlaying(false);
+        setIsPlaying(true);
     };
 
     return (
@@ -42,7 +67,9 @@ function AudioControlComp() {
                     <Button colorScheme='red' variant='outline' style={{ height: "40px" }} onClick={handleStop} data-bs-dismiss="offcanvas" aria-label="Close"><FaStop /></Button>
                 </div>
             </div>
-            <audio src={soundTrack} muted={isPlaying} loop autoPlay controls />
+            <audio ref={audioRef} autoPlay muted={isPlaying} >
+                <source src={soundTrack} type="audio/mp3" />
+            </audio>
         </div >
     );
 }
