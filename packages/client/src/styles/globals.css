@@ -131,16 +131,17 @@
     }
 }
 
-
 /*War Result div table*/
 .war-result-bar {
     width: 300px;
-    height: 300px;
-    border-radius: 15px;
+    height: 200px;
     overflow: hidden;
     margin-top: 25px;
     margin-right: 25px;
-    border: 2px solid rgb(241, 241, 241);
+    border-bottom: 2px solid rgb(241, 241, 241);
+    border-right: none;
+    border-left: none;
+    border-top: 2px solid rgb(241, 241, 241);
     right: 0;
     top: 0;
     z-index: 1;
