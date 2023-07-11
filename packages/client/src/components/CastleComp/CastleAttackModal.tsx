@@ -1,5 +1,4 @@
 import { Button } from "@chakra-ui/react";
-import warInfoBg from "../../images/warInfoBg.png";
 import { findIDFromPosition } from "../../utils/armyID";
 import { useMUD } from "../../MUDContext";
 import { useAttack } from "../../context/AttackContext";
@@ -72,23 +71,22 @@ function CastleAttackModal() {
         margin: "auto",
         bottom: "25px",
         padding: "10px",
-        backgroundImage: `url(${warInfoBg})`,
-        backgroundSize: "cover",
+        backgroundColor: "rgb(148, 163, 184, 0.5)"
       }}
       tabIndex={-1}
       id="offcanvasBottomCastle"
       aria-labelledby="offcanvasBottomLabel"
     >
       <h5
-        className="offcanvas-title text-center border-bottom border-dark text-dark"
+        className="offcanvas-title text-center border-bottom border-white text-white"
         id="offcanvasBottomLabel"
       >
-        War-Army Information
+        War - Army Information
       </h5>
       <div className="offcanvas-body small">
         <div className="row">
           <div className="col-6">
-            <h1 className="text-center border-bottom border-success text-dark">
+            <h1 className="text-center border-bottom border-white text-white p-1 bg-success">
               My Army
             </h1>
             <div className="row">
@@ -114,7 +112,7 @@ function CastleAttackModal() {
             </div>
           </div>
           <div className="col-6">
-            <h1 className="text-center border-bottom border-danger text-dark">
+            <h1 className="text-center border-bottom border-danger text-white p-1 bg-danger">
               Castle Army
             </h1>
             <div className="row">

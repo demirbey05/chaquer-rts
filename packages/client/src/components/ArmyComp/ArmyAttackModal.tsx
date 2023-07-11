@@ -1,5 +1,4 @@
 import { Button } from "@chakra-ui/react";
-import warInfoBg from "../../images/warInfoBg.png";
 import { useMUD } from "../../MUDContext";
 import { findIDFromPosition } from "../../utils/armyID";
 import { useAttack } from "../../context/AttackContext";
@@ -61,29 +60,28 @@ function ArmyAttackModal() {
         margin: "auto",
         bottom: "25px",
         padding: "10px",
-        backgroundImage: `url(${warInfoBg})`,
-        backgroundSize: "cover",
+        backgroundColor: "rgb(148, 163, 184, 0.5)"
       }}
       tabIndex={-1}
       id="offcanvasBottom"
       aria-labelledby="offcanvasBottomLabel"
     >
       <h5
-        className="offcanvas-title text-center border-bottom border-dark text-dark"
+        className="offcanvas-title text-center border-bottom border-white"
         id="offcanvasBottomLabel"
       >
-        War-Army Information
+        War - Army Information
       </h5>
       <div className="offcanvas-body small">
         <div className="row">
           <div className="col-6">
-            <h1 className="text-center border-bottom border-success text-dark">
+            <h1 className="text-center bg-success border-bottom border-white text-white p-1">
               My Army
             </h1>
             <div className="row">
               <div className="row justify-content-center text-center mt-2">
                 <p>
-                  Swordsman:{myArmyConfig && myArmyConfig.armyConfig.numSwordsman}
+                  Swordsman: {myArmyConfig && myArmyConfig.armyConfig.numSwordsman}
                 </p>
               </div>
             </div>
@@ -103,7 +101,7 @@ function ArmyAttackModal() {
             </div>
           </div>
           <div className="col-6">
-            <h1 className="text-center border-bottom border-danger text-dark">
+            <h1 className="text-center border-bottom border-white text-white bg-danger p-1">
               Enemy Army
             </h1>
             <div className="row">

@@ -8,6 +8,9 @@ export default defineConfig({
     fs: {
       strict: false,
     },
+    watch: {
+      usePolling: true,
+    },
   },
   build: {
     target: "es2022",
