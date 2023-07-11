@@ -8,10 +8,14 @@ import {
 type AttackContextType = {
     isAttackStage: boolean;
     setIsAttackStage: (value: boolean) => void;
-    attackFromArmyPosition: any | undefined;
-    setAttackFromArmyPosition: (value: any | undefined) => void;
-    attackToArmyPosition: any | undefined;
-    setAttackToArmyPosition: (value: any | undefined) => void;
+    attackFromArmyPositionToArmy: any | undefined;
+    setAttackFromArmyPositionToArmy: (value: any | undefined) => void;
+    attackToArmyPositionToArmy: any | undefined;
+    setAttackToArmyPositionToArmy: (value: any | undefined) => void;
+    attackFromArmyPositionToCastle: any | undefined;
+    setAttackFromArmyPositionToCastle: (value: any | undefined) => void;
+    attackToArmyPositionToCastle: any | undefined;
+    setAttackToArmyPositionToCastle: (value: any | undefined) => void;
     myArmyConfig: any | undefined;
     setMyArmyConfig: (value: any | undefined) => void;
     enemyArmyConfig: any | undefined;
@@ -21,10 +25,14 @@ type AttackContextType = {
 const AttackContext = createContext<AttackContextType>({
     isAttackStage: false,
     setIsAttackStage: () => { },
-    attackFromArmyPosition: undefined,
-    setAttackFromArmyPosition: () => { },
-    attackToArmyPosition: undefined,
-    setAttackToArmyPosition: () => { },
+    attackFromArmyPositionToArmy: undefined,
+    setAttackFromArmyPositionToArmy: () => { },
+    attackToArmyPositionToArmy: undefined,
+    setAttackToArmyPositionToArmy: () => { },
+    attackFromArmyPositionToCastle: undefined,
+    setAttackFromArmyPositionToCastle: () => { },
+    attackToArmyPositionToCastle: undefined,
+    setAttackToArmyPositionToCastle: () => { },
     myArmyConfig: undefined,
     setMyArmyConfig: () => { },
     enemyArmyConfig: undefined,
@@ -33,22 +41,31 @@ const AttackContext = createContext<AttackContextType>({
 
 const AttackProvider: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode; }) => {
     const [isAttackStage, setIsAttackStage] = useState<any>();
-    const [attackFromArmyPosition, setAttackFromArmyPosition] = useState<any>();
-    const [attackToArmyPosition, setAttackToArmyPosition] = useState<any>();
+
+    const [attackFromArmyPositionToArmy, setAttackFromArmyPositionToArmy] = useState<any>();
+    const [attackToArmyPositionToArmy, setAttackToArmyPositionToArmy] = useState<any>();
+
+    const [attackFromArmyPositionToCastle, setAttackFromArmyPositionToCastle] = useState<any>();
+    const [attackToArmyPositionToCastle, setAttackToArmyPositionToCastle] = useState<any>();
+
     const [myArmyConfig, setMyArmyConfig] = useState<any>();
     const [enemyArmyConfig, setEnemyArmyConfig] = useState<any>();
 
     const results: AttackContextType = {
         isAttackStage,
         setIsAttackStage,
-        attackFromArmyPosition,
-        setAttackFromArmyPosition,
-        attackToArmyPosition,
-        setAttackToArmyPosition,
+        attackFromArmyPositionToArmy,
+        setAttackFromArmyPositionToArmy,
+        attackToArmyPositionToArmy,
+        setAttackToArmyPositionToArmy,
         myArmyConfig,
         setMyArmyConfig,
         enemyArmyConfig,
-        setEnemyArmyConfig
+        setEnemyArmyConfig,
+        attackFromArmyPositionToCastle,
+        setAttackFromArmyPositionToCastle,
+        attackToArmyPositionToCastle,
+        setAttackToArmyPositionToCastle
     };
 
     return (

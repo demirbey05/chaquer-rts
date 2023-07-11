@@ -42,8 +42,10 @@ export function Grid(data: DataProp) {
   const columns = Array.from({ length: width }, (v, i) => i);
 
   const { components, systemCalls } = useMUD();
-  const { setAttackFromArmyPosition,
-    setAttackToArmyPosition,
+  const { setAttackFromArmyPositionToArmy,
+    setAttackToArmyPositionToArmy,
+    setAttackFromArmyPositionToCastle,
+    setAttackToArmyPositionToCastle,
     isAttackStage,
     setIsAttackStage,
     setMyArmyConfig,
@@ -110,9 +112,9 @@ export function Grid(data: DataProp) {
       //If user attack to the enemy army
       if (isEnemyArmy(toArmyPosition.current, armyPositions, myArmyPosition)) {
         setIsArmyMoveStage(false);
-        setAttackFromArmyPosition(fromArmyPositionRef.current);
+        setAttackFromArmyPositionToArmy(fromArmyPositionRef.current);
         setFromArmyPosition(undefined);
-        setAttackToArmyPosition(toArmyPosition.current);
+        setAttackToArmyPositionToArmy(toArmyPosition.current);
         setMyArmyConfig(
           getMyArmyConfigByPosition(
             {
@@ -134,9 +136,9 @@ export function Grid(data: DataProp) {
       //If user attack to the enemy castle
       else if (isEnemyCastle(toArmyPosition.current, myCastlePosition, castlePositions)) {
         setIsArmyMoveStage(false)
-        setAttackFromArmyPosition(fromArmyPositionRef.current);
+        setAttackFromArmyPositionToCastle(fromArmyPositionRef.current);
         setFromArmyPosition(undefined);
-        setAttackToArmyPosition(toArmyPosition.current);
+        setAttackToArmyPositionToCastle(toArmyPosition.current);
         setMyArmyConfig(
           getMyArmyConfigByPosition(
             {
@@ -176,7 +178,7 @@ export function Grid(data: DataProp) {
             document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
             document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "";
 
-            
+
             setIsAttackStage(false);
             setFromArmyPosition(undefined);
             toArmyPosition.current = { x: -1, y: -1 };
