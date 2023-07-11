@@ -1,6 +1,6 @@
-import { useEntityQuery, useObservableValue } from "@latticexyz/react";
+import { useObservableValue } from "@latticexyz/react";
 import { useMUD } from "../MUDContext";
-import { Has, Type, ComponentValue } from "@latticexyz/recs";
+import { Type, ComponentValue } from "@latticexyz/recs";
 import { useEffect, useState } from "react";
 import { BoundedQueue } from "../utils/structs/BoundedQueue";
 
