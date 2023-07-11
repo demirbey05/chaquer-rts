@@ -178,12 +178,10 @@ export function Grid(data: DataProp) {
             document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
             document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "";
 
-
             setIsAttackStage(false);
             setFromArmyPosition(undefined);
             toArmyPosition.current = { x: -1, y: -1 };
             fromArmyPositionRef.current = { x: "-1", y: "-1" };
-
           }
         }
       }
@@ -327,12 +325,22 @@ export function Grid(data: DataProp) {
         y: parseInt(fromArmyPosition.y),
       }).map((data) => {
         if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
-          canCastleBeSettle(values[data.x][data.y]) &&
+          canCastleBeSettle(values[data.x][data.y]) && !myCastlePosition.find((element: { x: number; y: number }) => {
+            return (
+              element.x == data.x &&
+              element.y == data.y
+            );
+          }) &&
             document
               .getElementById(`${data.y},${data.x}`)
               ?.classList.add("borderHoverMove");
+
+          myCastlePosition.find((element: { x: number; y: number }) => {
+            document.getElementById(`${element.y},${element.x}`)!.style.pointerEvents = "none"
+          })
         }
       });
+
     } else {
       if (tempArmyPos) {
         getManhattanPositions({
@@ -344,6 +352,10 @@ export function Grid(data: DataProp) {
               document
                 .getElementById(`${data.y},${data.x}`)
                 ?.classList.remove("borderHoverMove");
+
+            myCastlePosition.find((element: { x: number; y: number }) => {
+              document.getElementById(`${element.y},${element.x}`)!.style.pointerEvents = "auto"
+            })
           }
         });
       }
@@ -357,7 +369,8 @@ export function Grid(data: DataProp) {
         getManhattanPositions(position).map(
           (data) => {
             if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
-              canCastleBeSettle(values[data.x][data.y]) && document.getElementById(`${data.y},${data.x}`)?.classList.add("borderHoverArmy")
+              canCastleBeSettle(values[data.x][data.y]) &&
+                document.getElementById(`${data.y},${data.x}`)?.classList.add("borderHoverArmy")
             }
           }
         );
@@ -367,7 +380,8 @@ export function Grid(data: DataProp) {
         getManhattanPositions(position).map(
           (data) => {
             if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
-              canCastleBeSettle(values[data.x][data.y]) && document.getElementById(`${data.y},${data.x}`)?.classList.remove("borderHoverArmy")
+              canCastleBeSettle(values[data.x][data.y]) &&
+                document.getElementById(`${data.y},${data.x}`)?.classList.remove("borderHoverArmy")
             }
           }
         );
