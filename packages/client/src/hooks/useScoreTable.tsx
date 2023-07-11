@@ -10,17 +10,14 @@ type battleRecord = {
     isDraw: Type.Boolean;
 }
 
-export function useScoreTable(maxElementSize:number){
-    const {components} = useMUD()
+export function useScoreTable(maxElementSize: number) {
+    const { components } = useMUD()
     const update = useObservableValue(components.BattleResult.update$);
-    const [lastFive,setLastFive] = useState<BoundedQueue< ComponentValue<battleRecord,undefined>|undefined>>(new BoundedQueue(maxElementSize))
-   
+    const [lastFive, setLastFive] = useState<BoundedQueue<ComponentValue<battleRecord, undefined> | undefined>>(new BoundedQueue(maxElementSize))
 
-    useEffect(()=> {
-        setLastFive(n => {n.enqueue(update?.value[0]);return n})
-    },[update])
-
+    useEffect(() => {
+        setLastFive(n => { n.enqueue(update?.value[0]); return n })
+    }, [update])
 
     return lastFive
-
 }

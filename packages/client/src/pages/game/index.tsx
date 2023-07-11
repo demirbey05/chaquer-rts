@@ -13,12 +13,13 @@ import AudioControlComp from "../../components/AudioComp/AudioControlComp";
 import { useCastle } from "../../context/CastleContext";
 import { useArmy } from "../../context/ArmyContext";
 import { usePlayer } from "../../context/PlayerContext";
+import WarResultComp from "../../components/WarResultComp/WarResultComp";
 
 function Game() {
   const { width, height } = useTerrain();
   const { isCastleDeployedBefore, isCastleSettled } = useCastle();
   const { isArmyStage, isArmyMoveStage } = useArmy();
-  const {userWallet} = usePlayer()
+  const { userWallet } = usePlayer()
   const values = map;
   const myCastlePosition = useCastlePositionByAddress(userWallet!.address.toLocaleLowerCase());
 
@@ -33,6 +34,7 @@ function Game() {
       {(myCastlePosition && (myCastlePosition.length === 0) && isCastleDeployedBefore && isCastleSettled) && <LoserWarning />}
       {isCastleSettled && <ArmyInfoModal />}
       {isCastleSettled && <AudioControlComp />}
+      {isCastleSettled && <WarResultComp />}
       <ScrollContainer
         className="scroll-container"
         style={{ zIndex: "0", height: "100vh", overflow: "scroll" }}
