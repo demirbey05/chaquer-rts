@@ -33,7 +33,7 @@ function ArmyInfoModal() {
 
         setTimeout(function () {
             myDiv?.classList.remove("animate-border");
-        }, 6000);
+        }, 1500);
     };
 
     // Army Info Drag-able functions

@@ -114,7 +114,7 @@
 }
 
 .animate-border {
-    animation: borderAnimation 3s infinite alternate;
+    animation: borderAnimation 1.5s infinite alternate;
 }
 
 @keyframes borderAnimation {
