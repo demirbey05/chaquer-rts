@@ -66,23 +66,30 @@ function ArmyInfoModal() {
         document.onmousemove = elementDrag;
     };
 
+    const armyInfoOffcanvasButtonStyle: any = {
+        zIndex: 1,
+        height: "60px",
+        width: "60px",
+        position: "absolute",
+        left: 0,
+        top: 0,
+        bottom: 0,
+        marginTop: "90px",
+        fontSize: "30px"
+    }
+
     return (
         <>
-            <Button style={{
-                zIndex: 1,
-                height: "60px",
-                width: "60px",
-                position: "absolute",
-                left: 0,
-                top: 0,
-                bottom: 0,
-                marginTop: "90px",
-                fontSize: "30px"
-            }} type="button" colorScheme="yellow" data-bs-toggle="offcanvas" data-bs-target="#armyInfoModal" aria-controls="staticBackdrop">
+            <Button style={armyInfoOffcanvasButtonStyle}
+                type="button"
+                colorScheme="yellow"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#armyInfoModal"
+                aria-controls="armyInfoModal">
                 ⚔️
             </Button>
 
-            <div style={{ height: "625px", marginTop: "90px", padding: "10px", top: pos.y, left: pos.x }} onMouseDown={dragMouseDown} className="offcanvas offcanvas-start" data-bs-keyboard="false" data-bs-backdrop="false" id="armyInfoModal" aria-labelledby="staticBackdropLabel">
+            <div style={{ height: "625px", marginTop: "90px", padding: "10px", top: pos.y, left: pos.x }} onMouseDown={dragMouseDown} className="offcanvas offcanvas-start" data-bs-keyboard="false" data-bs-backdrop="false" id="armyInfoModal" aria-labelledby="armyInfoModal">
                 <div className="offcanvas-header" style={{ cursor: "move" }}>
                     <h5 className="offcanvas-title" id="staticBackdropLabel">My Army Details</h5>
                     <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&#10008;</button>

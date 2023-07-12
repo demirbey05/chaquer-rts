@@ -20,6 +20,7 @@ function Game() {
   const { isCastleDeployedBefore, isCastleSettled } = useCastle();
   const { isArmyStage, isArmyMoveStage } = useArmy();
   const { userWallet } = usePlayer()
+
   const values = map;
   const myCastlePosition = useCastlePositionByAddress(userWallet!.address.toLocaleLowerCase());
 

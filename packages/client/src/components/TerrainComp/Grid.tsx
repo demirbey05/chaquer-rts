@@ -1,7 +1,6 @@
 import "../../styles/globals.css";
 import { useEffect, useState, useRef } from "react";
 import { TerrainType } from "../../terrain-helper/types";
-import { useTerrain } from "../../context/TerrainContext";
 import { useCastle } from "../../context/CastleContext";
 import CastleSettleModal from "../CastleComp/CastleSettleModal";
 import ArmySettleModal from "../ArmyComp/ArmySettleModal";

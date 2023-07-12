@@ -1,54 +1,39 @@
+import { useState } from "react";
 import { usePlayer } from '../../context/PlayerContext';
 import { useWarResult } from '../../hooks/useWarResult';
-import { Button } from '@chakra-ui/react';
 import warResultIcon from '../../images/warResult.png';
+import { Button } from "@chakra-ui/react";
+import "../../styles/globals.css";
 
-function WarResultComp() {
+const WarResultComp = () => {
+    const [isOpen, setIsOpen] = useState(true);
     const warResults = useWarResult(5);
     const { userWallet } = usePlayer();
 
+    const toggleOffcanvas = () => {
+        setIsOpen(!isOpen);
+    };
+
+    const drawerButtonStyles: any = {
+        zIndex: 1,
+        height: "60px",
+        width: "60px",
+        position: "absolute",
+        right: 0,
+        top: 0,
+        bottom: 0,
+        marginTop: "25px",
+        fontSize: "30px"
+    }
+
     return (
         <div>
-            <Button
-                style={{
-                    zIndex: 1,
-                    height: "60px",
-                    width: "60px",
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    marginTop: "25px",
-                    fontSize: "30px"
-                }}
-                type="button"
-                colorScheme="yellow"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#warResultModal"
-                aria-controls="staticBackdrop">
+            <Button colorScheme="yellow" style={drawerButtonStyles} onClick={toggleOffcanvas}>
                 <img src={warResultIcon} width={"30px"} height={"30px"}></img>
             </Button>
-            <div className="offcanvas offcanvas-end"
-                style={{
-                    backgroundColor: "rgb(148, 163, 184, 0.5)",
-                    height: "240px",
-                    marginTop: "95px",
-                    marginRight: "5px",
-                    borderTop: "2px solid rgb(241, 241, 241)",
-                    borderBottom: "2px solid rgb(241, 241, 241)",
-                    overflow: "hidden",
-                    textAlign: "center",
-                    borderRadius: "25px"
-                }}
-                data-bs-keyboard="false"
-                data-bs-backdrop="false"
-                id="warResultModal"
-                aria-labelledby="staticBackdropLabel">
-                <div className="offcanvas-header text-center text-white">
-                    <h5 className="offcanvas-title border-bottom" id="offcanvasMenuLabel">War Results</h5>
-                    <button type="button" className="text-white" data-bs-dismiss="offcanvas" aria-label="Close">X</button>
-                </div>
-                <div className="offcanvas-body" style={{ overflow: "hidden" }}>
+            <div className={`mywarresultcanvas ${isOpen ? "open" : ""}`}>
+                <h4 className="text-center text-white p-2 mb-2 border-bottom">War Results</h4>
+                <div >
                     {warResults && warResults.data.map((data, key) => {
                         console.log(data)
                         if (data.type === "army") {
@@ -79,7 +64,7 @@ function WarResultComp() {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default WarResultComp
+export default WarResultComp;

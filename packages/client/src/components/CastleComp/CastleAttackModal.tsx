@@ -59,20 +59,22 @@ function CastleAttackModal() {
     setEnemyArmyConfig(undefined);
   };
 
+  const castleAttackOffCanvasDivStyle: any = {
+    width: "500px",
+    left: "0",
+    right: "0",
+    margin: "auto",
+    bottom: "25px",
+    padding: "10px",
+    backgroundColor: "rgb(148, 163, 184, 0.5)"
+  }
+
   return (
     <div
       className="offcanvas offcanvas-bottom rounded-4 font-bold text-white"
       data-bs-keyboard="false"
       data-bs-backdrop="false"
-      style={{
-        width: "500px",
-        left: "0",
-        right: "0",
-        margin: "auto",
-        bottom: "25px",
-        padding: "10px",
-        backgroundColor: "rgb(148, 163, 184, 0.5)"
-      }}
+      style={castleAttackOffCanvasDivStyle}
       tabIndex={-1}
       id="offcanvasBottomCastle"
       aria-labelledby="offcanvasBottomLabel"

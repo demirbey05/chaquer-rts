@@ -7,8 +7,6 @@ function CastleSettleModal() {
   const { systemCalls } = useMUD();
 
   const handleClick = async () => {
-    //@dev gameID should be handled
-    // tx conditon should be extremely tested
     const tx =
       !isCastleSettled &&
       (await systemCalls.settleCastle(

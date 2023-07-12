@@ -130,3 +130,26 @@
         border-width: 1px;
     }
 }
+
+/* Use the offcanvasBodyStyles object for styling */
+.mywarresultcanvas {
+    background-color: rgba(148, 163, 184, 0.5);
+    z-index: 1;
+    height: 200px;
+    width: 300px;
+    margin-top: 95px;
+    margin-right: 5px;
+    border-top: 2px solid rgb(241, 241, 241);
+    border-bottom: 2px solid rgb(241, 241, 241);
+    overflow: hidden;
+    text-align: center;
+    border-radius: 25px;
+    position: fixed;
+    top: 0;
+    right: -300px;
+    transition: right 0.3s ease;
+}
+
+.mywarresultcanvas.open {
+    right: 0;
+}

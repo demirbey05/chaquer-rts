@@ -6,7 +6,6 @@ import { FaPlay, FaStop } from 'react-icons/fa'
 
 function AudioControlComp() {
     const [isPlaying, setIsPlaying] = useState(false);
-
     const audioRef = useRef<any>();
 
     useEffect(() => {
@@ -40,19 +39,21 @@ function AudioControlComp() {
         setIsPlaying(true);
     };
 
+    const audioOffCanvasButtonStyle: any = {
+        zIndex: 1,
+        height: "60px",
+        width: "60px",
+        position: "absolute",
+        left: 0,
+        top: 0,
+        bottom: 0,
+        marginTop: "25px",
+        fontSize: "30px"
+    }
+
     return (
         <div>
-            <Button style={{
-                zIndex: 1,
-                height: "60px",
-                width: "60px",
-                position: "absolute",
-                left: 0,
-                top: 0,
-                bottom: 0,
-                marginTop: "25px",
-                fontSize: "30px"
-            }} type="button" colorScheme="yellow" data-bs-toggle="offcanvas" data-bs-target="#audioControlModal" aria-controls="staticBackdrop">
+            <Button style={audioOffCanvasButtonStyle} type="button" colorScheme="yellow" data-bs-toggle="offcanvas" data-bs-target="#audioControlModal" aria-controls="staticBackdrop">
                 <SettingsIcon />
             </Button>
 
