@@ -3,7 +3,7 @@ import { useMUD } from "../../MUDContext";
 import { findIDFromPosition } from "../../utils/armyID";
 import { useAttack } from "../../context/AttackContext";
 
-function ArmyAttackModal() {
+export const ArmyAttackModal = () => {
   const { components, systemCalls } = useMUD();
   const { setMyArmyConfig,
     setEnemyArmyConfig,
@@ -34,12 +34,14 @@ function ArmyAttackModal() {
       console.log("attackFromArmyID or attackToArmyID lengths are greater than 1")
       return
     }
-    // @dev gameID attention
+
     const tx = await systemCalls.attackToArmy(attackFromArmyId[0] as string, attackToArmyId[0] as string, 1)
+
     if (tx == null) {
       console.log("handleAttack encounter an error!.")
       return
     }
+
     document.getElementById(`${attackToArmyPositionToArmy.y},${attackToArmyPositionToArmy.x}`)!.setAttribute("data-bs-toggle", "");
     document.getElementById(`${attackToArmyPositionToArmy.y},${attackToArmyPositionToArmy.x}`)!.setAttribute("data-bs-target", "");
 
@@ -68,66 +70,19 @@ function ArmyAttackModal() {
       id="offcanvasBottom"
       aria-labelledby="offcanvasBottomLabel"
     >
-      <h5
-        className="offcanvas-title text-center border-bottom border-white"
-        id="offcanvasBottomLabel"
-      >
-        War - Army Information
-      </h5>
+      <ArmyAttackModalHeader headerText={"War - Army Information"} />
       <div className="offcanvas-body small">
         <div className="row">
-          <div className="col-6">
-            <h1 className="text-center bg-success border-bottom border-white text-white p-1">
-              My Army
-            </h1>
-            <div className="row">
-              <div className="row justify-content-center text-center mt-2">
-                <p>
-                  Swordsman: {myArmyConfig && myArmyConfig.armyConfig.numSwordsman}
-                </p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="row justify-content-center text-center mt-2">
-                <p>
-                  Archer: {myArmyConfig && myArmyConfig.armyConfig.numArcher}
-                </p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="row justify-content-center text-center mt-2">
-                <p>
-                  Cavalry: {myArmyConfig && myArmyConfig.armyConfig.numCavalry}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="col-6">
-            <h1 className="text-center border-bottom border-white text-white bg-danger p-1">
-              Enemy Army
-            </h1>
-            <div className="row">
-              <div className="row justify-content-center text-center mt-2">
-                <p>
-                  Swordsman: {enemyArmyConfig && enemyArmyConfig.armyConfig.numSwordsman}
-                </p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="row justify-content-center text-center mt-2">
-                <p>
-                  Archer: {enemyArmyConfig && enemyArmyConfig.armyConfig.numArcher}
-                </p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="row justify-content-center text-center mt-2">
-                <p>
-                  Cavalry: {enemyArmyConfig && enemyArmyConfig.armyConfig.numCavalry}
-                </p>
-              </div>
-            </div>
-          </div>
+          <ArmyAttackModalCard numSwordsman={myArmyConfig && myArmyConfig.armyConfig.numSwordsman}
+            numArcher={myArmyConfig && myArmyConfig.armyConfig.numArcher}
+            numCavalry={myArmyConfig && myArmyConfig.armyConfig.numCavalry}
+            title={"My Army"}
+            titleBg={"success"} />
+          < ArmyAttackModalCard numSwordsman={enemyArmyConfig && enemyArmyConfig.armyConfig.numSwordsman}
+            numArcher={enemyArmyConfig && enemyArmyConfig.armyConfig.numArcher}
+            numCavalry={enemyArmyConfig && enemyArmyConfig.armyConfig.numCavalry}
+            title={"Enemy Army"}
+            titleBg={"danger"} />
         </div>
       </div>
       <div className="d-flex justify-content-center">
@@ -158,4 +113,56 @@ function ArmyAttackModal() {
   );
 }
 
-export default ArmyAttackModal;
+interface ArmyAttackModalHeaderPropTypes {
+  headerText: string
+};
+
+const ArmyAttackModalHeader = (props: ArmyAttackModalHeaderPropTypes) => {
+  return (
+    <h5
+      className="offcanvas-title text-center border-bottom border-white"
+      id="offcanvasBottomLabel"
+    >
+      {props.headerText}
+    </h5>
+  )
+}
+
+interface ArmyAttackModalCardPropTypes {
+  title: string,
+  titleBg: string,
+  numSwordsman: number,
+  numArcher: number,
+  numCavalry: number
+};
+
+const ArmyAttackModalCard = (props: ArmyAttackModalCardPropTypes) => {
+  return (
+    <div className="col-6">
+      <h1 className={`text-center bg-${props.titleBg} border-bottom border-white text-white p-1`}>
+        {props.title}
+      </h1>
+      <div className="row">
+        <div className="row justify-content-center text-center mt-2">
+          <p>
+            Swordsman: {props.numSwordsman && props.numSwordsman}
+          </p>
+        </div>
+      </div>
+      <div className="row">
+        <div className="row justify-content-center text-center mt-2">
+          <p>
+            Archer: {props.numArcher && props.numArcher}
+          </p>
+        </div>
+      </div>
+      <div className="row">
+        <div className="row justify-content-center text-center mt-2">
+          <p>
+            Cavalry: {props.numCavalry && props.numCavalry}
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}

@@ -1,13 +1,13 @@
-import { useEffect } from 'react'
 import "../../styles/globals.css";
+import { useEffect } from 'react'
 import { useMyArmy } from '../../hooks/useMyArmy';
 import { Tooltip } from '@chakra-ui/react'
 import { useArmy } from '../../context/ArmyContext';
 import { usePlayer } from '../../context/PlayerContext';
 
-function ArmyProgressComp() {
+export const ArmyProgressComp = () => {
     const { numberOfArmy, isArmyMoveStage } = useArmy();
-    const {userWallet} = usePlayer()
+    const { userWallet } = usePlayer()
     const myArmyPosition: any = useMyArmy(userWallet!.address.toLocaleLowerCase())[0];
 
     useEffect(() => {
@@ -44,5 +44,3 @@ function ArmyProgressComp() {
 
     )
 }
-
-export default ArmyProgressComp

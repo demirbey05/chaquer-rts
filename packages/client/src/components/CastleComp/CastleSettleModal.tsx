@@ -2,7 +2,7 @@ import { useMUD } from "../../MUDContext";
 import { Button } from "@chakra-ui/react";
 import { useCastle } from "../../context/CastleContext";
 
-function CastleSettleModal() {
+export const CastleSettleModal = () => {
   const { isCastleSettled, tempCastle, setCastle, setIsCastleDeployedBefore, setIsCastleSettled } = useCastle();
   const { systemCalls } = useMUD();
 

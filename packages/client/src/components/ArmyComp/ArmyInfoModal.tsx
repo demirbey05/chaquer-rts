@@ -1,9 +1,9 @@
-import { Button } from "@chakra-ui/react";
+import React, { useState } from "react";
 import archerImg from "../../images/archer.png";
 import cavalryImg from "../../images/cavalry.png";
 import swordsmanImg from "../../images/swordsman.png";
+import { Button } from "@chakra-ui/react";
 import { useMyArmy } from "../../hooks/useMyArmy";
-import React, { useState } from "react";
 import { usePlayer } from "../../context/PlayerContext";
 
 // Scroll to div by id as middle of the screen
@@ -20,7 +20,7 @@ const scrollToDiv = (targetId: any) => {
     }
 };
 
-function ArmyInfoModal() {
+export const ArmyInfoModal = () => {
     const { userWallet } = usePlayer()
     const myArmyPosition: any = useMyArmy(userWallet!.address.toLocaleLowerCase())[0];
 
@@ -66,7 +66,7 @@ function ArmyInfoModal() {
         document.onmousemove = elementDrag;
     };
 
-    const armyInfoOffcanvasButtonStyle: any = {
+    const armyInfoModalButtonStyles: any = {
         zIndex: 1,
         height: "60px",
         width: "60px",
@@ -78,9 +78,17 @@ function ArmyInfoModal() {
         fontSize: "30px"
     }
 
+    const armyInfoModalOffcanvasDivStyles = {
+        height: "625px",
+        marginTop: "90px",
+        padding: "10px",
+        top: pos.y,
+        left: pos.x
+    }
+
     return (
         <>
-            <Button style={armyInfoOffcanvasButtonStyle}
+            <Button style={armyInfoModalButtonStyles}
                 type="button"
                 colorScheme="yellow"
                 data-bs-toggle="offcanvas"
@@ -89,10 +97,9 @@ function ArmyInfoModal() {
                 ⚔️
             </Button>
 
-            <div style={{ height: "625px", marginTop: "90px", padding: "10px", top: pos.y, left: pos.x }} onMouseDown={dragMouseDown} className="offcanvas offcanvas-start" data-bs-keyboard="false" data-bs-backdrop="false" id="armyInfoModal" aria-labelledby="armyInfoModal">
+            <div style={armyInfoModalOffcanvasDivStyles} onMouseDown={dragMouseDown} className="offcanvas offcanvas-start" data-bs-keyboard="false" data-bs-backdrop="false" id="armyInfoModal" aria-labelledby="armyInfoModal">
                 <div className="offcanvas-header" style={{ cursor: "move" }}>
-                    <h5 className="offcanvas-title" id="staticBackdropLabel">My Army Details</h5>
-                    <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&#10008;</button>
+                    <ArmyInfoModalHeader />
                 </div>
                 <hr></hr>
                 <div className="offcanvas-body">
@@ -104,37 +111,25 @@ function ArmyInfoModal() {
                                         return (<React.Fragment key={index}>
                                             <div className="row mt-2">
                                                 <div className="col align-items-center">
-                                                    <div className="row justify-content-center">
-                                                        <img
-                                                            src={swordsmanImg}
-                                                            style={{ height: "75px", width: "65px" }}
-                                                        />
-                                                    </div>
-                                                    <div className="row justify-content-center text-center border-1 mt-2">
-                                                        <p style={{ fontSize: "12px" }}>Swordsman: {army.armyConfig.numSwordsman}</p>
-                                                    </div>
+                                                    <ArmyInfoModalCard imageSource={swordsmanImg}
+                                                        soldierName={"Swordsman"}
+                                                        soliderCount={army.armyConfig.numSwordsman}
+                                                        imageHeight={"75px"}
+                                                        imageWidth={"65px"} />
                                                 </div>
                                                 <div className="col align-items-center">
-                                                    <div className="row justify-content-center">
-                                                        <img
-                                                            src={archerImg}
-                                                            style={{ height: "75px", width: "65px" }}
-                                                        />
-                                                    </div>
-                                                    <div className="row justify-content-center text-center border-1 mt-2">
-                                                        <p style={{ fontSize: "12px" }}>Archer: {army.armyConfig.numArcher}</p>
-                                                    </div>
+                                                    <ArmyInfoModalCard imageSource={archerImg}
+                                                        soldierName={"Archer"}
+                                                        soliderCount={army.armyConfig.numArcher}
+                                                        imageHeight={"75px"}
+                                                        imageWidth={"65px"} />
                                                 </div>
                                                 <div className="col align-items-center">
-                                                    <div className="row justify-content-center">
-                                                        <img
-                                                            src={cavalryImg}
-                                                            style={{ height: "75px", width: "75px" }}
-                                                        />
-                                                    </div>
-                                                    <div className="row justify-content-center text-center border-1 mt-2">
-                                                        <p style={{ fontSize: "12px" }}>Cavalry: {army.armyConfig.numCavalry}</p>
-                                                    </div>
+                                                    <ArmyInfoModalCard imageSource={cavalryImg}
+                                                        soldierName={"Cavalry"}
+                                                        soliderCount={army.armyConfig.numCavalry}
+                                                        imageHeight={"75px"}
+                                                        imageWidth={"100px"} />
                                                 </div>
                                             </div>
                                             <div className="row mt-2 align-items-center justify-content-center">
@@ -161,4 +156,44 @@ function ArmyInfoModal() {
     )
 }
 
-export default ArmyInfoModal
+const ArmyInfoModalHeader = () => {
+    return (
+        <>
+            <h5 className="offcanvas-title" id="staticBackdropLabel">My Army Details</h5>
+            <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&#10008;</button>
+        </>
+    )
+}
+
+interface ArmyInfoModalCardPropTypes {
+    imageSource: string,
+    imageHeight: string,
+    imageWidth: string,
+    soldierName: string,
+    soliderCount: number
+}
+
+const ArmyInfoModalCard = (props: ArmyInfoModalCardPropTypes) => {
+    return (
+        <>
+            <div className="row justify-content-center">
+                <img
+                    src={props.imageSource}
+                    style={{ height: props.imageHeight, width: props.imageWidth }}
+                />
+            </div>
+            <div className="row justify-content-center text-center border-1 mt-2">
+                <SoliderInfo soliderCount={props.soliderCount} soliderName={props.soldierName} />
+            </div>
+        </>
+    )
+}
+
+interface SoliderInfoPropTypes {
+    soliderName: string,
+    soliderCount: number
+}
+
+const SoliderInfo = (props: SoliderInfoPropTypes) => {
+    return <p style={{ fontSize: "12px" }}>{props.soliderName}: {props.soliderCount}</p>
+}

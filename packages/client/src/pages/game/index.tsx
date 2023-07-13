@@ -1,21 +1,21 @@
-import { Grid } from "../../components/TerrainComp/Grid";
-import { useTerrain } from "../../context/TerrainContext";
 import map from "../../../map.json";
 import ScrollContainer from "react-indiana-drag-scroll";
-import ArmyInfoModal from "../../components/ArmyComp/ArmyInfoModal";
-import CastleWarning from "../../components/CastleComp/CastleWarning";
-import ArmyWarning from "../../components/ArmyComp/ArmyWarning";
-import ArmyMoveWarning from "../../components/ArmyComp/ArmyMoveWarning";
-import LoserWarning from "../../components/GameComp/LoserWarning";
+import { Grid } from "../../components/TerrainComp/Grid";
+import { useTerrain } from "../../context/TerrainContext";
+import { ArmyInfoModal } from "../../components/ArmyComp/ArmyInfoModal";
+import { CastleWarning } from "../../components/CastleComp/CastleWarning";
+import { ArmyWarning } from "../../components/ArmyComp/ArmyWarning";
+import { ArmyMoveWarning } from "../../components/ArmyComp/ArmyMoveWarning";
+import { LoserWarning } from "../../components/GameComp/LoserWarning";
 import { useCastlePositionByAddress } from "../../hooks/useCastlePositionByAddress";
-import ArmyProgressComp from "../../components/ArmyComp/ArmyProgressComp";
-import AudioControlComp from "../../components/AudioComp/AudioControlComp";
+import { ArmyProgressComp } from "../../components/ArmyComp/ArmyProgressComp";
+import { AudioControlComp } from "../../components/AudioComp/AudioControlComp";
 import { useCastle } from "../../context/CastleContext";
 import { useArmy } from "../../context/ArmyContext";
 import { usePlayer } from "../../context/PlayerContext";
-import WarResultComp from "../../components/WarResultComp/WarResultComp";
+import { WarResultComp } from "../../components/WarResultComp/WarResultComp";
 
-function Game() {
+export const Game = () => {
   const { width, height } = useTerrain();
   const { isCastleDeployedBefore, isCastleSettled } = useCastle();
   const { isArmyStage, isArmyMoveStage } = useArmy();
@@ -27,7 +27,7 @@ function Game() {
   const terrainStyles = [0, 40];
 
   return (
-    <div>
+    <>
       {!isCastleSettled && <CastleWarning />}
       {isCastleSettled && isArmyStage && <ArmyWarning />}
       {isArmyMoveStage && <ArmyMoveWarning />}
@@ -36,20 +36,9 @@ function Game() {
       {isCastleSettled && <ArmyInfoModal />}
       {isCastleSettled && <AudioControlComp />}
       {isCastleSettled && <WarResultComp />}
-      <ScrollContainer
-        className="scroll-container"
-        style={{ zIndex: "0", height: "100vh", overflow: "scroll" }}
-      >
-        <Grid
-          width={width}
-          height={height}
-          values={values}
-          pixelStyles={terrainStyles}
-          isBorder={false}
-        />
+      <ScrollContainer className="scroll-container" style={{ zIndex: "0", height: "100vh", overflow: "scroll" }}>
+        <Grid width={width} height={height} values={values} pixelStyles={terrainStyles} isBorder={false} />
       </ScrollContainer>
-    </div>
+    </>
   );
 }
-
-export default Game;

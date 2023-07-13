@@ -1,4 +1,4 @@
-function LoserWarning() {
+export const LoserWarning = () => {
     const loserWarningDivStyles: any = {
         position: "absolute",
         zIndex: "1",
@@ -17,5 +17,3 @@ function LoserWarning() {
         </div>
     )
 }
-
-export default LoserWarning;

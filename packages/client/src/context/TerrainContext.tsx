@@ -1,11 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useContext,
-  createContext,
-  ReactNode,
-  useRef,
-} from "react";
+import { useState, useEffect, useContext, createContext, ReactNode, useRef } from "react";
 import { ethers } from "ethers";
 
 type TerrainContextType = {

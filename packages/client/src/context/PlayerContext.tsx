@@ -1,39 +1,33 @@
 import { getBurnerWallet } from "@latticexyz/std-client";
 import { Wallet } from "ethers";
-import {
-    useRef,
-    useContext,
-    createContext,
-    ReactNode,
-  } from "react";
-  
+import { useRef, useContext, createContext, ReactNode } from "react";
+
 type PlayerContextType = {
-  userWallet:Wallet|undefined
+  userWallet: Wallet | undefined
 
 };
 
 const PlayerContext = createContext<PlayerContextType>({
-  userWallet:undefined
+  userWallet: undefined
 
 });
 
-const PlayerProvider: React.FC<{ children: ReactNode }> = ({children,}: {children: ReactNode;}) => {
+const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { children: ReactNode; }) => {
 
-  const {current:userWallet} = useRef(new Wallet(getBurnerWallet().value))
+  const { current: userWallet } = useRef(new Wallet(getBurnerWallet().value))
 
-const results: PlayerContextType = {
-  userWallet
-    
-};
+  const results: PlayerContextType = {
+    userWallet
 
-return (
+  };
+
+  return (
     <PlayerContext.Provider value={results}>
-    {children}
+      {children}
     </PlayerContext.Provider>
-);
+  );
 };
-  
+
 const usePlayer = () => useContext(PlayerContext);
 
 export { PlayerProvider, usePlayer };
-  

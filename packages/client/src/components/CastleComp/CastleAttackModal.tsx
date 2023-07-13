@@ -5,7 +5,7 @@ import { useAttack } from "../../context/AttackContext";
 import { findCastleCloseArmies } from "../../utils/findCastleCloseArmies";
 import { useEffect, useState } from "react";
 
-function CastleAttackModal() {
+export const CastleAttackModal = () => {
   const { components, systemCalls } = useMUD();
   const { setMyArmyConfig,
     setEnemyArmyConfig,
@@ -79,66 +79,17 @@ function CastleAttackModal() {
       id="offcanvasBottomCastle"
       aria-labelledby="offcanvasBottomLabel"
     >
-      <h5
-        className="offcanvas-title text-center border-bottom border-white text-white"
-        id="offcanvasBottomLabel"
-      >
-        War - Army Information
-      </h5>
+      <CastleAttackModalHeader />
       <div className="offcanvas-body small">
         <div className="row">
-          <div className="col-6">
-            <h1 className="text-center border-bottom border-white text-white p-1 bg-success">
-              My Army
-            </h1>
-            <div className="row">
-              <div className="row justify-content-center text-center mt-2">
-                <p>
-                  Swordsman: {myArmyConfig && myArmyConfig.armyConfig.numSwordsman}
-                </p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="row justify-content-center text-center mt-2">
-                <p>
-                  Archer: {myArmyConfig && myArmyConfig.armyConfig.numArcher}
-                </p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="row justify-content-center text-center mt-2">
-                <p>
-                  Cavalry: {myArmyConfig && myArmyConfig.armyConfig.numCavalry}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="col-6">
-            <h1 className="text-center border-bottom border-danger text-white p-1 bg-danger">
-              Castle Army
-            </h1>
-            <div className="row">
-              <div className="row justify-content-center text-center mt-2">
-                <p>
-                  Swordsman: {castleArmy && castleArmy.numSwordsman}
-                </p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="row justify-content-center text-center mt-2">
-                <p>
-                  Archer: {castleArmy && castleArmy.numArcher}
-                </p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="row justify-content-center text-center mt-2">
-                <p>
-                  Cavalry: {castleArmy && castleArmy.numCavalry}
-                </p>
-              </div>
-            </div>
-          </div>
+          <CastleAttackModalArmyCard title={"My Army"} titleBg={"success"}
+            numSwordsman={myArmyConfig && myArmyConfig.armyConfig.numSwordsman}
+            numArcher={myArmyConfig && myArmyConfig.armyConfig.numArcher}
+            numCavalry={myArmyConfig && myArmyConfig.armyConfig.numCavalry} />
+          <CastleAttackModalArmyCard title={"Enemy Army"} titleBg={"danger"}
+            numSwordsman={castleArmy && castleArmy.numSwordsman}
+            numArcher={castleArmy && castleArmy.numArcher}
+            numCavalry={castleArmy && castleArmy.numCavalry} />
         </div>
       </div>
       <div className="d-flex justify-content-center">
@@ -169,4 +120,56 @@ function CastleAttackModal() {
   );
 }
 
-export default CastleAttackModal;
+interface CastleAttackModalArmyCardPropTypes {
+  title: string,
+  titleBg: string,
+  numSwordsman: number,
+  numArcher: number,
+  numCavalry: number
+}
+
+const CastleAttackModalArmyCard = (props: CastleAttackModalArmyCardPropTypes) => {
+  return (
+    <>
+      <div className="col-6">
+        <h1 className={`text-center border-bottom border-white text-white p-1 bg-${props.titleBg}`}>
+          {props.title}
+        </h1>
+        <div className="row">
+          <div className="row justify-content-center text-center mt-2">
+            <p>
+              Swordsman: {props.numSwordsman && props.numSwordsman}
+            </p>
+          </div>
+        </div>
+        <div className="row">
+          <div className="row justify-content-center text-center mt-2">
+            <p>
+              Archer: {props.numArcher && props.numArcher}
+            </p>
+          </div>
+        </div>
+        <div className="row">
+          <div className="row justify-content-center text-center mt-2">
+            <p>
+              Cavalry: {props.numCavalry && props.numCavalry}
+            </p>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+const CastleAttackModalHeader = () => {
+  return (
+    <>
+      <h5
+        className="offcanvas-title text-center border-bottom border-white text-white"
+        id="offcanvasBottomLabel"
+      >
+        War - Army Information
+      </h5>
+    </>
+  )
+}

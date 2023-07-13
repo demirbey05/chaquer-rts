@@ -1,4 +1,5 @@
-function ArmyWarning() {
+export const ArmyMoveWarning = () => {
+
     const armyWarningDivStyles: any = {
         position: "absolute",
         zIndex: "1",
@@ -9,6 +10,7 @@ function ArmyWarning() {
         margin: "50px auto",
         width: "600px",
     }
+
     return (
         <div style={armyWarningDivStyles}>
             <h2 className="text-center text-3xl text-white mb-2 border-top border-bottom font-bold">
@@ -17,5 +19,3 @@ function ArmyWarning() {
         </div>
     )
 }
-
-export default ArmyWarning

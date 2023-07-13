@@ -1,7 +1,7 @@
 import { useMUD } from "../MUDContext";
 import { useEntityQuery, useObservableValue } from "@latticexyz/react";
-import { getComponentValue, HasValue, Type } from "@latticexyz/recs";
-import { useState, useEffect, useRef } from "react";
+import { getComponentValue, HasValue } from "@latticexyz/recs";
+import { useState, useEffect } from "react";
 
 export function useMyArmy(address: any) {
   const { components } = useMUD();
@@ -10,7 +10,6 @@ export function useMyArmy(address: any) {
   const armyEntities = useEntityQuery([
     HasValue(components.ArmyOwnable, { owner: address }),
   ]);
-
 
   // Transform army positions and store in separate state
   const [armyPositions, setArmyPositions] = useState<any[]>([]);

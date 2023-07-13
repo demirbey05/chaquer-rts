@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
 import soundTrack from '../../sounds/chaquerSoundTrack.mp3'
+import { useState, useEffect, useRef } from 'react'
 import { Button } from "@chakra-ui/react";
 import { SettingsIcon } from '@chakra-ui/icons'
 import { FaPlay, FaStop } from 'react-icons/fa'
 
-function AudioControlComp() {
+export const AudioControlComp = () => {
     const [isPlaying, setIsPlaying] = useState(false);
     const audioRef = useRef<any>();
 
@@ -51,16 +51,22 @@ function AudioControlComp() {
         fontSize: "30px"
     }
 
+    const audioOffcanvasDivStyle: any = {
+        height: "120px",
+        width: "160px",
+        marginTop: "25px",
+        padding: "5px"
+    }
+
     return (
         <div>
             <Button style={audioOffCanvasButtonStyle} type="button" colorScheme="yellow" data-bs-toggle="offcanvas" data-bs-target="#audioControlModal" aria-controls="staticBackdrop">
                 <SettingsIcon />
             </Button>
 
-            <div style={{ height: "120px", width: "160px", marginTop: "25px", padding: "5px" }} className="offcanvas offcanvas-start" data-bs-keyboard="false" data-bs-backdrop="false" id="audioControlModal" aria-labelledby="staticBackdropLabel">
+            <div style={audioOffcanvasDivStyle} className="offcanvas offcanvas-start" data-bs-keyboard="false" data-bs-backdrop="false" id="audioControlModal" aria-labelledby="staticBackdropLabel">
                 <div className="offcanvas-header" style={{ height: "40px" }}>
-                    <h5 className="offcanvas-title" id="staticBackdropLabel">Audio Control</h5>
-                    <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&#10008;</button>
+                    <AudioControlCompHeader />
                 </div>
                 <hr></hr>
                 <div className="offcanvas-body" style={{ overflow: "hidden" }}>
@@ -75,4 +81,11 @@ function AudioControlComp() {
     );
 }
 
-export default AudioControlComp
+const AudioControlCompHeader = () => {
+    return (
+        <>
+            <h5 className="offcanvas-title" id="staticBackdropLabel">Audio Control</h5>
+            <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&#10008;</button>
+        </>
+    )
+}

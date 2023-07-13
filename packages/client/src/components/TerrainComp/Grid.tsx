@@ -2,10 +2,10 @@ import "../../styles/globals.css";
 import { useEffect, useState, useRef } from "react";
 import { TerrainType } from "../../terrain-helper/types";
 import { useCastle } from "../../context/CastleContext";
-import CastleSettleModal from "../CastleComp/CastleSettleModal";
-import ArmySettleModal from "../ArmyComp/ArmySettleModal";
-import AttackModal from "../ArmyComp/ArmyAttackModal";
-import CastleAttackModal from "../CastleComp/CastleAttackModal";
+import { CastleSettleModal } from "../CastleComp/CastleSettleModal";
+import { ArmySettleModal } from "../ArmyComp/ArmySettleModal";
+import { ArmyAttackModal } from "../ArmyComp/ArmyAttackModal";
+import { CastleAttackModal } from "../CastleComp/CastleAttackModal";
 import { useCastlePositions } from "../../hooks/useCastlePositions";
 import { useCastlePositionByAddress } from "../../hooks/useCastlePositionByAddress";
 import { useArmyPositions } from "../../hooks/useArmyPositions";
@@ -33,7 +33,7 @@ export type DataProp = {
   isBorder: boolean;
 };
 
-export function Grid(data: DataProp) {
+export const Grid = (data: DataProp) => {
   const width = data.width;
   const height = data.height;
   const values = data.values;
@@ -214,7 +214,9 @@ export function Grid(data: DataProp) {
     return () => {
       if (myCastlePosition && myCastlePosition.length > 0) {
         myCastlePosition.map((position: any) => {
-          document.getElementById(`${position.y},${position.x}`)!.style.border = "";
+          if (document.getElementById(`${position.y},${position.x}`)) {
+            document.getElementById(`${position.y},${position.x}`)!.style.border = "";
+          }
         });
       }
     };
@@ -464,7 +466,7 @@ export function Grid(data: DataProp) {
       })}
       <CastleSettleModal />
       <ArmySettleModal />
-      <AttackModal />
+      <ArmyAttackModal />
       <CastleAttackModal />
     </div >
   );

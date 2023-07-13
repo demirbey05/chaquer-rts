@@ -1,12 +1,12 @@
-import { useMUD } from "../../MUDContext";
-import { Button, NumberInput, NumberInputField } from "@chakra-ui/react";
 import archerImg from "../../images/archer.png";
 import cavalryImg from "../../images/cavalry.png";
 import swordsmanImg from "../../images/swordsman.png";
+import { useMUD } from "../../MUDContext";
+import { Button, NumberInput, NumberInputField } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useArmy } from "../../context/ArmyContext";
 
-function ArmySettleModal() {
+export const ArmySettleModal = () => {
   const { armyPosition, setIsArmyStage, setIsArmySettled } = useArmy();
   const { systemCalls } = useMUD();
 
@@ -80,64 +80,25 @@ function ArmySettleModal() {
               </div>
               <div className="row mt-2">
                 <div className="col align-items-center">
-                  <div className="row justify-content-center">
-                    <img
-                      src={swordsmanImg}
-                      style={{ height: "100px", width: "75px" }}
-                    />
-                  </div>
-                  <div className="row justify-content-center text-center border-1 mt-2">
-                    <p>Swordsman</p>
-                  </div>
-                  <div className="row justify-content-center mt-2">
-                    <NumberInput min={0}>
-                      <NumberInputField
-                        onChange={(e: any) => setSwordsmanCount(e.target.value)}
-                        onClick={(e: any) => e.target.select()}
-                        maxLength={3}
-                      />
-                    </NumberInput>
-                  </div>
+                  <ArmySettleInputBody imageSource={swordsmanImg}
+                    soldierName={"Swordsman"}
+                    setSoliderCount={setSwordsmanCount}
+                    imageHeight={"100px"}
+                    imageWidth={"75px"} />
                 </div>
                 <div className="col align-items-center">
-                  <div className="row justify-content-center">
-                    <img
-                      src={archerImg}
-                      style={{ height: "100px", width: "75px" }}
-                    />
-                  </div>
-                  <div className="row justify-content-center text-center border-1 mt-2">
-                    <p>Archer</p>
-                  </div>
-                  <div className="row justify-content-center mt-2">
-                    <NumberInput min={0}>
-                      <NumberInputField
-                        onChange={(e: any) => setArcherCount(e.target.value)}
-                        onClick={(e: any) => e.target.select()}
-                        maxLength={3}
-                      />
-                    </NumberInput>
-                  </div>
+                  <ArmySettleInputBody imageSource={archerImg}
+                    soldierName={"Archer"}
+                    setSoliderCount={setArcherCount}
+                    imageHeight={"100px"}
+                    imageWidth={"85px"} />
                 </div>
                 <div className="col align-items-center">
-                  <div className="row justify-content-center">
-                    <img
-                      src={cavalryImg}
-                      style={{ height: "100px", width: "100px" }}
-                    />
-                  </div>
-                  <div className="row justify-content-center text-center border-1 mt-2">
-                    <p>Cavalry</p>
-                  </div>
-                  <div className="row justify-content-center mt-2">
-                    <NumberInput min={0}>
-                      <NumberInputField
-                        onChange={(e: any) => setCavalryCount(e.target.value)}
-                        onClick={(e: any) => e.target.select()}
-                        maxLength={3}
-                      />
-                    </NumberInput>
-                  </div>
+                  <ArmySettleInputBody imageSource={cavalryImg}
+                    soldierName={"Cavalry"}
+                    setSoliderCount={setCavalryCount}
+                    imageHeight={"100px"}
+                    imageWidth={"125px"} />
                 </div>
               </div>
             </div>
@@ -168,4 +129,35 @@ function ArmySettleModal() {
   );
 }
 
-export default ArmySettleModal;
+interface ArmySettleInputBody {
+  imageSource: string,
+  imageHeight: string,
+  imageWidth: string,
+  soldierName: string,
+  setSoliderCount: React.Dispatch<React.SetStateAction<string>>
+}
+
+const ArmySettleInputBody = (props: ArmySettleInputBody) => {
+  return (
+    <>
+      <div className="row justify-content-center">
+        <img
+          src={props.imageSource}
+          style={{ height: props.imageHeight, width: props.imageWidth }}
+        />
+      </div>
+      <div className="row justify-content-center text-center border-1 mt-2">
+        <p>{props.soldierName}</p>
+      </div>
+      <div className="row justify-content-center mt-2">
+        <NumberInput min={0}>
+          <NumberInputField
+            onChange={(e: any) => props.setSoliderCount(e.target.value)}
+            onClick={(e: any) => e.target.select()}
+            maxLength={3}
+          />
+        </NumberInput>
+      </div>
+    </>
+  )
+}

@@ -1,4 +1,5 @@
-function ArmyWarning() {
+export const ArmyWarning = () => {
+
   const armyWarningDivStyle: any = {
     position: "absolute",
     zIndex: "1",
@@ -18,5 +19,3 @@ function ArmyWarning() {
     </div >
   )
 }
-
-export default ArmyWarning

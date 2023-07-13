@@ -1,9 +1,4 @@
-import {
-    useState,
-    useContext,
-    createContext,
-    ReactNode,
-} from "react";
+import { useState, useContext, createContext, ReactNode } from "react";
 
 type CastleContextType = {
     isCastleSettled: boolean | undefined;

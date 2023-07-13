@@ -1,11 +1,12 @@
+import "../../styles/globals.css";
 import { useState } from "react";
 import { usePlayer } from '../../context/PlayerContext';
 import { useWarResult } from '../../hooks/useWarResult';
 import warResultIcon from '../../images/warResult.png';
 import { Button } from "@chakra-ui/react";
-import "../../styles/globals.css";
 
-const WarResultComp = () => {
+
+export const WarResultComp = () => {
     const [isOpen, setIsOpen] = useState(true);
     const warResults = useWarResult(5);
     const { userWallet } = usePlayer();
@@ -35,30 +36,11 @@ const WarResultComp = () => {
                 <h4 className="text-center text-white p-2 mb-2 border-bottom">War Results</h4>
                 <div >
                     {warResults && warResults.data.map((data, key) => {
-                        console.log(data)
                         if (data.type === "army") {
-                            if (data.data?.isDraw === true) {
-                                return <p className='text-white mb-3' key={key}><span className='bg-primary p-2'>You</span> ⚔️ <span className='bg-primary p-2'>Enemy</span> (Draw)</p>
-                            }
-                            else if (data.data?.winner === userWallet?.address.toLocaleLowerCase()) {
-                                return <p className='text-white mb-3' key={key}><span className='bg-success p-2'>You</span> ⚔️ <span className='bg-danger p-2'>Enemy</span> (Win)</p>
-                            }
-                            else if (data.data?.loser === userWallet?.address.toLocaleLowerCase()) {
-                                return <p className='text-white mb-3' key={key}><span className='bg-danger p-2'>You</span> ⚔️ <span className='bg-success p-2'>Enemy</span> (Lose)</p>
-                            }
-                            return null;
+                            return <WarResult text={"⚔️"} data={data} userWallet={userWallet} key={key} />
                         }
                         else {
-                            if (data.data?.isDraw === true) {
-                                return <p className='text-white mb-3' key={key}><span className='bg-primary p-2'>You</span> ⚔️🏰 <span className='bg-primary p-2'>Enemy</span> (Draw)</p>
-                            }
-                            else if (data.data?.winner === userWallet?.address.toLocaleLowerCase()) {
-                                return <p className='text-white mb-3' key={key}><span className='bg-success p-2'>You</span> ⚔️🏰 <span className='bg-danger p-2'>Enemy</span> (Win)</p>
-                            }
-                            else if (data.data?.loser === userWallet?.address.toLocaleLowerCase()) {
-                                return <p className='text-white mb-3' key={key}><span className='bg-danger p-2'>You</span> ⚔️🏰 <span className='bg-success p-2'>Enemy</span> (Lose)</p>
-                            }
-                            return null;
+                            return <WarResult text={"⚔️🏰"} data={data} userWallet={userWallet} key={key} />
                         }
                     })}
                 </div>
@@ -67,4 +49,22 @@ const WarResultComp = () => {
     );
 };
 
-export default WarResultComp;
+interface WarResultPropTypes {
+    text: string,
+    data: any,
+    userWallet: any,
+    key: any
+}
+
+const WarResult = (props: WarResultPropTypes) => {
+    if (props.data.data?.isDraw === true) {
+        return <p className='text-white mb-3' key={props.key}><span className='bg-primary p-2'>You</span> {props.text} <span className='bg-primary p-2'>Enemy</span> (Draw)</p>
+    }
+    else if (props.data.data?.winner === props.userWallet?.address.toLocaleLowerCase()) {
+        return <p className='text-white mb-3' key={props.key}><span className='bg-success p-2'>You</span> {props.text} <span className='bg-danger p-2'>Enemy</span> (Win)</p>
+    }
+    else if (props.data.data?.loser === props.userWallet?.address.toLocaleLowerCase()) {
+        return <p className='text-white mb-3' key={props.key}><span className='bg-danger p-2'>You</span> {props.text} <span className='bg-success p-2'>Enemy</span> (Lose)</p>
+    }
+    return null;
+}

@@ -1,5 +1,5 @@
-import Menu from "./pages/menu/index";
-import Game from "./pages/game/index";
+import { Menu } from "./pages/menu/index";
+import { Game } from "./pages/game/index";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 export const App = () => {

@@ -1,4 +1,4 @@
-function CastleWarning() {
+export const CastleWarning = () => {
   const castleWarningDivStyles: any = {
     position: "absolute",
     zIndex: "1",
