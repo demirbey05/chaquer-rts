@@ -13,6 +13,8 @@ import { useMyArmy } from "../../hooks/useMyArmy";
 import { useMUD } from "../../MUDContext";
 import { findIDFromPosition, Coord } from "../../utils/armyID";
 import { getTerrainAsset } from '../../utils/getTerrainAsset';
+import { isMyCastle } from '../../utils/isMyCastle';
+import { isUserClickedManhattanPosition } from '../../utils/isUserClickedManhattanPosition';
 import { getDataAtrY, getDataAtrX } from "../../utils/getIdDataAtr";
 import { canCastleBeSettle } from "../../utils/canCastleBeSettle";
 import { isMyArmy } from "../../utils/isMyArmy";
@@ -56,13 +58,14 @@ export const Grid = (data: DataProp) => {
     isArmyStage,
     setArmyPosition,
     setNumberOfArmy,
-    numberOfArmy, setIsArmyStage } = useArmy();
+    numberOfArmy,
+    setIsArmyStage } = useArmy();
   const { userWallet } = usePlayer();
   const { isCastleSettled, setIsCastleSettled, setTempCastle } = useCastle();
 
   const [tempArmyPos, setTempArmyPos] = useState<any>();
   const movingArmyId = useRef<Entity>("0" as Entity);
-  const toArmyPosition = useRef({ x: -1, y: -1 });
+  const toArmyPositionRef = useRef({ x: -1, y: -1 });
   const fromArmyPositionRef = useRef<Coord>({ x: "-1", y: "-1" });
 
   const castlePositions = useCastlePositions();
@@ -74,86 +77,67 @@ export const Grid = (data: DataProp) => {
   // Handle Clicks
   const handleClick = async (e: any) => {
     // For Putting army Grid with clicking castle
-    if (!isArmyMoveStage && myCastlePosition.find((element: { x: number; y: number }) => {
-      return (
-        element.x == parseInt(getDataAtrX(e)) &&
-        element.y == parseInt(getDataAtrY(e))
-      );
-    })
-    ) {
+    if (!isArmyMoveStage && isMyCastle(myCastlePosition, getDataAtrX(e), getDataAtrY(e))) {
       if (isArmyStage) {
         setIsArmyStage(false);
-      } else if (!isArmyStage && numberOfArmy < 3) {
+      }
+      else if (!isArmyStage && numberOfArmy < 3) {
         setIsArmyStage(true);
       }
     }
+
+    // Keep castle position as temp
     if (!isCastleSettled) {
       setTempCastle({ x: getDataAtrX(e), y: getDataAtrY(e) });
     }
 
+    // Keep army position as temp
     if (isArmyStage) {
       setArmyPosition({ x: getDataAtrX(e), y: getDataAtrY(e) });
     }
 
+    //Logic of ArmyMove-ArmyAttack-CastleAttack
     if (!fromArmyPosition && isCastleSettled && !isArmyStage && myArmyPosition && isMyArmy({ x: getDataAtrX(e), y: getDataAtrY(e) }, myArmyPosition)) {
       setFromArmyPosition({ x: getDataAtrX(e), y: getDataAtrY(e) });
       setTempArmyPos({ x: getDataAtrX(e), y: getDataAtrY(e) });
       setIsArmyMoveStage(true);
       setIsAttackStage(true);
     }
-    else if (fromArmyPosition && getManhattanPositions({ x: parseInt(fromArmyPosition.x), y: parseInt(fromArmyPosition.y), }).some((item) =>
-      item.x.toString() === getDataAtrX(e) &&
-      item.y.toString() === getDataAtrY(e)
-    )) {
-      toArmyPosition.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
+    else if (fromArmyPosition && isUserClickedManhattanPosition(fromArmyPosition, getDataAtrX(e), getDataAtrY(e))) {
+      toArmyPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
       fromArmyPositionRef.current = { x: fromArmyPosition.x, y: fromArmyPosition.y, };
 
       //If user attack to the enemy army
-      if (isEnemyArmy(toArmyPosition.current, armyPositions, myArmyPosition)) {
+      if (isEnemyArmy(toArmyPositionRef.current, armyPositions, myArmyPosition)) {
         setIsArmyMoveStage(false);
-        setAttackFromArmyPositionToArmy(fromArmyPositionRef.current);
         setFromArmyPosition(undefined);
-        setAttackToArmyPositionToArmy(toArmyPosition.current);
+        setAttackFromArmyPositionToArmy(fromArmyPositionRef.current);
+        setAttackToArmyPositionToArmy(toArmyPositionRef.current);
         setMyArmyConfig(
-          getMyArmyConfigByPosition(
-            {
-              x: fromArmyPositionRef.current.x,
-              y: fromArmyPositionRef.current.y,
-            },
-            myArmyPosition
-          )
+          getMyArmyConfigByPosition({ x: fromArmyPositionRef.current.x, y: fromArmyPositionRef.current.y, }, myArmyPosition)
         );
         setEnemyArmyConfig(
           getEnemyArmyConfigByPosition(
-            { x: toArmyPosition.current.x, y: toArmyPosition.current.y },
-            armyPositions
-          )
+            { x: toArmyPositionRef.current.x, y: toArmyPositionRef.current.y }, armyPositions)
         );
-        toArmyPosition.current = { x: -1, y: -1 };
+        toArmyPositionRef.current = { x: -1, y: -1 };
         fromArmyPositionRef.current = { x: "-1", y: "-1" };
       }
       //If user attack to the enemy castle
-      else if (isEnemyCastle(toArmyPosition.current, myCastlePosition, castlePositions)) {
+      else if (isEnemyCastle(toArmyPositionRef.current, myCastlePosition, castlePositions)) {
         setIsArmyMoveStage(false)
-        setAttackFromArmyPositionToCastle(fromArmyPositionRef.current);
         setFromArmyPosition(undefined);
-        setAttackToArmyPositionToCastle(toArmyPosition.current);
+        setAttackFromArmyPositionToCastle(fromArmyPositionRef.current);
+        setAttackToArmyPositionToCastle(toArmyPositionRef.current);
         setMyArmyConfig(
-          getMyArmyConfigByPosition(
-            {
-              x: fromArmyPositionRef.current.x,
-              y: fromArmyPositionRef.current.y,
-            },
-            myArmyPosition
-          )
+          getMyArmyConfigByPosition({ x: fromArmyPositionRef.current.x, y: fromArmyPositionRef.current.y, }, myArmyPosition)
         );
-        toArmyPosition.current = { x: -1, y: -1 };
+        toArmyPositionRef.current = { x: -1, y: -1 };
         fromArmyPositionRef.current = { x: "-1", y: "-1" };
       }
       else {
-        if (canCastleBeSettle(values[toArmyPosition.current.x][toArmyPosition.current.y])) {
+        if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y])) {
           setIsAttackStage(false)
-          // Get the ArmyID from the coordinates
           const movingArmyIdMap = findIDFromPosition(
             fromArmyPositionRef.current,
             components.Position
@@ -163,11 +147,11 @@ export const Grid = (data: DataProp) => {
             movingArmyId.current = [...movingArmyIdMap][0];
           }
           setIsArmyMoveStage(false);
-          if (toArmyPosition.current && isArmyMoveStage) {
+          if (toArmyPositionRef.current && isArmyMoveStage) {
             const tx = await systemCalls.moveArmy(
               movingArmyId.current,
-              toArmyPosition.current.x,
-              toArmyPosition.current.y,
+              toArmyPositionRef.current.x,
+              toArmyPositionRef.current.y,
               1
             )
             if (tx == null) {
@@ -179,14 +163,15 @@ export const Grid = (data: DataProp) => {
 
             setIsAttackStage(false);
             setFromArmyPosition(undefined);
-            toArmyPosition.current = { x: -1, y: -1 };
+            toArmyPositionRef.current = { x: -1, y: -1 };
             fromArmyPositionRef.current = { x: "-1", y: "-1" };
           }
         }
       }
-    } else {
+    }
+    else {
       setFromArmyPosition(undefined);
-      toArmyPosition.current = { x: -1, y: -1 };
+      toArmyPositionRef.current = { x: -1, y: -1 };
       fromArmyPositionRef.current = { x: "-1", y: "-1" };
       setIsArmyMoveStage(false);
       setIsAttackStage(false);
