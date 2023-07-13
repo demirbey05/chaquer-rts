@@ -123,5 +123,80 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    Players: (() => {
+      const tableId = new TableId("", "Players");
+      return defineComponent(
+        world,
+        {
+          userValid: RecsType.Boolean,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    PlayerSeeds: (() => {
+      const tableId = new TableId("", "PlayerSeeds");
+      return defineComponent(
+        world,
+        {
+          seeds: RecsType.BigIntArray,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    NumberOfUsers: (() => {
+      const tableId = new TableId("", "NumberOfUsers");
+      return defineComponent(
+        world,
+        {
+          numOfUsers: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    LimitOfGame: (() => {
+      const tableId = new TableId("", "LimitOfGame");
+      return defineComponent(
+        world,
+        {
+          numOfUsers: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    AddressToUsername: (() => {
+      const tableId = new TableId("", "AddressToUsernam");
+      return defineComponent(
+        world,
+        {
+          userName: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
   };
 }

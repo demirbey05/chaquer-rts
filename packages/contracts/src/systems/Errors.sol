@@ -1,6 +1,5 @@
 //SPDX-License-Identifier:MIT
 
-
 pragma solidity ^0.8.0;
 
 // Init System Errors
@@ -14,7 +13,6 @@ error CastleSettle__CoordinatesOutOfBound();
 error CastleSettle__TileIsNotEmpty();
 error CastleSettle__WrongTerrainType();
 error CastleSettle__NoCastleRight();
-
 
 //Army Settle System
 error ArmySettle__CoordinatesOutOfBound();
@@ -39,9 +37,16 @@ error AttackSystem__NoArmy();
 error AttackSystem__NoFriendFire();
 error AttackSystem__WrongGameID();
 
-
-//Capture System Errors 
+//Capture System Errors
 error CaptureSystem__TooFarToAttack();
 error CaptureSystem__NoAuthorization();
 error CaptureSystem__FriendFireNotAllowed();
 error CaptureSystem__NonMatchedGameID();
+
+// MineInitSystem Errors
+error MineSystem__NoAuthorized();
+
+// Identity System Errors
+error IdentitySystem__AlreadyJoined();
+error IdentitySystem__GameIsFull();
+error IdentitySystem__InvalidUserName();

@@ -61,6 +61,47 @@ export default mudConfig({
         isDraw:"bool",
       },
       ephemeral:true
+    },
+    Players:{
+      keySchema:{
+        gameId:"uint256",
+        userAddress:"address"
+      } ,schema :{
+        userValid:"bool"
+      }
+    },
+    PlayerSeeds:{
+      keySchema:{
+        gameId:"uint256"
+      },
+      schema:{
+        seeds:"uint256[]"
+      }
+    },
+    NumberOfUsers:{
+      keySchema:{
+        gameId:"uint256"
+      },
+      schema:{
+        numOfUsers:"uint256"
+      }
+    },
+    LimitOfGame:{
+      keySchema:{
+        gameId:"uint256"
+      },
+      schema:{
+        numOfUsers:"uint256"
+      }
+    },
+    AddressToUsername:{
+      keySchema:{
+        ownerAddress:"address",
+        gameId:"uint256"
+      },
+      schema:{
+        userName:"string"
+      }
     }
   },
   modules: [

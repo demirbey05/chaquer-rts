@@ -6,12 +6,14 @@ pragma solidity >=0.8.0;
 import { IBaseWorld } from "@latticexyz/world/src/interfaces/IBaseWorld.sol";
 
 import { IAttackCaptureSystem } from "./IAttackCaptureSystem.sol";
+import { IIdentitySystem } from "./IIdentitySystem.sol";
 import { IMapSystem } from "./IMapSystem.sol";
+import { IMineInitSystem } from "./IMineInitSystem.sol";
 
 /**
  * The IWorld interface includes all systems dynamically added to the World
  * during the deploy process.
  */
-interface IWorld is IBaseWorld, IAttackCaptureSystem, IMapSystem {
+interface IWorld is IBaseWorld, IAttackCaptureSystem, IIdentitySystem, IMapSystem, IMineInitSystem {
 
 }

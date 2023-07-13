@@ -3,12 +3,10 @@
 pragma solidity ^0.8.0;
 import { BattleResult, RemainingData } from "./Types.sol";
 import "./Libraries.sol";
-import {CastleOwnable,Position} from "../codegen/Tables.sol";
+import { CastleOwnable, Position } from "../codegen/Tables.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 
 error ErrorInCalculatingBattleScores();
-
-
 
 function findRemainings(BattleResult memory result) pure returns (RemainingData memory remainings) {
   if (result.swordsman > 0) {
@@ -26,10 +24,9 @@ function findRemainings(BattleResult memory result) pure returns (RemainingData 
   return remainings;
 }
 
-function calculateScoreSingleRemaining(
-  BattleResult memory scoreArray,
-  RemainingData memory remainings
-) returns (int32 result) {
+function calculateScoreSingleRemaining(BattleResult memory scoreArray, RemainingData memory remainings)
+  returns (int32 result)
+{
   if (remainings.isSwordsman == 1) {
     result = (scoreArray.swordsman + 2 * scoreArray.cavalry + (scoreArray.archer / 2));
   }
@@ -41,15 +38,13 @@ function calculateScoreSingleRemaining(
   }
 }
 
-function calculateScoreDoubleRemaining(
-  BattleResult memory scoreArray,
-  RemainingData memory remainings
-) returns (int32 result) {
+function calculateScoreDoubleRemaining(BattleResult memory scoreArray, RemainingData memory remainings)
+  returns (int32 result)
+{
   if (remainings.isSwordsman == 1) {
     result = remainings.isArcher == 1
       ? scoreArray.swordsman + 2 * scoreArray.cavalry
       : scoreArray.swordsman + (scoreArray.archer / 2);
-
   } else if (remainings.isArcher == 1) {
     result = remainings.isCavalry == 1
       ? scoreArray.archer + 2 * scoreArray.swordsman
@@ -91,23 +86,25 @@ function calculateArmyScore(BattleResult memory battleResult, RemainingData memo
   }
 }
 
-library LibUtils{
-  function findSurroundingArmies(IStore world,bytes32 castleID, uint256 gameID) internal view  returns (bytes32[] memory){
-
+library LibUtils {
+  function findSurroundingArmies(
+    IStore world,
+    bytes32 castleID,
+    uint256 gameID
+  ) internal view returns (bytes32[] memory) {
     address owner = CastleOwnable.getOwner(castleID);
-    
-    bytes32[] memory allArmies = LibQueries.getOwnedArmyIDs( world, owner, gameID);
+
+    bytes32[] memory allArmies = LibQueries.getOwnedArmyIDs(world, owner, gameID);
     bytes32[] memory ownerArmiesSurroundCastle = new bytes32[](allArmies.length);
-    (uint32 xCastle,uint32 yCastle,) = Position.get(castleID);
+    (uint32 xCastle, uint32 yCastle, ) = Position.get(castleID);
     uint current = 0;
     for (uint i = 0; i < allArmies.length; i++) {
-      (uint32 xArmy,uint32 yArmy, ) = Position.get(allArmies[i]);
-      if (LibMath.manhattan(xCastle,yCastle,xArmy,yArmy) <= 3) {
+      (uint32 xArmy, uint32 yArmy, ) = Position.get(allArmies[i]);
+      if (LibMath.manhattan(xCastle, yCastle, xArmy, yArmy) <= 3) {
         ownerArmiesSurroundCastle[current] = allArmies[i];
         current++;
       }
     }
     return ownerArmiesSurroundCastle;
   }
-
 }

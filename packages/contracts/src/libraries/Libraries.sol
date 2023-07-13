@@ -7,3 +7,4 @@ import "./LibAttack.sol";
 import "./Types.sol";
 import "./Utils.sol";
 import "./LibQueries.sol";
+import "./LibRandom.sol";
