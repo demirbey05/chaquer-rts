@@ -7,8 +7,8 @@ import { MudV2Test } from "@latticexyz/std-contracts/src/test/MudV2Test.t.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 import { IWorld } from "../src/codegen/world/IWorld.sol";
-import { MapConfig, MapConfigTableId } from "../src/codegen/Tables.sol";
-import {InitSystem__AlreadyInitialized,InitSystem__MismatchedSize,InitSystem__NotEnoughDimension} from "../src/systems/MapSystem.sol";
+import { MapConfig, MapConfigTableId, LimitOfGame } from "../src/codegen/Tables.sol";
+import "../src/systems/Errors.sol";
 
 contract MapInitTest is MudV2Test {
   IWorld public world;
@@ -29,46 +29,75 @@ contract MapInitTest is MudV2Test {
 
   function testInitData() public {
     uint256 gameID = 1;
-    uint256 terrainLength = MapConfig.lengthTerrain(world,1);
+    uint256 terrainLength = MapConfig.lengthTerrain(world, 1);
     assertEq(0, terrainLength);
     bytes memory map1 = bytes(vm.readFile("test/mock_data/full_data.txt"));
-    world.initMapData(gameID,50,50,map1);
-    (uint32 width, uint32 height, bytes memory terrainData) = MapConfig.get(world,gameID);
-    assertEq(terrainData,map1);
+    world.initMapData(gameID, 50, 50, map1);
+    (uint32 width, uint32 height, bytes memory terrainData) = MapConfig.get(world, gameID);
+    assertEq(terrainData, map1);
     assertEq(width * height, map1.length);
-    terrainLength = MapConfig.lengthTerrain(world,1);
+    terrainLength = MapConfig.lengthTerrain(world, 1);
     assertEq(50 * 50, terrainLength);
-
   }
 
   function testSecondInitRevert() public {
     uint256 gameID = 1;
     bytes memory map1 = bytes(vm.readFile("test/mock_data/full_data.txt"));
-    world.initMapData(gameID,50,50,map1);
+    world.initMapData(gameID, 50, 50, map1);
     vm.expectRevert(InitSystem__AlreadyInitialized.selector);
-    world.initMapData(gameID,50,50,map1);
+    world.initMapData(gameID, 50, 50, map1);
   }
 
   function testMismatchedSize() public {
     uint256 gameID = 1;
     bytes memory map1 = bytes(vm.readFile("test/mock_data/full_data.txt"));
     vm.expectRevert(InitSystem__MismatchedSize.selector);
-    world.initMapData(gameID,35,35,map1); 
+    world.initMapData(gameID, 35, 35, map1);
   }
 
   function testWrongDimensionLower() public {
     uint256 gameID = 1;
     bytes memory map1 = bytes(vm.readFile("test/mock_data/full_data.txt"));
     vm.expectRevert(InitSystem__NotEnoughDimension.selector);
-    world.initMapData(gameID,8,8,map1); 
-
+    world.initMapData(gameID, 8, 8, map1);
   }
+
   function testWrongDimensionHigher() public {
     uint256 gameID = 1;
     bytes memory map1 = bytes(vm.readFile("test/mock_data/full_data.txt"));
     vm.expectRevert(InitSystem__NotEnoughDimension.selector);
-    world.initMapData(gameID,70,70,map1); 
+    world.initMapData(gameID, 70, 70, map1);
   }
 
+  function testSuccessfulCapacityInit() public {
+    uint256 gameID = 1;
+    bytes memory map1 = bytes(vm.readFile("test/mock_data/full_data.txt"));
+    world.initMapData(gameID, 50, 50, map1);
+    world.InitNumberOfGamer(gameID, 11);
+    uint256 capacityInited = LimitOfGame.get(world, gameID);
+    assertEq(capacityInited, 11);
+  }
 
+  function testCapacityInitWithoutTerrain() public {
+    uint256 gameID = 1;
+    vm.expectRevert(InitSystem__NotInitialized.selector);
+    world.InitNumberOfGamer(gameID, 10);
+  }
+
+  function testCapacityAlreadyInitialized() public {
+    uint256 gameID = 1;
+    bytes memory map1 = bytes(vm.readFile("test/mock_data/full_data.txt"));
+    world.initMapData(gameID, 50, 50, map1);
+    world.InitNumberOfGamer(gameID, 11);
+    vm.expectRevert(InitSystem__CapacityAlreadyInitialized.selector);
+    world.InitNumberOfGamer(gameID, 15);
+  }
+
+  function testCapacityIsLow() public {
+    uint256 gameID = 1;
+    bytes memory map1 = bytes(vm.readFile("test/mock_data/full_data.txt"));
+    world.initMapData(gameID, 50, 50, map1);
+    vm.expectRevert(InitSystem__CapacityIsTooLow.selector);
+    world.InitNumberOfGamer(gameID, 3);
+  }
 }

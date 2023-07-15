@@ -102,7 +102,25 @@ export default mudConfig({
       schema:{
         userName:"string"
       }
+    },
+    ResourceOwnable :{
+      schema:{
+        sourceType:"MineType",
+        owner:"address",
+        gameID:"uint256"
+      },
+    },
+    ResourceInited:{
+      keySchema:{
+        gameID:"uint256"
+      },
+      schema:{
+        isInited:"bool"
+      }
     }
+  },
+  enums: {
+    MineType: ["Food","Wood","Gold"],
   },
   modules: [
     {

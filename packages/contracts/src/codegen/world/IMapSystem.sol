@@ -8,6 +8,8 @@ import { ArmyConfigData } from "./../Tables.sol";
 interface IMapSystem {
   function initMapData(uint256 gameID, uint32 width, uint32 height, bytes calldata terrain) external;
 
+  function InitNumberOfGamer(uint256 gameID, uint256 capacity) external;
+
   function settleCastle(uint32 x, uint32 y, uint256 gameID) external returns (bytes32);
 
   function settleArmy(uint32 x, uint32 y, ArmyConfigData calldata config) external returns (bytes32);

@@ -5,4 +5,6 @@ pragma solidity >=0.8.0;
 
 interface IMineInitSystem {
   function commitSeed(uint256 gameID, uint256 seed) external;
+
+  function resourceSystemInit(uint256 gameID) external;
 }

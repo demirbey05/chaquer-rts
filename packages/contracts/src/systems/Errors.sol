@@ -6,6 +6,9 @@ pragma solidity ^0.8.0;
 error InitSystem__AlreadyInitialized();
 error InitSystem__MismatchedSize();
 error InitSystem__NotEnoughDimension();
+error InitSystem__NotInitialized();
+error InitSystem__CapacityAlreadyInitialized();
+error InitSystem__CapacityIsTooLow();
 
 //Castle Settle System Errors
 error CastleSettle__MapIsNotReady();
@@ -45,8 +48,13 @@ error CaptureSystem__NonMatchedGameID();
 
 // MineInitSystem Errors
 error MineSystem__NoAuthorized();
+error MineSystem__GameIsNotFull();
+error MineSystem__NotAllUsersSubmitSeed();
+error MineSystem__ResourceInitialized();
+error MineSystem__RandomizationError();
 
 // Identity System Errors
 error IdentitySystem__AlreadyJoined();
 error IdentitySystem__GameIsFull();
 error IdentitySystem__InvalidUserName();
+error IdentitySystem__GameDoesNotExist();
