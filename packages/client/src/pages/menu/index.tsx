@@ -6,7 +6,7 @@ import { TerrainSpinner } from "../../components/MenuComp/TerrainSpinner";
 import { TerrainInfoModal } from "../../components/MenuComp/TerrainInfoModal";
 import { Button } from "@chakra-ui/react";
 import { useTerrain } from "../../context/TerrainContext.js"
-import { Link } from "react-router-dom";
+import { UserNameModal } from '../../components/MenuComp/UserNameModal';
 import { useMUD } from "../../MUDContext";
 import { flatten2D } from "../../utils/terrainArray";
 import { ethers } from "ethers";
@@ -71,6 +71,7 @@ export const Menu = () => {
           )}
         </div>
       </div>
+      <UserNameModal />
     </div >
   );
 }
@@ -114,21 +115,21 @@ interface StartGameButtonPropTypes {
 const StartGameButton = (props: StartGameButtonPropTypes) => {
   return (
     <div className="text-center mt-2 mb-2">
-      <Link to="/game">
-        <Button
-          colorScheme="blackAlpha"
-          border="solid"
-          width="200px"
-          isDisabled={props.isLoading}
-          textColor="white"
-          variant="ghost"
-          p="7"
-          mt="16"
-          onClick={props.handleTerrain}
-        >
-          Start the Game
-        </Button>
-      </Link>
+      <Button
+        data-bs-toggle="modal"
+        data-bs-target="#userNameModal"
+        colorScheme="blackAlpha"
+        border="solid"
+        width="200px"
+        isDisabled={props.isLoading}
+        textColor="white"
+        variant="ghost"
+        p="7"
+        mt="16"
+        onClick={props.handleTerrain}
+      >
+        Start the Game
+      </Button>
     </div>
   )
 }
