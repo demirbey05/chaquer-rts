@@ -2,9 +2,10 @@
 
 pragma solidity ^0.8.0;
 import { query, QueryFragment, QueryType } from "@latticexyz/world/src/modules/keysintable/query.sol";
-import { PositionTableId, CastleOwnableTableId, Position, CastleOwnable, ArmyOwnableTableId, ArmyOwnable } from "../codegen/Tables.sol";
+import { PositionTableId, CastleOwnableTableId, Position, CastleOwnable, ArmyOwnableTableId, ArmyOwnable, ResourceOwnable, ResourceOwnableTableId } from "../codegen/Tables.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
+import { MineType } from "../codegen/Types.sol";
 
 library LibQueries {
   function queryPositionEntity(
@@ -54,6 +55,20 @@ library LibQueries {
     uint256 gameID
   ) internal view returns (bytes32[] memory) {
     bytes32[] memory entities = getKeysWithValue(world, ArmyOwnableTableId, ArmyOwnable.encode(owner, gameID));
+    return entities;
+  }
+
+  function getMines(
+    IStore world,
+    address owner,
+    uint256 gameID,
+    MineType mineType
+  ) internal view returns (bytes32[] memory) {
+    bytes32[] memory entities = getKeysWithValue(
+      world,
+      ResourceOwnableTableId,
+      ResourceOwnable.encode(mineType, owner, gameID)
+    );
     return entities;
   }
 }

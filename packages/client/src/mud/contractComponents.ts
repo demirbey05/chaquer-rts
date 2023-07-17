@@ -198,5 +198,37 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    ResourceOwnable: (() => {
+      const tableId = new TableId("", "ResourceOwnable");
+      return defineComponent(
+        world,
+        {
+          sourceType: RecsType.Number,
+          owner: RecsType.String,
+          gameID: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    ResourceInited: (() => {
+      const tableId = new TableId("", "ResourceInited");
+      return defineComponent(
+        world,
+        {
+          isInited: RecsType.Boolean,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
   };
 }

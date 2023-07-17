@@ -138,5 +138,10 @@ export default mudConfig({
       root: true,
       args: [resolveTableId("ArmyOwnable")],
     },
+    {
+      name: "KeysWithValueModule",
+      root: true,
+      args: [resolveTableId("ResourceOwnable")],
+    },
   ],
 });

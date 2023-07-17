@@ -108,4 +108,52 @@ library TestUtils {
     world.joinGame(gameID, userName);
     vm.stopPrank();
   }
+
+  function initializeCapacityWithUsers(
+    IWorld world,
+    uint256 gameID,
+    string memory userName,
+    address payable[] memory users,
+    uint256 capacity
+  ) internal {
+    world.InitNumberOfGamer(gameID, capacity);
+    for (uint i = 0; i < users.length; i++) {
+      TestUtils.initializeID(world, gameID, userName, users[i]);
+    }
+  }
+
+  function commitSeedWrapper(
+    IWorld world,
+    uint256 gameID,
+    uint256 seed,
+    address user
+  ) internal {
+    vm.startPrank(user);
+    world.commitSeed(gameID, seed);
+    vm.stopPrank();
+  }
+
+  function initializeSeedsOfUsers(
+    IWorld world,
+    uint256 gameID,
+    uint256 seed,
+    address payable[] memory users
+  ) internal {
+    for (uint i = 0; i < users.length; i++) {
+      TestUtils.commitSeedWrapper(world, gameID, seed, users[i]);
+    }
+  }
+
+  function initializeMinePlaces(
+    IWorld world,
+    uint256 gameID,
+    uint256 seed,
+    address payable[] memory users,
+    string memory userName,
+    uint256 capacity
+  ) internal returns (uint256 i) {
+    initializeCapacityWithUsers(world, gameID, userName, users, capacity);
+    initializeSeedsOfUsers(world, gameID, seed, users);
+    world.resourceSystemInit(gameID);
+  }
 }

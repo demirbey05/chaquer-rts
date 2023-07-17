@@ -18,9 +18,7 @@ contract MineInitSystem is System {
     address sender = _msgSender();
     bool isPlayer = Players.get(gameID, sender);
     if (isPlayer) {
-      uint256[] memory temp = PlayerSeeds.get(gameID);
-      temp[temp.length] = seed;
-      PlayerSeeds.set(gameID, temp);
+      PlayerSeeds.push(gameID, seed);
     } else {
       revert MineSystem__NoAuthorized();
     }
@@ -80,7 +78,7 @@ contract MineInitSystem is System {
       if (LibQueries.queryPositionEntity(IStore(_world()), x, y, gameID) > 0) {
         continue;
       }
-      bytes32 entityID = getUniqueEntity();
+      bytes32 entityID = keccak256(abi.encodePacked(x, y, "Mine", gameID));
       Position.set(entityID, x, y, gameID);
       ResourceOwnable.set(entityID, ResourceOwnableData(mineType, address(0), gameID));
       i++;
