@@ -1,14 +1,20 @@
 import { Link } from 'react-router-dom';
 import { usePlayer } from '../../context/PlayerContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const UserNameModal = () => {
-    const { setUserName } = usePlayer();
+    const { setUserName, userName } = usePlayer();
     const [disable, setDisable] = useState<boolean>(true);
+
+    useEffect(() => {
+        if (localStorage.getItem('username')) {
+            setDisable(false)
+        }
+    }, [userName])
 
     const handleInput = (e: any) => {
         setUserName(e.target.value)
-        if (e.target.value.length > 2) {
+        if (e.target.value.length > 2 && e.target.value.length < 32) {
             setDisable(false)
         }
         else {
@@ -26,7 +32,11 @@ export const UserNameModal = () => {
                     <div className="modal-body">
                         <div className="mb-3">
                             <label htmlFor="usernameinput" className="form-label">Username</label>
-                            <input onChange={(e: any) => handleInput(e)} type="text" className="form-control w-75" id="usernameinput" placeholder="username" />
+                            {
+                                !localStorage.getItem('username')
+                                    ? <input onChange={(e: any) => handleInput(e)} type="text" className="form-control w-75" id="usernameinput" placeholder="username" />
+                                    : <input value={userName} type="text" className="form-control w-75" id="usernameinput" readOnly />
+                            }
                         </div>
                     </div>
                     <div className="modal-footer">
@@ -39,8 +49,8 @@ export const UserNameModal = () => {
                         }
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 

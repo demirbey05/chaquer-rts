@@ -3,6 +3,8 @@ import { useState, useEffect, useRef } from 'react'
 import { Button } from "@chakra-ui/react";
 import { SettingsIcon } from '@chakra-ui/icons'
 import { FaPlay, FaStop } from 'react-icons/fa'
+import { RiArrowGoBackFill } from 'react-icons/ri'
+import { Link } from 'react-router-dom';
 
 export const AudioControlComp = () => {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -52,26 +54,34 @@ export const AudioControlComp = () => {
     }
 
     const audioOffcanvasDivStyle: any = {
-        height: "120px",
-        width: "160px",
+        height: "300px",
+        width: "400px",
         marginTop: "25px",
         padding: "5px"
     }
 
     return (
         <div>
-            <Button style={audioOffCanvasButtonStyle} type="button" colorScheme="yellow" data-bs-toggle="offcanvas" data-bs-target="#audioControlModal" aria-controls="staticBackdrop">
+            <Button style={audioOffCanvasButtonStyle}
+                type="button" colorScheme="yellow"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#audioControlModal"
+                aria-controls="staticBackdrop">
                 <SettingsIcon />
             </Button>
 
             <div style={audioOffcanvasDivStyle} className="offcanvas offcanvas-start" data-bs-keyboard="false" data-bs-backdrop="false" id="audioControlModal" aria-labelledby="staticBackdropLabel">
-                <div className="offcanvas-header" style={{ height: "40px" }}>
+                <div className="offcanvas-header">
                     <AudioControlCompHeader />
                 </div>
-                <hr></hr>
-                <div className="offcanvas-body" style={{ overflow: "hidden" }}>
-                    <Button colorScheme='whatsapp' variant='outline' style={{ height: "40px", marginRight: "10px" }} onClick={handlePlay} data-bs-dismiss="offcanvas" aria-label="Close"><FaPlay /></Button>
-                    <Button colorScheme='red' variant='outline' style={{ height: "40px" }} onClick={handleStop} data-bs-dismiss="offcanvas" aria-label="Close"><FaStop /></Button>
+                <hr />
+                <div className="offcanvas-body">
+                    <h5 className="offcanvas-title mb-2" id="staticBackdropLabel">Music Settings</h5>
+                    <PlayMusicButton handlePlay={handlePlay} />
+                    <PauseMusicButton handleStop={handleStop} />
+                    <hr className='mt-4' />
+                    <h5 className="offcanvas-title mb-2 mt-2" id="staticBackdropLabel">Back to Menu</h5>
+                    <BackToMenuButton />
                 </div>
             </div>
             <audio ref={audioRef} autoPlay muted={isPlaying} >
@@ -84,8 +94,51 @@ export const AudioControlComp = () => {
 const AudioControlCompHeader = () => {
     return (
         <>
-            <h5 className="offcanvas-title" id="staticBackdropLabel">Audio Control</h5>
+            <h5 className="offcanvas-title font-extrabold" id="staticBackdropLabel">Settings</h5>
             <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&#10008;</button>
         </>
+    )
+}
+
+const BackToMenuButton = () => {
+    return (
+        <Link to='/'>
+            <Button colorScheme='blue'
+                variant='outline'
+                style={{ height: "40px" }}
+                data-bs-dismiss="offcanvas"
+                aria-label="Close">
+                Back to Menu
+                <RiArrowGoBackFill className='ms-2' />
+            </Button>
+        </Link>
+    )
+}
+
+const PlayMusicButton = ({ handlePlay }: any) => {
+    return (
+        <Button colorScheme='whatsapp'
+            variant='outline'
+            style={{ height: "40px", marginRight: "10px" }}
+            onClick={handlePlay}
+            data-bs-dismiss="offcanvas"
+            aria-label="Close">
+            Play Music
+            <FaPlay className='ms-2' />
+        </Button>
+    )
+}
+
+const PauseMusicButton = ({ handleStop }: any) => {
+    return (
+        <Button colorScheme='red'
+            variant='outline'
+            style={{ height: "40px" }}
+            onClick={handleStop}
+            data-bs-dismiss="offcanvas"
+            aria-label="Close">
+            Pause Music
+            <FaStop className='ms-2' />
+        </Button>
     )
 }

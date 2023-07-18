@@ -6,12 +6,16 @@ type PlayerContextType = {
   userWallet: Wallet | undefined
   userName: string | undefined;
   setUserName: (value: string) => void;
+  saveUserName: () => void;
+  removeUserName: () => void;
 };
 
 const PlayerContext = createContext<PlayerContextType>({
   userWallet: undefined,
   userName: undefined,
-  setUserName: () => { }
+  setUserName: () => { },
+  saveUserName: () => { },
+  removeUserName: () => { }
 });
 
 const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { children: ReactNode; }) => {
@@ -40,7 +44,9 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
   const results: PlayerContextType = {
     userWallet,
     userName,
-    setUserName
+    setUserName,
+    saveUserName,
+    removeUserName
   };
 
   return (

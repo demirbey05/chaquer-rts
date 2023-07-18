@@ -1,10 +1,12 @@
 import { useMUD } from "../../MUDContext";
 import { Button } from "@chakra-ui/react";
 import { useCastle } from "../../context/CastleContext";
+import { usePlayer } from "../../context/PlayerContext";
 
 export const CastleSettleModal = () => {
   const { isCastleSettled, tempCastle, setCastle, setIsCastleDeployedBefore, setIsCastleSettled } = useCastle();
   const { systemCalls } = useMUD();
+  const { saveUserName } = usePlayer();
 
   const handleClick = async () => {
     const tx =
@@ -19,6 +21,7 @@ export const CastleSettleModal = () => {
       setCastle({ x: tempCastle.x, y: tempCastle.y });
       await tx.wait();
       setIsCastleDeployedBefore(true)
+      saveUserName();
     }
   };
 
