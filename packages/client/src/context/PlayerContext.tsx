@@ -8,6 +8,13 @@ type PlayerContextType = {
   setUserName: (value: string) => void;
   saveUserName: () => void;
   removeUserName: () => void;
+  playerSeed: number | undefined;
+  setPlayerSeed: (value: number) => void;
+  playerSeedStage: boolean | undefined;
+  setPlayerSeedStage: (value: boolean) => void;
+  savePlayerSeedStage: () => void;
+  playerWaitingStage: boolean | undefined;
+  setPlayerWaitingStage: (value: boolean) => void;
 };
 
 const PlayerContext = createContext<PlayerContextType>({
@@ -15,7 +22,14 @@ const PlayerContext = createContext<PlayerContextType>({
   userName: undefined,
   setUserName: () => { },
   saveUserName: () => { },
-  removeUserName: () => { }
+  removeUserName: () => { },
+  playerSeed: undefined,
+  setPlayerSeed: () => { },
+  playerSeedStage: true,
+  setPlayerSeedStage: () => { },
+  savePlayerSeedStage: () => { },
+  playerWaitingStage: undefined,
+  setPlayerWaitingStage: () => { }
 });
 
 const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { children: ReactNode; }) => {
@@ -23,16 +37,31 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
   const { current: userWallet } = useRef(new Wallet(getBurnerWallet().value))
   const [userName, setUserName] = useState<string>();
 
+  const [playerSeed, setPlayerSeed] = useState<number>();
+  const [playerSeedStage, setPlayerSeedStage] = useState<boolean>(true);
+
+  const [playerWaitingStage, setPlayerWaitingStage] = useState<boolean>(true);
+
   useEffect(() => {
     if (localStorage.getItem('username')) {
       setUserName(localStorage.getItem('username'))
     }
-  }, [])
+  }, [userName])
+
+  useEffect(() => {
+    if (localStorage.getItem('playerSeedStage')) {
+      setPlayerSeedStage(false)
+    }
+  }, [playerSeedStage])
 
   const saveUserName = () => {
     if (userName) {
       localStorage.setItem('username', userName)
     }
+  }
+
+  const savePlayerSeedStage = () => {
+    localStorage.setItem('playerSeedStage', "false");
   }
 
   const removeUserName = () => {
@@ -46,7 +75,14 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
     userName,
     setUserName,
     saveUserName,
-    removeUserName
+    removeUserName,
+    playerSeed,
+    setPlayerSeed,
+    playerSeedStage,
+    setPlayerSeedStage,
+    savePlayerSeedStage,
+    playerWaitingStage,
+    setPlayerWaitingStage
   };
 
   return (
