@@ -26,6 +26,7 @@ import { useArmy } from "../../context/ArmyContext";
 import { useAttack } from "../../context/AttackContext";
 import { Entity } from "@latticexyz/recs";
 import { usePlayer } from "../../context/PlayerContext";
+import { useResourcePositions } from "../../hooks/useResourcePositions";
 
 export type DataProp = {
   width: number;
@@ -73,6 +74,10 @@ export const Grid = (data: DataProp) => {
   const armyPositions: any = useArmyPositions()[0];
   const myArmyPosition: any = useMyArmy(userWallet!.address.toLocaleLowerCase())[0];
   const myArmyNumber = useMyArmy(userWallet!.address.toLocaleLowerCase())[1];
+  const resourcePositions = useResourcePositions();
+  const myResourcePositions = useResourcePositionByAddress(userWallet!.address.toLocaleLowerCase());
+  console.log(resourcePositions);
+  console.log(myResourcePositions)
 
   // Handle Clicks
   const handleClick = async (e: any) => {

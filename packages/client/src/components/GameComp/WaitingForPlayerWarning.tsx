@@ -29,16 +29,16 @@ export const WaitingForPlayerWarning = () => {
 
     return (
         <div id="overlay" className="waiting-for-players-fade-overlay">
-            {connectedUserNumber !== 10 ?
-                <div className="waiting-for-players-message-container">
-                    <span className="waiting-for-players-info-message">Waiting for other players...</span>
-                    <span className="waiting-for-players-info-message">{connectedUserNumber} players are ready...</span>
-                    <span className="waiting-for-players-info-message">Need {limitOfUser - connectedUserNumber} player to start the game...</span>
-                </div> :
-                <div className="waiting-for-players-message-container">
+            <div className="waiting-for-players-message-container">
+                {connectedUserNumber !== 10 ?
+                    <>
+                        <span className="waiting-for-players-info-message">Waiting for other players...</span>
+                        <span className="waiting-for-players-info-message">{connectedUserNumber} players are ready...</span>
+                        <span className="waiting-for-players-info-message">Need {limitOfUser - connectedUserNumber} player to start the game...</span>
+                    </> :
                     <span className="waiting-for-players-info-message">Game is starting in {count} seconds.</span>
-                </div>
-            }
+                }
+            </div>
         </div >
     )
 }
