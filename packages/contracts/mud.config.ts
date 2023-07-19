@@ -117,10 +117,29 @@ export default mudConfig({
       schema:{
         isInited:"bool"
       }
+    },
+    MineCaptureResult:{
+      schema:{
+        winner:"address",
+        loser:"address",
+        isDraw:"bool"
+      },
+      ephemeral:true,
+    },
+    GameState:{
+      keySchema:{
+        gameID:"uint256"
+      },
+      schema:{
+        state:"State"
+
+      }
     }
   },
+  
   enums: {
     MineType: ["Food","Wood","Gold"],
+    State:["Waiting","Started","Completed"]
   },
   modules: [
     {

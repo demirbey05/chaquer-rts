@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
 import { ArmyOwnable, BattleResult, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, CastleSiegeResult } from "../codegen/Tables.sol";
-import { LibMath, LibAttack, BattleScore, LibUtils,LibQueries } from "../libraries/Libraries.sol";
+import { LibMath, LibAttack, BattleScore, LibUtils, LibQueries } from "../libraries/Libraries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 
 contract AttackCaptureSystem is System {
@@ -94,13 +94,11 @@ contract AttackCaptureSystem is System {
     }
   }
 
-  function captureCastle(bytes32 armyID, bytes32 castleID) public  returns (uint256 result){
-
-
+  function captureCastle(bytes32 armyID, bytes32 castleID) public returns (uint256 result) {
     address armyOwner = ArmyOwnable.getOwner(armyID);
     address castleOwner = CastleOwnable.getOwner(castleID);
 
-    // Some Checks 
+    // Some Checks
     if (armyOwner == castleOwner) {
       revert CaptureSystem__FriendFireNotAllowed();
     }
@@ -120,17 +118,13 @@ contract AttackCaptureSystem is System {
     }
     bytes32[] memory ownerArmiesSurroundCastle = LibUtils.findSurroundingArmies(IStore(_world()), castleID, gameID);
     result = LibAttack.warCaptureCastle(armyID, ownerArmiesSurroundCastle);
- 
+
     if (result == 1) {
       CastleOwnable.setOwner(castleID, armyOwner);
 
       // Destroy all the army which belongs to castle owner
 
-      bytes32[] memory castleOwnerArmies = LibQueries.getOwnedArmyIDs(
-        IStore(_world()),
-        castleOwner,
-        gameID
-      );
+      bytes32[] memory castleOwnerArmies = LibQueries.getOwnedArmyIDs(IStore(_world()), castleOwner, gameID);
 
       for (uint i = 0; i < castleOwnerArmies.length; i++) {
         ArmyOwnable.deleteRecord(castleOwnerArmies[i]);
@@ -151,13 +145,13 @@ contract AttackCaptureSystem is System {
         castleOwner,
         true
       );
+    } else {
+      CastleSiegeResult.emitEphemeral(
+        keccak256(abi.encodePacked(block.timestamp, armyID, castleID, gameID)),
+        castleOwner,
+        armyOwner,
+        false
+      );
     }
-
-    CastleSiegeResult.emitEphemeral(
-      keccak256(abi.encodePacked(block.timestamp, armyID, castleID, gameID)),
-      armyOwner,
-      castleOwner,
-      false
-    );
   }
 }

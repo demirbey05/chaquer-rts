@@ -7,3 +7,9 @@ enum MineType {
   Wood,
   Gold
 }
+
+enum State {
+  Waiting,
+  Started,
+  Completed
+}

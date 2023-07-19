@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { MapConfig, Position, PositionTableId, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame } from "../codegen/Tables.sol";
+import { MapConfig, Position, PositionTableId, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame, Players } from "../codegen/Tables.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { LibMath } from "../libraries/LibMath.sol";
@@ -60,6 +60,10 @@ contract MapSystem is System {
 
     if ((terrainLength < 100) || (terrainLength > 3600)) {
       revert CastleSettle__MapIsNotReady();
+    }
+
+    if (!Players.get(gameID, ownerCandidate)) {
+      revert CastleSettle__NotPlayer();
     }
     // x and y axis is exchanged because of frontend issues
     if (!(x < height && y < width && x >= 0 && y >= 0)) {
