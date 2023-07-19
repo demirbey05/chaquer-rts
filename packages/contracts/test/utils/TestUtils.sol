@@ -2,10 +2,11 @@
 
 pragma solidity ^0.8.0;
 import { IWorld } from "../../src/codegen/world/IWorld.sol";
-import { ArmyOwnable, ArmyConfigData } from "../../src/codegen/Tables.sol";
+import { ArmyOwnable, ArmyConfigData, Position } from "../../src/codegen/Tables.sol";
 import { Vm } from "forge-std/Vm.sol";
 import { hasKey } from "@latticexyz/world/src/modules/keysintable/hasKey.sol";
 import { console } from "forge-std/console.sol";
+import { LibMath, LibQueries } from "../../src/libraries/Libraries.sol";
 
 address constant HEVM_ADDRESS = address(uint160(uint256(keccak256("hevm cheat code"))));
 
@@ -154,8 +155,6 @@ library TestUtils {
     address payable[] memory users
   ) internal {
     for (uint i = 0; i < users.length; i++) {
-      console.log("seed");
-      console.log(users[i]);
       TestUtils.commitSeedWrapper(world, gameID, seed, users[i]);
     }
   }
@@ -182,7 +181,6 @@ library TestUtils {
     uint32 safeMarginY
   ) internal {
     for (uint i = 0; i < users.length; i++) {
-      console.log(users[i]);
       TestUtils.settleCastle(world, safeMarginX + uint32(i), safeMarginY + uint32(i), gameID, users[i]);
     }
   }
@@ -195,7 +193,90 @@ library TestUtils {
     uint32 safeMarginY
   ) internal {
     for (uint32 i = 0; i < users.length; i++) {
-      TestUtils.settleCastle(world, safeMarginX + i, safeMarginY + i, gameID, users[i]);
+      TestUtils.settleCastle(world, safeMarginX + 2 * i, safeMarginY + 2 * i, gameID, users[i]);
+    }
+  }
+
+  function initializeMinePlacesStorage(
+    IWorld world,
+    uint256 gameID,
+    uint256 seed,
+    address payable[] storage users,
+    string memory userName,
+    uint256 capacity
+  ) internal returns (uint256 i) {
+    initializeCapacityWithUsers(world, gameID, userName, users, capacity);
+    TestUtils.initializeAllCastles(world, gameID, users, 30, 30);
+    initializeSeedsOfUsers(world, gameID, seed, users);
+    world.resourceSystemInit(gameID);
+  }
+
+  function findClosestMine(
+    IWorld world,
+    uint32 xCoord,
+    uint32 yCoord,
+    bytes32[] memory mineArray
+  ) internal returns (bytes32) {
+    bytes32 closestID = mineArray[0];
+    (uint32 xMine, uint32 yMine, ) = Position.get(world, closestID);
+    uint32 closestDistance = LibMath.manhattan(xCoord, yCoord, xMine, yMine);
+    for (uint i = 1; i < mineArray.length; i++) {
+      (xMine, yMine, ) = Position.get(world, mineArray[i]);
+      uint32 currentDis = LibMath.manhattan(xCoord, yCoord, xMine, yMine);
+      if (currentDis < closestDistance) {
+        closestDistance = currentDis;
+        closestID = mineArray[i];
+      }
+    }
+    return closestID;
+  }
+
+  function moveArmyToLocation(
+    IWorld world,
+    bytes32 armyID,
+    uint32 xCoord,
+    uint32 yCoord,
+    address user,
+    uint256 gameID
+  ) internal {
+    (uint32 xArmy, uint32 yArmy, ) = Position.get(world, armyID);
+    uint i = 0;
+    while (xArmy != xCoord && i < 30) {
+      if (xArmy > xCoord) {
+        // Minus
+        if (LibQueries.queryPositionEntity(world, xArmy - 1, yArmy, gameID) == 0) {
+          TestUtils.moveArmy(world, armyID, xArmy - 1, yArmy, user, gameID);
+        } else {
+          TestUtils.moveArmy(world, armyID, xArmy - 2, yArmy, user, gameID);
+        }
+      } else {
+        if (LibQueries.queryPositionEntity(world, xArmy + 1, yArmy, gameID) == 0) {
+          TestUtils.moveArmy(world, armyID, xArmy + 1, yArmy, user, gameID);
+        } else {
+          TestUtils.moveArmy(world, armyID, xArmy + 2, yArmy, user, gameID);
+        }
+      }
+      (xArmy, , ) = Position.get(world, armyID);
+      i++;
+    }
+    i = 0;
+    while (yArmy != yCoord && i < 30) {
+      if (yArmy > yCoord) {
+        // Minus
+        if (LibQueries.queryPositionEntity(world, xArmy, yArmy - 1, gameID) == 0) {
+          TestUtils.moveArmy(world, armyID, xArmy, yArmy - 1, user, gameID);
+        } else {
+          TestUtils.moveArmy(world, armyID, xArmy, yArmy - 2, user, gameID);
+        }
+      } else {
+        if (LibQueries.queryPositionEntity(world, xArmy, yArmy + 1, gameID) == 0) {
+          TestUtils.moveArmy(world, armyID, xArmy, yArmy + 1, user, gameID);
+        } else {
+          TestUtils.moveArmy(world, armyID, xArmy, yArmy + 2, user, gameID);
+        }
+      }
+      (, yArmy, ) = Position.get(world, armyID);
+      i++;
     }
   }
 }
