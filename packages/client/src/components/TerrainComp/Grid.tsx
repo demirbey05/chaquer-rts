@@ -74,10 +74,10 @@ export const Grid = (data: DataProp) => {
   const armyPositions: any = useArmyPositions()[0];
   const myArmyPosition: any = useMyArmy(userWallet!.address.toLocaleLowerCase())[0];
   const myArmyNumber = useMyArmy(userWallet!.address.toLocaleLowerCase())[1];
-  const resourcePositions = useResourcePositions();
-  const myResourcePositions = useResourcePositionByAddress(userWallet!.address.toLocaleLowerCase());
-  console.log(resourcePositions);
-  console.log(myResourcePositions)
+  //const resourcePositions = useResourcePositions();
+  //const myResourcePositions = useResourcePositionByAddress(userWallet!.address.toLocaleLowerCase());
+  //console.log(resourcePositions);
+  //console.log(myResourcePositions)
 
   // Handle Clicks
   const handleClick = async (e: any) => {
