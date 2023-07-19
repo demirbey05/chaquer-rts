@@ -17,3 +17,5 @@ import { LimitOfGame, LimitOfGameTableId } from "./tables/LimitOfGame.sol";
 import { AddressToUsername, AddressToUsernameTableId } from "./tables/AddressToUsername.sol";
 import { ResourceOwnable, ResourceOwnableData, ResourceOwnableTableId } from "./tables/ResourceOwnable.sol";
 import { ResourceInited, ResourceInitedTableId } from "./tables/ResourceInited.sol";
+import { MineCaptureResult, MineCaptureResultData, MineCaptureResultTableId } from "./tables/MineCaptureResult.sol";
+import { GameState, GameStateTableId } from "./tables/GameState.sol";

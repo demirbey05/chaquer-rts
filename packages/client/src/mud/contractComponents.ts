@@ -230,5 +230,37 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    MineCaptureResult: (() => {
+      const tableId = new TableId("", "MineCaptureResul");
+      return defineComponent(
+        world,
+        {
+          winner: RecsType.String,
+          loser: RecsType.String,
+          isDraw: RecsType.Boolean,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    GameState: (() => {
+      const tableId = new TableId("", "GameState");
+      return defineComponent(
+        world,
+        {
+          state: RecsType.Number,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
   };
 }

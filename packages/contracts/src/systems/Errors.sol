@@ -16,6 +16,7 @@ error CastleSettle__CoordinatesOutOfBound();
 error CastleSettle__TileIsNotEmpty();
 error CastleSettle__WrongTerrainType();
 error CastleSettle__NoCastleRight();
+error CastleSettle__NotPlayer();
 
 //Army Settle System
 error ArmySettle__CoordinatesOutOfBound();
@@ -52,9 +53,17 @@ error MineSystem__GameIsNotFull();
 error MineSystem__NotAllUsersSubmitSeed();
 error MineSystem__ResourceInitialized();
 error MineSystem__RandomizationError();
+error MineSystem__NoCastleOfUsers();
 
 // Identity System Errors
 error IdentitySystem__AlreadyJoined();
 error IdentitySystem__GameIsFull();
 error IdentitySystem__InvalidUserName();
 error IdentitySystem__GameDoesNotExist();
+
+// MineCapture System Errors
+
+error MineCapture__FriendFireNotAllowed();
+error MineCapture__NoAuthorization();
+error MineCapture__TooFarToAttack();
+error MineCapture__NonMatchedGameID();

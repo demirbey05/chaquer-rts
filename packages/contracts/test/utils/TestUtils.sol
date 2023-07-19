@@ -5,6 +5,7 @@ import { IWorld } from "../../src/codegen/world/IWorld.sol";
 import { ArmyOwnable, ArmyConfigData } from "../../src/codegen/Tables.sol";
 import { Vm } from "forge-std/Vm.sol";
 import { hasKey } from "@latticexyz/world/src/modules/keysintable/hasKey.sol";
+import { console } from "forge-std/console.sol";
 
 address constant HEVM_ADDRESS = address(uint160(uint256(keccak256("hevm cheat code"))));
 
@@ -122,6 +123,19 @@ library TestUtils {
     }
   }
 
+  function initializeCapacityWithUsersStorage(
+    IWorld world,
+    uint256 gameID,
+    string memory userName,
+    address payable[] storage users,
+    uint256 capacity
+  ) internal {
+    world.InitNumberOfGamer(gameID, capacity);
+    for (uint i = 0; i < users.length; i++) {
+      TestUtils.initializeID(world, gameID, userName, users[i]);
+    }
+  }
+
   function commitSeedWrapper(
     IWorld world,
     uint256 gameID,
@@ -140,6 +154,8 @@ library TestUtils {
     address payable[] memory users
   ) internal {
     for (uint i = 0; i < users.length; i++) {
+      console.log("seed");
+      console.log(users[i]);
       TestUtils.commitSeedWrapper(world, gameID, seed, users[i]);
     }
   }
@@ -153,7 +169,33 @@ library TestUtils {
     uint256 capacity
   ) internal returns (uint256 i) {
     initializeCapacityWithUsers(world, gameID, userName, users, capacity);
+    TestUtils.initializeAllCastles(world, gameID, users, 30, 30);
     initializeSeedsOfUsers(world, gameID, seed, users);
     world.resourceSystemInit(gameID);
+  }
+
+  function initializeAllCastles(
+    IWorld world,
+    uint256 gameID,
+    address payable[] memory users,
+    uint32 safeMarginX,
+    uint32 safeMarginY
+  ) internal {
+    for (uint i = 0; i < users.length; i++) {
+      console.log(users[i]);
+      TestUtils.settleCastle(world, safeMarginX + uint32(i), safeMarginY + uint32(i), gameID, users[i]);
+    }
+  }
+
+  function initializeAllCastlesStorage(
+    IWorld world,
+    uint256 gameID,
+    address payable[] storage users,
+    uint32 safeMarginX,
+    uint32 safeMarginY
+  ) internal {
+    for (uint32 i = 0; i < users.length; i++) {
+      TestUtils.settleCastle(world, safeMarginX + i, safeMarginY + i, gameID, users[i]);
+    }
   }
 }

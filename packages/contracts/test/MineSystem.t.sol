@@ -10,9 +10,21 @@ import { LibQueries } from "../src/libraries/Libraries.sol";
 import { MineType } from "../src/codegen/Types.sol";
 
 contract MineSystemTest is NakamoTest {
+  address payable[] users;
+
   function setUp() public override {
     super.setUp();
-    TestUtils.initMap(world, "test/mock_data/map.txt", 50, 50, 1);
+    users.push(user1);
+    users.push(user2);
+    users.push(user3);
+    users.push(user4);
+    users.push(user5);
+    users.push(user6);
+    users.push(user7);
+    users.push(user8);
+    users.push(user9);
+    users.push(user10);
+    TestUtils.initMap(world, "test/mock_data/map_full_land.txt", 50, 50, 1);
   }
 
   function testGameIsNotFull() public {
@@ -20,6 +32,7 @@ contract MineSystemTest is NakamoTest {
     address payable[] memory newArray = new address payable[](1);
     newArray[0] = user1;
     TestUtils.initializeCapacityWithUsers(world, 1, userName, newArray, 11);
+    TestUtils.initializeAllCastles(world, 1, newArray, 30, 30);
     TestUtils.initializeSeedsOfUsers(world, 1, 10, newArray);
     vm.expectRevert(MineSystem__GameIsNotFull.selector);
     world.resourceSystemInit(1);
@@ -41,6 +54,7 @@ contract MineSystemTest is NakamoTest {
     TestUtils.initializeCapacityWithUsers(world, 1, userName, newUserArray, 10);
     address payable[] memory newArray = new address payable[](1);
     newArray[0] = user1;
+    TestUtils.initializeAllCastles(world, 1, newUserArray, 30, 30);
     TestUtils.initializeSeedsOfUsers(world, 1, 10, newArray);
     vm.expectRevert(MineSystem__NotAllUsersSubmitSeed.selector);
     world.resourceSystemInit(1);
@@ -77,7 +91,7 @@ contract MineSystemTest is NakamoTest {
     newUserArray[7] = user8;
     newUserArray[8] = user9;
     newUserArray[9] = user10;
-    TestUtils.initializeCapacityWithUsers(world, 1, userName, newUserArray, 10);
+    TestUtils.initializeMinePlaces(world, 1, 1, newUserArray, userName, 10);
     vm.expectRevert(MineSystem__NoAuthorized.selector);
     TestUtils.commitSeedWrapper(world, 1, 5, user11);
   }
