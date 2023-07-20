@@ -6,7 +6,7 @@ import { usePlayer } from "../../context/PlayerContext";
 export const CastleSettleModal = () => {
   const { isCastleSettled, tempCastle, setCastle, setIsCastleDeployedBefore, setIsCastleSettled } = useCastle();
   const { systemCalls, network: { storeCache } } = useMUD();
-  const { saveUserName, setPlayerSeedStage, userWallet } = usePlayer();
+  const { setPlayerSeedStage, userWallet } = usePlayer();
 
   const handleClick = async () => {
     const tx =
@@ -21,7 +21,6 @@ export const CastleSettleModal = () => {
       setCastle({ x: tempCastle.x, y: tempCastle.y });
       await tx.wait();
       setIsCastleDeployedBefore(true)
-      saveUserName();
     }
   };
 

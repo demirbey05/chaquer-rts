@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useMUD } from '../../MUDContext';
 
 export const UserNameModal = () => {
-    const { setUserName, userName } = usePlayer();
+    const { setUserName, userName, saveUserName } = usePlayer();
     const { systemCalls } = useMUD()
     const [disable, setDisable] = useState<boolean>(true);
 
@@ -26,7 +26,7 @@ export const UserNameModal = () => {
     const onClick = async () => {
         if (!localStorage.getItem("username")) {
             const tx = await systemCalls.joinGame(userName!, 1);
-
+            saveUserName();
             if (tx == null) {
                 console.log("joinGame encounter an error!.")
                 return

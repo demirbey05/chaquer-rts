@@ -10,12 +10,14 @@ import {
 } from '@chakra-ui/react'
 import { useState, useRef } from 'react'
 import { usePlayer } from '../../context/PlayerContext';
+import { useMUD } from '../../MUDContext';
 
 export const PlayerSeedModal = () => {
     const { isOpen, onClose } = useDisclosure({ isOpen: true })
     const [disable, setDisable] = useState<boolean>(true);
     const initialRef = useRef(null);
-    const { setPlayerSeedStage, setPlayerSeed, savePlayerSeedStage } = usePlayer();
+    const { setPlayerSeedStage, setPlayerSeed, savePlayerSeedStage, playerSeed } = usePlayer();
+    const { systemCalls } = useMUD()
 
     const handleInput = (e: any) => {
         if (e.target.value > 0 && e.target.value < 100) {
@@ -27,7 +29,14 @@ export const PlayerSeedModal = () => {
         }
     }
 
-    const handleConfirmClick = () => {
+    const handleConfirmClick = async () => {
+        if (playerSeed) {
+            const tx = await systemCalls.commitSeed(1, playerSeed);
+            if (tx == null) {
+                console.log("Player Seed issue.")
+                return
+            }
+        }
         onClose();
         setPlayerSeedStage(false);
         savePlayerSeedStage();

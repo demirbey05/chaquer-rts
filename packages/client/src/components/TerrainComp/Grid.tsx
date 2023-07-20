@@ -27,6 +27,7 @@ import { useAttack } from "../../context/AttackContext";
 import { Entity } from "@latticexyz/recs";
 import { usePlayer } from "../../context/PlayerContext";
 import { useResourcePositions } from "../../hooks/useResourcePositions";
+import { useResourcePositionByAddress } from "../../hooks/useResourcePositionByAddress";
 
 export type DataProp = {
   width: number;
@@ -74,10 +75,10 @@ export const Grid = (data: DataProp) => {
   const armyPositions: any = useArmyPositions()[0];
   const myArmyPosition: any = useMyArmy(userWallet!.address.toLocaleLowerCase())[0];
   const myArmyNumber = useMyArmy(userWallet!.address.toLocaleLowerCase())[1];
-  //const resourcePositions = useResourcePositions();
-  //const myResourcePositions = useResourcePositionByAddress(userWallet!.address.toLocaleLowerCase());
-  //console.log(resourcePositions);
-  //console.log(myResourcePositions)
+  const resources = useResourcePositions();
+  const myResourcePositions = useResourcePositionByAddress(userWallet!.address.toLocaleLowerCase());
+  console.log(resources);
+  console.log(myResourcePositions)
 
   // Handle Clicks
   const handleClick = async (e: any) => {
@@ -212,6 +213,39 @@ export const Grid = (data: DataProp) => {
     };
   }, [castlePositions, myCastlePosition]);
 
+  // Deploy resource emojis
+  useEffect(() => {
+    if (myResourcePositions) {
+      myResourcePositions.map((position: any) => {
+        document.getElementById(`${position.y},${position.x}`)!.style.border = "2px solid rgb(245, 169, 6)";
+      })
+    }
+
+    if (resources) {
+      resources.map(data => {
+        if (data.resource.sourceType === 0) {
+          document.getElementById(`${data.positions.y},${data.positions.x}`)!.innerHTML = "🌽";
+        }
+        else if (data.resource.sourceType === 1) {
+          document.getElementById(`${data.positions.y},${data.positions.x}`)!.innerHTML = "🪓";
+        }
+        else {
+          document.getElementById(`${data.positions.y},${data.positions.x}`)!.innerHTML = "⛏️";
+        }
+      })
+    }
+
+    return () => {
+      if (myResourcePositions) {
+        myResourcePositions.map((position: any) => {
+          if (document.getElementById(`${position.y},${position.x}`)) {
+            document.getElementById(`${position.y},${position.x}`)!.style.border = "";
+          }
+        });
+      }
+    };
+  }, [myResourcePositions])
+
   //Makes castle position unClickable to not cause bug during army settlement
   useEffect(() => {
     if (castlePositions) {
@@ -296,15 +330,21 @@ export const Grid = (data: DataProp) => {
     });
 
     return () => {
-      castlePositions.map((data: any) => {
-        document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-toggle", "");
-        document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "");
-      });
+      if (castlePositions.length > 0) {
+        castlePositions.map((data: any) => {
+          document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-toggle", "");
+          document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "");
+        });
+      }
 
-      armyPositions.map((data: any) => {
-        document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-toggle", "");
-        document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-target", "");
-      })
+      if (armyPositions.length > 0) {
+        armyPositions.map((data: any) => {
+          if (document.getElementById(`${data.position.y},${data.position.x}`)!) {
+            document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-toggle", "");
+            document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-target", "");
+          }
+        })
+      }
     }
   }, [isAttackStage]);
 
