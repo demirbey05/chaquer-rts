@@ -6,7 +6,7 @@ import { Entity } from "@latticexyz/recs";
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
-  { worldSend, txReduced$, singletonEntity }: SetupNetworkResult,
+  { worldSend, txReduced$ }: SetupNetworkResult,
   { Position }: ClientComponents
 ) {
 
@@ -87,16 +87,69 @@ export function createSystemCalls(
     }
   }
 
+  const joinGame = async(userName:string,gameID:number) => {
+    try {
+      const tx = await worldSend("joinGame", [gameID,userName]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      return tx
+    } catch (e) {
+      console.log(e);
+      return null
+    }
+  }
+  const InitNumberOfGamer = async(gameID:number,limit:number) => {
+     try {
+      const tx = await worldSend("InitNumberOfGamer", [gameID,limit]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      return tx
+    } catch (e) {
+      console.log(e);
+      return null
+    }
+  }
 
+  const commitSeed = async (gameID:number,seed:number) =>{
+    try {
+      const tx = await worldSend("commitSeed", [gameID,seed]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      return tx
+    } catch (e) {
+      console.log(e);
+      return null
+    }
+  }
+  const resourceSystemInit = async (gameID:number) => {
+    try {
+      const tx = await worldSend("resourceSystemInit", [gameID]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      return tx
+    } catch (e) {
+      console.log(e);
+      return null
+    }
+  }
+  const captureMine = async (armyID:string, mineID:string)=> {
+    try {
+      const tx = await worldSend("captureMine", [armyID,mineID]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      return tx
+    } catch (e) {
+      console.log(e);
+      return null
+    }
 
-
-
+  }
   return {
     initMapDataSystem,
     settleCastle,
     settleArmy,
     moveArmy,
     attackToArmy,
-    castleCapture
+    castleCapture,
+    joinGame,
+    commitSeed,
+    resourceSystemInit,
+    captureMine,
+    InitNumberOfGamer
   };
 }

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { usePlayer } from '../../context/PlayerContext';
 
 export const WaitingForPlayerWarning = () => {
-    const [connectedUserNumber, setConnectedUserNumber] = useState<number>(2);
+    const [connectedUserNumber, setConnectedUserNumber] = useState<number>(3);
     const limitOfUser = 10;
     const { setPlayerWaitingStage } = usePlayer();
 

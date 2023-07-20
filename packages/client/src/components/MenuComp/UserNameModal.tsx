@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { usePlayer } from '../../context/PlayerContext';
 import { useEffect, useState } from 'react';
+import { useMUD } from '../../MUDContext';
 
 export const UserNameModal = () => {
     const { setUserName, userName } = usePlayer();
+    const { systemCalls } = useMUD()
     const [disable, setDisable] = useState<boolean>(true);
 
     useEffect(() => {
@@ -19,6 +21,17 @@ export const UserNameModal = () => {
         }
         else {
             setDisable(true)
+        }
+    }
+    const onClick = async () => {
+        if (!localStorage.getItem("username")) {
+            const tx = await systemCalls.joinGame(userName!, 1);
+
+            if (tx == null) {
+                console.log("joinGame encounter an error!.")
+                return
+            }
+
         }
     }
     return (
@@ -44,7 +57,7 @@ export const UserNameModal = () => {
                         {
                             disable ? <JoinToGameButton disable={disable} /> :
                                 (<Link to={'/game'}>
-                                    <JoinToGameButton disable={disable} />
+                                    <JoinToGameButton onClick={() => onClick()} disable={disable} />
                                 </Link>)
                         }
                     </div>
@@ -55,6 +68,6 @@ export const UserNameModal = () => {
 }
 
 
-const JoinToGameButton = ({ disable }: any) => {
-    return <button disabled={disable} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Join to the Game</button>
+const JoinToGameButton = ({ disable, onClick }: any) => {
+    return <button disabled={disable} onClick={onClick} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Join to the Game</button>
 }
