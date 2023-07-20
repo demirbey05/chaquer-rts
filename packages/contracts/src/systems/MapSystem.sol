@@ -9,7 +9,7 @@ import { LibMath } from "../libraries/LibMath.sol";
 import "./Errors.sol";
 
 contract MapSystem is System {
-  uint256 constant capacityLowerBound = 10;
+  uint256 constant capacityLowerBound = 1;
 
   function initMapData(
     uint256 gameID,

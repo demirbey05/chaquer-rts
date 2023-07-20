@@ -39,7 +39,7 @@ export const Menu = () => {
     saveTerrain();
     const data: string = ethers.utils.hexlify(flatten2D(map));
     await systemCalls.initMapDataSystem(1, width, height, data);
-    await systemCalls.InitNumberOfGamer(1, 10);
+    await systemCalls.InitNumberOfGamer(1, 2);
   };
 
   const terrainStyles = [8, 14];
