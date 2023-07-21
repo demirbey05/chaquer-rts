@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/react";
-import { findIDFromPosition } from "../../utils/armyID";
+import { findIDFromPosition } from "../../utils/findIDFromPosition";
 import { useMUD } from "../../MUDContext";
 import { useAttack } from "../../context/AttackContext";
 import { findCastleCloseArmies } from "../../utils/findCastleCloseArmies";
@@ -163,13 +163,8 @@ const CastleAttackModalArmyCard = (props: CastleAttackModalArmyCardPropTypes) =>
 
 const CastleAttackModalHeader = () => {
   return (
-    <>
-      <h5
-        className="offcanvas-title text-center border-bottom border-white text-white"
-        id="offcanvasBottomLabel"
-      >
-        War - Army Information
-      </h5>
-    </>
+    <h5 className="offcanvas-title text-center border-bottom border-white text-white" id="offcanvasBottomLabel">
+      War - Army Information
+    </h5>
   )
 }

@@ -11,6 +11,7 @@ import { CastleProvider } from './context/CastleContext';
 import { ArmyProvider } from "./context/ArmyContext";
 import { AttackProvider } from "./context/AttackContext";
 import { mount as mountDevTools } from "@latticexyz/dev-tools";
+import { MineProvider } from "./context/MineContext";
 
 
 const rootElement = document.getElementById("react-root");
@@ -24,17 +25,19 @@ setup().then((result) => {
       <ChakraProvider>
         <TerrainProvider>
           <AttackProvider>
-            <ArmyProvider>
-              <CastleProvider>
-                <PlayerProvider>
-                  <App />
-                </PlayerProvider>
-              </CastleProvider>
-            </ArmyProvider>
+            <MineProvider>
+              <ArmyProvider>
+                <CastleProvider>
+                  <PlayerProvider>
+                    <App />
+                  </PlayerProvider>
+                </CastleProvider>
+              </ArmyProvider>
+            </MineProvider>
           </AttackProvider>
         </TerrainProvider>
       </ChakraProvider>
-    </MUDProvider>
+    </MUDProvider >
   );
   mountDevTools();
 });

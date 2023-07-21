@@ -11,7 +11,7 @@ import { useCastlePositionByAddress } from "../../hooks/useCastlePositionByAddre
 import { useArmyPositions } from "../../hooks/useArmyPositions";
 import { useMyArmy } from "../../hooks/useMyArmy";
 import { useMUD } from "../../MUDContext";
-import { findIDFromPosition, Coord } from "../../utils/armyID";
+import { findIDFromPosition, Coord } from "../../utils/findIDFromPosition";
 import { getTerrainAsset } from '../../utils/getTerrainAsset';
 import { isMyCastle } from '../../utils/isMyCastle';
 import { isUserClickedManhattanPosition } from '../../utils/isUserClickedManhattanPosition';
@@ -28,6 +28,10 @@ import { Entity } from "@latticexyz/recs";
 import { usePlayer } from "../../context/PlayerContext";
 import { useResourcePositions } from "../../hooks/useResourcePositions";
 import { useResourcePositionByAddress } from "../../hooks/useResourcePositionByAddress";
+import { MineCaptureModal } from "../MineComp/MineCaptureModal";
+import { useMine } from "../../context/MineContext";
+import { isMyResource } from "../../utils/isMyResource";
+import { isUserClickedMine } from "../../utils/isUserClickedMine";
 
 export type DataProp = {
   width: number;
@@ -37,10 +41,10 @@ export type DataProp = {
   isBorder: boolean;
 };
 
-export const Grid = (data: DataProp) => {
-  const width = data.width;
-  const height = data.height;
-  const values = data.values;
+export const Grid = (props: DataProp) => {
+  const width = props.width;
+  const height = props.height;
+  const values = props.values;
   const rows = Array.from({ length: height }, (v, i) => i);
   const columns = Array.from({ length: width }, (v, i) => i);
 
@@ -64,8 +68,8 @@ export const Grid = (data: DataProp) => {
     setIsArmyStage } = useArmy();
   const { userWallet } = usePlayer();
   const { isCastleSettled, setIsCastleSettled, setTempCastle } = useCastle();
+  const { isMineStage, setIsMineStage, setTargetMinePosition, setAttackFromArmyPositionToMine } = useMine();
 
-  const [tempArmyPos, setTempArmyPos] = useState<any>();
   const movingArmyId = useRef<Entity>("0" as Entity);
   const toArmyPositionRef = useRef({ x: -1, y: -1 });
   const fromArmyPositionRef = useRef<Coord>({ x: "-1", y: "-1" });
@@ -77,8 +81,6 @@ export const Grid = (data: DataProp) => {
   const myArmyNumber = useMyArmy(userWallet!.address.toLocaleLowerCase())[1];
   const resources = useResourcePositions();
   const myResourcePositions = useResourcePositionByAddress(userWallet!.address.toLocaleLowerCase());
-  console.log(resources);
-  console.log(myResourcePositions)
 
   // Handle Clicks
   const handleClick = async (e: any) => {
@@ -105,9 +107,9 @@ export const Grid = (data: DataProp) => {
     //Logic of ArmyMove-ArmyAttack-CastleAttack
     if (!fromArmyPosition && isCastleSettled && !isArmyStage && myArmyPosition && isMyArmy({ x: getDataAtrX(e), y: getDataAtrY(e) }, myArmyPosition)) {
       setFromArmyPosition({ x: getDataAtrX(e), y: getDataAtrY(e) });
-      setTempArmyPos({ x: getDataAtrX(e), y: getDataAtrY(e) });
       setIsArmyMoveStage(true);
       setIsAttackStage(true);
+      setIsMineStage(true)
     }
     else if (fromArmyPosition && isUserClickedManhattanPosition(fromArmyPosition, getDataAtrX(e), getDataAtrY(e))) {
       toArmyPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
@@ -116,6 +118,7 @@ export const Grid = (data: DataProp) => {
       //If user attack to the enemy army
       if (isEnemyArmy(toArmyPositionRef.current, armyPositions, myArmyPosition)) {
         setIsArmyMoveStage(false);
+        setIsMineStage(false)
         setFromArmyPosition(undefined);
         setAttackFromArmyPositionToArmy(fromArmyPositionRef.current);
         setAttackToArmyPositionToArmy(toArmyPositionRef.current);
@@ -132,6 +135,7 @@ export const Grid = (data: DataProp) => {
       //If user attack to the enemy castle
       else if (isEnemyCastle(toArmyPositionRef.current, myCastlePosition, castlePositions)) {
         setIsArmyMoveStage(false)
+        setIsMineStage(false)
         setFromArmyPosition(undefined);
         setAttackFromArmyPositionToCastle(fromArmyPositionRef.current);
         setAttackToArmyPositionToCastle(toArmyPositionRef.current);
@@ -141,9 +145,23 @@ export const Grid = (data: DataProp) => {
         toArmyPositionRef.current = { x: -1, y: -1 };
         fromArmyPositionRef.current = { x: "-1", y: "-1" };
       }
+      //If user capture the mine
+      else if (isUserClickedMine(toArmyPositionRef.current.x, toArmyPositionRef.current.y, resources)) {
+        setIsArmyMoveStage(false)
+        setIsAttackStage(false)
+        setFromArmyPosition(undefined);
+        setAttackFromArmyPositionToMine(fromArmyPositionRef.current);
+        setTargetMinePosition(toArmyPositionRef.current);
+        setMyArmyConfig(
+          getMyArmyConfigByPosition({ x: fromArmyPositionRef.current.x, y: fromArmyPositionRef.current.y, }, myArmyPosition)
+        );
+        toArmyPositionRef.current = { x: -1, y: -1 };
+        fromArmyPositionRef.current = { x: "-1", y: "-1" };
+      }
       else {
         if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y])) {
           setIsAttackStage(false)
+          setIsMineStage(false)
           const movingArmyIdMap = findIDFromPosition(
             fromArmyPositionRef.current,
             components.Position
@@ -164,6 +182,7 @@ export const Grid = (data: DataProp) => {
               console.log("Error occured in moving army.")
               return
             }
+
             document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
             document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "";
 
@@ -181,6 +200,7 @@ export const Grid = (data: DataProp) => {
       fromArmyPositionRef.current = { x: "-1", y: "-1" };
       setIsArmyMoveStage(false);
       setIsAttackStage(false);
+      setIsMineStage(false)
     }
   };
 
@@ -194,14 +214,6 @@ export const Grid = (data: DataProp) => {
       setIsCastleSettled(true);
     }
 
-    if (castlePositions) {
-      //Puts the castle emojis to castle positions
-      castlePositions.map(
-        (data) =>
-          (document.getElementById(`${data.y},${data.x}`)!.innerHTML = "🏰")
-      );
-    }
-
     return () => {
       if (myCastlePosition && myCastlePosition.length > 0) {
         myCastlePosition.map((position: any) => {
@@ -211,7 +223,17 @@ export const Grid = (data: DataProp) => {
         });
       }
     };
-  }, [castlePositions, myCastlePosition]);
+  }, [myCastlePosition]);
+
+  //Puts the castle emojis to castle positions
+  useEffect(() => {
+    if (castlePositions) {
+      castlePositions.map(
+        (data) =>
+          (document.getElementById(`${data.y},${data.x}`)!.innerHTML = "🏰")
+      );
+    }
+  }, [castlePositions])
 
   // Deploy resource emojis
   useEffect(() => {
@@ -259,6 +281,20 @@ export const Grid = (data: DataProp) => {
 
   // Deploy army emojis to position. Add border for user's army.
   useEffect(() => {
+    setNumberOfArmy(myArmyNumber);
+
+    //Puts the castle emojis to castle positions
+    armyPositions.map((data: any) => {
+      document.getElementById(
+        `${data.position.y},${data.position.x}`
+      )!.innerHTML = "⚔️";
+      document
+        .getElementById(`${data.position.y},${data.position.x}`)
+        ?.classList.add("army-emoji");
+    });
+  }, [armyPositions]);
+
+  useEffect(() => {
     const clearBoard = () => {
       const boardElements = document.getElementsByClassName("army-emoji");
       Array.from(boardElements).forEach((element: any) => {
@@ -279,19 +315,7 @@ export const Grid = (data: DataProp) => {
         element.style.border = "2px solid rgb(245, 169, 6)";
       });
     }
-
-    setNumberOfArmy(myArmyNumber);
-
-    //Puts the castle emojis to castle positions
-    armyPositions.map((data: any) => {
-      document.getElementById(
-        `${data.position.y},${data.position.x}`
-      )!.innerHTML = "⚔️";
-      document
-        .getElementById(`${data.position.y},${data.position.x}`)
-        ?.classList.add("army-emoji");
-    });
-  }, [armyPositions, myArmyPosition]);
+  }, [myArmyPosition])
 
   // Handle Army and Castle Attack OffCanvas
   useEffect(() => {
@@ -332,14 +356,16 @@ export const Grid = (data: DataProp) => {
     return () => {
       if (castlePositions.length > 0) {
         castlePositions.map((data: any) => {
-          document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-toggle", "");
-          document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "");
+          if (document.getElementById(`${data.y},${data.x}`) !== null) {
+            document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-toggle", "");
+            document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "");
+          }
         });
       }
 
       if (armyPositions.length > 0) {
         armyPositions.map((data: any) => {
-          if (document.getElementById(`${data.position.y},${data.position.x}`)!) {
+          if (document.getElementById(`${data.position.y},${data.position.x}`) !== null) {
             document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-toggle", "");
             document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-target", "");
           }
@@ -347,6 +373,38 @@ export const Grid = (data: DataProp) => {
       }
     }
   }, [isAttackStage]);
+
+  // Handle Mine Capture OffCanvas
+  useEffect(() => {
+    resources.map((data: any) => {
+      if (isMineStage && fromArmyPosition) {
+        // Set data-bs-toggle for army
+        getManhattanPositions({ x: parseInt(fromArmyPosition.x), y: parseInt(fromArmyPosition.y) }).some((position: any) => {
+          return (position.x === parseInt(data.positions.x) && position.y === parseInt(data.positions.y))
+        }) &&
+          !isMyResource(data.positions.x, data.positions.y, myResourcePositions) &&
+          document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
+        // Set data-bs-target for army
+        getManhattanPositions({ x: parseInt(fromArmyPosition.x), y: parseInt(fromArmyPosition.y) }).some((position: any) => {
+          return (position.x === parseInt(data.positions.x) && position.y === parseInt(data.positions.y))
+        }) &&
+          !isMyResource(data.positions.x, data.positions.y, myResourcePositions) &&
+          document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-target", "#minecaptureoffcanvas");
+      }
+    });
+
+    return () => {
+      if (resources) {
+        resources.map((data: any) => {
+          if (document.getElementById(`${data.positions.y},${data.positions.x}`) !== null) {
+            document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-toggle", "");
+            document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-target", "");
+          }
+        });
+      }
+
+    }
+  }, [isMineStage])
 
   //Blue hover effect when user moves an army
   useEffect(() => {
@@ -356,27 +414,30 @@ export const Grid = (data: DataProp) => {
         y: parseInt(fromArmyPosition.y),
       }).map((data) => {
         if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
-          canCastleBeSettle(values[data.x][data.y]) && !myCastlePosition.find((element: { x: number; y: number }) => {
-            return (
-              element.x == data.x &&
-              element.y == data.y
-            );
-          }) &&
+          canCastleBeSettle(values[data.x][data.y]) &&
+            myCastlePosition && !myCastlePosition.find((element: { x: number; y: number }) => {
+              return (
+                element.x.toString() == data.x.toString() &&
+                element.y.toString() == data.y.toString()
+              );
+            }) && !props.isBorder &&
             document
               .getElementById(`${data.y},${data.x}`)
               ?.classList.add("borderHoverMove");
 
-          myCastlePosition.find((element: { x: number; y: number }) => {
+          myCastlePosition && myCastlePosition.find((element: { x: number; y: number }) => {
             document.getElementById(`${element.y},${element.x}`)!.style.pointerEvents = "none"
           })
         }
       });
 
-    } else {
-      if (tempArmyPos) {
+    }
+
+    return () => {
+      if (fromArmyPosition) {
         getManhattanPositions({
-          x: parseInt(tempArmyPos.x),
-          y: parseInt(tempArmyPos.y),
+          x: parseInt(fromArmyPosition.x),
+          y: parseInt(fromArmyPosition.y),
         }).map((data) => {
           if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
             canCastleBeSettle(values[data.x][data.y]) &&
@@ -384,14 +445,14 @@ export const Grid = (data: DataProp) => {
                 .getElementById(`${data.y},${data.x}`)
                 ?.classList.remove("borderHoverMove");
 
-            myCastlePosition.find((element: { x: number; y: number }) => {
+            myCastlePosition && myCastlePosition.find((element: { x: number; y: number }) => {
               document.getElementById(`${element.y},${element.x}`)!.style.pointerEvents = "auto"
             })
           }
         });
       }
     }
-  }, [fromArmyPosition, isArmyMoveStage]);
+  }, [fromArmyPosition, isArmyMoveStage, myCastlePosition]);
 
   //Orange hover effect when user deploys an army
   useEffect(() => {
@@ -400,7 +461,7 @@ export const Grid = (data: DataProp) => {
         getManhattanPositions(position).map(
           (data) => {
             if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
-              canCastleBeSettle(values[data.x][data.y]) &&
+              canCastleBeSettle(values[data.x][data.y]) && !props.isBorder &&
                 document.getElementById(`${data.y},${data.x}`)?.classList.add("borderHoverArmy")
             }
           }
@@ -421,7 +482,7 @@ export const Grid = (data: DataProp) => {
   }, [isArmyStage, myCastlePosition, values]);
 
   return (
-    <div className={`inline-grid ${data.isBorder && "border-4 border-black"}`}>
+    <div className={`inline-grid ${props.isBorder && "border-4 border-black"}`}>
       {rows.map((row) => {
         return columns.map((column) => {
           return (
@@ -433,35 +494,35 @@ export const Grid = (data: DataProp) => {
               style={{
                 gridColumn: column + 1,
                 gridRow: row + 1,
-                width: `${data.pixelStyles[1]}px`,
-                height: `${data.pixelStyles[1]}px`,
+                width: `${props.pixelStyles[1]}px`,
+                height: `${props.pixelStyles[1]}px`,
                 backgroundImage: `${getTerrainAsset(values[row][column])}`,
                 backgroundSize: "cover",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                fontSize: `${data.isBorder ? "7px" : "20px"}`,
+                fontSize: `${props.isBorder ? "7px" : "20px"}`,
               }}
               onClick={(e) => {
                 handleClick(e);
               }}
               className={`
-                ${!data.isBorder &&
+                ${!props.isBorder &&
                 canCastleBeSettle(values[row][column]) &&
                 "borderHover"
                 }`}
               data-bs-toggle={`${canCastleBeSettle(values[row][column]) &&
                 !isCastleSettled &&
-                !data.isBorder
+                !props.isBorder
                 ? "modal"
                 : ""
                 }${canCastleBeSettle(values[row][column]) &&
                   isCastleSettled &&
-                  !data.isBorder &&
+                  !props.isBorder &&
                   isArmyStage &&
                   numberOfArmy !== 3 &&
-                  myCastlePosition.length > 0 &&
                   myCastlePosition &&
+                  myCastlePosition.length > 0 &&
                   myCastlePosition.some((position: any) => {
                     return getManhattanPositions(position).some(
                       (item) => item.x === row && item.y === column
@@ -472,16 +533,16 @@ export const Grid = (data: DataProp) => {
                 }`}
               data-bs-target={`${canCastleBeSettle(values[row][column]) &&
                 !isCastleSettled &&
-                !data.isBorder
+                !props.isBorder
                 ? "#castleSettleModal"
                 : ""
                 }${canCastleBeSettle(values[row][column]) &&
                   isCastleSettled &&
-                  !data.isBorder &&
+                  !props.isBorder &&
                   isArmyStage &&
                   numberOfArmy !== 3 &&
-                  myCastlePosition.length > 0 &&
                   myCastlePosition &&
+                  myCastlePosition.length > 0 &&
                   myCastlePosition.some((position: any) => {
                     return getManhattanPositions(position).some(
                       (item) => item.x === row && item.y === column
@@ -498,6 +559,7 @@ export const Grid = (data: DataProp) => {
       <ArmySettleModal />
       <ArmyAttackModal />
       <CastleAttackModal />
+      <MineCaptureModal />
     </div >
   );
 }

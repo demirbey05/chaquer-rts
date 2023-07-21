@@ -48,7 +48,7 @@ export const UserNameModal = () => {
                             {
                                 !localStorage.getItem('username')
                                     ? <input onChange={(e: any) => handleInput(e)} type="text" className="form-control w-75" id="usernameinput" placeholder="username" />
-                                    : <input value={userName} type="text" className="form-control w-75" id="usernameinput" readOnly />
+                                    : <input defaultValue={userName} type="text" className="form-control w-75" id="usernameinput" readOnly />
                             }
                         </div>
                     </div>

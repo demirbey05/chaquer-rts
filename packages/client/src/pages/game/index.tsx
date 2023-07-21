@@ -33,11 +33,11 @@ export const Game = () => {
       {isCastleSettled && !playerSeedStage && playerWaitingStage && <WaitingForPlayerWarning />}
       {isCastleSettled && isArmyStage && <ArmyWarning />}
       {isArmyMoveStage && <ArmyMoveWarning />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && <ArmyProgressComp />}
+      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ArmyProgressComp />}
       {isPlayerLost && <LoserWarning />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && <ArmyInfoModal />}
+      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ArmyInfoModal />}
       {isCastleSettled && !playerSeedStage && !playerWaitingStage && <AudioControlComp />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && <WarResultComp />}
+      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <WarResultComp />}
       <ScrollContainer className="scroll-container" style={scrollContainerStyles}>
         <Grid width={width} height={height} values={values} pixelStyles={terrainStyles} isBorder={false} />
       </ScrollContainer>

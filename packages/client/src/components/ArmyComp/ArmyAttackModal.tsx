@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/react";
 import { useMUD } from "../../MUDContext";
-import { findIDFromPosition } from "../../utils/armyID";
+import { findIDFromPosition } from "../../utils/findIDFromPosition";
 import { useAttack } from "../../context/AttackContext";
 
 export const ArmyAttackModal = () => {

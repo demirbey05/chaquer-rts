@@ -59,6 +59,7 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
     if (isPlayerLost) {
       removeUserName();
       removePlayerSeedStage();
+      removeMineInitStage();
     }
   }, [isPlayerLost])
 
@@ -93,6 +94,12 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
   const removePlayerSeedStage = () => {
     if (localStorage.getItem('playerSeedStage')) {
       localStorage.removeItem('playerSeedStage')
+    }
+  }
+
+  const removeMineInitStage = () => {
+    if (localStorage.getItem('mineinit')) {
+      localStorage.removeItem('mineinit')
     }
   }
 
