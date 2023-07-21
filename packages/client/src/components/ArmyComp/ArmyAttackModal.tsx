@@ -6,8 +6,8 @@ import { useAttack } from "../../context/AttackContext";
 export const ArmyAttackModal = () => {
   const { components, systemCalls } = useMUD();
   const { setMyArmyConfig,
-    setEnemyArmyConfig,
     myArmyConfig,
+    setEnemyArmyConfig,
     enemyArmyConfig,
     setIsAttackStage,
     attackFromArmyPositionToArmy,
@@ -31,14 +31,14 @@ export const ArmyAttackModal = () => {
     )];
 
     if (attackFromArmyId.length != 1 || attackToArmyId.length != 1) {
-      console.log("attackFromArmyID or attackToArmyID lengths are greater than 1")
+      console.log("attackFromArmyID or attackToArmyID lengths are greater than 1.")
       return
     }
 
     const tx = await systemCalls.attackToArmy(attackFromArmyId[0] as string, attackToArmyId[0] as string, 1)
 
     if (tx == null) {
-      console.log("handleAttack encounter an error!.")
+      console.log("handleAttack encounter an error!")
       return
     }
 
@@ -67,18 +67,20 @@ export const ArmyAttackModal = () => {
       data-bs-backdrop="false"
       style={armyAttackOffCanvasDivStyles}
       tabIndex={-1}
-      id="offcanvasBottom"
-      aria-labelledby="offcanvasBottomLabel"
+      id="armyAttackModal"
+      aria-labelledby="armyAttackModalLabel"
     >
       <ArmyAttackModalHeader headerText={"War - Army Information"} />
       <div className="offcanvas-body small">
         <div className="row">
-          <ArmyAttackModalCard numSwordsman={myArmyConfig && myArmyConfig.armyConfig.numSwordsman}
+          <ArmyAttackModalCard
+            numSwordsman={myArmyConfig && myArmyConfig.armyConfig.numSwordsman}
             numArcher={myArmyConfig && myArmyConfig.armyConfig.numArcher}
             numCavalry={myArmyConfig && myArmyConfig.armyConfig.numCavalry}
             title={"My Army"}
             titleBg={"success"} />
-          < ArmyAttackModalCard numSwordsman={enemyArmyConfig && enemyArmyConfig.armyConfig.numSwordsman}
+          < ArmyAttackModalCard
+            numSwordsman={enemyArmyConfig && enemyArmyConfig.armyConfig.numSwordsman}
             numArcher={enemyArmyConfig && enemyArmyConfig.armyConfig.numArcher}
             numCavalry={enemyArmyConfig && enemyArmyConfig.armyConfig.numCavalry}
             title={"Enemy Army"}
@@ -103,8 +105,7 @@ export const ArmyAttackModal = () => {
             textColor="dark"
             data-bs-dismiss="offcanvas"
             onClick={handleAttackLater}
-            className="ml-2"
-          >
+            className="ml-2">
             Wait and Attack Later
           </Button>
         </div>
@@ -119,10 +120,7 @@ interface ArmyAttackModalHeaderPropTypes {
 
 const ArmyAttackModalHeader = (props: ArmyAttackModalHeaderPropTypes) => {
   return (
-    <h5
-      className="offcanvas-title text-center border-bottom border-white"
-      id="offcanvasBottomLabel"
-    >
+    <h5 className="offcanvas-title text-center border-bottom border-white" id="offcanvasBottomLabel">
       {props.headerText}
     </h5>
   )

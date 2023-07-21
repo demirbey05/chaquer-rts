@@ -281,20 +281,6 @@ export const Grid = (props: DataProp) => {
 
   // Deploy army emojis to position. Add border for user's army.
   useEffect(() => {
-    setNumberOfArmy(myArmyNumber);
-
-    //Puts the castle emojis to castle positions
-    armyPositions.map((data: any) => {
-      document.getElementById(
-        `${data.position.y},${data.position.x}`
-      )!.innerHTML = "⚔️";
-      document
-        .getElementById(`${data.position.y},${data.position.x}`)
-        ?.classList.add("army-emoji");
-    });
-  }, [armyPositions]);
-
-  useEffect(() => {
     const clearBoard = () => {
       const boardElements = document.getElementsByClassName("army-emoji");
       Array.from(boardElements).forEach((element: any) => {
@@ -315,7 +301,23 @@ export const Grid = (props: DataProp) => {
         element.style.border = "2px solid rgb(245, 169, 6)";
       });
     }
-  }, [myArmyPosition])
+
+    setNumberOfArmy(myArmyNumber);
+
+    //Puts the army emojis to army positions
+    armyPositions.map((data: any) => {
+      document.getElementById(
+        `${data.position.y},${data.position.x}`
+      )!.innerHTML = "⚔️";
+      document
+        .getElementById(`${data.position.y},${data.position.x}`)
+        ?.classList.add("army-emoji");
+    });
+  }, [armyPositions, myArmyPosition]);
+
+  useEffect(() => {
+
+  }, [])
 
   // Handle Army and Castle Attack OffCanvas
   useEffect(() => {
@@ -332,7 +334,7 @@ export const Grid = (props: DataProp) => {
           return (position.x === parseInt(data.position.x) && position.y === parseInt(data.position.y))
         }) &&
           !isMyArmy({ x: data.position.x, y: data.position.y }, myArmyPosition) &&
-          document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-target", "#offcanvasBottom");
+          document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-target", "#armyAttackModal");
       }
     });
 
@@ -479,7 +481,7 @@ export const Grid = (props: DataProp) => {
         );
       });
     }
-  }, [isArmyStage, myCastlePosition, values]);
+  }, [isArmyStage, myCastlePosition]);
 
   return (
     <div className={`inline-grid ${props.isBorder && "border-4 border-black"}`}>
