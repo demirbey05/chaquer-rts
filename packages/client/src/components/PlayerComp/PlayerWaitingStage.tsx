@@ -5,7 +5,7 @@ import { useNumberOfUsers } from '../../hooks/useNumberOfUsers';
 import { useIsMineInitialized } from '../../hooks/useIsMineInitialized';
 import { useMUD } from '../../MUDContext';
 
-export const WaitingForPlayerWarning = () => {
+export const PlayerWaitingStage = () => {
     const connectedUserNumber = Number(useNumberOfUsers(1)?.value.numOfUsers);
     const isMineInited = useIsMineInitialized(1)?.value.isInited;
     const limitOfUser = 2;

@@ -1,6 +1,6 @@
 import '../../styles/globals.css';
 
-export const CastleWarning = () => {
+export const CastleSettleWarning = () => {
   return (
     <div className='warning-on-top'>
       <h2>
@@ -9,5 +9,3 @@ export const CastleWarning = () => {
     </div>
   )
 }
-
-export default CastleWarning

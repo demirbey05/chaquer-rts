@@ -1,11 +1,11 @@
 import "../../styles/globals.css";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { TerrainType } from "../../terrain-helper/types";
 import { useCastle } from "../../context/CastleContext";
 import { CastleSettleModal } from "../CastleComp/CastleSettleModal";
 import { ArmySettleModal } from "../ArmyComp/ArmySettleModal";
-import { ArmyAttackModal } from "../ArmyComp/ArmyAttackModal";
-import { CastleAttackModal } from "../CastleComp/CastleAttackModal";
+import { ArmyAttackDrawer } from "../ArmyComp/ArmyAttackDrawer";
+import { CastleAttackDrawer } from "../CastleComp/CastleAttackDrawer";
 import { useCastlePositions } from "../../hooks/useCastlePositions";
 import { useCastlePositionByAddress } from "../../hooks/useCastlePositionByAddress";
 import { useArmyPositions } from "../../hooks/useArmyPositions";
@@ -26,9 +26,9 @@ import { useArmy } from "../../context/ArmyContext";
 import { useAttack } from "../../context/AttackContext";
 import { Entity } from "@latticexyz/recs";
 import { usePlayer } from "../../context/PlayerContext";
-import { useResourcePositions } from "../../hooks/useResourcePositions";
+import { useResources } from "../../hooks/useResources";
 import { useResourcePositionByAddress } from "../../hooks/useResourcePositionByAddress";
-import { MineCaptureModal } from "../MineComp/MineCaptureModal";
+import { MineCaptureDrawer } from "../MineComp/MineCaptureDrawer";
 import { useMine } from "../../context/MineContext";
 import { isMyResource } from "../../utils/isMyResource";
 import { isUserClickedMine } from "../../utils/isUserClickedMine";
@@ -41,7 +41,7 @@ export type DataProp = {
   isBorder: boolean;
 };
 
-export const Grid = (props: DataProp) => {
+export const Terrain = (props: DataProp) => {
   const width = props.width;
   const height = props.height;
   const values = props.values;
@@ -61,11 +61,11 @@ export const Grid = (props: DataProp) => {
     isArmyMoveStage,
     fromArmyPosition,
     setFromArmyPosition,
-    isArmyStage,
+    isArmySettleStage,
     setArmyPosition,
     setNumberOfArmy,
     numberOfArmy,
-    setIsArmyStage } = useArmy();
+    setIsArmySettleStage } = useArmy();
   const { userWallet } = usePlayer();
   const { isCastleSettled, setIsCastleSettled, setTempCastle } = useCastle();
   const { isMineStage, setIsMineStage, setTargetMinePosition, setAttackFromArmyPositionToMine } = useMine();
@@ -79,18 +79,18 @@ export const Grid = (props: DataProp) => {
   const armyPositions: any = useArmyPositions()[0];
   const myArmyPosition: any = useMyArmy(userWallet!.address.toLocaleLowerCase())[0];
   const myArmyNumber = useMyArmy(userWallet!.address.toLocaleLowerCase())[1];
-  const resources = useResourcePositions();
+  const resources = useResources();
   const myResourcePositions = useResourcePositionByAddress(userWallet!.address.toLocaleLowerCase());
 
   // Handle Clicks
   const handleClick = async (e: any) => {
     // For Putting army Grid with clicking castle
     if (!isArmyMoveStage && isMyCastle(myCastlePosition, getDataAtrX(e), getDataAtrY(e))) {
-      if (isArmyStage) {
-        setIsArmyStage(false);
+      if (isArmySettleStage) {
+        setIsArmySettleStage(false);
       }
-      else if (!isArmyStage && numberOfArmy < 3) {
-        setIsArmyStage(true);
+      else if (!isArmySettleStage && numberOfArmy < 3) {
+        setIsArmySettleStage(true);
       }
     }
 
@@ -100,12 +100,12 @@ export const Grid = (props: DataProp) => {
     }
 
     // Keep army position as temp
-    if (isArmyStage) {
+    if (isArmySettleStage) {
       setArmyPosition({ x: getDataAtrX(e), y: getDataAtrY(e) });
     }
 
     //Logic of ArmyMove-ArmyAttack-CastleAttack
-    if (!fromArmyPosition && isCastleSettled && !isArmyStage && myArmyPosition && isMyArmy({ x: getDataAtrX(e), y: getDataAtrY(e) }, myArmyPosition)) {
+    if (!fromArmyPosition && isCastleSettled && !isArmySettleStage && myArmyPosition && isMyArmy({ x: getDataAtrX(e), y: getDataAtrY(e) }, myArmyPosition)) {
       setFromArmyPosition({ x: getDataAtrX(e), y: getDataAtrY(e) });
       setIsArmyMoveStage(true);
       setIsAttackStage(true);
@@ -277,7 +277,7 @@ export const Grid = (props: DataProp) => {
           .setAttribute("data-bs-toggle", "");
       });
     }
-  }, [isArmyStage, castlePositions]);
+  }, [isArmySettleStage, castlePositions]);
 
   // Deploy army emojis to position. Add border for user's army.
   useEffect(() => {
@@ -334,7 +334,7 @@ export const Grid = (props: DataProp) => {
           return (position.x === parseInt(data.position.x) && position.y === parseInt(data.position.y))
         }) &&
           !isMyArmy({ x: data.position.x, y: data.position.y }, myArmyPosition) &&
-          document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-target", "#armyAttackModal");
+          document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-target", "#armyAttackDrawer");
       }
     });
 
@@ -351,7 +351,7 @@ export const Grid = (props: DataProp) => {
           return (position.x === parseInt(data.x) && position.y === parseInt(data.y))
         }) &&
           isEnemyCastle({ x: data.x, y: data.y }, myCastlePosition, castlePositions) &&
-          document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "#castleAttackModal");
+          document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "#castleAttackDrawer");
       }
     });
 
@@ -391,7 +391,7 @@ export const Grid = (props: DataProp) => {
           return (position.x === parseInt(data.positions.x) && position.y === parseInt(data.positions.y))
         }) &&
           !isMyResource(data.positions.x, data.positions.y, myResourcePositions) &&
-          document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-target", "#minecaptureoffcanvas");
+          document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-target", "#mineCaptureDrawer");
       }
     });
 
@@ -458,7 +458,7 @@ export const Grid = (props: DataProp) => {
 
   //Orange hover effect when user deploys an army
   useEffect(() => {
-    if (isArmyStage && myCastlePosition) {
+    if (isArmySettleStage && myCastlePosition) {
       myCastlePosition.map((position: any) => {
         getManhattanPositions(position).map(
           (data) => {
@@ -469,7 +469,7 @@ export const Grid = (props: DataProp) => {
           }
         );
       });
-    } else if (!isArmyStage && myCastlePosition) {
+    } else if (!isArmySettleStage && myCastlePosition) {
       myCastlePosition.map((position: any) => {
         getManhattanPositions(position).map(
           (data) => {
@@ -481,7 +481,7 @@ export const Grid = (props: DataProp) => {
         );
       });
     }
-  }, [isArmyStage, myCastlePosition]);
+  }, [isArmySettleStage, myCastlePosition]);
 
   return (
     <div className={`inline-grid ${props.isBorder && "border-4 border-black"}`}>
@@ -521,7 +521,7 @@ export const Grid = (props: DataProp) => {
                 }${canCastleBeSettle(values[row][column]) &&
                   isCastleSettled &&
                   !props.isBorder &&
-                  isArmyStage &&
+                  isArmySettleStage &&
                   numberOfArmy !== 3 &&
                   myCastlePosition &&
                   myCastlePosition.length > 0 &&
@@ -541,7 +541,7 @@ export const Grid = (props: DataProp) => {
                 }${canCastleBeSettle(values[row][column]) &&
                   isCastleSettled &&
                   !props.isBorder &&
-                  isArmyStage &&
+                  isArmySettleStage &&
                   numberOfArmy !== 3 &&
                   myCastlePosition &&
                   myCastlePosition.length > 0 &&
@@ -559,9 +559,9 @@ export const Grid = (props: DataProp) => {
       })}
       <CastleSettleModal />
       <ArmySettleModal />
-      <ArmyAttackModal />
-      <CastleAttackModal />
-      <MineCaptureModal />
+      <ArmyAttackDrawer />
+      <CastleAttackDrawer />
+      <MineCaptureDrawer />
     </div >
   );
 }

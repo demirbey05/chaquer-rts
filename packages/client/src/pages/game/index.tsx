@@ -1,25 +1,25 @@
 import map from "../../../map.json";
 import ScrollContainer from "react-indiana-drag-scroll";
-import { Grid } from "../../components/TerrainComp/Grid";
+import { Terrain } from "../../components/TerrainComp/Terrain";
 import { useTerrain } from "../../context/TerrainContext";
-import { ArmyInfoModal } from "../../components/ArmyComp/ArmyInfoModal";
-import { CastleWarning } from "../../components/CastleComp/CastleWarning";
-import { ArmyWarning } from "../../components/ArmyComp/ArmyWarning";
+import { ArmyInfoDrawer } from "../../components/ArmyComp/ArmyInfoDrawer";
+import { CastleSettleWarning } from "../../components/CastleComp/CastleSettleWarning";
+import { ArmySettleWarning } from "../../components/ArmyComp/ArmySettleWarning";
 import { ArmyMoveWarning } from "../../components/ArmyComp/ArmyMoveWarning";
-import { LoserWarning } from "../../components/GameComp/LoserWarning";
-import { ArmyProgressComp } from "../../components/ArmyComp/ArmyProgressComp";
-import { AudioControlComp } from "../../components/AudioComp/AudioControlComp";
+import { PlayerLostWarning } from "../../components/PlayerComp/PlayerLostWarning";
+import { ArmyProgressBar } from "../../components/ArmyComp/ArmyProgressBar";
+import { SettingsDrawer } from "../../components/SettingsComp/SettingsDrawer";
 import { useCastle } from "../../context/CastleContext";
 import { useArmy } from "../../context/ArmyContext";
 import { usePlayer } from "../../context/PlayerContext";
-import { WarResultComp } from "../../components/WarResultComp/WarResultComp";
+import { WarResultDrawer } from "../../components/WarResultComp/WarResultDrawer";
 import { PlayerSeedModal } from '../../components/PlayerSeedComp/PlayerSeedModal';
-import { WaitingForPlayerWarning } from "../../components/GameComp/WaitingForPlayerWarning";
+import { PlayerWaitingStage } from "../../components/PlayerComp/PlayerWaitingStage";
 
 export const Game = () => {
   const { width, height } = useTerrain();
   const { isCastleSettled } = useCastle();
-  const { isArmyStage, isArmyMoveStage } = useArmy();
+  const { isArmySettleStage, isArmyMoveStage } = useArmy();
   const { playerSeedStage, playerWaitingStage, isPlayerLost } = usePlayer()
 
   const values = map;
@@ -28,18 +28,19 @@ export const Game = () => {
 
   return (
     <>
-      {!isCastleSettled && <CastleWarning />}
+      {!isCastleSettled && <CastleSettleWarning />}
       {isCastleSettled && playerSeedStage && <PlayerSeedModal />}
-      {isCastleSettled && !playerSeedStage && playerWaitingStage && <WaitingForPlayerWarning />}
-      {isCastleSettled && isArmyStage && <ArmyWarning />}
+      {isCastleSettled && !playerSeedStage && playerWaitingStage && <PlayerWaitingStage />}
+      {isCastleSettled && isArmySettleStage && <ArmySettleWarning />}
       {isArmyMoveStage && <ArmyMoveWarning />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ArmyProgressComp />}
-      {isPlayerLost && <LoserWarning />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ArmyInfoModal />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && <AudioControlComp />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <WarResultComp />}
+      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ArmyProgressBar />}
+      {isPlayerLost && <PlayerLostWarning />}
+      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ArmyInfoDrawer />}
+      {isCastleSettled && !playerSeedStage && !playerWaitingStage && <SettingsDrawer />}
+      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <WarResultDrawer />}
+
       <ScrollContainer className="scroll-container" style={scrollContainerStyles}>
-        <Grid width={width} height={height} values={values} pixelStyles={terrainStyles} isBorder={false} />
+        <Terrain width={width} height={height} values={values} pixelStyles={terrainStyles} isBorder={false} />
       </ScrollContainer>
     </>
   );

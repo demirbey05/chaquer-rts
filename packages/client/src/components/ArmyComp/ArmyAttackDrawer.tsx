@@ -3,7 +3,7 @@ import { useMUD } from "../../MUDContext";
 import { findIDFromPosition } from "../../utils/findIDFromPosition";
 import { useAttack } from "../../context/AttackContext";
 
-export const ArmyAttackModal = () => {
+export const ArmyAttackDrawer = () => {
   const { components, systemCalls } = useMUD();
   const { setMyArmyConfig,
     myArmyConfig,
@@ -67,8 +67,8 @@ export const ArmyAttackModal = () => {
       data-bs-backdrop="false"
       style={armyAttackOffCanvasDivStyles}
       tabIndex={-1}
-      id="armyAttackModal"
-      aria-labelledby="armyAttackModalLabel"
+      id="armyAttackDrawer"
+      aria-labelledby="armyAttackDrawerLabel"
     >
       <ArmyAttackModalHeader headerText={"War - Army Information"} />
       <div className="offcanvas-body small">
@@ -120,7 +120,7 @@ interface ArmyAttackModalHeaderPropTypes {
 
 const ArmyAttackModalHeader = (props: ArmyAttackModalHeaderPropTypes) => {
   return (
-    <h5 className="offcanvas-title text-center" id="armyAttackModalLabel">
+    <h5 className="offcanvas-title text-center" id="armyAttackDrawerLabel">
       {props.headerText}
     </h5>
   )
@@ -140,27 +140,27 @@ const ArmyAttackModalCard = (props: ArmyAttackModalCardPropTypes) => {
       <h1 className={`text-center bg-${props.titleBg}  text-white p-2`}>
         {props.title}
       </h1>
-      <div className="row">
-        <div className="row text-center mt-2">
-          <p>
-            Swordsman: {props.numSwordsman && props.numSwordsman}
-          </p>
-        </div>
-      </div>
-      <div className="row">
-        <div className="row text-center mt-2">
-          <p>
-            Archer: {props.numArcher && props.numArcher}
-          </p>
-        </div>
-      </div>
-      <div className="row">
-        <div className="row text-center mt-2">
-          <p>
-            Cavalry: {props.numCavalry && props.numCavalry}
-          </p>
-        </div>
+      <ArmyAttackModalCardRow numSolider={props.numSwordsman} soliderName={"Swordsman"} />
+      <ArmyAttackModalCardRow numSolider={props.numArcher} soliderName={"Archer"} />
+      <ArmyAttackModalCardRow numSolider={props.numCavalry} soliderName={"Cavalry"} />
+    </div>
+  )
+}
+
+interface ArmyAttackModalCardRowPropTypes {
+  numSolider: number,
+  soliderName: string
+}
+
+const ArmyAttackModalCardRow = (props: ArmyAttackModalCardRowPropTypes) => {
+  return (
+    <div className="row">
+      <div className="row text-center mt-2">
+        <p>
+          {props.soliderName && props.soliderName}: {props.numSolider && props.numSolider}
+        </p>
       </div>
     </div>
   )
+
 }

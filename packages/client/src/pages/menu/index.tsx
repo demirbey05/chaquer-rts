@@ -1,12 +1,12 @@
 import map from "../../../map.json";
 import chaquerImg from '../../images/chaquer_bg.png';
-import { Grid } from "../../components/TerrainComp/Grid";
+import { Terrain } from "../../components/TerrainComp/Terrain";
 import { generatePerlinValues } from "../../terrain-helper/utils";
-import { TerrainSpinner } from "../../components/MenuComp/TerrainSpinner";
-import { TerrainInfoModal } from "../../components/MenuComp/TerrainInfoModal";
+import { TerrainSpinner } from "../../components/TerrainComp/TerrainSpinner";
+import { TerrainTypeInfoModal } from "../../components/TerrainComp/TerrainTypeInfoModal";
 import { Button } from "@chakra-ui/react";
 import { useTerrain } from "../../context/TerrainContext.js"
-import { UserNameModal } from '../../components/MenuComp/UserNameModal';
+import { UserNameModal } from '../../components/PlayerComp/UserNameModal';
 import { useMUD } from "../../MUDContext";
 import { flatten2D } from "../../utils/terrainArray";
 import { ethers } from "ethers";
@@ -67,7 +67,7 @@ export const Menu = () => {
           <RegenerateButton isLoading={isLoading} refresh={refresh} handleRefresh={handleRefresh} />
           {refresh !== 0 && (
             <div className="text-center mt-2 mb-2">
-              <TerrainInfoModal />
+              <TerrainTypeInfoModal />
             </div>
           )}
         </div>
@@ -97,7 +97,7 @@ interface TerrainMapPropStyles {
 const TerrainMap = (props: TerrainMapPropStyles) => {
   return (
     <div className="col-8 align-items-center justify-content-center">
-      <Grid
+      <Terrain
         width={props.width}
         height={props.height}
         values={props.values}

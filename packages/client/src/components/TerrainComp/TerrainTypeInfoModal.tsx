@@ -1,7 +1,7 @@
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure, Button } from '@chakra-ui/react'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 
-export const TerrainInfoModal = () => {
+export const TerrainTypeInfoModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (

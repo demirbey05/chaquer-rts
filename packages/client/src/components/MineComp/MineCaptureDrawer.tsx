@@ -4,16 +4,17 @@ import { useMUD } from "../../MUDContext";
 import { useEffect, useState } from "react";
 import { useMine } from "../../context/MineContext";
 import { useAttack } from "../../context/AttackContext";
-import { useResourcePositions } from "../../hooks/useResourcePositions";
+import { useResources } from "../../hooks/useResources";
 import { findCastleCloseArmies } from "../../utils/findCastleCloseArmies";
 import { getResourceTypeByPosition } from "../../utils/getResourceTypeByPosition";
 
-export const MineCaptureModal = () => {
+export const MineCaptureDrawer = () => {
     const { components, systemCalls } = useMUD();
     const { targetMinePosition, setIsMineStage, attackFromArmyPositionToMine } = useMine();
-    const resources = useResourcePositions();
     const { setMyArmyConfig, setEnemyArmyConfig, myArmyConfig } = useAttack();
+
     const [mineArmy, setMineArmy] = useState<any>();
+    const resources = useResources();
 
     const handleCaptureLater = () => {
         setIsMineStage(false);
@@ -76,8 +77,8 @@ export const MineCaptureModal = () => {
             data-bs-backdrop="false"
             style={mineCaptureCanvasStyles}
             tabIndex={-1}
-            id="mineCaptureModal"
-            aria-labelledby="mineCaptureModalLabel"
+            id="mineCaptureDrawer"
+            aria-labelledby="mineCaptureDrawerLabel"
         >
             <MineCaptureModalHeader resourceType={getResourceTypeByPosition(resources, targetMinePosition)} />
             <div className="offcanvas-body small">
@@ -126,7 +127,7 @@ interface MineCaptureModalHeaderProps {
 
 const MineCaptureModalHeader = ({ resourceType }: MineCaptureModalHeaderProps) => {
     return (
-        <h2 className="offcanvas-title text-center" id="mineCaptureModalLabel">
+        <h2 className="offcanvas-title text-center" id="mineCaptureDrawerLabel">
             {
                 resourceType === 0 ? "Capture Food " :
                     resourceType === 1 ? "Capture Wood " :

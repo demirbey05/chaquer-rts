@@ -5,7 +5,7 @@ import { useAttack } from "../../context/AttackContext";
 import { findCastleCloseArmies } from "../../utils/findCastleCloseArmies";
 import { useEffect, useState } from "react";
 
-export const CastleAttackModal = () => {
+export const CastleAttackDrawer = () => {
   const { components, systemCalls } = useMUD();
   const { setMyArmyConfig,
     setEnemyArmyConfig,
@@ -76,8 +76,8 @@ export const CastleAttackModal = () => {
       data-bs-backdrop="false"
       style={castleAttackOffCanvasDivStyle}
       tabIndex={-1}
-      id="castleAttackModal"
-      aria-labelledby="castleAttackModalLabel"
+      id="castleAttackDrawer"
+      aria-labelledby="castleAttackDrawerLabel"
     >
       <CastleAttackModalHeader />
       <div className="offcanvas-body small">
@@ -135,35 +135,34 @@ const CastleAttackModalArmyCard = (props: CastleAttackModalArmyCardPropTypes) =>
         <h1 className={`text-center text-white p-2 bg-${props.titleBg}`}>
           {props.title}
         </h1>
-        <div className="row">
-          <div className="row text-center mt-2">
-            <p>
-              Swordsman: {props.numSwordsman && props.numSwordsman}
-            </p>
-          </div>
-        </div>
-        <div className="row">
-          <div className="row text-center mt-2">
-            <p>
-              Archer: {props.numArcher && props.numArcher}
-            </p>
-          </div>
-        </div>
-        <div className="row">
-          <div className="row text-center mt-2">
-            <p>
-              Cavalry: {props.numCavalry && props.numCavalry}
-            </p>
-          </div>
-        </div>
+        <CastleAttackModalArmyCardRow soliderNum={props.numSwordsman} soliderName={"Swordsman"} />
+        <CastleAttackModalArmyCardRow soliderNum={props.numArcher} soliderName={"Archer"} />
+        <CastleAttackModalArmyCardRow soliderNum={props.numCavalry} soliderName={"Cavalry"} />
       </div>
     </>
   )
 }
 
+interface CastleAttackModalArmyCardRowPropTypes {
+  soliderNum: number,
+  soliderName: string
+}
+
+const CastleAttackModalArmyCardRow = (props: CastleAttackModalArmyCardRowPropTypes) => {
+  return (
+    <div className="row">
+      <div className="row text-center mt-2">
+        <p>
+          {props.soliderName && props.soliderName}: {props.soliderNum && props.soliderNum}
+        </p>
+      </div>
+    </div>
+  )
+}
+
 const CastleAttackModalHeader = () => {
   return (
-    <h5 className="offcanvas-title text-center text-white" id="castleAttackModalLabel">
+    <h5 className="offcanvas-title text-center text-white" id="castleAttackDrawerLabel">
       War - Army Information
     </h5>
   )

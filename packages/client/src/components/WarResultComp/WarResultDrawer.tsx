@@ -6,7 +6,7 @@ import warResultIcon from '../../images/warResult.png';
 import { Button } from "@chakra-ui/react";
 
 
-export const WarResultComp = () => {
+export const WarResultDrawer = () => {
     const [isOpen, setIsOpen] = useState(true);
     const warResults = useWarResult(5);
     const { userWallet } = usePlayer();

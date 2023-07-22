@@ -1,6 +1,6 @@
 import '../../styles/globals.css';
 
-export const LoserWarning = () => {
+export const PlayerLostWarning = () => {
     return (
         <div className="warning-on-top">
             <h2>

@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { useArmy } from "../../context/ArmyContext";
 
 export const ArmySettleModal = () => {
-  const { armyPosition, setIsArmyStage, setIsArmySettled } = useArmy();
+  const { armyPosition, setIsArmySettleStage, setIsArmySettled } = useArmy();
   const { systemCalls } = useMUD();
 
   const [swordsmanCount, setSwordsmanCount] = useState<string>("");
@@ -45,7 +45,7 @@ export const ArmySettleModal = () => {
     );
     if (tx) {
       setIsArmySettled(true);
-      setIsArmyStage(false);
+      setIsArmySettleStage(false);
 
       setSwordsmanCount('');
       setArcherCount('');
@@ -81,27 +81,21 @@ export const ArmySettleModal = () => {
                 </p>
               </div>
               <div className="row mt-2">
-                <div className="col align-items-center">
-                  <ArmySettleInputBody imageSource={swordsmanImg}
-                    soldierName={"Swordsman"}
-                    setSoliderCount={setSwordsmanCount}
-                    imageHeight={"100px"}
-                    imageWidth={"75px"} />
-                </div>
-                <div className="col align-items-center">
-                  <ArmySettleInputBody imageSource={archerImg}
-                    soldierName={"Archer"}
-                    setSoliderCount={setArcherCount}
-                    imageHeight={"100px"}
-                    imageWidth={"85px"} />
-                </div>
-                <div className="col align-items-center">
-                  <ArmySettleInputBody imageSource={cavalryImg}
-                    soldierName={"Cavalry"}
-                    setSoliderCount={setCavalryCount}
-                    imageHeight={"100px"}
-                    imageWidth={"125px"} />
-                </div>
+                <ArmySettleInputBody imageSource={swordsmanImg}
+                  soldierName={"Swordsman"}
+                  setSoliderCount={setSwordsmanCount}
+                  imageHeight={"100px"}
+                  imageWidth={"75px"} />
+                <ArmySettleInputBody imageSource={archerImg}
+                  soldierName={"Archer"}
+                  setSoliderCount={setArcherCount}
+                  imageHeight={"100px"}
+                  imageWidth={"85px"} />
+                <ArmySettleInputBody imageSource={cavalryImg}
+                  soldierName={"Cavalry"}
+                  setSoliderCount={setCavalryCount}
+                  imageHeight={"100px"}
+                  imageWidth={"125px"} />
               </div>
             </div>
           </div>
@@ -141,7 +135,7 @@ interface ArmySettleInputBody {
 
 const ArmySettleInputBody = (props: ArmySettleInputBody) => {
   return (
-    <>
+    <div className="col align-items-center">
       <div className="row justify-content-center">
         <img
           src={props.imageSource}
@@ -159,6 +153,6 @@ const ArmySettleInputBody = (props: ArmySettleInputBody) => {
           onChange={(e: any) => props.setSoliderCount(e.target.value)}
           onClick={(e: any) => e.target.select()} />
       </div>
-    </>
+    </div>
   )
 }

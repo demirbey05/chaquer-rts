@@ -3,7 +3,7 @@ import { useEntityQuery, useObservableValue } from "@latticexyz/react";
 import { Has, getComponentValue } from "@latticexyz/recs";
 import { useState, useEffect } from "react";
 
-export function useResourcePositions() {
+export function useResources() {
     const { components } = useMUD();
 
     // Get Castle entities
