@@ -97,7 +97,7 @@ export const ArmyInfoModal = () => {
                 ⚔️
             </Button>
 
-            <div style={armyInfoModalOffcanvasDivStyles} onMouseDown={dragMouseDown} className="offcanvas offcanvas-start" data-bs-keyboard="false" data-bs-backdrop="false" id="armyInfoModal" aria-labelledby="armyInfoModal">
+            <div style={armyInfoModalOffcanvasDivStyles} onMouseDown={dragMouseDown} className="offcanvas offcanvas-start" data-bs-keyboard="false" data-bs-backdrop="false" id="armyInfoModal" aria-labelledby="armyInfoModalLabel">
                 <div className="offcanvas-header" style={{ cursor: "move" }}>
                     <ArmyInfoModalHeader />
                 </div>
@@ -159,7 +159,7 @@ export const ArmyInfoModal = () => {
 const ArmyInfoModalHeader = () => {
     return (
         <>
-            <h5 className="offcanvas-title" id="staticBackdropLabel">My Army Details</h5>
+            <h5 className="offcanvas-title" id="armyInfoModalLabel">My Army Details</h5>
             <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&#10008;</button>
         </>
     )

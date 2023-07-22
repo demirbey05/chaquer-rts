@@ -76,10 +76,10 @@ export const MineCaptureModal = () => {
             data-bs-backdrop="false"
             style={mineCaptureCanvasStyles}
             tabIndex={-1}
-            id="minecaptureoffcanvas"
-            aria-labelledby="minecaptureoffcanvas"
+            id="mineCaptureModal"
+            aria-labelledby="mineCaptureModalLabel"
         >
-            <MineCaptureModalHeader resourceType={getResourceTypeByPosition({ resources, targetMinePosition })} />
+            <MineCaptureModalHeader resourceType={getResourceTypeByPosition(resources, targetMinePosition)} />
             <div className="offcanvas-body small">
                 <div className="row">
                     <CastleAttackModalArmyCard title={"My Army"} titleBg={"success"}
@@ -126,7 +126,7 @@ interface MineCaptureModalHeaderProps {
 
 const MineCaptureModalHeader = ({ resourceType }: MineCaptureModalHeaderProps) => {
     return (
-        <h2 className="offcanvas-title text-center" id="offcanvasBottomLabel">
+        <h2 className="offcanvas-title text-center" id="mineCaptureModalLabel">
             {
                 resourceType === 0 ? "Capture Food " :
                     resourceType === 1 ? "Capture Wood " :
@@ -149,25 +149,25 @@ const CastleAttackModalArmyCard = (props: CastleAttackModalArmyCardPropTypes) =>
     return (
         <>
             <div className="col-6">
-                <h1 className={`text-center border-bottom border-white text-white p-1 bg-${props.titleBg}`}>
+                <h1 className={`text-center text-white p-2 bg-${props.titleBg}`}>
                     {props.title}
                 </h1>
                 <div className="row">
-                    <div className="row justify-content-center text-center mt-2">
+                    <div className="row text-center mt-2">
                         <p>
                             Swordsman: {props.numSwordsman && props.numSwordsman}
                         </p>
                     </div>
                 </div>
                 <div className="row">
-                    <div className="row justify-content-center text-center mt-2">
+                    <div className="row text-center mt-2">
                         <p>
                             Archer: {props.numArcher && props.numArcher}
                         </p>
                     </div>
                 </div>
                 <div className="row">
-                    <div className="row justify-content-center text-center mt-2">
+                    <div className="row text-center mt-2">
                         <p>
                             Cavalry: {props.numCavalry && props.numCavalry}
                         </p>

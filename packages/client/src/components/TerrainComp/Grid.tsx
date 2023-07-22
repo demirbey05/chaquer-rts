@@ -351,7 +351,7 @@ export const Grid = (props: DataProp) => {
           return (position.x === parseInt(data.x) && position.y === parseInt(data.y))
         }) &&
           isEnemyCastle({ x: data.x, y: data.y }, myCastlePosition, castlePositions) &&
-          document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "#offcanvasBottomCastle");
+          document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "#castleAttackModal");
       }
     });
 

@@ -194,3 +194,35 @@
     text-align: center;
     color: white;
 }
+
+/* Warning Styles on top*/
+.warning-on-top {
+    position: absolute;
+    z-index: 1;
+    color: white;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin: 125px auto;
+    width: 600px;
+    text-align: center;
+    font-size: 30px;
+    border-bottom: 2px solid white;
+    border-top: 2px solid white;
+}
+
+/* Warning Styles on bottom*/
+.warning-on-bottom {
+    position: absolute;
+    z-index: 1;
+    color: white;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 50px auto;
+    width: 600px;
+    text-align: center;
+    font-size: 30px;
+    border-bottom: 2px solid white;
+    border-top: 2px solid white;
+}

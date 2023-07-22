@@ -1,7 +1,10 @@
-export const getResourceTypeByPosition = ({ resource, position }: any) => {
+export const getResourceTypeByPosition = (resource: any[], position: any) => {
   if (resource && position) {
     const foundResource = resource.find((data: any) => {
-      return data.positions.x === position.x && data.positions.y === position.y;
+      return (
+        data.positions.x.toString() === position.x &&
+        data.positions.y.toString() === position.y
+      );
     });
 
     if (foundResource) {

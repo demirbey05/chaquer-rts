@@ -60,20 +60,20 @@ export const ArmySettleModal = () => {
       className="modal fade"
       id="armySettleModal"
       data-bs-backdrop="static"
-      aria-labelledby="exampleModalLabel"
+      aria-labelledby="armySettleModalLabel"
       aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
-          <div className="modal-header">
-            <h1 className="modal-title fs-5" id="exampleModalLabel">
+          <div className="modal-header justify-center">
+            <h1 className="modal-title text-2xl" id="armySettleModalLabel">
               Army Settlement
             </h1>
           </div>
           <div className="modal-body">
             <div className="container-fluid">
               <div className="row border-bottom">
-                <p>
+                <p className="mb-2">
                   Please determine the number of warriors that will hold in
                   the army. You can deploy maximum 100 army in the total.
                 </p>

@@ -76,8 +76,8 @@ export const CastleAttackModal = () => {
       data-bs-backdrop="false"
       style={castleAttackOffCanvasDivStyle}
       tabIndex={-1}
-      id="offcanvasBottomCastle"
-      aria-labelledby="offcanvasBottomLabel"
+      id="castleAttackModal"
+      aria-labelledby="castleAttackModalLabel"
     >
       <CastleAttackModalHeader />
       <div className="offcanvas-body small">
@@ -131,26 +131,26 @@ interface CastleAttackModalArmyCardPropTypes {
 const CastleAttackModalArmyCard = (props: CastleAttackModalArmyCardPropTypes) => {
   return (
     <>
-      <div className="col-6">
-        <h1 className={`text-center border-bottom border-white text-white p-1 bg-${props.titleBg}`}>
+      <div className="col-6" style={{ overflow: "hidden" }}>
+        <h1 className={`text-center text-white p-2 bg-${props.titleBg}`}>
           {props.title}
         </h1>
         <div className="row">
-          <div className="row justify-content-center text-center mt-2">
+          <div className="row text-center mt-2">
             <p>
               Swordsman: {props.numSwordsman && props.numSwordsman}
             </p>
           </div>
         </div>
         <div className="row">
-          <div className="row justify-content-center text-center mt-2">
+          <div className="row text-center mt-2">
             <p>
               Archer: {props.numArcher && props.numArcher}
             </p>
           </div>
         </div>
         <div className="row">
-          <div className="row justify-content-center text-center mt-2">
+          <div className="row text-center mt-2">
             <p>
               Cavalry: {props.numCavalry && props.numCavalry}
             </p>
@@ -163,7 +163,7 @@ const CastleAttackModalArmyCard = (props: CastleAttackModalArmyCardPropTypes) =>
 
 const CastleAttackModalHeader = () => {
   return (
-    <h5 className="offcanvas-title text-center border-bottom border-white text-white" id="offcanvasBottomLabel">
+    <h5 className="offcanvas-title text-center text-white" id="castleAttackModalLabel">
       War - Army Information
     </h5>
   )

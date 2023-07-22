@@ -120,7 +120,7 @@ interface ArmyAttackModalHeaderPropTypes {
 
 const ArmyAttackModalHeader = (props: ArmyAttackModalHeaderPropTypes) => {
   return (
-    <h5 className="offcanvas-title text-center border-bottom border-white" id="offcanvasBottomLabel">
+    <h5 className="offcanvas-title text-center" id="armyAttackModalLabel">
       {props.headerText}
     </h5>
   )
@@ -137,25 +137,25 @@ interface ArmyAttackModalCardPropTypes {
 const ArmyAttackModalCard = (props: ArmyAttackModalCardPropTypes) => {
   return (
     <div className="col-6">
-      <h1 className={`text-center bg-${props.titleBg} border-bottom border-white text-white p-1`}>
+      <h1 className={`text-center bg-${props.titleBg}  text-white p-2`}>
         {props.title}
       </h1>
       <div className="row">
-        <div className="row justify-content-center text-center mt-2">
+        <div className="row text-center mt-2">
           <p>
             Swordsman: {props.numSwordsman && props.numSwordsman}
           </p>
         </div>
       </div>
       <div className="row">
-        <div className="row justify-content-center text-center mt-2">
+        <div className="row text-center mt-2">
           <p>
             Archer: {props.numArcher && props.numArcher}
           </p>
         </div>
       </div>
       <div className="row">
-        <div className="row justify-content-center text-center mt-2">
+        <div className="row text-center mt-2">
           <p>
             Cavalry: {props.numCavalry && props.numCavalry}
           </p>
