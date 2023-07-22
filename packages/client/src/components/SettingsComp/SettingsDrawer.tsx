@@ -33,12 +33,21 @@ export const SettingsDrawer = () => {
         };
     }, []);
 
+    useEffect(() => {
+        if (localStorage.getItem('audioPaused')) {
+            setIsPlaying(true);
+        }
+    }, [])
+
     const handlePlay = () => {
         setIsPlaying(false);
     };
 
     const handleStop = () => {
         setIsPlaying(true);
+        if (!localStorage.getItem('audioPaused')) {
+            localStorage.setItem('audioPaused', "true")
+        }
     };
 
     const audioOffCanvasButtonStyle: any = {
