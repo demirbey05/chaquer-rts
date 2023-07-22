@@ -2,7 +2,7 @@ import archerImg from "../../images/archer.png";
 import cavalryImg from "../../images/cavalry.png";
 import swordsmanImg from "../../images/swordsman.png";
 import { useMUD } from "../../MUDContext";
-import { Button, NumberInput, NumberInputField } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useArmy } from "../../context/ArmyContext";
 
@@ -25,14 +25,8 @@ export const ArmySettleModal = () => {
     }
 
     if (
-      parseInt(swordsmanCount) +
-      parseInt(archerCount) +
-      parseInt(cavalryCount) <=
-      100 &&
-      parseInt(swordsmanCount) +
-      parseInt(archerCount) +
-      parseInt(cavalryCount) >
-      0
+      parseInt(swordsmanCount) + parseInt(archerCount) + parseInt(cavalryCount) <= 100 &&
+      parseInt(swordsmanCount) + parseInt(archerCount) + parseInt(cavalryCount) > 0
     ) {
       setIsDisabled(false);
     } else {
@@ -52,6 +46,14 @@ export const ArmySettleModal = () => {
     if (tx) {
       setIsArmySettled(true);
       setIsArmyStage(false);
+
+      setSwordsmanCount('');
+      setArcherCount('');
+      setCavalryCount('');
+
+      (document.getElementById('Swordsman') as HTMLInputElement).value = '';
+      (document.getElementById('Cavalry') as HTMLInputElement).value = '';
+      (document.getElementById('Archer') as HTMLInputElement).value = '';
     }
   };
 
@@ -150,13 +152,12 @@ const ArmySettleInputBody = (props: ArmySettleInputBody) => {
         <p>{props.soldierName}</p>
       </div>
       <div className="row justify-content-center mt-2">
-        <NumberInput min={0}>
-          <NumberInputField
-            onChange={(e: any) => props.setSoliderCount(e.target.value)}
-            onClick={(e: any) => e.target.select()}
-            maxLength={3}
-          />
-        </NumberInput>
+        <input
+          className="form-control w-75"
+          type="number"
+          id={props.soldierName}
+          onChange={(e: any) => props.setSoliderCount(e.target.value)}
+          onClick={(e: any) => e.target.select()} />
       </div>
     </>
   )

@@ -1,13 +1,4 @@
-import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    Button,
-    useDisclosure
-} from '@chakra-ui/react'
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, Button, useDisclosure } from '@chakra-ui/react'
 import { useState, useRef } from 'react'
 import { usePlayer } from '../../context/PlayerContext';
 import { useMUD } from '../../MUDContext';
@@ -46,18 +37,17 @@ export const PlayerSeedModal = () => {
         <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false} isCentered={true}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Please enter player seed for better game experience</ModalHeader>
+                <ModalHeader className='text-center text-2xl'>Player Seed Stage</ModalHeader>
                 <hr />
-                <ModalBody pb={6}>
-                    <label htmlFor="playerseedinput" className="form-label">Player Seed</label>
-                    <input ref={initialRef} onChange={(e: any) => handleInput(e)} type="number" className="form-control w-75" id="usernameinput" placeholder='Player Seed' />
+                <ModalBody>
+                    <input ref={initialRef} onChange={(e: any) => handleInput(e)} type="number" className="form-control" id="usernameinput" placeholder='Enter player seed for better game experience' />
                 </ModalBody>
-
                 <ModalFooter>
                     <Button isDisabled={disable}
                         onClick={handleConfirmClick}
-                        colorScheme='blue'
-                        mr={3}>
+                        colorScheme='whatsapp'
+                        border="solid"
+                        textColor="dark">
                         Confirm
                     </Button>
                 </ModalFooter>

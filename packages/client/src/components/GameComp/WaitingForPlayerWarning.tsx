@@ -68,8 +68,7 @@ export const WaitingForPlayerWarning = () => {
                     connectedUserNumber && connectedUserNumber !== 2 &&
                     <>
                         <span className="waiting-for-players-info-message">Waiting for other players...</span>
-                        <span className="waiting-for-players-info-message">{connectedUserNumber} players are ready...</span>
-                        <span className="waiting-for-players-info-message">Need {limitOfUser - connectedUserNumber} player to start the game...</span>
+                        <span className="waiting-for-players-info-message">Need {limitOfUser - connectedUserNumber} player to start the game. ({connectedUserNumber}/{limitOfUser})</span>
                     </>
                 }
                 {isMineInited && checkMineAlreadyInited === null && <span className="waiting-for-players-info-message">Game is starting in {count} seconds.</span>}

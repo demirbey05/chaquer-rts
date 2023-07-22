@@ -35,30 +35,34 @@ export const UserNameModal = () => {
         }
     }
     return (
-        <div className="modal fade" id="userNameModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex={-1} aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div className="modal fade"
+            id="userNameModal"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabIndex={-1}
+            aria-labelledby="userNameModalLabel"
+            aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content bg-dark text-white">
-                    <div className="modal-header">
-                        <h1 className="modal-title fs-5" id="userNameModalLabel">Please enter your username</h1>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div className="modal-header justify-center">
+                        <h1 className="modal-title text-2xl" id="userNameModalLabel">Username</h1>
                     </div>
                     <div className="modal-body">
-                        <div className="mb-3">
-                            <label htmlFor="usernameinput" className="form-label">Username</label>
-                            {
-                                !localStorage.getItem('username')
-                                    ? <input onChange={(e: any) => handleInput(e)} type="text" className="form-control w-75" id="usernameinput" placeholder="username" />
-                                    : <input defaultValue={userName} type="text" className="form-control w-75" id="usernameinput" readOnly />
-                            }
-                        </div>
+                        {
+                            !localStorage.getItem('username')
+                                ? <input onChange={(e: any) => handleInput(e)} type="text" className="form-control" id="usernameinput" placeholder="Please enter your username" />
+                                : <input defaultValue={userName} type="text" className="form-control" id="usernameinput" readOnly />
+                        }
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" className="btn btn-dark border-white" data-bs-dismiss="modal">Close</button>
                         {
                             disable ? <JoinToGameButton disable={disable} /> :
-                                (<Link to={'/game'}>
-                                    <JoinToGameButton onClick={() => onClick()} disable={disable} />
-                                </Link>)
+                                (
+                                    <Link to={'/game'}>
+                                        <JoinToGameButton onClick={() => onClick()} disable={disable} />
+                                    </Link>
+                                )
                         }
                     </div>
                 </div>
@@ -69,5 +73,12 @@ export const UserNameModal = () => {
 
 
 const JoinToGameButton = ({ disable, onClick }: any) => {
-    return <button disabled={disable} onClick={onClick} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Join to the Game</button>
+    return <button
+        disabled={disable}
+        onClick={onClick}
+        type="button"
+        className="btn btn-dark border-white"
+        data-bs-dismiss="modal">
+        Join to the Game
+    </button>
 }

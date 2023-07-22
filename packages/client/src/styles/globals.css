@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
 /*Border hover that user always see*/
 .borderHover {
     display: inline-block;

@@ -60,7 +60,7 @@ export const Menu = () => {
           </>)
         }
         <div className="col">
-          <h2 className="text-center text-white display-4 border-top border-bottom font-bold">
+          <h2 className="text-center text-white text-6xl border-top border-bottom font-bold">
             Chaquer
           </h2>
           {refresh !== 0 && <StartGameButton isLoading={isLoading} handleTerrain={handleTerrain} />}
@@ -119,14 +119,12 @@ const StartGameButton = (props: StartGameButtonPropTypes) => {
       <Button
         data-bs-toggle="modal"
         data-bs-target="#userNameModal"
-        colorScheme="blackAlpha"
-        border="solid"
+        colorScheme="whiteAlpha"
+        textColor="dark"
+        p="8"
+        mt="16"
         width="200px"
         isDisabled={props.isLoading}
-        textColor="white"
-        variant="ghost"
-        p="7"
-        mt="16"
         onClick={props.handleTerrain}
       >
         Start the Game
@@ -145,14 +143,12 @@ const RegenerateButton = (props: RegenerateButtonPropTypes) => {
   return (
     <div className="text-center mb-2">
       <Button
-        colorScheme="blackAlpha"
-        border="solid"
+        colorScheme="whiteAlpha"
+        p="8"
+        textColor="dark"
         width="200px"
         isDisabled={props.isLoading}
-        textColor="white"
-        variant="ghost"
         onClick={props.handleRefresh}
-        p="7"
         marginTop={props.refresh === 0 ? "300px" : "0"}
       >
         {props.refresh === 0 ? "Enter the Game" : "Regenerate the Terrain"}
