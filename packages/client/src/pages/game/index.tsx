@@ -15,6 +15,7 @@ import { usePlayer } from "../../context/PlayerContext";
 import { WarResultDrawer } from "../../components/WarResultComp/WarResultDrawer";
 import { PlayerSeedModal } from '../../components/PlayerSeedComp/PlayerSeedModal';
 import { PlayerWaitingStage } from "../../components/PlayerComp/PlayerWaitingStage";
+import { MineProgressBar } from '../../components/MineComp/MineProgressBar';
 
 export const Game = () => {
   const { width, height } = useTerrain();
@@ -34,6 +35,7 @@ export const Game = () => {
       {isCastleSettled && isArmySettleStage && <ArmySettleWarning />}
       {isArmyMoveStage && <ArmyMoveWarning />}
       {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ArmyProgressBar />}
+      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <MineProgressBar />}
       {isPlayerLost && <PlayerLostWarning />}
       {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ArmyInfoDrawer />}
       {isCastleSettled && !playerSeedStage && !playerWaitingStage && <SettingsDrawer />}
