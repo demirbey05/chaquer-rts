@@ -247,12 +247,45 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
-    GameState: (() => {
-      const tableId = new TableId("", "GameState");
+    GameMetaData: (() => {
+      const tableId = new TableId("", "GameMetaData");
       return defineComponent(
         world,
         {
           state: RecsType.Number,
+          startBlock: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    ResourceOwn: (() => {
+      const tableId = new TableId("", "ResourceOwn");
+      return defineComponent(
+        world,
+        {
+          numOfFood: RecsType.BigInt,
+          numOfWood: RecsType.BigInt,
+          numOfGold: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    LastCollectTime: (() => {
+      const tableId = new TableId("", "LastCollectTime");
+      return defineComponent(
+        world,
+        {
+          lastCollect: RecsType.BigInt,
         },
         {
           metadata: {

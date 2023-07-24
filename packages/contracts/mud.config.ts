@@ -126,13 +126,34 @@ export default mudConfig({
       },
       ephemeral:true,
     },
-    GameState:{
+    GameMetaData:{
       keySchema:{
         gameID:"uint256"
       },
       schema:{
-        state:"State"
+        state:"State",
+        startBlock:"uint256"
 
+      }
+    },
+    ResourceOwn : {
+      keySchema:{
+        owner:"address",
+        gameID:"uint256"
+      },
+      schema:{
+        numOfFood:"uint256",
+        numOfWood:"uint256",
+        numOfGold:"uint256"
+      }
+    },
+    LastCollectTime:{
+      keySchema:{
+        owner:"address",
+        gameID:"uint256"
+      },
+      schema:{
+        lastCollect:"uint256"
       }
     }
   },

@@ -18,4 +18,6 @@ import { AddressToUsername, AddressToUsernameTableId } from "./tables/AddressToU
 import { ResourceOwnable, ResourceOwnableData, ResourceOwnableTableId } from "./tables/ResourceOwnable.sol";
 import { ResourceInited, ResourceInitedTableId } from "./tables/ResourceInited.sol";
 import { MineCaptureResult, MineCaptureResultData, MineCaptureResultTableId } from "./tables/MineCaptureResult.sol";
-import { GameState, GameStateTableId } from "./tables/GameState.sol";
+import { GameMetaData, GameMetaDataData, GameMetaDataTableId } from "./tables/GameMetaData.sol";
+import { ResourceOwn, ResourceOwnData, ResourceOwnTableId } from "./tables/ResourceOwn.sol";
+import { LastCollectTime, LastCollectTimeTableId } from "./tables/LastCollectTime.sol";

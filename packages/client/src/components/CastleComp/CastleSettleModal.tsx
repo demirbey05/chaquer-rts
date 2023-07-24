@@ -20,6 +20,9 @@ export const CastleSettleModal = () => {
       await tx.wait();
       setIsCastleDeployedBefore(true)
     }
+    /*const userName = await storeCache.tables.AddressToUsername.get({ ownerAddress: (userWallet!.address).toLowerCase(), gameId: BigInt(1) });
+    console.log(userName)
+    console.log(pad(getAddress(userWallet!.address)).toLowerCase())*/
   };
 
   return (

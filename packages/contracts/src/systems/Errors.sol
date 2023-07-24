@@ -67,3 +67,7 @@ error MineCapture__FriendFireNotAllowed();
 error MineCapture__NoAuthorization();
 error MineCapture__TooFarToAttack();
 error MineCapture__NonMatchedGameID();
+
+// Economy System Errors
+
+error EconomySystem__DifferenceIsLess();
