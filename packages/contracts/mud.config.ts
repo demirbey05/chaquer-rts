@@ -133,7 +133,6 @@ export default mudConfig({
       schema:{
         state:"State",
         startBlock:"uint256"
-
       }
     },
     ResourceOwn : {
@@ -154,6 +153,25 @@ export default mudConfig({
       },
       schema:{
         lastCollect:"uint256"
+      }
+    },
+    ResourcesSold:{
+      keySchema:{
+        gameID:"uint256"
+      },
+      schema:{
+        foodSold:"uint256",
+        woodSold:"uint256",
+        goldSold:"uint256",
+      }
+    },
+    CreditOwn:{
+      keySchema:{
+        gameID:"uint256",
+        owner:"address"
+      },
+      schema:{
+        amount:"uint256"
       }
     }
   },

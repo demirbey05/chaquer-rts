@@ -29,8 +29,10 @@
     "@latticexyz/std-contracts": "2.0.0-alpha.1.268",
     "@latticexyz/store": "2.0.0-alpha.1.268",
     "@latticexyz/world": "2.0.0-alpha.1.268",
+    "@prb/math": "^4.0.1",
     "ethers": "^5.7.2",
-    "snapsync": "link:@latticexyz/world/snapsync"
+    "snapsync": "link:@latticexyz/world/snapsync",
+    "solmate": "^6.1.0"
   },
   "devDependencies": {
     "@typechain/ethers-v5": "^10.2.0",

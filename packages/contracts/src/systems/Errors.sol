@@ -71,3 +71,4 @@ error MineCapture__NonMatchedGameID();
 // Economy System Errors
 
 error EconomySystem__DifferenceIsLess();
+error EconomySystem__InsufficientSource();

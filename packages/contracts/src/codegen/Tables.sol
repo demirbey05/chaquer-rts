@@ -21,3 +21,5 @@ import { MineCaptureResult, MineCaptureResultData, MineCaptureResultTableId } fr
 import { GameMetaData, GameMetaDataData, GameMetaDataTableId } from "./tables/GameMetaData.sol";
 import { ResourceOwn, ResourceOwnData, ResourceOwnTableId } from "./tables/ResourceOwn.sol";
 import { LastCollectTime, LastCollectTimeTableId } from "./tables/LastCollectTime.sol";
+import { ResourcesSold, ResourcesSoldData, ResourcesSoldTableId } from "./tables/ResourcesSold.sol";
+import { CreditOwn, CreditOwnTableId } from "./tables/CreditOwn.sol";

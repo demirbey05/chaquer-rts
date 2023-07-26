@@ -10,10 +10,10 @@ import { IStore } from "@latticexyz/store/src/IStore.sol";
 import "./Errors.sol";
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 
-contract MineInitSystem is System {
-  uint256 constant minePerResource = 4;
-  uint256 constant maxIter = 30;
+uint256 constant minePerResource = 4;
+uint256 constant maxIter = 30;
 
+contract MineInitSystem is System {
   function commitSeed(uint256 gameID, uint256 seed) public {
     address sender = _msgSender();
     bool isPlayer = Players.get(gameID, sender);

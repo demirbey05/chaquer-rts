@@ -4,12 +4,15 @@ pragma solidity ^0.8.0;
 
 import { TestUtils } from "./utils/TestUtils.sol";
 import { NakamoTest } from "./utils/NakamoTest.sol";
+import { UD60x18, intoUint256 } from "@prb/math/src/UD60x18.sol";
 import "../src/systems/Errors.sol";
-import { ResourceOwn } from "../src/codegen/Tables.sol";
+import { ResourceOwn, GameMetaData, ResourceOwn, ResourcesSold, CreditOwn } from "../src/codegen/Tables.sol";
 import { LibQueries, LibUtils, LibMath } from "../src/libraries/Libraries.sol";
+import { LibVRGDA } from "../src/libraries/LibVRGDA.sol";
 import { MineType } from "../src/codegen/Types.sol";
-import { console } from "forge-std/console.sol";
 import "../src/systems/EconomySystem.sol";
+import "../src/systems/MineInitSystem.sol";
+import { console } from "forge-std/console.sol";
 
 contract EconomyTest is NakamoTest {
   address payable[] users;
@@ -28,6 +31,7 @@ contract EconomyTest is NakamoTest {
     users.push(user8);
     users.push(user9);
     users.push(user10);
+    vm.roll(5);
     TestUtils.initializeMinePlacesStorage(world, 1, 1, users, userName, 10);
   }
 
@@ -62,5 +66,72 @@ contract EconomyTest is NakamoTest {
     assertEq(ResourceOwn.getNumOfWood(world, user1, 1), startWood + blockRate * 8 + mineRate * 2);
     assertEq(ResourceOwn.getNumOfGold(world, user1, 1), startGold + blockRate * 8);
     assertEq(LastCollectTime.get(world, user1, 1), 23);
+  }
+
+  function testSuccessfullTrade() public {
+    uint256 startBlock = GameMetaData.getStartBlock(world, 1);
+    vm.roll(6);
+    TestUtils.collectResource(world, user1, 1);
+    uint256 creditInitial = CreditOwn.get(world, 1, user1);
+    assertEq(ResourcesSold.getFoodSold(world, 1), 0);
+    TestUtils.sellResource(world, user1, 1, 500, MineType.Food);
+    uint256 creditAfter = CreditOwn.get(world, 1, user1);
+    console.log(creditAfter);
+    assertEq(ResourceOwn.getNumOfFood(world, user1, 1), 500);
+    assertEq(ResourcesSold.getFoodSold(world, 1), 500);
+    TestUtils.sellResource(world, user1, 1, 500, MineType.Food);
+    assertEq(ResourceOwn.getNumOfFood(world, user1, 1), 0);
+    assertEq(ResourcesSold.getFoodSold(world, 1), 1000);
+  }
+
+  // To observe behavior of vrgda system
+
+  function testVRGDA() public {
+    world.economyIncreaseResource(user1, 1);
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Food, 0));
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Wood, 0));
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Gold, 0));
+    console.log("-----");
+    vm.roll(6);
+    TestUtils.sellResource(world, user1, 1, 500, MineType.Food);
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Food, 1));
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Wood, 1));
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Gold, 1));
+    console.log("-----");
+    vm.roll(7);
+    TestUtils.sellResource(world, user1, 1, 5000, MineType.Food);
+    TestUtils.sellResource(world, user1, 1, 5000, MineType.Food);
+    TestUtils.sellResource(world, user1, 1, 5000, MineType.Food);
+    TestUtils.sellResource(world, user1, 1, 5000, MineType.Food);
+    TestUtils.sellResource(world, user1, 1, 5000, MineType.Food);
+    TestUtils.sellResource(world, user1, 1, 5000, MineType.Food);
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Food, 2));
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Wood, 2));
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Gold, 2));
+    console.log("-----");
+    vm.roll(8);
+    TestUtils.sellResource(world, user1, 1, 500, MineType.Food);
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Food, 3));
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Wood, 3));
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Gold, 3));
+    console.log("-----");
+    vm.roll(9);
+    TestUtils.sellResource(world, user1, 1, 500, MineType.Food);
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Food, 4));
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Wood, 4));
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Gold, 4));
+    console.log("-----");
+    vm.roll(10);
+    TestUtils.sellResource(world, user1, 1, 500, MineType.Food);
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Food, 5));
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Wood, 5));
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Gold, 5));
+    console.log("-----");
+    vm.roll(11);
+    TestUtils.sellResource(world, user1, 1, 500, MineType.Food);
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Food, 6));
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Wood, 6));
+    console.log(LibVRGDA.getResourcePrice(world, 1, MineType.Gold, 6));
+    console.log("-----");
   }
 }

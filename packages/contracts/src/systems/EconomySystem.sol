@@ -2,11 +2,15 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { LastCollectTime, ResourceOwnData, ResourceOwn } from "../codegen/Tables.sol";
-import { LibQueries } from "../libraries/Libraries.sol";
+import { LastCollectTime, ResourceOwnData, ResourceOwn, GameMetaData, CreditOwn, ResourcesSold } from "../codegen/Tables.sol";
+import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import "./Errors.sol";
 import { MineType } from "../codegen/Types.sol";
+import { LibVRGDA } from "../libraries/LibVRGDA.sol";
+import { IWorld } from "../codegen/world/IWorld.sol";
+import { wadMul, toWadUnsafe } from "solmate/src/utils/SignedWadMath.sol";
+
 uint256 constant mineRate = 200;
 uint256 constant blockRate = 100;
 uint256 constant startFood = 1000;
@@ -42,5 +46,47 @@ contract EconomySystem is System {
     data.numOfWood += mineRate * woodMines.length * difference + blockRate * difference;
     data.numOfGold += mineRate * goldMines.length * difference + blockRate * difference;
     ResourceOwn.set(owner, gameID, data);
+  }
+
+  function sellResource(
+    uint256 gameID,
+    uint256 amount,
+    MineType mineType
+  ) public {
+    address owner = _msgSender();
+    ResourceOwnData memory resources = ResourceOwn.get(owner, gameID);
+    uint256 startBlock = GameMetaData.getStartBlock(gameID);
+    if (mineType == MineType.Food) {
+      if (resources.numOfFood < amount) {
+        revert EconomySystem__InsufficientSource();
+      }
+      uint256 price = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Food, block.number - startBlock);
+      int256 revenue = wadMul(int256(price), toWadUnsafe(amount));
+      ResourceOwn.setNumOfFood(owner, gameID, resources.numOfFood - amount);
+      CreditOwn.set(gameID, owner, CreditOwn.get(gameID, owner) + uint256(revenue));
+      ResourcesSold.setFoodSold(gameID, ResourcesSold.getFoodSold(gameID) + amount);
+    } else if (mineType == MineType.Wood) {
+      if (resources.numOfWood < amount) {
+        revert EconomySystem__InsufficientSource();
+      }
+      uint256 price = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Wood, block.number - startBlock);
+      int256 revenue = wadMul(int256(price), toWadUnsafe(amount));
+      ResourceOwn.setNumOfWood(owner, gameID, resources.numOfWood - amount);
+      CreditOwn.set(gameID, owner, CreditOwn.get(gameID, owner) + uint256(revenue));
+      ResourcesSold.setWoodSold(gameID, ResourcesSold.getWoodSold(gameID) + amount);
+    } else if (mineType == MineType.Gold) {
+      if (resources.numOfGold < amount) {
+        revert EconomySystem__InsufficientSource();
+      }
+      uint256 price = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Gold, block.number - startBlock);
+      int256 revenue = wadMul(int256(price), toWadUnsafe(amount));
+      ResourceOwn.setNumOfGold(owner, gameID, resources.numOfGold - amount);
+      CreditOwn.set(gameID, owner, CreditOwn.get(gameID, owner) + uint256(revenue));
+      ResourcesSold.setGoldSold(gameID, ResourcesSold.getGoldSold(gameID) + amount);
+    }
+  }
+
+  function economyIncreaseResource(address user, uint256 gameID) public {
+    ResourceOwn.set(user, gameID, ResourceOwnData(100000, 100000, 100000));
   }
 }

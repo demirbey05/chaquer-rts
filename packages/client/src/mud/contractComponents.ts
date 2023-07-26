@@ -295,5 +295,37 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    ResourcesSold: (() => {
+      const tableId = new TableId("", "ResourcesSold");
+      return defineComponent(
+        world,
+        {
+          foodSold: RecsType.BigInt,
+          woodSold: RecsType.BigInt,
+          goldSold: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    CreditOwn: (() => {
+      const tableId = new TableId("", "CreditOwn");
+      return defineComponent(
+        world,
+        {
+          amount: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
   };
 }

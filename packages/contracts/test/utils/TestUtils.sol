@@ -316,4 +316,16 @@ library TestUtils {
     world.collectResource(gameID);
     vm.stopPrank();
   }
+
+  function sellResource(
+    IWorld world,
+    address user,
+    uint256 gameID,
+    uint256 amount,
+    MineType mineType
+  ) internal {
+    vm.startPrank(user);
+    world.sellResource(gameID, amount, mineType);
+    vm.stopPrank();
+  }
 }
