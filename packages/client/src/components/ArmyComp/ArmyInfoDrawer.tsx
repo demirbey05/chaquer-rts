@@ -105,7 +105,7 @@ export const ArmyInfoDrawer = () => {
                 id="armyInfoDrawer"
                 aria-labelledby="armyInfoDrawerLabel">
                 <div className="offcanvas-header" style={{ cursor: "move" }}>
-                    <h5 className="offcanvas-title" id="armyInfoDrawerLabel">My Army Details</h5>
+                    <h5 className="offcanvas-title font-extrabold" id="armyInfoDrawerLabel">My Army Details</h5>
                     <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&#10008;</button>
                 </div>
                 <hr></hr>

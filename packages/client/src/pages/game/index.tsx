@@ -16,6 +16,8 @@ import { WarResultDrawer } from "../../components/WarResultComp/WarResultDrawer"
 import { PlayerSeedModal } from '../../components/PlayerSeedComp/PlayerSeedModal';
 import { PlayerWaitingStage } from "../../components/PlayerComp/PlayerWaitingStage";
 import { MineProgressBar } from '../../components/MineComp/MineProgressBar';
+import { CreditProgressBar } from '../../components/CreditComp/CreditProgressBar';
+import { MarketDrawer } from "../../components/MarketComp/MarketDrawer";
 
 export const Game = () => {
   const { width, height } = useTerrain();
@@ -36,8 +38,10 @@ export const Game = () => {
       {isArmyMoveStage && <ArmyMoveWarning />}
       {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ArmyProgressBar />}
       {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <MineProgressBar />}
+      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <CreditProgressBar />}
       {isPlayerLost && <PlayerLostWarning />}
       {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ArmyInfoDrawer />}
+      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <MarketDrawer />}
       {isCastleSettled && !playerSeedStage && !playerWaitingStage && <SettingsDrawer />}
       {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <WarResultDrawer />}
 

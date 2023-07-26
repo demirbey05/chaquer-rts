@@ -173,6 +173,20 @@ export function createSystemCalls(
       return null;
     }
   };
+  const sellResource = async (
+    gameID: number,
+    amount: number,
+    mineType: number
+  ) => {
+    try {
+      const tx = await worldSend("sellResource", [gameID, amount, mineType]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
   return {
     initMapDataSystem,
     settleCastle,
@@ -186,5 +200,6 @@ export function createSystemCalls(
     captureMine,
     InitNumberOfGamer,
     collectResource,
+    sellResource,
   };
 }
