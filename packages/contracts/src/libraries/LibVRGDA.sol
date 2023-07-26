@@ -62,9 +62,16 @@ library LibVRGDA {
     IWorld world,
     int256 sold,
     uint256 gameID
-  ) public view returns (int256) {
+  ) internal view returns (int256) {
     uint256 numPlayers = NumberOfUsers.get(world, gameID);
     int256 perTimeUnit = wadMul(0.7e18, (int256(minePerResource * mineRate + blockRate * numPlayers)) * 1e18);
     return unsafeWadDiv(sold, perTimeUnit);
   }
+
+  function getArmyPrice(
+    IWorld world,
+    uint256 gameID,
+    MineType mineType,
+    uint256 time
+  ) internal {}
 }

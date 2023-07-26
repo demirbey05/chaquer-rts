@@ -327,5 +327,22 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    SoldierCreated: (() => {
+      const tableId = new TableId("", "SoldierCreated");
+      return defineComponent(
+        world,
+        {
+          numOfSwordsman: RecsType.BigInt,
+          numOfArcher: RecsType.BigInt,
+          numOfCavalry: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
   };
 }

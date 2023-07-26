@@ -173,6 +173,18 @@ export default mudConfig({
       schema:{
         amount:"uint256"
       }
+    },
+    SoldierCreated:{
+      keySchema:{
+        gameID:"uint256",
+        owner:"address"
+      },
+      schema:{
+        numOfSwordsman:"uint256",
+        numOfArcher:"uint256",
+        numOfCavalry:"uint256"
+      },
+      dataStruct:false
     }
   },
   
