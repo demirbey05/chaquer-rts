@@ -177,7 +177,6 @@ export default mudConfig({
     SoldierCreated:{
       keySchema:{
         gameID:"uint256",
-        owner:"address"
       },
       schema:{
         numOfSwordsman:"uint256",

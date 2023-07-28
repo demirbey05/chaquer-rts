@@ -26,6 +26,7 @@ error ArmySettle__NoCastle();
 error ArmySettle__TooFarToSettle();
 error ArmySettle__TooManySoldier();
 error ArmySettle__WrongTerrainType();
+error ArmySettle__UnsufficientBalance();
 
 // Army Move System
 

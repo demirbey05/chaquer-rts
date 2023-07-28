@@ -2,10 +2,13 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { MapConfig, Position, PositionTableId, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame, Players } from "../codegen/Tables.sol";
+import { wadMul, toWadUnsafe } from "solmate/src/utils/SignedWadMath.sol";
+import { MapConfig, Position, PositionTableId, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame, Players, CreditOwn, GameMetaData, SoldierCreated } from "../codegen/Tables.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
+import { IWorld } from "../codegen/world/IWorld.sol";
 import { LibMath } from "../libraries/LibMath.sol";
+import { LibVRGDA } from "../libraries/LibVRGDA.sol";
 import "./Errors.sol";
 
 contract MapSystem is System {
@@ -92,6 +95,38 @@ contract MapSystem is System {
     return entityID;
   }
 
+  function handleEconomyCheck(
+    IWorld world,
+    address owner,
+    ArmyConfigData calldata config
+  ) internal {
+    uint256 startBlock = GameMetaData.getStartBlock(config.gameID);
+    uint256 ownerBalance = CreditOwn.get(config.gameID, owner);
+    uint256 swordsmanPrice = LibVRGDA.getArmyPrice(IWorld(_world()), config.gameID, 0, block.number - startBlock);
+    uint256 archerPrice = LibVRGDA.getArmyPrice(IWorld(_world()), config.gameID, 1, block.number - startBlock);
+    uint256 cavalryPrice = LibVRGDA.getArmyPrice(IWorld(_world()), config.gameID, 2, block.number - startBlock);
+
+    int256 costSwordsman = wadMul(int256(swordsmanPrice), toWadUnsafe(uint256(swordsmanPrice)));
+    int256 costArcher = wadMul(int256(swordsmanPrice), toWadUnsafe(uint256(archerPrice)));
+    int256 costCavalry = wadMul(int256(swordsmanPrice), toWadUnsafe(uint256(cavalryPrice)));
+
+    if (uint256(costSwordsman + costArcher + costCavalry) > ownerBalance) {
+      revert ArmySettle__UnsufficientBalance();
+    }
+
+    CreditOwn.set(
+      config.gameID,
+      owner,
+      CreditOwn.get(config.gameID, owner) - uint256(costSwordsman + costArcher + costCavalry)
+    );
+    SoldierCreated.set(
+      config.gameID,
+      SoldierCreated.getNumOfSwordsman(config.gameID) + config.numSwordsman,
+      SoldierCreated.getNumOfArcher(config.gameID) + config.numArcher,
+      SoldierCreated.getNumOfCavalry(config.gameID) + config.numCavalry
+    );
+  }
+
   function settleArmy(
     uint32 x,
     uint32 y,
@@ -134,9 +169,11 @@ contract MapSystem is System {
       revert ArmySettle__TooFarToSettle();
     }
 
-    if (config.numArcher + config.numCavalry + config.numSwordsman > 100) {
+    if (config.numArcher + config.numCavalry + config.numSwordsman > 500) {
       revert ArmySettle__TooManySoldier();
     }
+    // Economy System Integration
+    handleEconomyCheck(IWorld(_world()), ownerCandidate, config);
 
     bytes32 entityID = keccak256(abi.encodePacked(x, y, "Army", ownerCandidate, config.gameID));
 
