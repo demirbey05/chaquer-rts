@@ -25,11 +25,19 @@ export const ArmySettleModal = () => {
     }
 
     if (
-      parseInt(swordsmanCount) + parseInt(archerCount) + parseInt(cavalryCount) <= 100 &&
+      parseInt(swordsmanCount) + parseInt(archerCount) + parseInt(cavalryCount) <= 1500 &&
       parseInt(swordsmanCount) + parseInt(archerCount) + parseInt(cavalryCount) > 0
     ) {
       setIsDisabled(false);
     } else {
+      setIsDisabled(true);
+    }
+
+    if (
+      (parseInt(swordsmanCount) > 500) ||
+      (parseInt(archerCount) > 500) ||
+      (parseInt(cavalryCount) > 500)
+    ) {
       setIsDisabled(true);
     }
   }, [swordsmanCount, archerCount, cavalryCount]);

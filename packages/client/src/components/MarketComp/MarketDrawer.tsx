@@ -116,11 +116,11 @@ export const MarketDrawer = () => {
             <div style={marketDrawerDivStyles}
                 className="offcanvas offcanvas-start"
                 data-bs-keyboard="false"
-                data-bs-backdrop="false"
+                data-bs-backdrop="static"
                 data-bs-config="true"
                 id="marketDrawer"
                 aria-labelledby="marketDrawerLabel">
-                <div className="offcanvas-header border-bottom" style={{ cursor: "move" }}>
+                <div className="offcanvas-header border-bottom">
                     <h5 className="offcanvas-title font-extrabold" id="marketDrawerLabel">Market</h5>
                     <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&#10008;</button>
                 </div>
@@ -181,7 +181,7 @@ const SellButton = (props: SellButtonPropTypes) => {
             colorScheme="whatsapp"
             border="solid"
             textColor="dark"
-            data-bs-dismiss="modal"
+            data-bs-dismiss="off-canvas"
             className="w-75"
             mt={4}
             isDisabled={props.isDisabled}

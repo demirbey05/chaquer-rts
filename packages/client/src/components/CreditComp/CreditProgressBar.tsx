@@ -2,13 +2,12 @@ import "../../styles/globals.css";
 import { useEffect } from 'react'
 import { usePlayer } from '../../context/PlayerContext';
 import { useMUD } from "../../MUDContext";
-import { useCredit } from '../../hooks/useCreadit';
+import { useCredit } from '../../hooks/useCredit';
 
 export const CreditProgressBar = () => {
     const { userWallet } = usePlayer()
     const { systemCalls } = useMUD();
-    const credit = useCredit(1, userWallet!.address);
-    console.log(credit)
+    const credit: any = useCredit(1, userWallet!.address)?.value.amount; // Buradaki type bozuk
 
     useEffect(() => {
         const interval = setInterval(async () => {
@@ -27,7 +26,7 @@ export const CreditProgressBar = () => {
             <div className="row">
                 <div className="col-4 credit-progress-bar-col">
                     <>
-                        💰: {credit ? credit : 0}
+                        💰: {credit ? Number(credit).toString().slice(0, 8) : 0}
                     </>
                 </div>
             </div>
