@@ -23,7 +23,7 @@ export const MarketDrawer = () => {
             setIsFoodDisabled(true);
         }
 
-        if (numberOfResource && (parseInt(numFood) < numberOfResource!.numOfFood)) {
+        if (numberOfResource && (parseInt(numFood) <= numberOfResource!.numOfFood)) {
             setIsFoodDisabled(false);
         } else {
             setIsFoodDisabled(true);
@@ -35,7 +35,7 @@ export const MarketDrawer = () => {
             setIsWoodDisabled(true);
         }
 
-        if (numberOfResource && (parseInt(numWood) < numberOfResource!.numOfWood)) {
+        if (numberOfResource && (parseInt(numWood) <= numberOfResource!.numOfWood)) {
             setIsWoodDisabled(false);
         } else {
             setIsWoodDisabled(true);
@@ -47,7 +47,7 @@ export const MarketDrawer = () => {
             setIsGoldDisabled(true);
         }
 
-        if (numberOfResource && (parseInt(numGold) < numberOfResource!.numOfGold)) {
+        if (numberOfResource && (parseInt(numGold) <= numberOfResource!.numOfGold)) {
             setIsGoldDisabled(false);
         } else {
             setIsGoldDisabled(true);
@@ -181,7 +181,6 @@ const SellButton = (props: SellButtonPropTypes) => {
             colorScheme="whatsapp"
             border="solid"
             textColor="dark"
-            data-bs-dismiss="off-canvas"
             className="w-75"
             mt={4}
             isDisabled={props.isDisabled}
