@@ -17,24 +17,22 @@ import { EncodeArray } from "@latticexyz/store/src/tightcoder/EncodeArray.sol";
 import { Schema, SchemaLib } from "@latticexyz/store/src/Schema.sol";
 import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCounter.sol";
 
-// Import user types
-import { State } from "./../Types.sol";
+bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16(""), bytes16("LastCollectTime")));
+bytes32 constant LastCollectTimeTableId = _tableId;
 
-bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16(""), bytes16("GameState")));
-bytes32 constant GameStateTableId = _tableId;
-
-library GameState {
+library LastCollectTime {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](1);
-    _schema[0] = SchemaType.UINT8;
+    _schema[0] = SchemaType.UINT256;
 
     return SchemaLib.encode(_schema);
   }
 
   function getKeySchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](1);
-    _schema[0] = SchemaType.UINT256;
+    SchemaType[] memory _schema = new SchemaType[](2);
+    _schema[0] = SchemaType.ADDRESS;
+    _schema[1] = SchemaType.UINT256;
 
     return SchemaLib.encode(_schema);
   }
@@ -42,8 +40,8 @@ library GameState {
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
     string[] memory _fieldNames = new string[](1);
-    _fieldNames[0] = "state";
-    return ("GameState", _fieldNames);
+    _fieldNames[0] = "lastCollect";
+    return ("LastCollectTime", _fieldNames);
   }
 
   /** Register the table's schema */
@@ -68,63 +66,70 @@ library GameState {
     _store.setMetadata(_tableId, _tableName, _fieldNames);
   }
 
-  /** Get state */
-  function get(uint256 gameID) internal view returns (State state) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
+  /** Get lastCollect */
+  function get(address owner, uint256 gameID) internal view returns (uint256 lastCollect) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
-    return State(uint8(Bytes.slice1(_blob, 0)));
+    return (uint256(Bytes.slice32(_blob, 0)));
   }
 
-  /** Get state (using the specified store) */
-  function get(IStore _store, uint256 gameID) internal view returns (State state) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
+  /** Get lastCollect (using the specified store) */
+  function get(IStore _store, address owner, uint256 gameID) internal view returns (uint256 lastCollect) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
-    return State(uint8(Bytes.slice1(_blob, 0)));
+    return (uint256(Bytes.slice32(_blob, 0)));
   }
 
-  /** Set state */
-  function set(uint256 gameID, State state) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
+  /** Set lastCollect */
+  function set(address owner, uint256 gameID, uint256 lastCollect) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked(uint8(state)));
+    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((lastCollect)));
   }
 
-  /** Set state (using the specified store) */
-  function set(IStore _store, uint256 gameID, State state) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
+  /** Set lastCollect (using the specified store) */
+  function set(IStore _store, address owner, uint256 gameID, uint256 lastCollect) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
-    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked(uint8(state)));
+    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((lastCollect)));
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(State state) internal view returns (bytes memory) {
-    return abi.encodePacked(state);
+  function encode(uint256 lastCollect) internal view returns (bytes memory) {
+    return abi.encodePacked(lastCollect);
   }
 
   /** Encode keys as a bytes32 array using this table's schema */
-  function encodeKeyTuple(uint256 gameID) internal pure returns (bytes32[] memory _keyTuple) {
-    _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
+  function encodeKeyTuple(address owner, uint256 gameID) internal pure returns (bytes32[] memory _keyTuple) {
+    _keyTuple = new bytes32[](2);
+    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[1] = bytes32(uint256(gameID));
   }
 
   /* Delete all data for given keys */
-  function deleteRecord(uint256 gameID) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
+  function deleteRecord(address owner, uint256 gameID) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreSwitch.deleteRecord(_tableId, _keyTuple);
   }
 
   /* Delete all data for given keys (using the specified store) */
-  function deleteRecord(IStore _store, uint256 gameID) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
+  function deleteRecord(IStore _store, address owner, uint256 gameID) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     _store.deleteRecord(_tableId, _keyTuple);
   }

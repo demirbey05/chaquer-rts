@@ -247,12 +247,128 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
-    GameState: (() => {
-      const tableId = new TableId("", "GameState");
+    GameMetaData: (() => {
+      const tableId = new TableId("", "GameMetaData");
       return defineComponent(
         world,
         {
           state: RecsType.Number,
+          startBlock: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    ResourceOwn: (() => {
+      const tableId = new TableId("", "ResourceOwn");
+      return defineComponent(
+        world,
+        {
+          numOfFood: RecsType.BigInt,
+          numOfWood: RecsType.BigInt,
+          numOfGold: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    LastCollectTime: (() => {
+      const tableId = new TableId("", "LastCollectTime");
+      return defineComponent(
+        world,
+        {
+          lastCollect: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    ResourcesSold: (() => {
+      const tableId = new TableId("", "ResourcesSold");
+      return defineComponent(
+        world,
+        {
+          foodSold: RecsType.BigInt,
+          woodSold: RecsType.BigInt,
+          goldSold: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    CreditOwn: (() => {
+      const tableId = new TableId("", "CreditOwn");
+      return defineComponent(
+        world,
+        {
+          amount: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    SoldierCreated: (() => {
+      const tableId = new TableId("", "SoldierCreated");
+      return defineComponent(
+        world,
+        {
+          numOfSwordsman: RecsType.BigInt,
+          numOfArcher: RecsType.BigInt,
+          numOfCavalry: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    ResourcePrices: (() => {
+      const tableId = new TableId("", "ResourcePrices");
+      return defineComponent(
+        world,
+        {
+          priceFood: RecsType.BigInt,
+          priceWood: RecsType.BigInt,
+          priceGold: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    ArmyPrices: (() => {
+      const tableId = new TableId("", "ArmyPrices");
+      return defineComponent(
+        world,
+        {
+          priceSwordsman: RecsType.BigInt,
+          priceArcher: RecsType.BigInt,
+          priceCavalry: RecsType.BigInt,
         },
         {
           metadata: {

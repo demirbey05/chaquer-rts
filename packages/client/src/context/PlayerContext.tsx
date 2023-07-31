@@ -1,6 +1,8 @@
 import { getBurnerWallet } from "@latticexyz/std-client";
 import { Wallet } from "ethers";
 import { useRef, useState, useEffect, useContext, createContext, ReactNode } from "react";
+import { useCastle } from "./CastleContext";
+import { useCastlePositionByAddress } from "../hooks/useCastlePositionByAddress";
 
 type PlayerContextType = {
   userWallet: Wallet | undefined
@@ -15,6 +17,7 @@ type PlayerContextType = {
   savePlayerSeedStage: () => void;
   playerWaitingStage: boolean | undefined;
   setPlayerWaitingStage: (value: boolean) => void;
+  isPlayerLost: boolean | undefined;
 };
 
 const PlayerContext = createContext<PlayerContextType>({
@@ -29,18 +32,36 @@ const PlayerContext = createContext<PlayerContextType>({
   setPlayerSeedStage: () => { },
   savePlayerSeedStage: () => { },
   playerWaitingStage: undefined,
-  setPlayerWaitingStage: () => { }
+  setPlayerWaitingStage: () => { },
+  isPlayerLost: false
 });
 
 const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { children: ReactNode; }) => {
-
   const { current: userWallet } = useRef(new Wallet(getBurnerWallet().value))
   const [userName, setUserName] = useState<string>();
+  const [isPlayerLost, setIsPlayerLost] = useState<boolean>(false);
 
   const [playerSeed, setPlayerSeed] = useState<number>();
   const [playerSeedStage, setPlayerSeedStage] = useState<boolean>(true);
 
   const [playerWaitingStage, setPlayerWaitingStage] = useState<boolean>(true);
+
+  const { isCastleDeployedBefore, isCastleSettled } = useCastle();
+  const myCastlePosition = useCastlePositionByAddress(userWallet!.address.toLocaleLowerCase());
+
+  useEffect(() => {
+    if ((myCastlePosition && (myCastlePosition.length === 0) && isCastleDeployedBefore && isCastleSettled)) {
+      setIsPlayerLost(true);
+    }
+  }, [myCastlePosition, isCastleDeployedBefore, isCastleSettled])
+
+  useEffect(() => {
+    if (isPlayerLost) {
+      removeUserName();
+      removePlayerSeedStage();
+      removeMineInitStage();
+    }
+  }, [isPlayerLost])
 
   useEffect(() => {
     if (localStorage.getItem('username')) {
@@ -70,6 +91,18 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
     }
   }
 
+  const removePlayerSeedStage = () => {
+    if (localStorage.getItem('playerSeedStage')) {
+      localStorage.removeItem('playerSeedStage')
+    }
+  }
+
+  const removeMineInitStage = () => {
+    if (localStorage.getItem('mineinit')) {
+      localStorage.removeItem('mineinit')
+    }
+  }
+
   const results: PlayerContextType = {
     userWallet,
     userName,
@@ -82,7 +115,8 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
     setPlayerSeedStage,
     savePlayerSeedStage,
     playerWaitingStage,
-    setPlayerWaitingStage
+    setPlayerWaitingStage,
+    isPlayerLost
   };
 
   return (

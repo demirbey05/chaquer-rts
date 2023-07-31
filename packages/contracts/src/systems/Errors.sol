@@ -26,6 +26,7 @@ error ArmySettle__NoCastle();
 error ArmySettle__TooFarToSettle();
 error ArmySettle__TooManySoldier();
 error ArmySettle__WrongTerrainType();
+error ArmySettle__UnsufficientBalance();
 
 // Army Move System
 
@@ -67,3 +68,8 @@ error MineCapture__FriendFireNotAllowed();
 error MineCapture__NoAuthorization();
 error MineCapture__TooFarToAttack();
 error MineCapture__NonMatchedGameID();
+
+// Economy System Errors
+
+error EconomySystem__DifferenceIsLess();
+error EconomySystem__InsufficientSource();

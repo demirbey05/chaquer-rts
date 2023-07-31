@@ -5,8 +5,8 @@ import { IWorld } from "../../src/codegen/world/IWorld.sol";
 import { ArmyOwnable, ArmyConfigData, Position } from "../../src/codegen/Tables.sol";
 import { Vm } from "forge-std/Vm.sol";
 import { hasKey } from "@latticexyz/world/src/modules/keysintable/hasKey.sol";
-import { console } from "forge-std/console.sol";
 import { LibMath, LibQueries } from "../../src/libraries/Libraries.sol";
+import { MineType } from "../../src/codegen/Types.sol";
 
 address constant HEVM_ADDRESS = address(uint160(uint256(keccak256("hevm cheat code"))));
 
@@ -278,5 +278,53 @@ library TestUtils {
       (, yArmy, ) = Position.get(world, armyID);
       i++;
     }
+  }
+
+  function captureMine(
+    IWorld world,
+    bytes32 armyID,
+    bytes32 mineID,
+    address user
+  ) internal {
+    vm.startPrank(user);
+    world.captureMine(armyID, mineID);
+    vm.stopPrank();
+  }
+
+  function captureClosestMineInitial(
+    IWorld world,
+    bytes32 armyID,
+    address user,
+    uint256 gameID,
+    MineType mineType
+  ) internal {
+    bytes32[] memory mines = LibQueries.getMines(world, address(0), gameID, mineType);
+    (uint32 xCoord, uint32 yCoord, ) = Position.get(world, armyID);
+    bytes32 closestMine = findClosestMine(world, xCoord, yCoord, mines);
+    (uint32 xMine, uint32 yMine, ) = Position.get(world, closestMine);
+    moveArmyToLocation(world, armyID, xMine, yMine, user, gameID);
+    captureMine(world, armyID, closestMine, user);
+  }
+
+  function collectResource(
+    IWorld world,
+    address user,
+    uint256 gameID
+  ) internal {
+    vm.startPrank(user);
+    world.collectResource(gameID);
+    vm.stopPrank();
+  }
+
+  function sellResource(
+    IWorld world,
+    address user,
+    uint256 gameID,
+    uint256 amount,
+    MineType mineType
+  ) internal {
+    vm.startPrank(user);
+    world.sellResource(gameID, amount, mineType);
+    vm.stopPrank();
   }
 }

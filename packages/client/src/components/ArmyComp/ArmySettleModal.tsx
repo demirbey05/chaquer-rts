@@ -2,12 +2,12 @@ import archerImg from "../../images/archer.png";
 import cavalryImg from "../../images/cavalry.png";
 import swordsmanImg from "../../images/swordsman.png";
 import { useMUD } from "../../MUDContext";
-import { Button, NumberInput, NumberInputField } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useArmy } from "../../context/ArmyContext";
 
 export const ArmySettleModal = () => {
-  const { armyPosition, setIsArmyStage, setIsArmySettled } = useArmy();
+  const { armyPosition, setIsArmySettleStage, setIsArmySettled } = useArmy();
   const { systemCalls } = useMUD();
 
   const [swordsmanCount, setSwordsmanCount] = useState<string>("");
@@ -25,17 +25,19 @@ export const ArmySettleModal = () => {
     }
 
     if (
-      parseInt(swordsmanCount) +
-      parseInt(archerCount) +
-      parseInt(cavalryCount) <=
-      100 &&
-      parseInt(swordsmanCount) +
-      parseInt(archerCount) +
-      parseInt(cavalryCount) >
-      0
+      parseInt(swordsmanCount) + parseInt(archerCount) + parseInt(cavalryCount) <= 1500 &&
+      parseInt(swordsmanCount) + parseInt(archerCount) + parseInt(cavalryCount) > 0
     ) {
       setIsDisabled(false);
     } else {
+      setIsDisabled(true);
+    }
+
+    if (
+      (parseInt(swordsmanCount) > 500) ||
+      (parseInt(archerCount) > 500) ||
+      (parseInt(cavalryCount) > 500)
+    ) {
       setIsDisabled(true);
     }
   }, [swordsmanCount, archerCount, cavalryCount]);
@@ -51,7 +53,15 @@ export const ArmySettleModal = () => {
     );
     if (tx) {
       setIsArmySettled(true);
-      setIsArmyStage(false);
+      setIsArmySettleStage(false);
+
+      setSwordsmanCount('');
+      setArcherCount('');
+      setCavalryCount('');
+
+      (document.getElementById('Swordsman') as HTMLInputElement).value = '';
+      (document.getElementById('Cavalry') as HTMLInputElement).value = '';
+      (document.getElementById('Archer') as HTMLInputElement).value = '';
     }
   };
 
@@ -60,46 +70,40 @@ export const ArmySettleModal = () => {
       className="modal fade"
       id="armySettleModal"
       data-bs-backdrop="static"
-      aria-labelledby="exampleModalLabel"
+      aria-labelledby="armySettleModalLabel"
       aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
-          <div className="modal-header">
-            <h1 className="modal-title fs-5" id="exampleModalLabel">
+          <div className="modal-header justify-center">
+            <h1 className="modal-title text-2xl" id="armySettleModalLabel">
               Army Settlement
             </h1>
           </div>
           <div className="modal-body">
             <div className="container-fluid">
               <div className="row border-bottom">
-                <p>
+                <p className="mb-2">
                   Please determine the number of warriors that will hold in
                   the army. You can deploy maximum 100 army in the total.
                 </p>
               </div>
               <div className="row mt-2">
-                <div className="col align-items-center">
-                  <ArmySettleInputBody imageSource={swordsmanImg}
-                    soldierName={"Swordsman"}
-                    setSoliderCount={setSwordsmanCount}
-                    imageHeight={"100px"}
-                    imageWidth={"75px"} />
-                </div>
-                <div className="col align-items-center">
-                  <ArmySettleInputBody imageSource={archerImg}
-                    soldierName={"Archer"}
-                    setSoliderCount={setArcherCount}
-                    imageHeight={"100px"}
-                    imageWidth={"85px"} />
-                </div>
-                <div className="col align-items-center">
-                  <ArmySettleInputBody imageSource={cavalryImg}
-                    soldierName={"Cavalry"}
-                    setSoliderCount={setCavalryCount}
-                    imageHeight={"100px"}
-                    imageWidth={"125px"} />
-                </div>
+                <ArmySettleInputBody imageSource={swordsmanImg}
+                  soldierName={"Swordsman"}
+                  setSoliderCount={setSwordsmanCount}
+                  imageHeight={"100px"}
+                  imageWidth={"75px"} />
+                <ArmySettleInputBody imageSource={archerImg}
+                  soldierName={"Archer"}
+                  setSoliderCount={setArcherCount}
+                  imageHeight={"100px"}
+                  imageWidth={"85px"} />
+                <ArmySettleInputBody imageSource={cavalryImg}
+                  soldierName={"Cavalry"}
+                  setSoliderCount={setCavalryCount}
+                  imageHeight={"100px"}
+                  imageWidth={"125px"} />
               </div>
             </div>
           </div>
@@ -139,7 +143,7 @@ interface ArmySettleInputBody {
 
 const ArmySettleInputBody = (props: ArmySettleInputBody) => {
   return (
-    <>
+    <div className="col align-items-center">
       <div className="row justify-content-center">
         <img
           src={props.imageSource}
@@ -150,14 +154,13 @@ const ArmySettleInputBody = (props: ArmySettleInputBody) => {
         <p>{props.soldierName}</p>
       </div>
       <div className="row justify-content-center mt-2">
-        <NumberInput min={0}>
-          <NumberInputField
-            onChange={(e: any) => props.setSoliderCount(e.target.value)}
-            onClick={(e: any) => e.target.select()}
-            maxLength={3}
-          />
-        </NumberInput>
+        <input
+          className="form-control w-75"
+          type="number"
+          id={props.soldierName}
+          onChange={(e: any) => props.setSoliderCount(e.target.value)}
+          onClick={(e: any) => e.target.select()} />
       </div>
-    </>
+    </div>
   )
 }

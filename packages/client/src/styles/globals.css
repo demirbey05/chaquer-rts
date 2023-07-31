@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
 /*Border hover that user always see*/
 .borderHover {
     display: inline-block;
@@ -79,14 +83,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 300px;
+    width: 450px;
     height: 50px;
     border-radius: 15px;
     overflow: hidden;
     flex-direction: row;
     border: 2px solid rgb(241, 241, 241);
     left: 0;
-    right: 0;
+    right: 50%;
     top: 0;
     margin: 25px auto;
     padding: 5px;
@@ -193,4 +197,88 @@
     font-size: 20px;
     text-align: center;
     color: white;
+}
+
+/* Warning Styles on top*/
+.warning-on-top {
+    position: absolute;
+    z-index: 1;
+    color: white;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin: 125px auto;
+    width: 600px;
+    text-align: center;
+    font-size: 30px;
+    border-bottom: 2px solid white;
+    border-top: 2px solid white;
+}
+
+/* Warning Styles on bottom*/
+.warning-on-bottom {
+    position: absolute;
+    z-index: 1;
+    color: white;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 50px auto;
+    width: 600px;
+    text-align: center;
+    font-size: 30px;
+    border-bottom: 2px solid white;
+    border-top: 2px solid white;
+}
+
+/*Mine progress bar*/
+.mine-progress-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 450px;
+    height: 50px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid rgb(241, 241, 241);
+    left: 50%;
+    right: 0;
+    top: 0;
+    margin: 25px auto;
+    padding: 20px;
+    z-index: 1;
+    position: absolute;
+    background-color: rgb(148, 163, 184, 0.5);
+    color: white;
+}
+
+.mine-progress-bar-col {
+    width: 140px;
+    font-weight: bolder
+}
+
+/*Credit progress bar*/
+.credit-progress-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 140px;
+    height: 50px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid rgb(241, 241, 241);
+    left: 0%;
+    right: 0;
+    top: 0;
+    margin: 25px auto;
+    padding: 20px;
+    z-index: 1;
+    position: absolute;
+    background-color: rgb(148, 163, 184, 0.5);
+    color: white;
+}
+
+.credit-progress-bar-col {
+    width: 140px;
+    font-weight: bolder
 }

@@ -1,13 +1,13 @@
 import { Button } from "@chakra-ui/react";
 import { useMUD } from "../../MUDContext";
-import { findIDFromPosition } from "../../utils/armyID";
+import { findIDFromPosition } from "../../utils/findIDFromPosition";
 import { useAttack } from "../../context/AttackContext";
 
-export const ArmyAttackModal = () => {
+export const ArmyAttackDrawer = () => {
   const { components, systemCalls } = useMUD();
   const { setMyArmyConfig,
-    setEnemyArmyConfig,
     myArmyConfig,
+    setEnemyArmyConfig,
     enemyArmyConfig,
     setIsAttackStage,
     attackFromArmyPositionToArmy,
@@ -31,14 +31,14 @@ export const ArmyAttackModal = () => {
     )];
 
     if (attackFromArmyId.length != 1 || attackToArmyId.length != 1) {
-      console.log("attackFromArmyID or attackToArmyID lengths are greater than 1")
+      console.log("attackFromArmyID or attackToArmyID lengths are greater than 1.")
       return
     }
 
     const tx = await systemCalls.attackToArmy(attackFromArmyId[0] as string, attackToArmyId[0] as string, 1)
 
     if (tx == null) {
-      console.log("handleAttack encounter an error!.")
+      console.log("handleAttack encounter an error!")
       return
     }
 
@@ -67,18 +67,20 @@ export const ArmyAttackModal = () => {
       data-bs-backdrop="false"
       style={armyAttackOffCanvasDivStyles}
       tabIndex={-1}
-      id="offcanvasBottom"
-      aria-labelledby="offcanvasBottomLabel"
+      id="armyAttackDrawer"
+      aria-labelledby="armyAttackDrawerLabel"
     >
       <ArmyAttackModalHeader headerText={"War - Army Information"} />
       <div className="offcanvas-body small">
         <div className="row">
-          <ArmyAttackModalCard numSwordsman={myArmyConfig && myArmyConfig.armyConfig.numSwordsman}
+          <ArmyAttackModalCard
+            numSwordsman={myArmyConfig && myArmyConfig.armyConfig.numSwordsman}
             numArcher={myArmyConfig && myArmyConfig.armyConfig.numArcher}
             numCavalry={myArmyConfig && myArmyConfig.armyConfig.numCavalry}
             title={"My Army"}
             titleBg={"success"} />
-          < ArmyAttackModalCard numSwordsman={enemyArmyConfig && enemyArmyConfig.armyConfig.numSwordsman}
+          < ArmyAttackModalCard
+            numSwordsman={enemyArmyConfig && enemyArmyConfig.armyConfig.numSwordsman}
             numArcher={enemyArmyConfig && enemyArmyConfig.armyConfig.numArcher}
             numCavalry={enemyArmyConfig && enemyArmyConfig.armyConfig.numCavalry}
             title={"Enemy Army"}
@@ -103,8 +105,7 @@ export const ArmyAttackModal = () => {
             textColor="dark"
             data-bs-dismiss="offcanvas"
             onClick={handleAttackLater}
-            className="ml-2"
-          >
+            className="ml-2">
             Wait and Attack Later
           </Button>
         </div>
@@ -119,10 +120,7 @@ interface ArmyAttackModalHeaderPropTypes {
 
 const ArmyAttackModalHeader = (props: ArmyAttackModalHeaderPropTypes) => {
   return (
-    <h5
-      className="offcanvas-title text-center border-bottom border-white"
-      id="offcanvasBottomLabel"
-    >
+    <h5 className="offcanvas-title text-center" id="armyAttackDrawerLabel">
       {props.headerText}
     </h5>
   )
@@ -139,30 +137,30 @@ interface ArmyAttackModalCardPropTypes {
 const ArmyAttackModalCard = (props: ArmyAttackModalCardPropTypes) => {
   return (
     <div className="col-6">
-      <h1 className={`text-center bg-${props.titleBg} border-bottom border-white text-white p-1`}>
+      <h1 className={`text-center bg-${props.titleBg}  text-white p-2`}>
         {props.title}
       </h1>
-      <div className="row">
-        <div className="row justify-content-center text-center mt-2">
-          <p>
-            Swordsman: {props.numSwordsman && props.numSwordsman}
-          </p>
-        </div>
-      </div>
-      <div className="row">
-        <div className="row justify-content-center text-center mt-2">
-          <p>
-            Archer: {props.numArcher && props.numArcher}
-          </p>
-        </div>
-      </div>
-      <div className="row">
-        <div className="row justify-content-center text-center mt-2">
-          <p>
-            Cavalry: {props.numCavalry && props.numCavalry}
-          </p>
-        </div>
+      <ArmyAttackModalCardRow numSolider={props.numSwordsman} soliderName={"Swordsman"} />
+      <ArmyAttackModalCardRow numSolider={props.numArcher} soliderName={"Archer"} />
+      <ArmyAttackModalCardRow numSolider={props.numCavalry} soliderName={"Cavalry"} />
+    </div>
+  )
+}
+
+interface ArmyAttackModalCardRowPropTypes {
+  numSolider: number,
+  soliderName: string
+}
+
+const ArmyAttackModalCardRow = (props: ArmyAttackModalCardRowPropTypes) => {
+  return (
+    <div className="row">
+      <div className="row text-center mt-2">
+        <p>
+          {props.soliderName && props.soliderName}: {props.numSolider && props.numSolider}
+        </p>
       </div>
     </div>
   )
+
 }

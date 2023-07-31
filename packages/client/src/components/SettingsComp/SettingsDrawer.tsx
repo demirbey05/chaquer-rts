@@ -6,7 +6,7 @@ import { FaPlay, FaStop } from 'react-icons/fa'
 import { RiArrowGoBackFill } from 'react-icons/ri'
 import { Link } from 'react-router-dom';
 
-export const AudioControlComp = () => {
+export const SettingsDrawer = () => {
     const [isPlaying, setIsPlaying] = useState(false);
     const audioRef = useRef<any>();
 
@@ -33,12 +33,21 @@ export const AudioControlComp = () => {
         };
     }, []);
 
+    useEffect(() => {
+        if (localStorage.getItem('audioPaused')) {
+            setIsPlaying(true);
+        }
+    }, [])
+
     const handlePlay = () => {
         setIsPlaying(false);
     };
 
     const handleStop = () => {
         setIsPlaying(true);
+        if (!localStorage.getItem('audioPaused')) {
+            localStorage.setItem('audioPaused', "true")
+        }
     };
 
     const audioOffCanvasButtonStyle: any = {
@@ -63,24 +72,30 @@ export const AudioControlComp = () => {
     return (
         <div>
             <Button style={audioOffCanvasButtonStyle}
-                type="button" colorScheme="yellow"
+                type="button"
+                colorScheme="yellow"
                 data-bs-toggle="offcanvas"
-                data-bs-target="#audioControlModal"
+                data-bs-target="#settingsDrawer"
                 aria-controls="staticBackdrop">
                 <SettingsIcon />
             </Button>
 
-            <div style={audioOffcanvasDivStyle} className="offcanvas offcanvas-start" data-bs-keyboard="false" data-bs-backdrop="false" id="audioControlModal" aria-labelledby="staticBackdropLabel">
+            <div style={audioOffcanvasDivStyle}
+                className="offcanvas offcanvas-start"
+                data-bs-keyboard="false"
+                data-bs-backdrop="false"
+                id="settingsDrawer"
+                aria-labelledby="settingsDrawerLabel">
                 <div className="offcanvas-header">
                     <AudioControlCompHeader />
                 </div>
                 <hr />
                 <div className="offcanvas-body">
-                    <h5 className="offcanvas-title mb-2" id="staticBackdropLabel">Music Settings</h5>
+                    <h5 className="offcanvas-title mb-2" id="settingsDrawerLabel">Music Settings</h5>
                     <PlayMusicButton handlePlay={handlePlay} />
                     <PauseMusicButton handleStop={handleStop} />
                     <hr className='mt-4' />
-                    <h5 className="offcanvas-title mb-2 mt-2" id="staticBackdropLabel">Back to Menu</h5>
+                    <h5 className="offcanvas-title mb-2 mt-2" id="settingsDrawerLabel2">Back to Menu</h5>
                     <BackToMenuButton />
                 </div>
             </div>

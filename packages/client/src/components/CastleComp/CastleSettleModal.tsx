@@ -1,12 +1,10 @@
 import { useMUD } from "../../MUDContext";
 import { Button } from "@chakra-ui/react";
 import { useCastle } from "../../context/CastleContext";
-import { usePlayer } from "../../context/PlayerContext";
 
 export const CastleSettleModal = () => {
   const { isCastleSettled, tempCastle, setCastle, setIsCastleDeployedBefore, setIsCastleSettled } = useCastle();
   const { systemCalls } = useMUD();
-  const { saveUserName, setPlayerSeedStage } = usePlayer();
 
   const handleClick = async () => {
     const tx =
@@ -21,8 +19,10 @@ export const CastleSettleModal = () => {
       setCastle({ x: tempCastle.x, y: tempCastle.y });
       await tx.wait();
       setIsCastleDeployedBefore(true)
-      saveUserName();
     }
+    /*const userName = await storeCache.tables.AddressToUsername.get({ ownerAddress: (userWallet!.address).toLowerCase(), gameId: BigInt(1) });
+    console.log(userName)
+    console.log(pad(getAddress(userWallet!.address)).toLowerCase())*/
   };
 
   return (
@@ -31,13 +31,13 @@ export const CastleSettleModal = () => {
         className="modal fade"
         id="castleSettleModal"
         data-bs-backdrop="static"
-        aria-labelledby="exampleModalLabel"
+        aria-labelledby="castleSettleModalLabel"
         aria-hidden="true"
       >
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">
+            <div className="modal-header justify-center">
+              <h1 className="modal-title text-2xl" id="castleSettleModalLabel">
                 Castle Settlement
               </h1>
             </div>
@@ -69,5 +69,3 @@ export const CastleSettleModal = () => {
     </>
   );
 }
-
-export default CastleSettleModal;

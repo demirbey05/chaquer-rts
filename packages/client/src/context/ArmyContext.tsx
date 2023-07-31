@@ -3,8 +3,8 @@ import { useState, useContext, createContext, ReactNode } from "react";
 type ArmyContextType = {
     isArmySettled: boolean | undefined;
     setIsArmySettled: (value: boolean) => void;
-    isArmyStage: boolean | undefined;
-    setIsArmyStage: (value: boolean) => void;
+    isArmySettleStage: boolean | undefined;
+    setIsArmySettleStage: (value: boolean) => void;
     setArmyPosition: (value: { x: number; y: number }) => void;
     armyPosition: { x: any; y: any };
     numberOfArmy: any | undefined;
@@ -18,8 +18,8 @@ type ArmyContextType = {
 const ArmyContext = createContext<ArmyContextType>({
     isArmySettled: false,
     setIsArmySettled: () => { },
-    isArmyStage: false,
-    setIsArmyStage: () => { },
+    isArmySettleStage: false,
+    setIsArmySettleStage: () => { },
     setArmyPosition: () => { },
     armyPosition: { x: null, y: null },
     numberOfArmy: null,
@@ -32,7 +32,7 @@ const ArmyContext = createContext<ArmyContextType>({
 
 const ArmyProvider: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode; }) => {
     const [isArmySettled, setIsArmySettled] = useState<boolean>();
-    const [isArmyStage, setIsArmyStage] = useState<boolean>();
+    const [isArmySettleStage, setIsArmySettleStage] = useState<boolean>();
     const [armyPosition, setArmyPosition] = useState<any>();
     const [numberOfArmy, setNumberOfArmy] = useState<any>();
 
@@ -42,8 +42,8 @@ const ArmyProvider: React.FC<{ children: ReactNode }> = ({ children }: { childre
     const results: ArmyContextType = {
         isArmySettled,
         setIsArmySettled,
-        isArmyStage,
-        setIsArmyStage,
+        isArmySettleStage,
+        setIsArmySettleStage,
         armyPosition,
         setArmyPosition,
         numberOfArmy,

@@ -126,13 +126,83 @@ export default mudConfig({
       },
       ephemeral:true,
     },
-    GameState:{
+    GameMetaData:{
       keySchema:{
         gameID:"uint256"
       },
       schema:{
-        state:"State"
-
+        state:"State",
+        startBlock:"uint256"
+      }
+    },
+    ResourceOwn : {
+      keySchema:{
+        owner:"address",
+        gameID:"uint256"
+      },
+      schema:{
+        numOfFood:"uint256",
+        numOfWood:"uint256",
+        numOfGold:"uint256"
+      }
+    },
+    LastCollectTime:{
+      keySchema:{
+        owner:"address",
+        gameID:"uint256"
+      },
+      schema:{
+        lastCollect:"uint256"
+      }
+    },
+    ResourcesSold:{
+      keySchema:{
+        gameID:"uint256"
+      },
+      schema:{
+        foodSold:"uint256",
+        woodSold:"uint256",
+        goldSold:"uint256",
+      }
+    },
+    CreditOwn:{
+      keySchema:{
+        gameID:"uint256",
+        owner:"address"
+      },
+      schema:{
+        amount:"uint256"
+      }
+    },
+    SoldierCreated:{
+      keySchema:{
+        gameID:"uint256",
+      },
+      schema:{
+        numOfSwordsman:"uint256",
+        numOfArcher:"uint256",
+        numOfCavalry:"uint256"
+      },
+      dataStruct:false
+    },
+    ResourcePrices:{
+      keySchema:{
+        gameID:"uint256"
+      },
+      schema:{
+        priceFood:"uint256",
+        priceWood:"uint256",
+        priceGold:"uint256"
+      }
+    },
+    ArmyPrices:{
+      keySchema:{
+        gameID:"uint256"
+      },
+      schema:{
+        priceSwordsman:"uint256",
+        priceArcher:"uint256",
+        priceCavalry:"uint256"
       }
     }
   },

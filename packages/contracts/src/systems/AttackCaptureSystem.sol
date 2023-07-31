@@ -3,9 +3,10 @@ pragma solidity ^0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
-import { ArmyOwnable, BattleResult, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, CastleSiegeResult } from "../codegen/Tables.sol";
+import { ArmyOwnable, BattleResult, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, CastleSiegeResult, ResourceOwnable } from "../codegen/Tables.sol";
 import { LibMath, LibAttack, BattleScore, LibUtils, LibQueries } from "../libraries/Libraries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
+import { MineType } from "../codegen/Types.sol";
 
 contract AttackCaptureSystem is System {
   function attackToArmy(
@@ -94,6 +95,17 @@ contract AttackCaptureSystem is System {
     }
   }
 
+  function takeOwnershipOfMines(
+    address user,
+    MineType mineType,
+    uint256 gameID
+  ) internal {
+    bytes32[] memory castleOwnerMines = LibQueries.getMines(IStore(_world()), user, gameID, mineType);
+    for (uint i = 0; i < castleOwnerMines.length; i++) {
+      ResourceOwnable.setOwner(castleOwnerMines[i], address(0));
+    }
+  }
+
   function captureCastle(bytes32 armyID, bytes32 castleID) public returns (uint256 result) {
     address armyOwner = ArmyOwnable.getOwner(armyID);
     address castleOwner = CastleOwnable.getOwner(castleID);
@@ -131,6 +143,9 @@ contract AttackCaptureSystem is System {
         ArmyConfig.deleteRecord(castleOwnerArmies[i]);
         Position.deleteRecord(castleOwnerArmies[i]);
       }
+      takeOwnershipOfMines(castleOwner, MineType.Food, gameID);
+      takeOwnershipOfMines(castleOwner, MineType.Wood, gameID);
+      takeOwnershipOfMines(castleOwner, MineType.Gold, gameID);
 
       CastleSiegeResult.emitEphemeral(
         keccak256(abi.encodePacked(block.timestamp, armyID, castleID, gameID)),

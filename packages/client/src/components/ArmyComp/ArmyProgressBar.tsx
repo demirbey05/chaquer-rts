@@ -5,7 +5,7 @@ import { Tooltip } from '@chakra-ui/react'
 import { useArmy } from '../../context/ArmyContext';
 import { usePlayer } from '../../context/PlayerContext';
 
-export const ArmyProgressComp = () => {
+export const ArmyProgressBar = () => {
     const { numberOfArmy, isArmyMoveStage } = useArmy();
     const { userWallet } = usePlayer()
     const myArmyPosition: any = useMyArmy(userWallet!.address.toLocaleLowerCase())[0];
