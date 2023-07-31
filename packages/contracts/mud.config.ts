@@ -184,6 +184,26 @@ export default mudConfig({
         numOfCavalry:"uint256"
       },
       dataStruct:false
+    },
+    ResourcePrices:{
+      keySchema:{
+        gameID:"uint256"
+      },
+      schema:{
+        priceFood:"uint256",
+        priceWood:"uint256",
+        priceGold:"uint256"
+      }
+    },
+    ArmyPrices:{
+      keySchema:{
+        gameID:"uint256"
+      },
+      schema:{
+        priceSwordsman:"uint256",
+        priceArcher:"uint256",
+        priceCavalry:"uint256"
+      }
     }
   },
   

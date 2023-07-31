@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { LastCollectTime, ResourceOwnData, ResourceOwn, GameMetaData, CreditOwn, ResourcesSold } from "../codegen/Tables.sol";
+import { LastCollectTime, ResourceOwnData, ResourceOwn, GameMetaData, CreditOwn, ResourcesSold, ResourcePrices, ArmyPrices } from "../codegen/Tables.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import "./Errors.sol";
@@ -86,7 +86,32 @@ contract EconomySystem is System {
     }
   }
 
+  function updatePrices(uint256 gameID) public {
+    uint256 startBlock = GameMetaData.getStartBlock(gameID);
+    uint256 priceFood = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Food, block.number - startBlock);
+    uint256 priceWood = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Wood, block.number - startBlock);
+    uint256 priceGold = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Wood, block.number - startBlock);
+    uint256 swordsmanPrice = LibVRGDA.getArmyPrice(IWorld(_world()), gameID, 0, block.number - startBlock);
+    uint256 archerPrice = LibVRGDA.getArmyPrice(IWorld(_world()), gameID, 1, block.number - startBlock);
+    uint256 cavalryPrice = LibVRGDA.getArmyPrice(IWorld(_world()), gameID, 2, block.number - startBlock);
+
+    ResourcePrices.setPriceFood(gameID, priceFood);
+    ResourcePrices.setPriceWood(gameID, priceWood);
+    ResourcePrices.setPriceGold(gameID, priceGold);
+
+    ArmyPrices.setPriceSwordsman(gameID, swordsmanPrice);
+    ArmyPrices.setPriceArcher(gameID, archerPrice);
+    ArmyPrices.setPriceCavalry(gameID, cavalryPrice);
+  }
+
+  // Functions for test purposes
+  // @dev They should not be used in production!!.
+
   function economyIncreaseResource(address user, uint256 gameID) public {
     ResourceOwn.set(user, gameID, ResourceOwnData(100000, 100000, 100000));
+  }
+
+  function economyIncreaseCredit(address user, uint256 gameID) public {
+    CreditOwn.set(gameID, user, 100000 * 1e18);
   }
 }

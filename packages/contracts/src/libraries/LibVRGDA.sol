@@ -14,7 +14,7 @@ library LibVRGDA {
     MineType mineType,
     uint256 time
   ) internal view returns (uint256) {
-    int256 decayConstant = wadLn(1e18 + 0.15e18);
+    int256 decayConstant = wadLn(1e18 + 0.005e18);
     int256 timeScaled = toWadUnsafe(time);
     if (mineType == MineType.Food) {
       uint256 sold = ResourcesSold.getFoodSold(world, gameID);
@@ -82,7 +82,7 @@ library LibVRGDA {
         return
           uint256(
             wadMul(
-              1e18,
+              0.1e18,
               wadExp(unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeArmy(world, toWadUnsafe(sold), gameID)))
             )
           );
@@ -118,7 +118,7 @@ library LibVRGDA {
     uint256 gameID
   ) internal view returns (int256) {
     uint256 numPlayers = NumberOfUsers.get(world, gameID);
-    int256 perTimeUnit = wadMul(0.7e18, (int256(500 * numPlayers)) * 1e18);
+    int256 perTimeUnit = wadMul(0.5e18, (int256(500 * numPlayers)) * 1e18);
     return unsafeWadDiv(sold, perTimeUnit);
   }
 }

@@ -5,7 +5,6 @@ import { IWorld } from "../../src/codegen/world/IWorld.sol";
 import { ArmyOwnable, ArmyConfigData, Position } from "../../src/codegen/Tables.sol";
 import { Vm } from "forge-std/Vm.sol";
 import { hasKey } from "@latticexyz/world/src/modules/keysintable/hasKey.sol";
-import { console } from "forge-std/console.sol";
 import { LibMath, LibQueries } from "../../src/libraries/Libraries.sol";
 import { MineType } from "../../src/codegen/Types.sol";
 

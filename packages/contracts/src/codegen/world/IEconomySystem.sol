@@ -10,5 +10,9 @@ interface IEconomySystem {
 
   function sellResource(uint256 gameID, uint256 amount, MineType mineType) external;
 
+  function updatePrices(uint256 gameID) external;
+
   function economyIncreaseResource(address user, uint256 gameID) external;
+
+  function economyIncreaseCredit(address user, uint256 gameID) external;
 }

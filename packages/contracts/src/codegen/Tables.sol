@@ -24,3 +24,5 @@ import { LastCollectTime, LastCollectTimeTableId } from "./tables/LastCollectTim
 import { ResourcesSold, ResourcesSoldData, ResourcesSoldTableId } from "./tables/ResourcesSold.sol";
 import { CreditOwn, CreditOwnTableId } from "./tables/CreditOwn.sol";
 import { SoldierCreated, SoldierCreatedTableId } from "./tables/SoldierCreated.sol";
+import { ResourcePrices, ResourcePricesData, ResourcePricesTableId } from "./tables/ResourcePrices.sol";
+import { ArmyPrices, ArmyPricesData, ArmyPricesTableId } from "./tables/ArmyPrices.sol";

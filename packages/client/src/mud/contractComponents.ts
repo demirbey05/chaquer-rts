@@ -344,5 +344,39 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    ResourcePrices: (() => {
+      const tableId = new TableId("", "ResourcePrices");
+      return defineComponent(
+        world,
+        {
+          priceFood: RecsType.BigInt,
+          priceWood: RecsType.BigInt,
+          priceGold: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    ArmyPrices: (() => {
+      const tableId = new TableId("", "ArmyPrices");
+      return defineComponent(
+        world,
+        {
+          priceSwordsman: RecsType.BigInt,
+          priceArcher: RecsType.BigInt,
+          priceCavalry: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
   };
 }
