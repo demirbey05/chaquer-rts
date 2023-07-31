@@ -82,7 +82,7 @@ library LibVRGDA {
         return
           uint256(
             wadMul(
-              0.1e18,
+              1e18,
               wadExp(unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeArmy(world, toWadUnsafe(sold), gameID)))
             )
           );
