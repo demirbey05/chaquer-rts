@@ -327,4 +327,12 @@ library TestUtils {
     world.sellResource(gameID, amount, mineType);
     vm.stopPrank();
   }
+
+  function cheatCredit(
+    IWorld world,
+    address user,
+    uint256 gameID
+  ) internal {
+    world.economyIncreaseCredit(user, gameID);
+  }
 }

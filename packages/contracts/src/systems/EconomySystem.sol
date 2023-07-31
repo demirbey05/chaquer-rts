@@ -61,27 +61,27 @@ contract EconomySystem is System {
         revert EconomySystem__InsufficientSource();
       }
       uint256 price = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Food, block.number - startBlock);
-      int256 revenue = wadMul(int256(price), toWadUnsafe(amount));
+      uint256 revenue = price * amount;
       ResourceOwn.setNumOfFood(owner, gameID, resources.numOfFood - amount);
-      CreditOwn.set(gameID, owner, CreditOwn.get(gameID, owner) + uint256(revenue));
+      CreditOwn.set(gameID, owner, CreditOwn.get(gameID, owner) + revenue);
       ResourcesSold.setFoodSold(gameID, ResourcesSold.getFoodSold(gameID) + amount);
     } else if (mineType == MineType.Wood) {
       if (resources.numOfWood < amount) {
         revert EconomySystem__InsufficientSource();
       }
       uint256 price = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Wood, block.number - startBlock);
-      int256 revenue = wadMul(int256(price), toWadUnsafe(amount));
+      uint256 revenue = price * amount;
       ResourceOwn.setNumOfWood(owner, gameID, resources.numOfWood - amount);
-      CreditOwn.set(gameID, owner, CreditOwn.get(gameID, owner) + uint256(revenue));
+      CreditOwn.set(gameID, owner, CreditOwn.get(gameID, owner) + revenue);
       ResourcesSold.setWoodSold(gameID, ResourcesSold.getWoodSold(gameID) + amount);
     } else if (mineType == MineType.Gold) {
       if (resources.numOfGold < amount) {
         revert EconomySystem__InsufficientSource();
       }
       uint256 price = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Gold, block.number - startBlock);
-      int256 revenue = wadMul(int256(price), toWadUnsafe(amount));
+      uint256 revenue = price * amount;
       ResourceOwn.setNumOfGold(owner, gameID, resources.numOfGold - amount);
-      CreditOwn.set(gameID, owner, CreditOwn.get(gameID, owner) + uint256(revenue));
+      CreditOwn.set(gameID, owner, CreditOwn.get(gameID, owner) + revenue);
       ResourcesSold.setGoldSold(gameID, ResourcesSold.getGoldSold(gameID) + amount);
     }
   }

@@ -106,18 +106,18 @@ contract MapSystem is System {
     uint256 archerPrice = LibVRGDA.getArmyPrice(IWorld(_world()), config.gameID, 1, block.number - startBlock);
     uint256 cavalryPrice = LibVRGDA.getArmyPrice(IWorld(_world()), config.gameID, 2, block.number - startBlock);
 
-    int256 costSwordsman = wadMul(int256(swordsmanPrice), toWadUnsafe(uint256(swordsmanPrice)));
-    int256 costArcher = wadMul(int256(swordsmanPrice), toWadUnsafe(uint256(archerPrice)));
-    int256 costCavalry = wadMul(int256(swordsmanPrice), toWadUnsafe(uint256(cavalryPrice)));
+    uint256 costSwordsman = swordsmanPrice * config.numSwordsman;
+    uint256 costArcher = archerPrice * config.numArcher;
+    uint256 costCavalry = cavalryPrice * config.numCavalry;
 
-    if (uint256(costSwordsman + costArcher + costCavalry) > ownerBalance) {
+    if (costSwordsman + costArcher + costCavalry > ownerBalance) {
       revert ArmySettle__UnsufficientBalance();
     }
 
     CreditOwn.set(
       config.gameID,
       owner,
-      CreditOwn.get(config.gameID, owner) - uint256(costSwordsman + costArcher + costCavalry)
+      CreditOwn.get(config.gameID, owner) - (costSwordsman + costArcher + costCavalry)
     );
     SoldierCreated.set(
       config.gameID,
