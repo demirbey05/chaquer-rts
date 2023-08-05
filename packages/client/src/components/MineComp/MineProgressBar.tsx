@@ -2,24 +2,29 @@ import "../../styles/globals.css";
 import { useEffect } from 'react'
 import { usePlayer } from '../../context/PlayerContext';
 import { useNumberOfResource } from '../../hooks/useNumberOfResource';
+import { useIsMineInitialized } from '../../hooks/useIsMineInitialized';
 import { useMUD } from "../../MUDContext";
 
 export const MineProgressBar = () => {
-    const { userWallet } = usePlayer()
+    const { userWallet, isPlayerLost } = usePlayer();
     const { systemCalls } = useMUD();
-    const numberOfResource = useNumberOfResource(userWallet!.address, 1)?.value;
+
+    const numberOfResource: any = useNumberOfResource(userWallet!.address, 1)?.value;
+    const isMineInited: any = useIsMineInitialized(1)?.value.isInited;
 
     useEffect(() => {
-        const interval = setInterval(async () => {
-            const tx = await systemCalls.collectResource(1);
-            if (tx == null) {
-                console.log("Error occurred during resource collecting.");
-                return;
-            }
-        }, 1000);
+        if (!isPlayerLost && isMineInited) {
+            const interval = setInterval(async () => {
+                const tx = await systemCalls.collectResource(1);
+                if (tx == null) {
+                    console.log("Error occurred during resource collecting.");
+                    return;
+                }
+            }, 1000);
 
-        return () => clearInterval(interval);
-    }, [])
+            return () => clearInterval(interval);
+        }
+    }, [isPlayerLost, isMineInited])
 
     return (
         <div className="mine-progress-bar">

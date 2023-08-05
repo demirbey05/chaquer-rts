@@ -122,6 +122,7 @@ export function createSystemCalls(
       return null;
     }
   };
+
   const InitNumberOfGamer = async (gameID: number, limit: number) => {
     try {
       const tx = await worldSend("InitNumberOfGamer", [gameID, limit]);
@@ -143,6 +144,7 @@ export function createSystemCalls(
       return null;
     }
   };
+
   const resourceSystemInit = async (gameID: number) => {
     try {
       const tx = await worldSend("resourceSystemInit", [gameID]);
@@ -153,6 +155,7 @@ export function createSystemCalls(
       return null;
     }
   };
+
   const captureMine = async (armyID: string, mineID: string) => {
     try {
       const tx = await worldSend("captureMine", [armyID, mineID]);
@@ -163,6 +166,7 @@ export function createSystemCalls(
       return null;
     }
   };
+
   const collectResource = async (gameID: number) => {
     try {
       const tx = await worldSend("collectResource", [gameID]);
@@ -173,6 +177,7 @@ export function createSystemCalls(
       return null;
     }
   };
+
   const sellResource = async (
     gameID: number,
     amount: number,
@@ -187,6 +192,18 @@ export function createSystemCalls(
       return null;
     }
   };
+
+  const updatePrices = async (gameID: number) => {
+    try {
+      const tx = await worldSend("updatePrices", [gameID]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
   return {
     initMapDataSystem,
     settleCastle,
@@ -201,5 +218,6 @@ export function createSystemCalls(
     InitNumberOfGamer,
     collectResource,
     sellResource,
+    updatePrices,
   };
 }
