@@ -39,6 +39,34 @@ export const SettingsDrawer = () => {
         }
     }, [])
 
+    useEffect(() => {
+        // Add keyboard event listener to the document
+        const handleKeyPress = (event: any) => {
+            if (event.key === 's' || event.key === 'S') {
+                // Toggle the offcanvas when "S" key is pressed
+                const offcanvasElement = document.getElementById('settingsDrawer');
+                if (offcanvasElement) {
+                    const offcanvas = new Offcanvas(offcanvasElement);
+                    offcanvas.toggle();
+                }
+            } else if (event.key === 'Escape') {
+                // Close the offcanvas when "Escape" key is pressed
+                const offcanvasElement = document.getElementById('settingsDrawer');
+                if (offcanvasElement) {
+                    const offcanvas = new Offcanvas(offcanvasElement);
+                    offcanvas.hide();
+                }
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyPress);
+
+        // Clean up the event listener on component unmount
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
+
     const handlePlay = () => {
         setIsPlaying(false);
     };

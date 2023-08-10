@@ -29,6 +29,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@wagmi/chains": "^0.2.22",
     "async-mutex": "^0.4.0",
+    "bootstrap": "^5.3.1",
     "buffer": "^6.0.3",
     "contracts": "workspace:*",
     "ethers": "^5.7.2",

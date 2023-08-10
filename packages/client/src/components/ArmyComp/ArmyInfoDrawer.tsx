@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import archerImg from "../../images/archer.png";
 import cavalryImg from "../../images/cavalry.png";
 import swordsmanImg from "../../images/swordsman.png";
@@ -23,6 +23,33 @@ const scrollToDiv = (targetId: any) => {
 export const ArmyInfoDrawer = () => {
     const { userWallet } = usePlayer()
     const myArmyPosition: any = useMyArmy(userWallet!.address.toLocaleLowerCase())[0];
+
+    useEffect(() => {
+        // Add keyboard event listener to the document
+        const handleKeyPress = (event: any) => {
+            if (event.key === 'a' || event.key === 'A') {
+                // Toggle the offcanvas when "S" key is pressed
+                const offcanvasElement = document.getElementById('armyInfoDrawer');
+                if (offcanvasElement) {
+                    const offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                    offcanvas.toggle();
+                }
+            } else if (event.key === 'Escape') {
+                // Close the offcanvas when "Escape" key is pressed
+                const offcanvasElement = document.getElementById('armyInfoDrawer');
+                if (offcanvasElement) {
+                    offcanvasElement.classList.remove('show'); // Manually remove the 'show' class
+                }
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyPress);
+
+        // Clean up the event listener on component unmount
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
 
     // Find the army on the map
     const handleClick = (targetId: any) => {

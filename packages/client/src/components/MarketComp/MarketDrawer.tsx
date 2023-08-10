@@ -31,7 +31,6 @@ export const MarketDrawer = () => {
     const numberOfResource: any = useNumberOfResource(userWallet!.address, 1)?.value;
     const isMineInited: any = useIsMineInitialized(1)?.value.isInited;
     const armyPrices: ArmyPrices | undefined | any = useArmyPrices(1)?.value;
-    console.log(armyPrices);
 
     useEffect(() => {
         if (!isPlayerLost && isMineInited) {
@@ -46,6 +45,33 @@ export const MarketDrawer = () => {
             return () => clearInterval(interval);
         }
     }, [isPlayerLost, isMineInited])
+
+    useEffect(() => {
+        // Add keyboard event listener to the document
+        const handleKeyPress = (event: any) => {
+            if (event.key === 'm' || event.key === 'M') {
+                // Toggle the offcanvas when "S" key is pressed
+                const offcanvasElement = document.getElementById('armyInfoDrawer');
+                if (offcanvasElement) {
+                    const offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                    offcanvas.toggle();
+                }
+            } else if (event.key === 'Escape') {
+                // Close the offcanvas when "Escape" key is pressed
+                const offcanvasElement = document.getElementById('armyInfoDrawer');
+                if (offcanvasElement) {
+                    offcanvasElement.classList.remove('show'); // Manually remove the 'show' class
+                }
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyPress);
+
+        // Clean up the event listener on component unmount
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
 
     useEffect(() => {
         if (numFood && numFood.toString().length === 0) {
@@ -167,9 +193,9 @@ export const MarketDrawer = () => {
                         <h4 className="border-bottom text-center p-2 font-bold">Army Prices</h4>
                     </Tooltip>
                     <div className="d-flex align-middle justify-center mt-2">
-                        <ArmyCard imageSource={swordsmanImg} imageHeight={"75px"} imageWidth={"65px"} soldierName={"Swordsman"} soldierPrice={2222222} />
-                        <ArmyCard imageSource={archerImg} imageHeight={"75px"} imageWidth={"65px"} soldierName={"Archer"} soldierPrice={2222222} />
-                        <ArmyCard imageSource={cavalryImg} imageHeight={"75px"} imageWidth={"100px"} soldierName={"Cavalry"} soldierPrice={2222222} />
+                        <ArmyCard imageSource={swordsmanImg} imageHeight={"75px"} imageWidth={"65px"} soldierName={"Swordsman"} soldierPrice={armyPrices && armyPrices.priceSwordsman} />
+                        <ArmyCard imageSource={archerImg} imageHeight={"75px"} imageWidth={"65px"} soldierName={"Archer"} soldierPrice={armyPrices && armyPrices.priceArcher} />
+                        <ArmyCard imageSource={cavalryImg} imageHeight={"75px"} imageWidth={"100px"} soldierName={"Cavalry"} soldierPrice={armyPrices && armyPrices.priceCavalry} />
                     </div>
                 </div>
             </div>

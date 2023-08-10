@@ -8,13 +8,14 @@ export const CreditProgressBar = () => {
     const { systemCalls } = useMUD();
 
     const credit: any = useCredit(1, userWallet!.address)?.value.amount;
+    console.log(credit)
 
     return (
         <div className="credit-progress-bar">
             <div className="row">
                 <div className="col-4 credit-progress-bar-col">
                     <>
-                        💰: {credit ? Number(credit).toString().slice(0, 8) : 0}
+                        💰: {credit ? parseFloat(credit).toString().slice(0, 8) : 0}
                     </>
                 </div>
             </div>
