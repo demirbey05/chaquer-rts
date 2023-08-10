@@ -34,9 +34,9 @@ export const ArmySettleModal = () => {
     }
 
     if (
-      (parseInt(swordsmanCount) > 500) ||
-      (parseInt(archerCount) > 500) ||
-      (parseInt(cavalryCount) > 500)
+      (parseInt(swordsmanCount) > 500 || parseInt(swordsmanCount) < 0) ||
+      (parseInt(archerCount) > 500 || parseInt(archerCount) < 0) ||
+      (parseInt(cavalryCount) > 500 || parseInt(cavalryCount) < 0)
     ) {
       setIsDisabled(true);
     }

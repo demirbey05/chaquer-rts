@@ -126,7 +126,8 @@ export const MarketDrawer = () => {
     }
 
     const marketDrawerDivStyles = {
-        height: "500px",
+        height: "525px",
+        width: "425px",
         marginTop: "90px",
         padding: "10px"
     }
@@ -145,7 +146,7 @@ export const MarketDrawer = () => {
             <div style={marketDrawerDivStyles}
                 className="offcanvas offcanvas-start"
                 data-bs-keyboard="false"
-                data-bs-backdrop="static"
+                data-bs-backdrop="false"
                 data-bs-config="true"
                 id="marketDrawer"
                 aria-labelledby="marketDrawerLabel">
@@ -166,9 +167,9 @@ export const MarketDrawer = () => {
                         <h4 className="border-bottom text-center p-2 font-bold">Army Prices</h4>
                     </Tooltip>
                     <div className="d-flex align-middle justify-center mt-2">
-                        <ArmyCard imageSource={swordsmanImg} imageHeight={"75px"} imageWidth={"65px"} soldierName={"Swordsman"} soldierPrice={armyPrices && armyPrices.priceSwordsman} />
-                        <ArmyCard imageSource={archerImg} imageHeight={"75px"} imageWidth={"65px"} soldierName={"Archer"} soldierPrice={armyPrices && armyPrices.priceArcher} />
-                        <ArmyCard imageSource={cavalryImg} imageHeight={"75px"} imageWidth={"100px"} soldierName={"Cavalry"} soldierPrice={armyPrices && armyPrices.priceCavalry} />
+                        <ArmyCard imageSource={swordsmanImg} imageHeight={"75px"} imageWidth={"65px"} soldierName={"Swordsman"} soldierPrice={2222222} />
+                        <ArmyCard imageSource={archerImg} imageHeight={"75px"} imageWidth={"65px"} soldierName={"Archer"} soldierPrice={2222222} />
+                        <ArmyCard imageSource={cavalryImg} imageHeight={"75px"} imageWidth={"100px"} soldierName={"Cavalry"} soldierPrice={2222222} />
                     </div>
                 </div>
             </div>
@@ -225,6 +226,7 @@ const ArmyCard = (props: ArmyCardPropTypes) => {
             </div>
             <div className="row justify-content-center text-center mt-2">
                 <SoliderInfo soliderName={props.soldierName} soldierPrice={props.soldierPrice} />
+                <p>💰</p>
             </div>
         </div>
     )
@@ -236,7 +238,7 @@ interface SoliderPricePropTypes {
 }
 
 const SoliderInfo = (props: SoliderPricePropTypes) => {
-    return <p style={{ fontSize: "12px" }}>{props.soliderName}: {props.soldierPrice ? Number(props.soldierPrice) : 0} 💰</p>
+    return <p style={{ fontSize: "12px" }}>{props.soliderName}: {props.soldierPrice ? Number(props.soldierPrice).toString().slice(0, 6) : 0}</p>
 }
 
 interface SellButtonPropTypes {
