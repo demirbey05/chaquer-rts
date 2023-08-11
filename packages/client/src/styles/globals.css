@@ -298,3 +298,24 @@ input::-webkit-inner-spin-button {
     left: 25px;
     z-index: 1;
 }
+
+/* Prices Drawer styles */
+.prices-drawer-body {
+    background-color: white;
+    z-index: 1;
+    height: 315px;
+    width: 300px;
+    margin-top: 375px;
+    margin-right: 5px;
+    border-top: 2px solid rgb(241, 241, 241);
+    border-bottom: 2px solid rgb(241, 241, 241);
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    right: -300px;
+    transition: right 0.3s ease;
+}
+
+.prices-drawer-body.open {
+    right: 0;
+}

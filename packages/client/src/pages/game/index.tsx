@@ -18,6 +18,7 @@ import { PlayerWaitingStage } from "../../components/PlayerComp/PlayerWaitingSta
 import { MineProgressBar } from '../../components/MineComp/MineProgressBar';
 import { CreditProgressBar } from '../../components/CreditComp/CreditProgressBar';
 import { MarketDrawer } from "../../components/MarketComp/MarketDrawer";
+import { PriceListDrawer } from "../../components/PriceComp/PriceListDrawer";
 import { ShortCutTips } from "../../components/TipsComp/ShortCutTips";
 
 export const Game = () => {
@@ -43,6 +44,7 @@ export const Game = () => {
       {isPlayerLost && <PlayerLostWarning />}
       {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ArmyInfoDrawer />}
       {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <MarketDrawer />}
+      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <PriceListDrawer />}
       {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ShortCutTips />}
       {isCastleSettled && !playerSeedStage && !playerWaitingStage && <SettingsDrawer />}
       {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <WarResultDrawer />}

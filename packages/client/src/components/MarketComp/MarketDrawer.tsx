@@ -1,24 +1,12 @@
-import archerImg from "../../images/archer.png";
-import cavalryImg from "../../images/cavalry.png";
-import swordsmanImg from "../../images/swordsman.png";
 import { useState, useEffect } from "react";
 import { Button } from "@chakra-ui/react";
 import { Tooltip } from "@chakra-ui/react"
 import { useMUD } from "../../MUDContext";
 import { useNumberOfResource } from '../../hooks/useNumberOfResource';
 import { usePlayer } from '../../context/PlayerContext';
-import { useIsMineInitialized } from '../../hooks/useIsMineInitialized';
-import { useArmyPrices } from "../../hooks/useArmyPrices";
-import { useResourcePrices } from "../../hooks/useResourcePrices";
-
-interface ArmyPrices {
-    priceSwordsman: number | undefined,
-    priceArcher: number | undefined,
-    priceCavalry: number | undefined
-}
 
 export const MarketDrawer = () => {
-    const { userWallet, isPlayerLost } = usePlayer();
+    const { userWallet } = usePlayer();
     const { systemCalls }: any = useMUD();
 
     const [numWood, setNumWood] = useState<string>("");
@@ -30,24 +18,6 @@ export const MarketDrawer = () => {
     const [isGoldDisabled, setIsGoldDisabled] = useState<boolean>(true);
 
     const numberOfResource: any = useNumberOfResource(userWallet!.address, 1)?.value;
-    const isMineInited: any = useIsMineInitialized(1)?.value.isInited;
-    const armyPrices: ArmyPrices | undefined | any = useArmyPrices(1)?.value;
-    const resourcePrices = useResourcePrices(1);
-    console.log(resourcePrices)
-
-    useEffect(() => {
-        if (!isPlayerLost && isMineInited) {
-            const interval = setInterval(async () => {
-                const tx = await systemCalls.updatePrices(1);
-                if (tx == null) {
-                    console.log("Error occurred during updating army prices.");
-                    return;
-                }
-            }, 1000);
-
-            return () => clearInterval(interval);
-        }
-    }, [isPlayerLost, isMineInited])
 
     useEffect(() => {
         // Add keyboard event listener to the document
@@ -155,8 +125,7 @@ export const MarketDrawer = () => {
     }
 
     const marketDrawerDivStyles = {
-        height: "525px",
-        width: "425px",
+        height: "325px",
         marginTop: "90px",
         padding: "10px"
     }
@@ -192,14 +161,6 @@ export const MarketDrawer = () => {
                         <ResourceCard resourceEmoji={"🪓"} resourceName={"Wood"} setResourceCount={setNumWood} isDisabled={isWoodDisabled} handleSell={handleWoodSell} />
                         <ResourceCard resourceEmoji={"⛏️"} resourceName={"Gold"} setResourceCount={setNumGold} isDisabled={isGoldDisabled} handleSell={handleGoldSell} />
                     </div>
-                    <Tooltip label="You can reach the current army prices from here!" placement="top-start" bg="blue.400" fontSize="md">
-                        <h4 className="border-bottom text-center p-2 font-bold mt-4">Army Prices</h4>
-                    </Tooltip>
-                    <div className="d-flex align-middle justify-center mt-2">
-                        <ArmyCard imageSource={swordsmanImg} imageHeight={"75px"} imageWidth={"65px"} soldierName={"Swordsman"} soldierPrice={armyPrices && armyPrices.priceSwordsman} />
-                        <ArmyCard imageSource={archerImg} imageHeight={"75px"} imageWidth={"65px"} soldierName={"Archer"} soldierPrice={armyPrices && armyPrices.priceArcher} />
-                        <ArmyCard imageSource={cavalryImg} imageHeight={"75px"} imageWidth={"100px"} soldierName={"Cavalry"} soldierPrice={armyPrices && armyPrices.priceCavalry} />
-                    </div>
                 </div>
             </div>
         </>
@@ -234,40 +195,6 @@ const ResourceCard = (props: ResourceCardPropTypes) => {
             <SellButton isDisabled={props.isDisabled} handleSell={props.handleSell} resourceName={props.resourceName} />
         </div>
     )
-}
-
-interface ArmyCardPropTypes {
-    imageSource: string,
-    imageHeight: string,
-    imageWidth: string,
-    soldierName: string,
-    soldierPrice: number | undefined
-}
-
-const ArmyCard = (props: ArmyCardPropTypes) => {
-    return (
-        <div className="col align-items-center">
-            <div className="row justify-content-center">
-                <img
-                    src={props.imageSource}
-                    style={{ height: props.imageHeight, width: props.imageWidth }}
-                />
-            </div>
-            <div className="row justify-content-center text-center mt-2">
-                <SoliderInfo soliderName={props.soldierName} soldierPrice={props.soldierPrice} />
-                <p>💰</p>
-            </div>
-        </div>
-    )
-}
-
-interface SoliderPricePropTypes {
-    soliderName: string,
-    soldierPrice: number | undefined
-}
-
-const SoliderInfo = (props: SoliderPricePropTypes) => {
-    return <p style={{ fontSize: "12px" }}>{props.soliderName}: {props.soldierPrice ? (Number(props.soldierPrice) / Number("1000000000000000000")).toString().slice(0, 6) : 0}</p>
 }
 
 interface SellButtonPropTypes {
