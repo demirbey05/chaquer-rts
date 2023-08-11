@@ -282,3 +282,19 @@ input::-webkit-inner-spin-button {
     width: 200px;
     font-weight: bolder
 }
+
+/*Circle Button for tips*/
+.circle-button {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    font-size: 25px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    z-index: 1;
+}
