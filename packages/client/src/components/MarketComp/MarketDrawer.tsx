@@ -9,6 +9,7 @@ import { useNumberOfResource } from '../../hooks/useNumberOfResource';
 import { usePlayer } from '../../context/PlayerContext';
 import { useIsMineInitialized } from '../../hooks/useIsMineInitialized';
 import { useArmyPrices } from "../../hooks/useArmyPrices";
+import { useResourcePrices } from "../../hooks/useResourcePrices";
 
 interface ArmyPrices {
     priceSwordsman: number | undefined,
@@ -31,6 +32,8 @@ export const MarketDrawer = () => {
     const numberOfResource: any = useNumberOfResource(userWallet!.address, 1)?.value;
     const isMineInited: any = useIsMineInitialized(1)?.value.isInited;
     const armyPrices: ArmyPrices | undefined | any = useArmyPrices(1)?.value;
+    const resourcePrices = useResourcePrices(1);
+    console.log(resourcePrices)
 
     useEffect(() => {
         if (!isPlayerLost && isMineInited) {
@@ -78,7 +81,7 @@ export const MarketDrawer = () => {
             setIsFoodDisabled(true);
         }
 
-        if (numberOfResource && (parseInt(numFood) <= numberOfResource!.numOfFood)) {
+        if (numberOfResource && (parseInt(numFood) <= numberOfResource!.numOfFood && parseInt(numFood) > 0)) {
             setIsFoodDisabled(false);
         } else {
             setIsFoodDisabled(true);
@@ -90,7 +93,7 @@ export const MarketDrawer = () => {
             setIsWoodDisabled(true);
         }
 
-        if (numberOfResource && (parseInt(numWood) <= numberOfResource!.numOfWood)) {
+        if (numberOfResource && (parseInt(numWood) <= numberOfResource!.numOfWood && parseInt(numWood) > 0)) {
             setIsWoodDisabled(false);
         } else {
             setIsWoodDisabled(true);
@@ -102,7 +105,7 @@ export const MarketDrawer = () => {
             setIsGoldDisabled(true);
         }
 
-        if (numberOfResource && (parseInt(numGold) <= numberOfResource!.numOfGold)) {
+        if (numberOfResource && (parseInt(numGold) <= numberOfResource!.numOfGold && parseInt(numGold) > 0)) {
             setIsGoldDisabled(false);
         } else {
             setIsGoldDisabled(true);
@@ -190,7 +193,7 @@ export const MarketDrawer = () => {
                         <ResourceCard resourceEmoji={"⛏️"} resourceName={"Gold"} setResourceCount={setNumGold} isDisabled={isGoldDisabled} handleSell={handleGoldSell} />
                     </div>
                     <Tooltip label="You can reach the current army prices from here!" placement="top-start" bg="blue.400" fontSize="md">
-                        <h4 className="border-bottom text-center p-2 font-bold">Army Prices</h4>
+                        <h4 className="border-bottom text-center p-2 font-bold mt-4">Army Prices</h4>
                     </Tooltip>
                     <div className="d-flex align-middle justify-center mt-2">
                         <ArmyCard imageSource={swordsmanImg} imageHeight={"75px"} imageWidth={"65px"} soldierName={"Swordsman"} soldierPrice={armyPrices && armyPrices.priceSwordsman} />
@@ -264,7 +267,7 @@ interface SoliderPricePropTypes {
 }
 
 const SoliderInfo = (props: SoliderPricePropTypes) => {
-    return <p style={{ fontSize: "12px" }}>{props.soliderName}: {props.soldierPrice ? Number(props.soldierPrice).toString().slice(0, 6) : 0}</p>
+    return <p style={{ fontSize: "12px" }}>{props.soliderName}: {props.soldierPrice ? (Number(props.soldierPrice) / Number("1000000000000000000")).toString().slice(0, 6) : 0}</p>
 }
 
 interface SellButtonPropTypes {

@@ -262,7 +262,7 @@ input::-webkit-inner-spin-button {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 140px;
+    width: 200px;
     height: 50px;
     border-radius: 10px;
     overflow: hidden;
@@ -279,6 +279,6 @@ input::-webkit-inner-spin-button {
 }
 
 .credit-progress-bar-col {
-    width: 140px;
+    width: 200px;
     font-weight: bolder
 }
