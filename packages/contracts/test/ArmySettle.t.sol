@@ -6,7 +6,6 @@ import { TestUtils } from "./utils/TestUtils.sol";
 import { NakamoTest } from "./utils/NakamoTest.sol";
 import "../src/systems/Errors.sol";
 import { ArmyConfig, Position, ArmyOwnable, ArmyConfigData, CreditOwn, GameMetaData, SoldierCreated, MapConfig } from "../src/codegen/Tables.sol";
-import { console } from "forge-std/console.sol";
 import { LibVRGDA } from "../src/libraries/LibVRGDA.sol";
 
 contract ArmySettleTest is NakamoTest {
