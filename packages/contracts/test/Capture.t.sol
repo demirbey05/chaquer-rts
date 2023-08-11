@@ -3,14 +3,28 @@ pragma solidity ^0.8.0;
 
 import { TestUtils } from "./utils/TestUtils.sol";
 import { NakamoTest } from "./utils/NakamoTest.sol";
-import {LibQueries} from "../src/libraries/LibQueries.sol";
+import { LibQueries } from "../src/libraries/LibQueries.sol";
 import "../src/systems/Errors.sol";
 
 contract CaptureTest is NakamoTest {
-    bytes32 castleIDFirst;
+  bytes32 castleIDFirst;
+  address payable[] users;
+
   function setUp() public override {
     super.setUp();
-    TestUtils.initMap(world, "test/mock_data/map.txt", 50, 50, 1);
+    TestUtils.initMap(world, "test/mock_data/map_full_land.txt", 50, 50, 1);
+    string memory userName = "demir";
+    users.push(user1);
+    users.push(user2);
+    users.push(user3);
+    users.push(user4);
+    users.push(user5);
+    users.push(user6);
+    users.push(user7);
+    users.push(user8);
+    users.push(user9);
+    users.push(user10);
+    TestUtils.initializeMinePlacesStorage(world, 1, 1, users, userName, 10);
     castleIDFirst = TestUtils.settleCastle(world, 35, 1, 1, user1);
   }
 
@@ -93,7 +107,7 @@ contract CaptureTest is NakamoTest {
     bytes32 armyOne = TestUtils.settleArmy(world, 34, 1, 67, 26, 6, user1, 1);
     bytes32 castleID = TestUtils.settleCastle(world, 33, 1, 1, user2);
     bytes32 armyTwo = TestUtils.settleArmy(world, 32, 1, 50, 0, 0, user2, 1);
-    TestUtils.moveArmy(world,armyTwo,29,1,user2,1);
+    TestUtils.moveArmy(world, armyTwo, 29, 1, user2, 1);
     uint256 result = TestUtils.attackCastle(world, armyOne, castleID, user1);
     assertEq(1, result);
   }
@@ -103,15 +117,16 @@ contract CaptureTest is NakamoTest {
     bytes32 castleID = TestUtils.settleCastle(world, 33, 1, 1, user2);
     bytes32 armyTwo = TestUtils.settleArmy(world, 32, 1, 50, 0, 0, user2, 1);
 
-    TestUtils.moveArmy(world,armyTwo,29,1,user2,1);
-    bytes32[] memory aliceArmiesBefore = LibQueries.getOwnedArmyIDs(world,user2,1);
+    TestUtils.moveArmy(world, armyTwo, 29, 1, user2, 1);
+    bytes32[] memory aliceArmiesBefore = LibQueries.getOwnedArmyIDs(world, user2, 1);
     assertEq(1, aliceArmiesBefore.length);
 
     uint256 result = TestUtils.attackCastle(world, armyOne, castleID, user1);
     assertEq(1, result);
-    bytes32[] memory aliceArmiesAfter = LibQueries.getOwnedArmyIDs(world,user2,1);
+    bytes32[] memory aliceArmiesAfter = LibQueries.getOwnedArmyIDs(world, user2, 1);
     assertEq(0, aliceArmiesAfter.length);
   }
+
   function testNoAuthorization() public {
     bytes32 armyOne = TestUtils.settleArmy(world, 34, 1, 67, 26, 6, user1, 1);
     bytes32 castleID = TestUtils.settleCastle(world, 33, 1, 1, user2);
@@ -144,6 +159,5 @@ contract CaptureTest is NakamoTest {
     bytes32 castleID = TestUtils.settleCastle(world, 30, 1, 1, user2);
     vm.expectRevert(CaptureSystem__TooFarToAttack.selector);
     TestUtils.attackCastle(world, armyOne, castleID, user1);
-
   }
 }
