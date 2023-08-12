@@ -20,27 +20,24 @@ export const MarketDrawer = () => {
     const numberOfResource: any = useNumberOfResource(userWallet!.address, 1)?.value;
 
     useEffect(() => {
-        // Add keyboard event listener to the document
-        const handleKeyPress = (event: any) => {
+        const handleKeyPress = (event: KeyboardEvent) => {
             if (event.key === 'm' || event.key === 'M') {
-                // Toggle the offcanvas when "S" key is pressed
-                const offcanvasElement = document.getElementById('armyInfoDrawer');
-                if (offcanvasElement) {
-                    const offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-                    offcanvas.toggle();
+                const offcanvasElement = document.getElementById('marketDrawer');
+                if (offcanvasElement && !offcanvasElement.classList.contains("show")) {
+                    offcanvasElement.classList.add('show');
+                }
+                else if (offcanvasElement) {
+                    offcanvasElement.classList.remove('show');
                 }
             } else if (event.key === 'Escape') {
-                // Close the offcanvas when "Escape" key is pressed
-                const offcanvasElement = document.getElementById('armyInfoDrawer');
+                const offcanvasElement = document.getElementById('marketDrawer');
                 if (offcanvasElement) {
-                    offcanvasElement.classList.remove('show'); // Manually remove the 'show' class
+                    offcanvasElement.classList.remove('show');
                 }
             }
         };
 
         document.addEventListener('keydown', handleKeyPress);
-
-        // Clean up the event listener on component unmount
         return () => {
             document.removeEventListener('keydown', handleKeyPress);
         };

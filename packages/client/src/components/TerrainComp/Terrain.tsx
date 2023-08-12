@@ -1,16 +1,19 @@
 import "../../styles/globals.css";
-import { useEffect, useRef } from "react";
 import { TerrainType } from "../../terrain-helper/types";
+import { useEffect, useRef } from "react";
+import { Entity } from "@latticexyz/recs";
 import { useCastle } from "../../context/CastleContext";
-import { CastleSettleModal } from "../CastleComp/CastleSettleModal";
-import { ArmySettleModal } from "../ArmyComp/ArmySettleModal";
-import { ArmyAttackDrawer } from "../ArmyComp/ArmyAttackDrawer";
-import { CastleAttackDrawer } from "../CastleComp/CastleAttackDrawer";
+import { useAttack } from "../../context/AttackContext";
+import { usePlayer } from "../../context/PlayerContext";
+import { useArmy } from "../../context/ArmyContext";
+import { useMine } from "../../context/MineContext";
+import { useMUD } from "../../MUDContext";
 import { useCastlePositions } from "../../hooks/useCastlePositions";
 import { useCastlePositionByAddress } from "../../hooks/useCastlePositionByAddress";
 import { useArmyPositions } from "../../hooks/useArmyPositions";
 import { useMyArmy } from "../../hooks/useMyArmy";
-import { useMUD } from "../../MUDContext";
+import { useResources } from "../../hooks/useResources";
+import { useResourcePositionByAddress } from "../../hooks/useResourcePositionByAddress";
 import { findIDFromPosition, Coord } from "../../utils/findIDFromPosition";
 import { getTerrainAsset } from '../../utils/getTerrainAsset';
 import { isMyCastle } from '../../utils/isMyCastle';
@@ -22,14 +25,6 @@ import { isEnemyArmy } from "../../utils/isEnemyArmy";
 import { getMyArmyConfigByPosition, getEnemyArmyConfigByPosition } from "../../utils/getArmyConfigByPosition";
 import { getManhattanPositions } from "../../utils/getManhattanPositions";
 import { isEnemyCastle } from "../../utils/isEnemyCastle";
-import { useArmy } from "../../context/ArmyContext";
-import { useAttack } from "../../context/AttackContext";
-import { Entity } from "@latticexyz/recs";
-import { usePlayer } from "../../context/PlayerContext";
-import { useResources } from "../../hooks/useResources";
-import { useResourcePositionByAddress } from "../../hooks/useResourcePositionByAddress";
-import { MineCaptureDrawer } from "../MineComp/MineCaptureDrawer";
-import { useMine } from "../../context/MineContext";
 import { isMyResource } from "../../utils/isMyResource";
 import { isUserClickedMine } from "../../utils/isUserClickedMine";
 
@@ -39,6 +34,7 @@ export type DataProp = {
   values: Array<Array<TerrainType>>;
   pixelStyles: Array<any>;
   isBorder: boolean;
+  zoomLevel: number;
 };
 
 export const Terrain = (props: DataProp) => {
@@ -315,10 +311,6 @@ export const Terrain = (props: DataProp) => {
     });
   }, [armyPositions, myArmyPosition]);
 
-  useEffect(() => {
-
-  }, [])
-
   // Handle Army and Castle Attack OffCanvas
   useEffect(() => {
     armyPositions.map((data: any) => {
@@ -484,84 +476,81 @@ export const Terrain = (props: DataProp) => {
   }, [isArmySettleStage, myCastlePosition]);
 
   return (
-    <div className={`inline-grid ${props.isBorder && "border-4 border-black"}`}>
-      {rows.map((row) => {
-        return columns.map((column) => {
-          return (
-            <div
-              key={`${column},${row}`}
-              id={`${column},${row}`}
-              data-row={`${row}`}
-              data-column={`${column}`}
-              style={{
-                gridColumn: column + 1,
-                gridRow: row + 1,
-                width: `${props.pixelStyles[1]}px`,
-                height: `${props.pixelStyles[1]}px`,
-                backgroundImage: `${getTerrainAsset(values[row][column])}`,
-                backgroundSize: "cover",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                fontSize: `${props.isBorder ? "7px" : "20px"}`,
-              }}
-              onClick={(e) => {
-                handleClick(e);
-              }}
-              className={`
+    <div className={`inline-grid ${props.isBorder && "border-4 border-black"}`} style={{ transform: `scale(${props.zoomLevel})`, transition: "transform 0.2s ease-in-out" }} >
+      {
+        rows.map((row) => {
+          return columns.map((column) => {
+            return (
+              <div
+                key={`${column},${row}`}
+                id={`${column},${row}`}
+                data-row={`${row}`}
+                data-column={`${column}`}
+                style={{
+                  gridColumn: column + 1,
+                  gridRow: row + 1,
+                  width: `${props.pixelStyles[1]}px`,
+                  height: `${props.pixelStyles[1]}px`,
+                  backgroundImage: `${getTerrainAsset(values[row][column])}`,
+                  backgroundSize: "cover",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontSize: `${props.isBorder ? "7px" : "20px"}`,
+                }}
+                onClick={(e) => {
+                  handleClick(e);
+                }}
+                className={`
                 ${!props.isBorder &&
-                canCastleBeSettle(values[row][column]) &&
-                "borderHover"
-                }`}
-              data-bs-toggle={`${canCastleBeSettle(values[row][column]) &&
-                !isCastleSettled &&
-                !props.isBorder
-                ? "modal"
-                : ""
-                }${canCastleBeSettle(values[row][column]) &&
-                  isCastleSettled &&
-                  !props.isBorder &&
-                  isArmySettleStage &&
-                  numberOfArmy !== 3 &&
-                  myCastlePosition &&
-                  myCastlePosition.length > 0 &&
-                  myCastlePosition.some((position: any) => {
-                    return getManhattanPositions(position).some(
-                      (item) => item.x === row && item.y === column
-                    );
-                  })
+                  canCastleBeSettle(values[row][column]) &&
+                  "borderHover"
+                  }`}
+                data-bs-toggle={`${canCastleBeSettle(values[row][column]) &&
+                  !isCastleSettled &&
+                  !props.isBorder
                   ? "modal"
                   : ""
-                }`}
-              data-bs-target={`${canCastleBeSettle(values[row][column]) &&
-                !isCastleSettled &&
-                !props.isBorder
-                ? "#castleSettleModal"
-                : ""
-                }${canCastleBeSettle(values[row][column]) &&
-                  isCastleSettled &&
-                  !props.isBorder &&
-                  isArmySettleStage &&
-                  numberOfArmy !== 3 &&
-                  myCastlePosition &&
-                  myCastlePosition.length > 0 &&
-                  myCastlePosition.some((position: any) => {
-                    return getManhattanPositions(position).some(
-                      (item) => item.x === row && item.y === column
-                    );
-                  })
-                  ? "#armySettleModal"
+                  }${canCastleBeSettle(values[row][column]) &&
+                    isCastleSettled &&
+                    !props.isBorder &&
+                    isArmySettleStage &&
+                    numberOfArmy !== 3 &&
+                    myCastlePosition &&
+                    myCastlePosition.length > 0 &&
+                    myCastlePosition.some((position: any) => {
+                      return getManhattanPositions(position).some(
+                        (item) => item.x === row && item.y === column
+                      );
+                    })
+                    ? "modal"
+                    : ""
+                  }`}
+                data-bs-target={`${canCastleBeSettle(values[row][column]) &&
+                  !isCastleSettled &&
+                  !props.isBorder
+                  ? "#castleSettleModal"
                   : ""
-                }`}
-            ></div>
-          );
-        });
-      })}
-      <CastleSettleModal />
-      <ArmySettleModal />
-      <ArmyAttackDrawer />
-      <CastleAttackDrawer />
-      <MineCaptureDrawer />
+                  }${canCastleBeSettle(values[row][column]) &&
+                    isCastleSettled &&
+                    !props.isBorder &&
+                    isArmySettleStage &&
+                    numberOfArmy !== 3 &&
+                    myCastlePosition &&
+                    myCastlePosition.length > 0 &&
+                    myCastlePosition.some((position: any) => {
+                      return getManhattanPositions(position).some(
+                        (item) => item.x === row && item.y === column
+                      );
+                    })
+                    ? "#armySettleModal"
+                    : ""
+                  }`}
+              ></div>
+            );
+          });
+        })
+      }
     </div >
   );
 }

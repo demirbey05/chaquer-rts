@@ -150,7 +150,7 @@ const ArmySettleInputBody = (props: ArmySettleInputBody) => {
           style={{ height: props.imageHeight, width: props.imageWidth }}
         />
       </div>
-      <div className="row justify-content-center text-center border-1 mt-2">
+      <div className="row justify-content-center text-center mt-2">
         <p>{props.soldierName}</p>
       </div>
       <div className="row justify-content-center mt-2">

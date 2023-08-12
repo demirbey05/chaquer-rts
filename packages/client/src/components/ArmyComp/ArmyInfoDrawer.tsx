@@ -25,27 +25,24 @@ export const ArmyInfoDrawer = () => {
     const myArmyPosition: any = useMyArmy(userWallet!.address.toLocaleLowerCase())[0];
 
     useEffect(() => {
-        // Add keyboard event listener to the document
         const handleKeyPress = (event: any) => {
             if (event.key === 'a' || event.key === 'A') {
-                // Toggle the offcanvas when "S" key is pressed
                 const offcanvasElement = document.getElementById('armyInfoDrawer');
-                if (offcanvasElement) {
-                    const offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-                    offcanvas.toggle();
+                if (offcanvasElement && !offcanvasElement.classList.contains("show")) {
+                    offcanvasElement.classList.add('show');
+                }
+                else if (offcanvasElement) {
+                    offcanvasElement.classList.remove('show');
                 }
             } else if (event.key === 'Escape') {
-                // Close the offcanvas when "Escape" key is pressed
                 const offcanvasElement = document.getElementById('armyInfoDrawer');
                 if (offcanvasElement) {
-                    offcanvasElement.classList.remove('show'); // Manually remove the 'show' class
+                    offcanvasElement.classList.remove('show');
                 }
             }
         };
 
         document.addEventListener('keydown', handleKeyPress);
-
-        // Clean up the event listener on component unmount
         return () => {
             document.removeEventListener('keydown', handleKeyPress);
         };

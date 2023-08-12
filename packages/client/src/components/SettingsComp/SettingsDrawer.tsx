@@ -15,17 +15,16 @@ export const SettingsDrawer = () => {
 
         const handleEnded = () => {
             if (audioElement) {
-                audioElement.currentTime = 0; // Reset the playback to the beginning
-                audioElement.play(); // Start playing again
+                audioElement.currentTime = 0;
+                audioElement.play();
             }
         };
 
         if (audioElement) {
             audioElement.addEventListener('ended', handleEnded);
-            audioElement.play(); // Start playing initially
+            audioElement.play();
         }
 
-        // Clean up the event listener on component unmount
         return () => {
             if (audioElement) {
                 audioElement.removeEventListener('ended', handleEnded);
@@ -40,28 +39,23 @@ export const SettingsDrawer = () => {
     }, [])
 
     useEffect(() => {
-        // Add keyboard event listener to the document
         const handleKeyPress = (event: any) => {
             if (event.key === 's' || event.key === 'S') {
-                // Toggle the offcanvas when "S" key is pressed
                 const offcanvasElement = document.getElementById('settingsDrawer');
-                if (offcanvasElement) {
-                    const offcanvas = new Offcanvas(offcanvasElement);
-                    offcanvas.toggle();
+                if (offcanvasElement && !offcanvasElement.classList.contains("show")) {
+                    offcanvasElement.classList.add('show');
+                }
+                else if (offcanvasElement) {
+                    offcanvasElement.classList.remove('show');
                 }
             } else if (event.key === 'Escape') {
-                // Close the offcanvas when "Escape" key is pressed
                 const offcanvasElement = document.getElementById('settingsDrawer');
                 if (offcanvasElement) {
-                    const offcanvas = new Offcanvas(offcanvasElement);
-                    offcanvas.hide();
+                    offcanvasElement.classList.remove('show');
                 }
             }
         };
-
         document.addEventListener('keydown', handleKeyPress);
-
-        // Clean up the event listener on component unmount
         return () => {
             document.removeEventListener('keydown', handleKeyPress);
         };

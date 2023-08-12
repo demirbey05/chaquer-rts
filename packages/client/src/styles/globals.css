@@ -299,6 +299,19 @@ input::-webkit-inner-spin-button {
     z-index: 1;
 }
 
+/*Zoom Buttons*/
+.zoom-buttons {
+    width: 35px;
+    height: 35px;
+    color: white;
+    font-size: 30px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    bottom: 25px;
+    z-index: 1;
+}
+
 /* Prices Drawer styles */
 .prices-drawer-body {
     background-color: white;

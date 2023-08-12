@@ -35,6 +35,21 @@ export const PriceListDrawer = () => {
         setIsOpen(!isOpen);
     };
 
+    const handleKeyPress = (event: KeyboardEvent) => {
+        if (event.key === 'p' || event.key === 'P') {
+            toggleOffcanvas();
+        } else if (event.key === 'Escape') {
+            setIsOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyPress);
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [isOpen]);
+
     const drawerButtonStyles: any = {
         zIndex: 1,
         height: "60px",

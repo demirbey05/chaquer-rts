@@ -25,6 +25,9 @@ export const ShortCutTips = () => {
                         <ListItem>⚙️ Settings {"->"} Press "S"</ListItem>
                         <ListItem>⚔️ Army Info {"->"} Press "A"</ListItem>
                         <ListItem>🛒 Market {"->"} Press "M"</ListItem>
+                        <ListItem>＄ Prices {"->"} Press "P"</ListItem>
+                        <ListItem>🔎 Zoom In (+) {"->"} Press "I"</ListItem>
+                        <ListItem>🔎 Zoom Out (-) {"->"} Press "O"</ListItem>
                     </UnorderedList>
                 </PopoverBody>
             </PopoverContent>
