@@ -1,8 +1,19 @@
 import { useMUD } from "../MUDContext";
-import { useRow } from "@latticexyz/react";
+import { useObservableValue } from "@latticexyz/react";
+import { useState, useEffect } from "react";
 
-export function useArmyPrices(gameID: number) {
-    const { network: { storeCache } } = useMUD();
-    const armyPrices = useRow(storeCache, { table: "ArmyPrices", key: { gameID: BigInt(gameID) } });
+export function useArmyPrices() {
+    const { components } = useMUD();
+
+    const prices = useObservableValue(components.ArmyPrices.update$);
+
+    const [armyPrices, setArmyPrices] = useState<any>();
+
+    useEffect(() => {
+        if (prices) {
+            setArmyPrices(prices.value[0]);
+        }
+    }, [prices]);
+
     return armyPrices;
 }

@@ -12,10 +12,8 @@ export const PriceListDrawer = () => {
     const { systemCalls } = useMUD();
 
     const isMineInited = useIsMineInitialized(1)?.value.isInited;
-    const armyPrices = useArmyPrices(1)?.value;
-    const resourcePrices = useResourcePrices(1)?.value;
-    console.log(resourcePrices)
-    console.log(armyPrices)
+    const armyPrices = useArmyPrices();
+    const resourcePrices = useResourcePrices();
 
     useEffect(() => {
         if (!isPlayerLost && isMineInited) {
