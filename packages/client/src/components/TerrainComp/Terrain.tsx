@@ -27,6 +27,7 @@ import { getManhattanPositions } from "../../utils/getManhattanPositions";
 import { isEnemyCastle } from "../../utils/isEnemyCastle";
 import { isMyResource } from "../../utils/isMyResource";
 import { isUserClickedMine } from "../../utils/isUserClickedMine";
+import MapImg from '../../images/map.png';
 
 export type DataProp = {
   width: number;
@@ -476,12 +477,21 @@ export const Terrain = (props: DataProp) => {
   }, [isArmySettleStage, myCastlePosition]);
 
   return (
-    <div className={`inline-grid ${props.isBorder && "border-4 border-black"}`} style={{ transform: `scale(${props.zoomLevel})`, transition: "transform 0.2s ease-in-out" }} >
+    <div className={`inline-grid ${props.isBorder && "border-4 border-black"}`}
+      style={{
+        transform: `scale(${props.zoomLevel})`,
+        transition: "transform 0.2s ease-in-out",
+        zIndex: "1",
+        backgroundImage: `url(${MapImg})`, // Remove the 4 next line to remove AI generated terrain
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        boxShadow: "20px 20px rgba(0, 0, 0, 0.5)",
+      }} >
       {
         rows.map((row) => {
           return columns.map((column) => {
             return (
-              <div
+              <span
                 key={`${column},${row}`}
                 id={`${column},${row}`}
                 data-row={`${row}`}
@@ -491,12 +501,13 @@ export const Terrain = (props: DataProp) => {
                   gridRow: row + 1,
                   width: `${props.pixelStyles[1]}px`,
                   height: `${props.pixelStyles[1]}px`,
-                  backgroundImage: `${getTerrainAsset(values[row][column])}`,
-                  backgroundSize: "cover",
+                  //backgroundImage: `${getTerrainAsset(values[row][column])}`, old terrain assets
+                  //backgroundSize: "cover",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
                   fontSize: `${props.isBorder ? "7px" : "20px"}`,
+                  border: "0.5px solid rgba(0, 0, 0, 0.1)"
                 }}
                 onClick={(e) => {
                   handleClick(e);
@@ -546,7 +557,7 @@ export const Terrain = (props: DataProp) => {
                     ? "#armySettleModal"
                     : ""
                   }`}
-              ></div>
+              ></span>
             );
           });
         })

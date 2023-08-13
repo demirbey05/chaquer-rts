@@ -1,6 +1,6 @@
 import map from "../../../map.json";
 import ScrollContainer from "react-indiana-drag-scroll";
-import tileBgImg from '../../images/tile-background.png';
+import gameBgImg from '../../images/gameBackground.png';
 import { useState } from "react";
 import { useTerrain } from "../../context/TerrainContext";
 import { useCastle } from "../../context/CastleContext";
@@ -42,7 +42,7 @@ export const Game = () => {
     zIndex: "0",
     height: "100vh",
     overflow: "scroll",
-    backgroundImage: `url(${tileBgImg})`,
+    backgroundImage: `url(${gameBgImg})`,
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover"
   }
