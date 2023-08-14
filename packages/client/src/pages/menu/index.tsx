@@ -1,5 +1,5 @@
 import map from "../../../map.json";
-import chaquerImg from '../../images/chaquer_bg.png';
+import chaquerImg from '../../images/chaquer_bg.jpg';
 import { Terrain } from "../../components/TerrainComp/Terrain";
 import { generatePerlinValues } from "../../terrain-helper/utils";
 import { TerrainSpinner } from "../../components/TerrainComp/TerrainSpinner";
@@ -103,6 +103,7 @@ const TerrainMap = (props: TerrainMapPropStyles) => {
         values={props.values}
         pixelStyles={props.terrainStyles}
         isBorder={true}
+        zoomLevel={1}
       />
     </div>
   )

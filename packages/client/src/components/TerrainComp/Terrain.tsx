@@ -501,7 +501,7 @@ export const Terrain = (props: DataProp) => {
                   gridRow: row + 1,
                   width: `${props.pixelStyles[1]}px`,
                   height: `${props.pixelStyles[1]}px`,
-                  //backgroundImage: `${getTerrainAsset(values[row][column])}`, old terrain assets
+                  //backgroundImage: `${getTerrainAsset(values[row][column])}`, // remove the next 2 line for AI generated map
                   //backgroundSize: "cover",
                   display: "flex",
                   justifyContent: "center",

@@ -85,7 +85,7 @@ export const SettingsDrawer = () => {
     }
 
     const audioOffcanvasDivStyle: any = {
-        height: "300px",
+        height: "280px",
         width: "400px",
         marginTop: "25px",
         padding: "5px"

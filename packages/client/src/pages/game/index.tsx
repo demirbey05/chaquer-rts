@@ -1,6 +1,6 @@
 import map from "../../../map.json";
 import ScrollContainer from "react-indiana-drag-scroll";
-import gameBgImg from '../../images/gameBackground.png';
+import gameBgImg from '../../images/gameBackground.jpg';
 import { useState } from "react";
 import { useTerrain } from "../../context/TerrainContext";
 import { useCastle } from "../../context/CastleContext";

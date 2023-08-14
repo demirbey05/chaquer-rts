@@ -64,7 +64,7 @@ export const PriceListDrawer = () => {
             <Button colorScheme="yellow" style={drawerButtonStyles} onClick={toggleOffcanvas}>
                 $
             </Button>
-            <div id="prices-drawer-body" className={`prices-drawer-body ${isOpen ? "open" : ""}`}>
+            <div id="prices-drawer-body" className={`prices-drawer ${isOpen ? "open" : ""}`}>
                 <h4 className="text-center p-2 mb-2 border-bottom font-extrabold">Current Prices</h4>
                 <Tooltip label="You can reach the current resource prices from here..." placement="top-start" bg="blue.400" fontSize="md">
                     <h6 className="text-center p-2 mb-2 border-bottom">Resource Prices / per</h6>

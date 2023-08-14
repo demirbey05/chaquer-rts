@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import archerImg from "../../images/archer.png";
 import cavalryImg from "../../images/cavalry.png";
 import swordsmanImg from "../../images/swordsman.png";
+import { MdLocationPin } from 'react-icons/md'
 import { Button } from "@chakra-ui/react";
 import { useMyArmy } from "../../hooks/useMyArmy";
 import { usePlayer } from "../../context/PlayerContext";
@@ -103,7 +104,7 @@ export const ArmyInfoDrawer = () => {
     }
 
     const armyInfoModalOffcanvasDivStyles = {
-        height: "625px",
+        height: "600px",
         marginTop: "90px",
         padding: "10px",
         top: pos.y,
@@ -158,12 +159,11 @@ export const ArmyInfoDrawer = () => {
                                     <div className="row mt-2 align-items-center justify-content-center">
                                         <Button
                                             colorScheme="linkedin"
-                                            style={{ width: "100px", marginBottom: "5px" }}
                                             data-bs-toggle="offcanvas"
                                             data-bs-target="#armyInfoModal"
                                             onClick={() => handleClick(`${army.position.y},${army.position.x}`)}
                                         >
-                                            Find on Map
+                                            Find on Map<MdLocationPin className="ms-2 text-xl" />
                                         </Button>
                                     </div>
                                     <hr />

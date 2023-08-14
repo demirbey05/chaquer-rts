@@ -136,7 +136,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Use the offcanvasBodyStyles object for styling */
-.mywarresultcanvas {
+.my-war-result-drawer {
     background-color: rgba(148, 163, 184, 0.5);
     z-index: 1;
     height: 200px;
@@ -150,11 +150,11 @@ input::-webkit-inner-spin-button {
     border-radius: 25px;
     position: fixed;
     top: 0;
-    right: -300px;
+    right: -305px;
     transition: right 0.3s ease;
 }
 
-.mywarresultcanvas.open {
+.my-war-result-drawer.open {
     right: 0;
 }
 
@@ -284,11 +284,11 @@ input::-webkit-inner-spin-button {
 }
 
 /*Circle Button for tips*/
-.circle-button {
+.tips-button {
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    background-color: #007bff;
+    background-color: #ECC94B;
     color: white;
     font-size: 25px;
     border: none;
@@ -313,7 +313,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Prices Drawer styles */
-.prices-drawer-body {
+.prices-drawer {
     background-color: white;
     z-index: 1;
     height: 315px;
@@ -325,10 +325,10 @@ input::-webkit-inner-spin-button {
     overflow: hidden;
     position: fixed;
     top: 0;
-    right: -300px;
+    right: -305px;
     transition: right 0.3s ease;
 }
 
-.prices-drawer-body.open {
+.prices-drawer.open {
     right: 0;
 }

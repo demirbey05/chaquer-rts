@@ -32,7 +32,7 @@ export const WarResultDrawer = () => {
             <Button colorScheme="yellow" style={drawerButtonStyles} onClick={toggleOffcanvas}>
                 <img src={warResultIcon} width={"30px"} height={"30px"}></img>
             </Button>
-            <div id="warResultDrawer" className={`mywarresultcanvas ${isOpen ? "open" : ""}`}>
+            <div id="warResultDrawer" className={`my-war-result-drawer ${isOpen ? "open" : ""}`}>
                 <h4 className="text-center text-white p-2 mb-2 border-bottom">War Results</h4>
                 <div >
                     {warResults && warResults.data.map((data, key) => {

@@ -14,7 +14,7 @@ export const ShortCutTips = () => {
     return (
         <Popover isLazy>
             <PopoverTrigger>
-                <button className="circle-button">i</button>
+                <button className="tips-button">i</button>
             </PopoverTrigger>
             <PopoverContent>
                 <PopoverArrow />
