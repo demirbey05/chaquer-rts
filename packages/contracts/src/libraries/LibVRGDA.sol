@@ -74,7 +74,7 @@ library LibVRGDA {
     uint256 armyTypeID,
     uint256 time
   ) internal returns (uint256) {
-    int256 decayConstant = wadLn(1e18 - 0.15e18);
+    int256 decayConstant = wadLn(1e18 - 0.005e18);
     int256 timeScaled = toWadUnsafe(time);
     if (armyTypeID == 0) {
       uint256 sold = SoldierCreated.getNumOfSwordsman(world, gameID);
