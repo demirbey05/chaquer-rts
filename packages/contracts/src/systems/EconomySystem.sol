@@ -12,7 +12,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { wadMul, toWadUnsafe } from "solmate/src/utils/SignedWadMath.sol";
 
 uint256 constant mineRate = 200;
-uint256 constant blockRate = 5;
+uint256 constant blockRate = 0;
 uint256 constant startFood = 100;
 uint256 constant startWood = 100;
 uint256 constant startGold = 100;

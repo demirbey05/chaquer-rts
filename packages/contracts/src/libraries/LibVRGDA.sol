@@ -64,7 +64,7 @@ library LibVRGDA {
     uint256 gameID
   ) internal view returns (int256) {
     uint256 numPlayers = NumberOfUsers.get(world, gameID);
-    int256 perTimeUnit = wadMul(0.7e18, (int256(minePerResource * mineRate + blockRate * numPlayers)) * 1e18);
+    int256 perTimeUnit = wadMul(0.5e18, (int256(minePerResource * mineRate + blockRate * numPlayers)) * 1e18);
     return unsafeWadDiv(sold, perTimeUnit);
   }
 
