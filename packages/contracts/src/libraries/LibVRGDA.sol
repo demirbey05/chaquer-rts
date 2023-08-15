@@ -7,6 +7,8 @@ import "../systems/EconomySystem.sol";
 import "../systems/MineInitSystem.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 
+int256 constant basePriceResource = 0.1e18;
+
 library LibVRGDA {
   function getResourcePrice(
     IWorld world,
@@ -22,7 +24,7 @@ library LibVRGDA {
         return
           uint256(
             wadMul(
-              1e18,
+              basePriceResource,
               wadExp(
                 unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeResource(world, toWadUnsafe(sold), gameID))
               )
@@ -35,7 +37,7 @@ library LibVRGDA {
         return
           uint256(
             wadMul(
-              1e18,
+              basePriceResource,
               wadExp(
                 unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeResource(world, toWadUnsafe(sold), gameID))
               )
@@ -48,7 +50,7 @@ library LibVRGDA {
         return
           uint256(
             wadMul(
-              1e18,
+              basePriceResource,
               wadExp(
                 unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeResource(world, toWadUnsafe(sold), gameID))
               )
