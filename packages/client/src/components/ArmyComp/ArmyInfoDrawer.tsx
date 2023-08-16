@@ -23,31 +23,28 @@ const scrollToDiv = (targetId: any) => {
 
 export const ArmyInfoDrawer = () => {
     const { userWallet } = usePlayer()
+    const [isOpen, setIsOpen] = useState(false);
+
     const myArmyPosition: any = useMyArmy(userWallet!.address.toLocaleLowerCase())[0];
 
-    useEffect(() => {
-        const handleKeyPress = (event: any) => {
-            if (event.key === 'a' || event.key === 'A') {
-                const offcanvasElement = document.getElementById('armyInfoDrawer');
-                if (offcanvasElement && !offcanvasElement.classList.contains("show")) {
-                    offcanvasElement.classList.add('show');
-                }
-                else if (offcanvasElement) {
-                    offcanvasElement.classList.remove('show');
-                }
-            } else if (event.key === 'Escape') {
-                const offcanvasElement = document.getElementById('armyInfoDrawer');
-                if (offcanvasElement) {
-                    offcanvasElement.classList.remove('show');
-                }
-            }
-        };
+    const toggleDrawer = () => {
+        setIsOpen(!isOpen);
+    };
 
-        document.addEventListener('keydown', handleKeyPress);
+    const handleKeyPress = (event: KeyboardEvent) => {
+        if (event.key === 'a' || event.key === 'A') {
+            toggleDrawer();
+        } else if (event.key === 'Escape') {
+            setIsOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyPress);
         return () => {
-            document.removeEventListener('keydown', handleKeyPress);
+            window.removeEventListener('keydown', handleKeyPress);
         };
-    }, []);
+    }, [isOpen]);
 
     // Find the army on the map
     const handleClick = (targetId: any) => {
@@ -59,36 +56,6 @@ export const ArmyInfoDrawer = () => {
         setTimeout(function () {
             myDiv?.classList.remove("animate-border");
         }, 1500);
-    };
-
-    // Army Info Drag-able functions
-    const [pos, setPos] = useState({ x: 0, y: 0 });
-    const [pos3, setPos3] = useState(0);
-    const [pos4, setPos4] = useState(0);
-
-    const dragMouseDown = (e: any) => {
-        e.preventDefault();
-        setPos3(e.clientX);
-        setPos4(e.clientY);
-
-        const elementDrag = (e: any) => {
-            e.preventDefault();
-            const dx = pos3 - e.clientX;
-            const dy = pos4 - e.clientY;
-            const newX = pos.x - dx;
-            const newY = pos.y - dy;
-            setPos({ x: newX, y: newY });
-            setPos3(e.clientX);
-            setPos4(e.clientY);
-        };
-
-        const closeDragElement = () => {
-            document.onmouseup = null;
-            document.onmousemove = null;
-        };
-
-        document.onmouseup = closeDragElement;
-        document.onmousemove = elementDrag;
     };
 
     const armyInfoModalButtonStyles: any = {
@@ -103,75 +70,54 @@ export const ArmyInfoDrawer = () => {
         fontSize: "30px"
     }
 
-    const armyInfoModalOffcanvasDivStyles = {
-        height: "600px",
-        marginTop: "90px",
-        padding: "10px",
-        top: pos.y,
-        left: pos.x
-    }
-
     return (
         <>
-            <Button style={armyInfoModalButtonStyles}
-                type="button"
-                colorScheme="yellow"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#armyInfoDrawer"
-                aria-controls="armyInfoDrawer">
+            <Button colorScheme="yellow" style={armyInfoModalButtonStyles} onClick={toggleDrawer}>
                 ⚔️
             </Button>
-
-            <div style={armyInfoModalOffcanvasDivStyles}
-                onMouseDown={dragMouseDown}
-                className="offcanvas offcanvas-start"
-                data-bs-keyboard="false"
-                data-bs-backdrop="false"
-                id="armyInfoDrawer"
-                aria-labelledby="armyInfoDrawerLabel">
-                <div className="offcanvas-header" style={{ cursor: "move" }}>
-                    <h5 className="offcanvas-title font-extrabold" id="armyInfoDrawerLabel">My Army Details</h5>
-                    <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&#10008;</button>
+            <div id="army-info-drawer" className={`army-info-drawer ${isOpen ? "open" : ""}`}>
+                <div className="d-flex justify-between border-bottom mb-2 p-2">
+                    <h5 className="font-extrabold">My Army Details</h5>
+                    <button type="button" onClick={() => setIsOpen(false)}>&#10008;</button>
                 </div>
-                <hr></hr>
-                <div className="offcanvas-body">
-                    {myArmyPosition.length !== 0 ?
-                        myArmyPosition.map((army: any, index: number) => {
-                            return (
-                                <React.Fragment key={index}>
-                                    <div className="row mt-2">
-                                        <ArmyInfoModalCard imageSource={swordsmanImg}
-                                            soldierName={"Swordsman"}
-                                            soliderCount={army.armyConfig.numSwordsman}
-                                            imageHeight={"75px"}
-                                            imageWidth={"65px"} />
-                                        <ArmyInfoModalCard imageSource={archerImg}
-                                            soldierName={"Archer"}
-                                            soliderCount={army.armyConfig.numArcher}
-                                            imageHeight={"75px"}
-                                            imageWidth={"65px"} />
-                                        <ArmyInfoModalCard imageSource={cavalryImg}
-                                            soldierName={"Cavalry"}
-                                            soliderCount={army.armyConfig.numCavalry}
-                                            imageHeight={"75px"}
-                                            imageWidth={"100px"} />
-                                    </div>
-                                    <div className="row mt-2 align-items-center justify-content-center">
-                                        <Button
-                                            colorScheme="linkedin"
-                                            data-bs-toggle="offcanvas"
-                                            data-bs-target="#armyInfoModal"
-                                            onClick={() => handleClick(`${army.position.y},${army.position.x}`)}
-                                        >
-                                            Find on Map<MdLocationPin className="ms-2 text-xl" />
-                                        </Button>
-                                    </div>
-                                    <hr />
-                                </React.Fragment>)
-                        })
-                        : <p className="text-center text-warning">You have no army!</p>
-                    }
-                </div>
+                {myArmyPosition.length !== 0 ?
+                    myArmyPosition.map((army: any, index: number) => {
+                        return (
+                            <React.Fragment key={index}>
+                                <div className="row mt-2">
+                                    <ArmyInfoModalCard imageSource={swordsmanImg}
+                                        soldierName={"Swordsman"}
+                                        soliderCount={army.armyConfig.numSwordsman}
+                                        imageHeight={"75px"}
+                                        imageWidth={"65px"} />
+                                    <ArmyInfoModalCard imageSource={archerImg}
+                                        soldierName={"Archer"}
+                                        soliderCount={army.armyConfig.numArcher}
+                                        imageHeight={"75px"}
+                                        imageWidth={"65px"} />
+                                    <ArmyInfoModalCard imageSource={cavalryImg}
+                                        soldierName={"Cavalry"}
+                                        soliderCount={army.armyConfig.numCavalry}
+                                        imageHeight={"75px"}
+                                        imageWidth={"100px"} />
+                                </div>
+                                <div className="row mt-2 mb-2 align-items-center justify-content-center">
+                                    <Button
+                                        colorScheme="linkedin"
+                                        className="w-50"
+                                        onClick={() => {
+                                            handleClick(`${army.position.y},${army.position.x}`);
+                                            setIsOpen(false)
+                                        }}
+                                    >
+                                        Find on Map<MdLocationPin className="ms-2 text-xl" />
+                                    </Button>
+                                </div>
+                                <hr />
+                            </React.Fragment>)
+                    })
+                    : <p className="text-center text-warning">You have no army!</p>
+                }
             </div>
         </>
     )

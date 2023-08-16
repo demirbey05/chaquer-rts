@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 export const SettingsDrawer = () => {
     const [isPlaying, setIsPlaying] = useState(false);
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
     const audioRef = useRef<any>();
 
     useEffect(() => {
@@ -39,13 +39,24 @@ export const SettingsDrawer = () => {
         }
     }, [])
 
-    const toggleOffcanvas = () => {
+    const handlePlay = () => {
+        setIsPlaying(false);
+    };
+
+    const handleStop = () => {
+        setIsPlaying(true);
+        if (!localStorage.getItem('audioPaused')) {
+            localStorage.setItem('audioPaused', "true")
+        }
+    };
+
+    const toggleDrawer = () => {
         setIsOpen(!isOpen);
     };
 
     const handleKeyPress = (event: KeyboardEvent) => {
         if (event.key === 's' || event.key === 'S') {
-            toggleOffcanvas();
+            toggleDrawer();
         } else if (event.key === 'Escape') {
             setIsOpen(false);
         }
@@ -58,18 +69,7 @@ export const SettingsDrawer = () => {
         };
     }, [isOpen]);
 
-    const handlePlay = () => {
-        setIsPlaying(false);
-    };
-
-    const handleStop = () => {
-        setIsPlaying(true);
-        if (!localStorage.getItem('audioPaused')) {
-            localStorage.setItem('audioPaused', "true")
-        }
-    };
-
-    const audioOffCanvasButtonStyle: any = {
+    const settingsDrawerButtonStyle: any = {
         zIndex: 1,
         height: "60px",
         width: "60px",
@@ -82,28 +82,30 @@ export const SettingsDrawer = () => {
     }
 
     return (
-        <div>
-            <Button colorScheme="yellow" style={audioOffCanvasButtonStyle} onClick={toggleOffcanvas}>
+        <>
+            <Button colorScheme="yellow" style={settingsDrawerButtonStyle} onClick={toggleDrawer}>
                 <SettingsIcon />
             </Button>
             <div id="settings-drawer" className={`settings-drawer ${isOpen ? "open" : ""}`}>
-                <AudioControlCompHeader toggleDrawer={toggleOffcanvas} />
-                <h5 className='mb-2'>Music Settings</h5>
-                <PlayMusicButton handlePlay={handlePlay} />
-                <PauseMusicButton handleStop={handleStop} />
-                <hr className='mt-2 mb-2' />
-                <h5 className="mb-2 mt-2">Back to Menu</h5>
-                <BackToMenuButton />
+                <AudioControlCompHeader toggleDrawer={toggleDrawer} />
+                <div className='ms-2'>
+                    <h5 className='mb-2'>Music Settings</h5>
+                    <PlayMusicButton handlePlay={handlePlay} />
+                    <PauseMusicButton handleStop={handleStop} />
+                    <hr className='mt-2 mb-2' />
+                    <h5 className="mb-2 mt-2">Back to Menu</h5>
+                    <BackToMenuButton toggleDrawer={toggleDrawer} />
+                </div>
             </div>
             <audio ref={audioRef} autoPlay muted={isPlaying} >
                 <source src={soundTrack} type="audio/mp3" />
             </audio>
-        </div>
+        </>
     );
 }
 
 interface AudioControlCompHeaderPropTypes {
-    toggleDrawer: any
+    toggleDrawer: () => void
 }
 
 const AudioControlCompHeader = (props: AudioControlCompHeaderPropTypes) => {
@@ -115,13 +117,17 @@ const AudioControlCompHeader = (props: AudioControlCompHeaderPropTypes) => {
     )
 }
 
-const BackToMenuButton = () => {
+interface BackToMenuButtonPropTypes {
+    toggleDrawer: () => void
+}
+
+const BackToMenuButton = (props: BackToMenuButtonPropTypes) => {
     return (
         <Link to='/'>
             <Button colorScheme='blue'
                 variant='outline'
                 style={{ height: "40px" }}
-                data-bs-dismiss="offcanvas"
+                onClick={props.toggleDrawer}
                 aria-label="Close">
                 Back to Menu
                 <RiArrowGoBackFill className='ms-2' />
@@ -136,7 +142,6 @@ const PlayMusicButton = ({ handlePlay }: any) => {
             variant='outline'
             style={{ height: "40px", marginRight: "10px" }}
             onClick={handlePlay}
-            data-bs-dismiss="offcanvas"
             aria-label="Close">
             Play Music
             <FaPlay className='ms-2' />
@@ -150,7 +155,6 @@ const PauseMusicButton = ({ handleStop }: any) => {
             variant='outline'
             style={{ height: "40px" }}
             onClick={handleStop}
-            data-bs-dismiss="offcanvas"
             aria-label="Close">
             Pause Music
             <FaStop className='ms-2' />

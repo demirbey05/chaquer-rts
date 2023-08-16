@@ -135,29 +135,6 @@ input::-webkit-inner-spin-button {
     }
 }
 
-/* Use the offcanvasBodyStyles object for styling */
-.my-war-result-drawer {
-    background-color: rgba(148, 163, 184, 0.5);
-    z-index: 1;
-    height: 200px;
-    width: 300px;
-    margin-top: 95px;
-    margin-right: 5px;
-    border-top: 2px solid rgb(241, 241, 241);
-    border-bottom: 2px solid rgb(241, 241, 241);
-    overflow: hidden;
-    text-align: center;
-    border-radius: 25px;
-    position: fixed;
-    top: 0;
-    right: -305px;
-    transition: right 0.3s ease;
-}
-
-.my-war-result-drawer.open {
-    right: 0;
-}
-
 /*Terrain Info styles*/
 .terrain-info-menu {
     width: 300px;
@@ -312,17 +289,37 @@ input::-webkit-inner-spin-button {
     z-index: 1;
 }
 
-/* Prices Drawer styles */
-.prices-drawer {
-    background-color: white;
-    z-index: 1;
-    height: 315px;
+/* War Result Drawer styles*/
+.my-war-result-drawer {
+    background-color: rgba(148, 163, 184, 0.5);
+    z-index: 2;
+    height: 200px;
     width: 300px;
-    margin-top: 375px;
+    margin-top: 95px;
     margin-right: 5px;
     border-top: 2px solid rgb(241, 241, 241);
     border-bottom: 2px solid rgb(241, 241, 241);
     overflow: hidden;
+    text-align: center;
+    border-radius: 25px;
+    position: fixed;
+    top: 0;
+    right: -305px;
+    transition: right 0.3s ease;
+}
+
+.my-war-result-drawer.open {
+    right: 0;
+}
+
+/* Prices Drawer styles */
+.prices-drawer {
+    background-color: white;
+    z-index: 2;
+    height: 315px;
+    width: 300px;
+    margin-top: 375px;
+    margin-right: 5px;
     position: fixed;
     top: 0;
     right: -305px;
@@ -340,11 +337,7 @@ input::-webkit-inner-spin-button {
     height: 250px;
     width: 400px;
     padding: 10px;
-    margin-top: 25px;
-    margin-right: 5px;
-    border-top: 2px solid rgb(241, 241, 241);
-    border-bottom: 2px solid rgb(241, 241, 241);
-    overflow: hidden;
+    margin-top: 90px;
     position: fixed;
     top: 0;
     left: -400px;
@@ -352,5 +345,41 @@ input::-webkit-inner-spin-button {
 }
 
 .settings-drawer.open {
+    left: 0;
+}
+
+/* Army Info Drawer styles */
+.army-info-drawer {
+    background-color: white;
+    z-index: 2;
+    height: 600px;
+    width: 400px;
+    padding: 10px;
+    margin-top: 90px;
+    position: fixed;
+    top: 0;
+    left: -400px;
+    transition: left 0.3s ease;
+}
+
+.army-info-drawer.open {
+    left: 0;
+}
+
+/* Market Drawer styles */
+.market-drawer {
+    background-color: white;
+    z-index: 2;
+    height: 475px;
+    width: 400px;
+    padding: 10px;
+    margin-top: 90px;
+    position: fixed;
+    top: 0;
+    left: -400px;
+    transition: left 0.3s ease;
+}
+
+.market-drawer.open {
     left: 0;
 }

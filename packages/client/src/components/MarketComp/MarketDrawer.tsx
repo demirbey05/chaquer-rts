@@ -9,6 +9,8 @@ export const MarketDrawer = () => {
     const { userWallet } = usePlayer();
     const { systemCalls } = useMUD();
 
+    const [isOpen, setIsOpen] = useState(false);
+
     const [numWood, setNumWood] = useState<string>("");
     const [numFood, setNumFood] = useState<string>("");
     const [numGold, setNumGold] = useState<string>("");
@@ -227,6 +229,25 @@ export const MarketDrawer = () => {
         }
     }
 
+    const toggleDrawer = () => {
+        setIsOpen(!isOpen);
+    };
+
+    const handleKeyPress = (event: KeyboardEvent) => {
+        if (event.key === 'm' || event.key === 'M') {
+            toggleDrawer();
+        } else if (event.key === 'Escape') {
+            setIsOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyPress);
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [isOpen]);
+
     const marketDrawerButtonStyles: any = {
         zIndex: 1,
         height: "60px",
@@ -239,36 +260,17 @@ export const MarketDrawer = () => {
         fontSize: "30px"
     }
 
-    const marketDrawerDivStyles = {
-        height: "500px",
-        width: "425px",
-        marginTop: "90px",
-        padding: "10px"
-    }
-
     return (
         <>
-            <Button style={marketDrawerButtonStyles}
-                type="button"
-                colorScheme="yellow"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#marketDrawer"
-                aria-controls="marketDrawer">
+            <Button colorScheme="yellow" style={marketDrawerButtonStyles} onClick={toggleDrawer}>
                 🛒
             </Button>
-
-            <div style={marketDrawerDivStyles}
-                className="offcanvas offcanvas-start"
-                data-bs-keyboard="false"
-                data-bs-backdrop="false"
-                data-bs-config="true"
-                id="marketDrawer"
-                aria-labelledby="marketDrawerLabel">
-                <div className="offcanvas-header border-bottom">
-                    <h5 className="offcanvas-title font-extrabold" id="marketDrawerLabel">Market</h5>
-                    <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&#10008;</button>
+            <div id="market-drawer" className={`market-drawer ${isOpen ? "open" : ""}`}>
+                <div className="d-flex justify-between border-bottom mb-2 p-2">
+                    <h5 className="font-extrabold">Market</h5>
+                    <button type="button" onClick={() => setIsOpen(false)}>&#10008;</button>
                 </div>
-                <div className="offcanvas-body">
+                <div className='ms-2'>
                     <Tooltip label="You can make credit by selling the resources!" placement="top-start" bg="green.400" fontSize="md">
                         <h4 className="border-bottom text-center p-2 font-bold">Sell Resource</h4>
                     </Tooltip>

@@ -2,7 +2,7 @@ import archerImg from "../../images/archer.png";
 import cavalryImg from "../../images/cavalry.png";
 import swordsmanImg from "../../images/swordsman.png";
 import { useMUD } from "../../MUDContext";
-import { Button } from "@chakra-ui/react";
+import { Button, Tooltip } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useArmy } from "../../context/ArmyContext";
 
@@ -76,18 +76,15 @@ export const ArmySettleModal = () => {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header justify-center">
-            <h1 className="modal-title text-2xl" id="armySettleModalLabel">
-              Army Settlement
-            </h1>
+            <Tooltip label="Please determine the number of warriors that will hold in
+                  the army. You can deploy maximum 1500 army in the total and 500 for each type." placement="top-start" bg="blue.400" fontSize="md">
+              <h1 className="modal-title text-2xl" id="armySettleModalLabel">
+                Army Settlement
+              </h1>
+            </Tooltip>
           </div>
           <div className="modal-body">
             <div className="container-fluid">
-              <div className="row border-bottom">
-                <p className="mb-2">
-                  Please determine the number of warriors that will hold in
-                  the army. You can deploy maximum 100 army in the total.
-                </p>
-              </div>
               <div className="row mt-2">
                 <ArmySettleInputBody imageSource={swordsmanImg}
                   soldierName={"Swordsman"}

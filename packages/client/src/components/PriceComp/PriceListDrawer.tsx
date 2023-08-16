@@ -29,13 +29,13 @@ export const PriceListDrawer = () => {
         }
     }, [isPlayerLost, isMineInited])
 
-    const toggleOffcanvas = () => {
+    const toggleDrawer = () => {
         setIsOpen(!isOpen);
     };
 
     const handleKeyPress = (event: KeyboardEvent) => {
         if (event.key === 'p' || event.key === 'P') {
-            toggleOffcanvas();
+            toggleDrawer();
         } else if (event.key === 'Escape') {
             setIsOpen(false);
         }
@@ -61,7 +61,7 @@ export const PriceListDrawer = () => {
 
     return (
         <div>
-            <Button colorScheme="yellow" style={drawerButtonStyles} onClick={toggleOffcanvas}>
+            <Button colorScheme="yellow" style={drawerButtonStyles} onClick={toggleDrawer}>
                 $
             </Button>
             <div id="prices-drawer-body" className={`prices-drawer ${isOpen ? "open" : ""}`}>
