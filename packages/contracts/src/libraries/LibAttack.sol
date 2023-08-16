@@ -2,24 +2,25 @@
 
 pragma solidity ^0.8.0;
 
-import {ArmyConfigData,ArmyConfig,ArmyOwnable,CastleOwnable,Position} from "../codegen/Tables.sol";
+import { ArmyConfigData, ArmyConfig, ArmyOwnable, CastleOwnable, Position } from "../codegen/Tables.sol";
 import { BattleResult, BattleScore, RemainingData } from "./Types.sol";
 import { findRemainings, calculateScoreSingleRemaining, calculateScoreDoubleRemaining, calculateArmyScore } from "./Utils.sol";
 
 library LibAttack {
-    function firstBattle(
-    ArmyConfigData memory armyOne,
-    ArmyConfigData memory armyTwo
-  ) internal pure returns (BattleResult memory firstBattle) {
+  function firstBattle(ArmyConfigData memory armyOne, ArmyConfigData memory armyTwo)
+    internal
+    pure
+    returns (BattleResult memory firstBattle)
+  {
     firstBattle.swordsman = int32(armyOne.numSwordsman) - int32(armyTwo.numSwordsman);
     firstBattle.archer = int32(armyOne.numArcher) - int32(armyTwo.numArcher);
     firstBattle.cavalry = int32(armyOne.numCavalry) - int32(armyTwo.numCavalry);
   }
-  function calculateBattleScores(
-    ArmyConfigData memory armyOne,
-    ArmyConfigData memory armyTwo
-  ) internal returns (BattleScore memory result) {
 
+  function calculateBattleScores(ArmyConfigData memory armyOne, ArmyConfigData memory armyTwo)
+    internal
+    returns (BattleScore memory result)
+  {
     BattleResult memory firstResultOne = firstBattle(armyOne, armyTwo);
     BattleResult memory firstResultTwo = firstBattle(armyTwo, armyOne);
     RemainingData memory remainingsOne = findRemainings(firstResultOne);
@@ -27,14 +28,10 @@ library LibAttack {
     result.scoreArmyOne = calculateArmyScore(firstResultOne, remainingsOne);
     result.scoreArmyTwo = calculateArmyScore(firstResultTwo, remainingsTwo);
   }
-    function warCaptureCastle(
-    bytes32 attackerArmyID,
-    bytes32[] memory defenderArmies
-  ) internal returns (uint256) {
+
+  function warCaptureCastle(bytes32 attackerArmyID, bytes32[] memory defenderArmies) internal returns (uint256) {
     ArmyConfigData memory attackerArmy = ArmyConfig.get(attackerArmyID);
-    ArmyConfigData memory defenderArmy = ArmyConfigData(0,0,0,attackerArmy.gameID);
-
-
+    ArmyConfigData memory defenderArmy = ArmyConfigData(0, 0, 0, attackerArmy.gameID);
 
     for (uint i = 0; i < defenderArmies.length; i++) {
       if (defenderArmies[i] == bytes32(0)) {
@@ -48,7 +45,7 @@ library LibAttack {
     BattleScore memory battleScore = calculateBattleScores(attackerArmy, defenderArmy);
 
     if (battleScore.scoreArmyOne > battleScore.scoreArmyTwo) {
-      for (uint i = 0; i < defenderArmies.length; i++) {        
+      for (uint i = 0; i < defenderArmies.length; i++) {
         if (defenderArmies[i] == bytes32(0)) {
           continue;
         }
@@ -56,13 +53,16 @@ library LibAttack {
         Position.deleteRecord(defenderArmies[i]);
         ArmyOwnable.deleteRecord(defenderArmies[i]);
       }
-      ArmyConfigData memory newConfig = ArmyConfigData(
-        attackerArmy.numSwordsman >> 1,
-        attackerArmy.numArcher >> 1,
-        attackerArmy.numCavalry >> 1,
-        attackerArmy.gameID
-      );
-      ArmyConfig.set(attackerArmyID, newConfig);
+      if (defenderArmies.length > 0) {
+        ArmyConfigData memory newConfig = ArmyConfigData(
+          attackerArmy.numSwordsman >> 1,
+          attackerArmy.numArcher >> 1,
+          attackerArmy.numCavalry >> 1,
+          attackerArmy.gameID
+        );
+        ArmyConfig.set(attackerArmyID, newConfig);
+      }
+
       return 1;
     } else if (battleScore.scoreArmyOne < battleScore.scoreArmyTwo) {
       ArmyOwnable.deleteRecord(attackerArmyID);
@@ -93,5 +93,3 @@ library LibAttack {
     }
   }
 }
-
-
