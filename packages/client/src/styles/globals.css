@@ -332,3 +332,25 @@ input::-webkit-inner-spin-button {
 .prices-drawer.open {
     right: 0;
 }
+
+/* Settings Drawer styles */
+.settings-drawer {
+    background-color: white;
+    z-index: 2;
+    height: 250px;
+    width: 400px;
+    padding: 10px;
+    margin-top: 25px;
+    margin-right: 5px;
+    border-top: 2px solid rgb(241, 241, 241);
+    border-bottom: 2px solid rgb(241, 241, 241);
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: -400px;
+    transition: left 0.3s ease;
+}
+
+.settings-drawer.open {
+    left: 0;
+}

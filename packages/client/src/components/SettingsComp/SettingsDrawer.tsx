@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 
 export const SettingsDrawer = () => {
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
     const audioRef = useRef<any>();
 
     useEffect(() => {
@@ -38,28 +39,24 @@ export const SettingsDrawer = () => {
         }
     }, [])
 
+    const toggleOffcanvas = () => {
+        setIsOpen(!isOpen);
+    };
+
+    const handleKeyPress = (event: KeyboardEvent) => {
+        if (event.key === 's' || event.key === 'S') {
+            toggleOffcanvas();
+        } else if (event.key === 'Escape') {
+            setIsOpen(false);
+        }
+    };
+
     useEffect(() => {
-        const handleKeyPress = (event: any) => {
-            if (event.key === 's' || event.key === 'S') {
-                const offcanvasElement = document.getElementById('settingsDrawer');
-                if (offcanvasElement && !offcanvasElement.classList.contains("show")) {
-                    offcanvasElement.classList.add('show');
-                }
-                else if (offcanvasElement) {
-                    offcanvasElement.classList.remove('show');
-                }
-            } else if (event.key === 'Escape') {
-                const offcanvasElement = document.getElementById('settingsDrawer');
-                if (offcanvasElement) {
-                    offcanvasElement.classList.remove('show');
-                }
-            }
-        };
-        document.addEventListener('keydown', handleKeyPress);
+        window.addEventListener('keydown', handleKeyPress);
         return () => {
-            document.removeEventListener('keydown', handleKeyPress);
+            window.removeEventListener('keydown', handleKeyPress);
         };
-    }, []);
+    }, [isOpen]);
 
     const handlePlay = () => {
         setIsPlaying(false);
@@ -84,56 +81,37 @@ export const SettingsDrawer = () => {
         fontSize: "30px"
     }
 
-    const audioOffcanvasDivStyle: any = {
-        height: "280px",
-        width: "400px",
-        marginTop: "25px",
-        padding: "5px"
-    }
-
     return (
         <div>
-            <Button style={audioOffCanvasButtonStyle}
-                type="button"
-                colorScheme="yellow"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#settingsDrawer"
-                aria-controls="staticBackdrop">
+            <Button colorScheme="yellow" style={audioOffCanvasButtonStyle} onClick={toggleOffcanvas}>
                 <SettingsIcon />
             </Button>
-
-            <div style={audioOffcanvasDivStyle}
-                className="offcanvas offcanvas-start"
-                data-bs-keyboard="false"
-                data-bs-backdrop="false"
-                id="settingsDrawer"
-                aria-labelledby="settingsDrawerLabel">
-                <div className="offcanvas-header">
-                    <AudioControlCompHeader />
-                </div>
-                <hr />
-                <div className="offcanvas-body">
-                    <h5 className="offcanvas-title mb-2" id="settingsDrawerLabel">Music Settings</h5>
-                    <PlayMusicButton handlePlay={handlePlay} />
-                    <PauseMusicButton handleStop={handleStop} />
-                    <hr className='mt-4' />
-                    <h5 className="offcanvas-title mb-2 mt-2" id="settingsDrawerLabel2">Back to Menu</h5>
-                    <BackToMenuButton />
-                </div>
+            <div id="settings-drawer" className={`settings-drawer ${isOpen ? "open" : ""}`}>
+                <AudioControlCompHeader toggleDrawer={toggleOffcanvas} />
+                <h5 className='mb-2'>Music Settings</h5>
+                <PlayMusicButton handlePlay={handlePlay} />
+                <PauseMusicButton handleStop={handleStop} />
+                <hr className='mt-2 mb-2' />
+                <h5 className="mb-2 mt-2">Back to Menu</h5>
+                <BackToMenuButton />
             </div>
             <audio ref={audioRef} autoPlay muted={isPlaying} >
                 <source src={soundTrack} type="audio/mp3" />
             </audio>
-        </div >
+        </div>
     );
 }
 
-const AudioControlCompHeader = () => {
+interface AudioControlCompHeaderPropTypes {
+    toggleDrawer: any
+}
+
+const AudioControlCompHeader = (props: AudioControlCompHeaderPropTypes) => {
     return (
-        <>
-            <h5 className="offcanvas-title font-extrabold" id="staticBackdropLabel">Settings</h5>
-            <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&#10008;</button>
-        </>
+        <div className='d-flex justify-between border-bottom mb-2 p-2'>
+            <h5 className="font-extrabold">Settings</h5>
+            <button type="button" onClick={props.toggleDrawer}>&#10008;</button>
+        </div>
     )
 }
 
