@@ -344,7 +344,8 @@ const ResourceCard = (props: ResourceCardPropTypes) => {
             </div>
             <div className="row justify-content-center mt-2 w-100">
                 <input
-                    className="form-control"
+                    className="form-control dark-input bg-dark text-white"
+                    placeholder={`# of ${props.resourceName}`}
                     type="number"
                     id={props.resourceName}
                     onChange={(e: any) => props.setResourceCount(e.target.value)}

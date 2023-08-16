@@ -6,6 +6,23 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
 
+.dark-input::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: white;
+    opacity: 1;
+    /* Firefox */
+}
+
+.dark-input:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: white;
+}
+
+.dark-input::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: white;
+}
+
 /*Border hover that user always see*/
 .borderHover {
     display: inline-block;
@@ -291,7 +308,8 @@ input::-webkit-inner-spin-button {
 
 /* War Result Drawer styles*/
 .my-war-result-drawer {
-    background-color: rgba(148, 163, 184, 0.5);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
     z-index: 2;
     height: 200px;
     width: 300px;
@@ -314,7 +332,8 @@ input::-webkit-inner-spin-button {
 
 /* Prices Drawer styles */
 .prices-drawer {
-    background-color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
     z-index: 2;
     height: 315px;
     width: 300px;
@@ -332,7 +351,8 @@ input::-webkit-inner-spin-button {
 
 /* Settings Drawer styles */
 .settings-drawer {
-    background-color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
     z-index: 2;
     height: 250px;
     width: 400px;
@@ -350,7 +370,8 @@ input::-webkit-inner-spin-button {
 
 /* Army Info Drawer styles */
 .army-info-drawer {
-    background-color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
     z-index: 2;
     height: 600px;
     width: 400px;
@@ -368,7 +389,8 @@ input::-webkit-inner-spin-button {
 
 /* Market Drawer styles */
 .market-drawer {
-    background-color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
     z-index: 2;
     height: 475px;
     width: 400px;
