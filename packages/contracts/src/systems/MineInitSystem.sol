@@ -6,6 +6,7 @@ import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getU
 import { PlayerSeeds, Players, LimitOfGame, NumberOfUsers, ResourceInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, MineCaptureResult, ArmyConfig, ArmyOwnable } from "../codegen/Tables.sol";
 import { MineType } from "../codegen/Types.sol";
 import { LibRandom, LibQueries, LibAttack, LibUtils, LibMath } from "../libraries/Libraries.sol";
+import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import "./Errors.sol";
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
@@ -116,7 +117,12 @@ contract MineInitSystem is System {
       return;
     }
 
-    bytes32[] memory ownerArmiesSurroundCastle = LibUtils.findSurroundingArmies(IStore(_world()), mineID, gameID);
+    bytes32[] memory ownerArmiesSurroundCastle = LibUtils.findSurroundingArmies(
+      IStore(_world()),
+      mineID,
+      gameID,
+      EntityType.Mine
+    );
     uint result = LibAttack.warCaptureCastle(armyID, ownerArmiesSurroundCastle);
 
     if (result == 1) {

@@ -43,6 +43,7 @@ library LibAttack {
       defenderArmy.numCavalry += currentArmy.numCavalry;
     }
     BattleScore memory battleScore = calculateBattleScores(attackerArmy, defenderArmy);
+    bool isFighted = false;
 
     if (battleScore.scoreArmyOne > battleScore.scoreArmyTwo) {
       for (uint i = 0; i < defenderArmies.length; i++) {
@@ -52,15 +53,22 @@ library LibAttack {
         ArmyConfig.deleteRecord(defenderArmies[i]);
         Position.deleteRecord(defenderArmies[i]);
         ArmyOwnable.deleteRecord(defenderArmies[i]);
+        isFighted = true;
       }
-      if (defenderArmies.length > 0) {
-        ArmyConfigData memory newConfig = ArmyConfigData(
-          attackerArmy.numSwordsman >> 1,
-          attackerArmy.numArcher >> 1,
-          attackerArmy.numCavalry >> 1,
-          attackerArmy.gameID
-        );
-        ArmyConfig.set(attackerArmyID, newConfig);
+
+      if (isFighted) {
+        uint32 newSwordsman = attackerArmy.numSwordsman >> 1;
+        uint32 newArcher = attackerArmy.numArcher >> 1;
+        uint32 newCavalry = attackerArmy.numCavalry >> 1;
+
+        if (newSwordsman > 0 && newArcher > 0 && newCavalry > 0) {
+          ArmyConfigData memory newConfig = ArmyConfigData(newSwordsman, newArcher, newCavalry, attackerArmy.gameID);
+          ArmyConfig.set(attackerArmyID, newConfig);
+        } else {
+          ArmyConfig.deleteRecord(attackerArmyID);
+          Position.deleteRecord(attackerArmyID);
+          ArmyOwnable.deleteRecord(attackerArmyID);
+        }
       }
 
       return 1;

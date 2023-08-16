@@ -5,6 +5,7 @@ import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
 import { ArmyOwnable, BattleResult, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, CastleSiegeResult, ResourceOwnable } from "../codegen/Tables.sol";
 import { LibMath, LibAttack, BattleScore, LibUtils, LibQueries } from "../libraries/Libraries.sol";
+import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { MineType } from "../codegen/Types.sol";
 
@@ -128,7 +129,12 @@ contract AttackCaptureSystem is System {
     if (gameID != gameIDTwo) {
       revert CaptureSystem__NonMatchedGameID();
     }
-    bytes32[] memory ownerArmiesSurroundCastle = LibUtils.findSurroundingArmies(IStore(_world()), castleID, gameID);
+    bytes32[] memory ownerArmiesSurroundCastle = LibUtils.findSurroundingArmies(
+      IStore(_world()),
+      castleID,
+      gameID,
+      EntityType.Castle
+    );
     result = LibAttack.warCaptureCastle(armyID, ownerArmiesSurroundCastle);
 
     if (result == 1) {

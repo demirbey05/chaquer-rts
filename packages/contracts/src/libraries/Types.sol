@@ -17,3 +17,7 @@ struct RemainingData {
   uint8 isCavalry;
   uint8 numRemaining;
 }
+enum EntityType {
+  Castle,
+  Mine
+}
