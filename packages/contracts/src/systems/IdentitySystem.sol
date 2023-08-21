@@ -24,6 +24,9 @@ contract IdentitySystem is System {
     if (Players.get(gameID, sender)) {
       revert IdentitySystem__AlreadyJoined();
     }
+    if (GameMetaData.getState(gameID) != State.Waiting) {
+      revert IdentitySystem__WrongState();
+    }
 
     if (currentNumOfUser >= limit) {
       revert IdentitySystem__GameIsFull();

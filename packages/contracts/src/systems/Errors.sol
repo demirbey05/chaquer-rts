@@ -61,6 +61,7 @@ error IdentitySystem__AlreadyJoined();
 error IdentitySystem__GameIsFull();
 error IdentitySystem__InvalidUserName();
 error IdentitySystem__GameDoesNotExist();
+error IdentitySystem__WrongState();
 
 // MineCapture System Errors
 

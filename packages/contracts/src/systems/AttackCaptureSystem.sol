@@ -115,9 +115,11 @@ contract AttackCaptureSystem is System {
     if (armyOwner == castleOwner) {
       revert CaptureSystem__FriendFireNotAllowed();
     }
+
     if (armyOwner != msg.sender) {
       revert CaptureSystem__NoAuthorization();
     }
+
     (uint32 xArmy, uint32 yArmy, uint256 gameID) = Position.get(armyID);
     (uint32 xCastle, uint32 yCastle, uint256 gameIDTwo) = Position.get(castleID);
 

@@ -9,6 +9,8 @@ import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { LibMath } from "../libraries/LibMath.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
+import { State } from "../codegen/Types.sol";
+
 import "./Errors.sol";
 
 contract MapSystem is System {
@@ -48,6 +50,7 @@ contract MapSystem is System {
       revert InitSystem__CapacityIsTooLow();
     }
     LimitOfGame.set(gameID, capacity);
+    GameMetaData.setState(gameID, State.Waiting);
   }
 
   function settleCastle(
@@ -64,7 +67,6 @@ contract MapSystem is System {
     if ((terrainLength < 100) || (terrainLength > 3600)) {
       revert CastleSettle__MapIsNotReady();
     }
-
     if (!Players.get(gameID, ownerCandidate)) {
       revert CastleSettle__NotPlayer();
     }

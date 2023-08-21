@@ -10,6 +10,7 @@ import { UserNameModal } from '../../components/PlayerComp/UserNameModal';
 import { useMUD } from "../../MUDContext";
 import { flatten2D } from "../../utils/terrainArray";
 import { ethers } from "ethers";
+import { limitOfUser } from "../../constants";
 
 export const Menu = () => {
   const {
@@ -39,7 +40,7 @@ export const Menu = () => {
     saveTerrain();
     const data: string = ethers.utils.hexlify(flatten2D(map));
     await systemCalls.initMapDataSystem(1, width, height, data);
-    await systemCalls.InitNumberOfGamer(1, 2);
+    await systemCalls.InitNumberOfGamer(1, limitOfUser);
   };
 
   const terrainStyles = [8, 14];
