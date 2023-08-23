@@ -15,4 +15,6 @@ interface IMapSystem {
   function settleArmy(uint32 x, uint32 y, ArmyConfigData calldata config) external returns (bytes32);
 
   function armyMove(bytes32 armyID, uint32 x, uint32 y, uint256 gameID) external;
+
+  function claimWinner(address winnerCandidate, uint256 gameID) external;
 }

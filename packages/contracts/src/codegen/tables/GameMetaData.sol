@@ -26,14 +26,16 @@ bytes32 constant GameMetaDataTableId = _tableId;
 struct GameMetaDataData {
   State state;
   uint256 startBlock;
+  address winner;
 }
 
 library GameMetaData {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](2);
+    SchemaType[] memory _schema = new SchemaType[](3);
     _schema[0] = SchemaType.UINT8;
     _schema[1] = SchemaType.UINT256;
+    _schema[2] = SchemaType.ADDRESS;
 
     return SchemaLib.encode(_schema);
   }
@@ -47,9 +49,10 @@ library GameMetaData {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](2);
+    string[] memory _fieldNames = new string[](3);
     _fieldNames[0] = "state";
     _fieldNames[1] = "startBlock";
+    _fieldNames[2] = "winner";
     return ("GameMetaData", _fieldNames);
   }
 
@@ -143,6 +146,40 @@ library GameMetaData {
     _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((startBlock)));
   }
 
+  /** Get winner */
+  function getWinner(uint256 gameID) internal view returns (address winner) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
+    return (address(Bytes.slice20(_blob, 0)));
+  }
+
+  /** Get winner (using the specified store) */
+  function getWinner(IStore _store, uint256 gameID) internal view returns (address winner) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
+    return (address(Bytes.slice20(_blob, 0)));
+  }
+
+  /** Set winner */
+  function setWinner(uint256 gameID, address winner) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    StoreSwitch.setField(_tableId, _keyTuple, 2, abi.encodePacked((winner)));
+  }
+
+  /** Set winner (using the specified store) */
+  function setWinner(IStore _store, uint256 gameID, address winner) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    _store.setField(_tableId, _keyTuple, 2, abi.encodePacked((winner)));
+  }
+
   /** Get the full data */
   function get(uint256 gameID) internal view returns (GameMetaDataData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
@@ -162,8 +199,8 @@ library GameMetaData {
   }
 
   /** Set the full data using individual values */
-  function set(uint256 gameID, State state, uint256 startBlock) internal {
-    bytes memory _data = encode(state, startBlock);
+  function set(uint256 gameID, State state, uint256 startBlock, address winner) internal {
+    bytes memory _data = encode(state, startBlock, winner);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
@@ -172,8 +209,8 @@ library GameMetaData {
   }
 
   /** Set the full data using individual values (using the specified store) */
-  function set(IStore _store, uint256 gameID, State state, uint256 startBlock) internal {
-    bytes memory _data = encode(state, startBlock);
+  function set(IStore _store, uint256 gameID, State state, uint256 startBlock, address winner) internal {
+    bytes memory _data = encode(state, startBlock, winner);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
@@ -183,12 +220,12 @@ library GameMetaData {
 
   /** Set the full data using the data struct */
   function set(uint256 gameID, GameMetaDataData memory _table) internal {
-    set(gameID, _table.state, _table.startBlock);
+    set(gameID, _table.state, _table.startBlock, _table.winner);
   }
 
   /** Set the full data using the data struct (using the specified store) */
   function set(IStore _store, uint256 gameID, GameMetaDataData memory _table) internal {
-    set(_store, gameID, _table.state, _table.startBlock);
+    set(_store, gameID, _table.state, _table.startBlock, _table.winner);
   }
 
   /** Decode the tightly packed blob using this table's schema */
@@ -196,11 +233,13 @@ library GameMetaData {
     _table.state = State(uint8(Bytes.slice1(_blob, 0)));
 
     _table.startBlock = (uint256(Bytes.slice32(_blob, 1)));
+
+    _table.winner = (address(Bytes.slice20(_blob, 33)));
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(State state, uint256 startBlock) internal view returns (bytes memory) {
-    return abi.encodePacked(state, startBlock);
+  function encode(State state, uint256 startBlock, address winner) internal view returns (bytes memory) {
+    return abi.encodePacked(state, startBlock, winner);
   }
 
   /** Encode keys as a bytes32 array using this table's schema */

@@ -14,7 +14,7 @@ export const PlayerWaitingStage = () => {
     const { setPlayerWaitingStage } = usePlayer();
     const { systemCalls } = useMUD()
 
-    const [count, setCount] = useState(10);
+    const [count, setCount] = useState(5);
     const [resourceInitStage, setResourceInitStage] = useState<boolean>();
 
     // Bring initializade button when all players connected

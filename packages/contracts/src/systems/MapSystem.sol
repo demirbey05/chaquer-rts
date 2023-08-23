@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { wadMul, toWadUnsafe } from "solmate/src/utils/SignedWadMath.sol";
-import { MapConfig, Position, PositionTableId, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame, Players, CreditOwn, GameMetaData, SoldierCreated } from "../codegen/Tables.sol";
+import { MapConfig, Position, PositionTableId, CastleOwnable, NumberOfUsers, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame, Players, CreditOwn, GameMetaData, SoldierCreated } from "../codegen/Tables.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
@@ -210,5 +210,19 @@ contract MapSystem is System {
       revert MoveArmy__TileIsNotEmpty();
     }
     Position.set(armyID, x, y, gameID);
+  }
+
+  function claimWinner(address winnerCandidate, uint256 gameID) public {
+    if (!Players.get(gameID, winnerCandidate)) {
+      revert GameSystem__NotPlayer();
+    }
+    if (NumberOfUsers.get(gameID) != 1) {
+      revert GameSystem__WrongClaim();
+    }
+    if (GameMetaData.getState(gameID) != State.Started) {
+      revert GameSystem__WrongState();
+    }
+    GameMetaData.setWinner(gameID, winnerCandidate);
+    GameMetaData.setState(gameID, State.Completed);
   }
 }
