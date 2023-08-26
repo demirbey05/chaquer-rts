@@ -4,6 +4,7 @@ import { usePlayer } from '../../context/PlayerContext';
 import { useNumberOfUsers } from '../../hooks/useNumberOfUsers';
 import { useIsMineInitialized } from '../../hooks/useIsMineInitialized';
 import { useMUD } from '../../MUDContext';
+import { useError } from '../../context/ErrorContext';
 
 export const PlayerWaitingStage = () => {
     const connectedUserNumber = Number(useNumberOfUsers(1)?.value.numOfUsers);
@@ -12,9 +13,10 @@ export const PlayerWaitingStage = () => {
     const checkMineAlreadyInited = localStorage.getItem("mineinit")
 
     const { setPlayerWaitingStage } = usePlayer();
+    const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { systemCalls } = useMUD()
 
-    const [count, setCount] = useState(10);
+    const [count, setCount] = useState(5);
     const [resourceInitStage, setResourceInitStage] = useState<boolean>();
 
     // Bring initializade button when all players connected
@@ -55,7 +57,9 @@ export const PlayerWaitingStage = () => {
         if (!isMineInited) {
             const tx = await systemCalls.resourceSystemInit(1);
             if (tx == null) {
-                console.log("During resource initialization error occured.")
+                setErrorMessage("An error occurred while initializing the mines.")
+                setErrorTitle("Mine Initialize Error")
+                setShowError(true)
                 return
             }
         }

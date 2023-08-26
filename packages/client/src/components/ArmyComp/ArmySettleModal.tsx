@@ -5,9 +5,12 @@ import { useMUD } from "../../MUDContext";
 import { Button, Tooltip } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useArmy } from "../../context/ArmyContext";
+import { CustomToastMessage } from "../ErrorMonitoringComp/CustomToastMessage";
+import { useError } from "../../context/ErrorContext";
 
 export const ArmySettleModal = () => {
   const { armyPosition, setIsArmySettleStage, setIsArmySettled } = useArmy();
+  const { setErrorMessage, setErrorTitle, setShowError } = useError();
   const { systemCalls } = useMUD();
 
   const [swordsmanCount, setSwordsmanCount] = useState<string>("");
@@ -62,6 +65,11 @@ export const ArmySettleModal = () => {
       (document.getElementById('Swordsman') as HTMLInputElement).value = '';
       (document.getElementById('Cavalry') as HTMLInputElement).value = '';
       (document.getElementById('Archer') as HTMLInputElement).value = '';
+    }
+    else {
+      setErrorMessage("An error occurred during army settlement!")
+      setErrorTitle("Army Settlement Error")
+      setShowError(true)
     }
   };
 

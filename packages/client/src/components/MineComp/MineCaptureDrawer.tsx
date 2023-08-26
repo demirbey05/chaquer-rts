@@ -7,11 +7,13 @@ import { useAttack } from "../../context/AttackContext";
 import { useResources } from "../../hooks/useResources";
 import { findCastleCloseArmies } from "../../utils/findCastleCloseArmies";
 import { getResourceTypeByPosition } from "../../utils/getResourceTypeByPosition";
+import { useError } from "../../context/ErrorContext";
 
 export const MineCaptureDrawer = () => {
     const { components, systemCalls } = useMUD();
     const { targetMinePosition, setIsMineStage, attackFromArmyPositionToMine } = useMine();
     const { setMyArmyConfig, setEnemyArmyConfig, myArmyConfig } = useAttack();
+    const { setShowError, setErrorMessage, setErrorTitle } = useError();
 
     const [mineArmy, setMineArmy] = useState<any>();
     const resources = useResources();
@@ -46,12 +48,16 @@ export const MineCaptureDrawer = () => {
 
         findCastleCloseArmies(attackToMineId[0], components.Position, components.ResourceOwnable, components.ArmyOwnable, components.ArmyConfig)
         if (attackFromArmyId.length != 1 || attackToMineId.length != 1) {
-            console.log("attackFromArmyID or attackToMineID lengths are greater than 1")
+            setErrorMessage("An error occurred while trying to capture a mine.")
+            setErrorTitle("Mine Capture Error")
+            setShowError(true)
             return
         }
         const tx = await systemCalls.captureMine(attackFromArmyId[0], attackToMineId[0])
         if (tx == null) {
-            console.log("handleCapture encounter an error!. In Castle Capturing.")
+            setErrorMessage("An error occurred while trying to capture a mine.")
+            setErrorTitle("Mine Capture Error")
+            setShowError(true)
             return
         }
 

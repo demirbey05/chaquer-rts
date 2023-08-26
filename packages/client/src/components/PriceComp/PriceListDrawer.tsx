@@ -5,10 +5,13 @@ import { useResourcePrices } from "../../hooks/useResourcePrices";
 import { useIsMineInitialized } from '../../hooks/useIsMineInitialized';
 import { usePlayer } from '../../context/PlayerContext';
 import { useMUD } from "../../MUDContext";
+import { getNumberFromBigInt } from "../../utils/getNumberFromBigInt";
+import { useError } from '../../context/ErrorContext';
 
 export const PriceListDrawer = () => {
     const [isOpen, setIsOpen] = useState(true);
     const { isPlayerLost } = usePlayer();
+    const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { systemCalls } = useMUD();
 
     const isMineInited = useIsMineInitialized(1)?.value.isInited;
@@ -20,7 +23,9 @@ export const PriceListDrawer = () => {
             const interval = setInterval(async () => {
                 const tx = await systemCalls.updatePrices(1);
                 if (tx == null) {
-                    console.log("Error occurred during updating army prices.");
+                    setErrorMessage("An error occurred during updating army prices.")
+                    setErrorTitle("Price Updating Error")
+                    setShowError(true)
                     return;
                 }
             }, 1000);
@@ -93,5 +98,5 @@ interface PriceListItemPropTypes {
 }
 
 const PriceListItem = (props: PriceListItemPropTypes) => {
-    return <p className="border-bottom border-black d-flex justify-between"><span className="ms-2">{props.name}</span><span className="me-2">{props.price ? (Number(props.price) / Number("1000000000000000000")).toString().slice(0, 14) : "0.00"} 💰</span></p>
+    return <p className="border-bottom border-black d-flex justify-between"><span className="ms-2">{props.name}</span><span className="me-2">{props.price ? getNumberFromBigInt(props.price).slice(0, 14) : "0.00"} 💰</span></p>
 }

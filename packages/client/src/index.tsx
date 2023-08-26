@@ -12,7 +12,7 @@ import { ArmyProvider } from "./context/ArmyContext";
 import { AttackProvider } from "./context/AttackContext";
 import { mount as mountDevTools } from "@latticexyz/dev-tools";
 import { MineProvider } from "./context/MineContext";
-
+import { ErrorProvider } from "./context/ErrorContext";
 
 const rootElement = document.getElementById("react-root");
 if (!rootElement) throw new Error("React root not found");
@@ -23,19 +23,21 @@ setup().then((result) => {
   root.render(
     <MUDProvider value={result}>
       <ChakraProvider>
-        <TerrainProvider>
-          <AttackProvider>
-            <MineProvider>
-              <ArmyProvider>
-                <CastleProvider>
-                  <PlayerProvider>
-                    <App />
-                  </PlayerProvider>
-                </CastleProvider>
-              </ArmyProvider>
-            </MineProvider>
-          </AttackProvider>
-        </TerrainProvider>
+        <ErrorProvider>
+          <TerrainProvider>
+            <AttackProvider>
+              <MineProvider>
+                <ArmyProvider>
+                  <CastleProvider>
+                    <PlayerProvider>
+                      <App />
+                    </PlayerProvider>
+                  </CastleProvider>
+                </ArmyProvider>
+              </MineProvider>
+            </AttackProvider>
+          </TerrainProvider>
+        </ErrorProvider>
       </ChakraProvider>
     </MUDProvider >
   );

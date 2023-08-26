@@ -2,12 +2,15 @@ import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody,
 import { useState, useRef } from 'react'
 import { usePlayer } from '../../context/PlayerContext';
 import { useMUD } from '../../MUDContext';
+import { useError } from '../../context/ErrorContext';
 
 export const PlayerSeedModal = () => {
     const { isOpen, onClose } = useDisclosure({ isOpen: true })
     const [disable, setDisable] = useState<boolean>(true);
     const initialRef = useRef(null);
+
     const { setPlayerSeedStage, setPlayerSeed, savePlayerSeedStage, playerSeed } = usePlayer();
+    const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { systemCalls } = useMUD()
 
     const handleInput = (e: any) => {
@@ -24,7 +27,9 @@ export const PlayerSeedModal = () => {
         if (playerSeed) {
             const tx = await systemCalls.commitSeed(1, playerSeed);
             if (tx == null) {
-                console.log("Player Seed issue.")
+                setErrorMessage("An error occurred while trying to enter player seed.")
+                setErrorTitle("Player Seed Error")
+                setShowError(true)
                 return
             }
         }

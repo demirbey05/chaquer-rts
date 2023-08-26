@@ -4,9 +4,11 @@ import { useMUD } from "../../MUDContext";
 import { useAttack } from "../../context/AttackContext";
 import { findCastleCloseArmies } from "../../utils/findCastleCloseArmies";
 import { useEffect, useState } from "react";
+import { useError } from "../../context/ErrorContext";
 
 export const CastleAttackDrawer = () => {
   const { components, systemCalls } = useMUD();
+  const { setShowError, setErrorMessage, setErrorTitle } = useError();
   const { setMyArmyConfig,
     setEnemyArmyConfig,
     myArmyConfig,
@@ -45,12 +47,16 @@ export const CastleAttackDrawer = () => {
 
     findCastleCloseArmies(attackToCastleId[0], components.Position, components.CastleOwnable, components.ArmyOwnable, components.ArmyConfig)
     if (attackFromArmyId.length != 1 || attackToCastleId.length != 1) {
-      console.log("attackFromArmyID or attackToCastleID lengths are greater than 1")
+      setErrorMessage("An error occurred while trying to attack to castle.")
+      setErrorTitle("Castle Attack Error")
+      setShowError(true)
       return
     }
     const tx = await systemCalls.castleCapture(attackFromArmyId[0], attackToCastleId[0])
     if (tx == null) {
-      console.log("handleAttack encounter an error!. In Castle Capturing.")
+      setErrorMessage("An error occurred while trying to attack to castle.")
+      setErrorTitle("Castle Attack Error")
+      setShowError(true)
       return
     }
 

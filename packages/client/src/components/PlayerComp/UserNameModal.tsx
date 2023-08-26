@@ -2,9 +2,11 @@ import { Link } from 'react-router-dom';
 import { usePlayer } from '../../context/PlayerContext';
 import { useEffect, useState } from 'react';
 import { useMUD } from '../../MUDContext';
+import { useError } from '../../context/ErrorContext';
 
 export const UserNameModal = () => {
     const { setUserName, userName, saveUserName } = usePlayer();
+    const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { systemCalls } = useMUD()
     const [disable, setDisable] = useState<boolean>(true);
 
@@ -28,7 +30,9 @@ export const UserNameModal = () => {
             const tx = await systemCalls.joinGame(userName!, 1);
             saveUserName();
             if (tx == null) {
-                console.log("joinGame encounter an error!.")
+                setErrorMessage("An error occurred while trying to join to the game.")
+                setErrorTitle("Join Game Error")
+                setShowError(true)
                 return
             }
 

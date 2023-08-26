@@ -7,6 +7,7 @@ import { useAttack } from "../../context/AttackContext";
 import { usePlayer } from "../../context/PlayerContext";
 import { useArmy } from "../../context/ArmyContext";
 import { useMine } from "../../context/MineContext";
+import { useError } from "../../context/ErrorContext";
 import { useMUD } from "../../MUDContext";
 import { useCastlePositions } from "../../hooks/useCastlePositions";
 import { useCastlePositionByAddress } from "../../hooks/useCastlePositionByAddress";
@@ -66,6 +67,7 @@ export const Terrain = (props: DataProp) => {
   const { userWallet } = usePlayer();
   const { isCastleSettled, setIsCastleSettled, setTempCastle } = useCastle();
   const { isMineStage, setIsMineStage, setTargetMinePosition, setAttackFromArmyPositionToMine } = useMine();
+  const { setShowError, setErrorMessage, setErrorTitle } = useError();
 
   const movingArmyId = useRef<Entity>("0" as Entity);
   const toArmyPositionRef = useRef({ x: -1, y: -1 });
@@ -176,12 +178,14 @@ export const Terrain = (props: DataProp) => {
               1
             )
             if (tx == null) {
-              console.log("Error occured in moving army.")
+              setErrorMessage("An error occurred while trying to move army.")
+              setErrorTitle("Army Move Error")
+              setShowError(true)
               return
             }
 
             document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
-            document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "";
+            document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
 
             setIsAttackStage(false);
             setFromArmyPosition(undefined);
@@ -215,7 +219,7 @@ export const Terrain = (props: DataProp) => {
       if (myCastlePosition && myCastlePosition.length > 0) {
         myCastlePosition.map((position: any) => {
           if (document.getElementById(`${position.y},${position.x}`)) {
-            document.getElementById(`${position.y},${position.x}`)!.style.border = "";
+            document.getElementById(`${position.y},${position.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
           }
         });
       }
@@ -258,7 +262,7 @@ export const Terrain = (props: DataProp) => {
       if (myResourcePositions) {
         myResourcePositions.map((position: any) => {
           if (document.getElementById(`${position.y},${position.x}`)) {
-            document.getElementById(`${position.y},${position.x}`)!.style.border = "";
+            document.getElementById(`${position.y},${position.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
           }
         });
       }
@@ -282,7 +286,7 @@ export const Terrain = (props: DataProp) => {
       const boardElements = document.getElementsByClassName("army-emoji");
       Array.from(boardElements).forEach((element: any) => {
         element.innerHTML = "";
-        element.style.border = ""; // Clear the border
+        element.style.border = "0.5px solid rgba(0, 0, 0, 0.1)"; // Clear the border
       });
     };
 

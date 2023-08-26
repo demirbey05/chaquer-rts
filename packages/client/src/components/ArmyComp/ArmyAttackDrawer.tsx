@@ -2,9 +2,11 @@ import { Button } from "@chakra-ui/react";
 import { useMUD } from "../../MUDContext";
 import { findIDFromPosition } from "../../utils/findIDFromPosition";
 import { useAttack } from "../../context/AttackContext";
+import { useError } from "../../context/ErrorContext";
 
 export const ArmyAttackDrawer = () => {
   const { components, systemCalls } = useMUD();
+  const { setShowError, setErrorMessage, setErrorTitle } = useError();
   const { setMyArmyConfig,
     myArmyConfig,
     setEnemyArmyConfig,
@@ -31,14 +33,18 @@ export const ArmyAttackDrawer = () => {
     )];
 
     if (attackFromArmyId.length != 1 || attackToArmyId.length != 1) {
-      console.log("attackFromArmyID or attackToArmyID lengths are greater than 1.")
+      setErrorMessage("An error occurred while trying to attack to army.")
+      setErrorTitle("Army Attack Error")
+      setShowError(true)
       return
     }
 
     const tx = await systemCalls.attackToArmy(attackFromArmyId[0] as string, attackToArmyId[0] as string, 1)
 
     if (tx == null) {
-      console.log("handleAttack encounter an error!")
+      setErrorMessage("An error occurred while trying to attack to army.")
+      setErrorTitle("Army Attack Error")
+      setShowError(true)
       return
     }
 

@@ -1,9 +1,11 @@
 import { useMUD } from "../../MUDContext";
 import { Button } from "@chakra-ui/react";
 import { useCastle } from "../../context/CastleContext";
+import { useError } from "../../context/ErrorContext";
 
 export const CastleSettleModal = () => {
   const { isCastleSettled, tempCastle, setCastle, setIsCastleDeployedBefore, setIsCastleSettled } = useCastle();
+  const { setShowError, setErrorMessage, setErrorTitle } = useError();
   const { systemCalls } = useMUD();
 
   const handleClick = async () => {
@@ -20,9 +22,11 @@ export const CastleSettleModal = () => {
       await tx.wait();
       setIsCastleDeployedBefore(true)
     }
-    /*const userName = await storeCache.tables.AddressToUsername.get({ ownerAddress: (userWallet!.address).toLowerCase(), gameId: BigInt(1) });
-    console.log(userName)
-    console.log(pad(getAddress(userWallet!.address)).toLowerCase())*/
+    else {
+      setErrorMessage("An error occurred during castle settlement.")
+      setErrorTitle("Castle Settlement Error")
+      setShowError(true)
+    }
   };
 
   return (

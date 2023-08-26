@@ -4,9 +4,11 @@ import { usePlayer } from '../../context/PlayerContext';
 import { useNumberOfResource } from '../../hooks/useNumberOfResource';
 import { useIsMineInitialized } from '../../hooks/useIsMineInitialized';
 import { useMUD } from "../../MUDContext";
+import { useError } from "../../context/ErrorContext";
 
 export const MineProgressBar = () => {
     const { userWallet, isPlayerLost } = usePlayer();
+    const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { systemCalls } = useMUD();
 
     const numberOfResource: any = useNumberOfResource(userWallet!.address, 1)?.value;
@@ -17,7 +19,9 @@ export const MineProgressBar = () => {
             const interval = setInterval(async () => {
                 const tx = await systemCalls.collectResource(1);
                 if (tx == null) {
-                    console.log("Error occurred during resource collecting.");
+                    setErrorMessage("An error occured while collecting resources.")
+                    setErrorTitle("Resource Collect Error")
+                    setShowError(true)
                     return;
                 }
             }, 1000);

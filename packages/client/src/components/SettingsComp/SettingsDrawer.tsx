@@ -90,8 +90,8 @@ export const SettingsDrawer = () => {
                 <AudioControlCompHeader toggleDrawer={toggleDrawer} />
                 <div className='ms-2'>
                     <h5 className='mb-2'>Music Settings</h5>
-                    <PlayMusicButton handlePlay={handlePlay} />
-                    <PauseMusicButton handleStop={handleStop} />
+                    <PlayMusicButton handlePlay={handlePlay} closeDrawer={toggleDrawer} />
+                    <PauseMusicButton handleStop={handleStop} closeDrawer={toggleDrawer} />
                     <hr className='mt-2 mb-2' />
                     <h5 className="mb-2 mt-2">Back to Menu</h5>
                     <BackToMenuButton toggleDrawer={toggleDrawer} />
@@ -136,12 +136,15 @@ const BackToMenuButton = (props: BackToMenuButtonPropTypes) => {
     )
 }
 
-const PlayMusicButton = ({ handlePlay }: any) => {
+const PlayMusicButton = ({ handlePlay, closeDrawer }: any) => {
     return (
         <Button colorScheme='whatsapp'
             variant='outline'
             style={{ height: "40px", marginRight: "10px" }}
-            onClick={handlePlay}
+            onClick={() => {
+                closeDrawer();
+                handlePlay();
+            }}
             aria-label="Close">
             Play Music
             <FaPlay className='ms-2' />
@@ -149,12 +152,15 @@ const PlayMusicButton = ({ handlePlay }: any) => {
     )
 }
 
-const PauseMusicButton = ({ handleStop }: any) => {
+const PauseMusicButton = ({ handleStop, closeDrawer }: any) => {
     return (
         <Button colorScheme='red'
             variant='outline'
             style={{ height: "40px" }}
-            onClick={handleStop}
+            onClick={() => {
+                closeDrawer();
+                handleStop();
+            }}
             aria-label="Close">
             Pause Music
             <FaStop className='ms-2' />

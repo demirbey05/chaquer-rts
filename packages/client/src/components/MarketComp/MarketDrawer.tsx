@@ -4,9 +4,11 @@ import { Tooltip } from "@chakra-ui/react"
 import { useMUD } from "../../MUDContext";
 import { useNumberOfResource } from '../../hooks/useNumberOfResource';
 import { usePlayer } from '../../context/PlayerContext';
+import { useError } from "../../context/ErrorContext";
 
 export const MarketDrawer = () => {
     const { userWallet } = usePlayer();
+    const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { systemCalls } = useMUD();
 
     const [isOpen, setIsOpen] = useState(false);
@@ -169,6 +171,11 @@ export const MarketDrawer = () => {
                 setNumFood('');
                 (document.getElementById('Food') as HTMLInputElement).value = '';
             }
+            else {
+                setErrorMessage("An error occurred while trying to sell food.")
+                setErrorTitle("Food Selling Error");
+                setShowError(true);
+            }
         }
     }
 
@@ -179,6 +186,11 @@ export const MarketDrawer = () => {
                 setNumWood('');
                 (document.getElementById('Wood') as HTMLInputElement).value = '';
             }
+            else {
+                setErrorMessage("An error occurred while trying to sell wood.")
+                setErrorTitle("Wood Selling Error");
+                setShowError(true);
+            }
         }
     }
 
@@ -188,6 +200,11 @@ export const MarketDrawer = () => {
             if (tx) {
                 setNumGold('');
                 (document.getElementById('Gold') as HTMLInputElement).value = '';
+            }
+            else {
+                setErrorMessage("An error occurred while trying to sell gold.")
+                setErrorTitle("Gold Selling Error");
+                setShowError(true);
             }
         }
     }
@@ -200,7 +217,9 @@ export const MarketDrawer = () => {
                 console.log("Success sell during 30 resource sell.")
             }
             else {
-                console.log("Error occured during 30 resource sell.")
+                setErrorMessage("An error occurred while trying to sell 30 resources.")
+                setErrorTitle("Resource Selling Error");
+                setShowError(true);
             }
         }
     }
@@ -212,7 +231,9 @@ export const MarketDrawer = () => {
                 console.log("Success sell during 100 resource sell.")
             }
             else {
-                console.log("Error occured during 100 resource sell.")
+                setErrorMessage("An error occurred while trying to sell 100 resources.")
+                setErrorTitle("Resource Selling Error");
+                setShowError(true);
             }
         }
     }
@@ -224,7 +245,9 @@ export const MarketDrawer = () => {
                 console.log("Success sell during 500 resource sell.")
             }
             else {
-                console.log("Error occured during 500 resource sell.")
+                setErrorMessage("An error occurred while trying to sell 500 resources.")
+                setErrorTitle("Resource Selling Error");
+                setShowError(true);
             }
         }
     }
