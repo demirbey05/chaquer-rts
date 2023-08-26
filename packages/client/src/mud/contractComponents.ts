@@ -254,6 +254,7 @@ export function defineContractComponents(world: World) {
         {
           state: RecsType.Number,
           startBlock: RecsType.BigInt,
+          winner: RecsType.String,
         },
         {
           metadata: {

@@ -159,6 +159,17 @@ library TestUtils {
     }
   }
 
+  function initializeSeedsOfUsersStorage(
+    IWorld world,
+    uint256 gameID,
+    uint256 seed,
+    address payable[] storage users
+  ) internal {
+    for (uint i = 0; i < users.length; i++) {
+      TestUtils.commitSeedWrapper(world, gameID, seed, users[i]);
+    }
+  }
+
   function initializeMinePlaces(
     IWorld world,
     uint256 gameID,
@@ -194,6 +205,20 @@ library TestUtils {
   ) internal {
     for (uint32 i = 0; i < users.length; i++) {
       TestUtils.settleCastle(world, safeMarginX + 2 * i, safeMarginY + 2 * i, gameID, users[i]);
+    }
+  }
+
+  function initializeAllCastlesStorage(
+    IWorld world,
+    uint256 gameID,
+    address payable[] storage users,
+    uint32 safeMarginX,
+    uint32 safeMarginY,
+    uint32 moveX,
+    uint32 moveY
+  ) internal {
+    for (uint32 i = 0; i < users.length; i++) {
+      TestUtils.settleCastle(world, safeMarginX + moveX * i, safeMarginY + moveY * i, gameID, users[i]);
     }
   }
 

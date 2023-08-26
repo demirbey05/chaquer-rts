@@ -4,12 +4,15 @@ import { usePlayer } from '../../context/PlayerContext';
 import { useNumberOfUsers } from '../../hooks/useNumberOfUsers';
 import { useIsMineInitialized } from '../../hooks/useIsMineInitialized';
 import { useMUD } from '../../MUDContext';
+<<<<<<< HEAD
 import { useError } from '../../context/ErrorContext';
+=======
+import { limitOfUser } from '../../constants';
+>>>>>>> a48338496a481df06b342f3c67948c75f8e6d5e9
 
 export const PlayerWaitingStage = () => {
     const connectedUserNumber = Number(useNumberOfUsers(1)?.value.numOfUsers);
     const isMineInited = useIsMineInitialized(1)?.value.isInited;
-    const limitOfUser = 2;
     const checkMineAlreadyInited = localStorage.getItem("mineinit")
 
     const { setPlayerWaitingStage } = usePlayer();
@@ -21,7 +24,7 @@ export const PlayerWaitingStage = () => {
 
     // Bring initializade button when all players connected
     useEffect(() => {
-        if (connectedUserNumber && (connectedUserNumber === 2)) {
+        if (connectedUserNumber && (connectedUserNumber === limitOfUser)) {
             setResourceInitStage(true)
         }
     }, [connectedUserNumber]);
@@ -69,7 +72,7 @@ export const PlayerWaitingStage = () => {
         <div id="overlay" className="waiting-for-players-fade-overlay">
             <div className="waiting-for-players-message-container">
                 {
-                    connectedUserNumber && connectedUserNumber !== 2 &&
+                    connectedUserNumber && connectedUserNumber !== limitOfUser &&
                     <>
                         <span className="waiting-for-players-info-message">Waiting for other players...</span>
                         <span className="waiting-for-players-info-message">Need {limitOfUser - connectedUserNumber} player to start the game. ({connectedUserNumber}/{limitOfUser})</span>

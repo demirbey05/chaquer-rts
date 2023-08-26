@@ -61,6 +61,7 @@ error IdentitySystem__AlreadyJoined();
 error IdentitySystem__GameIsFull();
 error IdentitySystem__InvalidUserName();
 error IdentitySystem__GameDoesNotExist();
+error IdentitySystem__WrongState();
 
 // MineCapture System Errors
 
@@ -73,3 +74,9 @@ error MineCapture__NonMatchedGameID();
 
 error EconomySystem__DifferenceIsLess();
 error EconomySystem__InsufficientSource();
+
+//Game System Errors
+
+error GameSystem__NotPlayer();
+error GameSystem__WrongClaim();
+error GameSystem__WrongState();

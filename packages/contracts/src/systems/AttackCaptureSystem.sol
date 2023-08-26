@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
-import { ArmyOwnable, BattleResult, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, CastleSiegeResult, ResourceOwnable } from "../codegen/Tables.sol";
+import { ArmyOwnable, BattleResult, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, CastleSiegeResult, ResourceOwnable, Players, NumberOfUsers } from "../codegen/Tables.sol";
 import { LibMath, LibAttack, BattleScore, LibUtils, LibQueries } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
@@ -107,6 +107,21 @@ contract AttackCaptureSystem is System {
     }
   }
 
+  function removeUser(address castleOwner, uint256 gameID) internal {
+    bytes32[] memory castleOwnerArmies = LibQueries.getOwnedArmyIDs(IStore(_world()), castleOwner, gameID);
+
+    for (uint i = 0; i < castleOwnerArmies.length; i++) {
+      ArmyOwnable.deleteRecord(castleOwnerArmies[i]);
+      ArmyConfig.deleteRecord(castleOwnerArmies[i]);
+      Position.deleteRecord(castleOwnerArmies[i]);
+    }
+    takeOwnershipOfMines(castleOwner, MineType.Food, gameID);
+    takeOwnershipOfMines(castleOwner, MineType.Wood, gameID);
+    takeOwnershipOfMines(castleOwner, MineType.Gold, gameID);
+    NumberOfUsers.set(gameID, NumberOfUsers.get(gameID) - 1);
+    Players.set(gameID, castleOwner, false);
+  }
+
   function captureCastle(bytes32 armyID, bytes32 castleID) public returns (uint256 result) {
     address armyOwner = ArmyOwnable.getOwner(armyID);
     address castleOwner = CastleOwnable.getOwner(castleID);
@@ -115,9 +130,11 @@ contract AttackCaptureSystem is System {
     if (armyOwner == castleOwner) {
       revert CaptureSystem__FriendFireNotAllowed();
     }
+
     if (armyOwner != msg.sender) {
       revert CaptureSystem__NoAuthorization();
     }
+
     (uint32 xArmy, uint32 yArmy, uint256 gameID) = Position.get(armyID);
     (uint32 xCastle, uint32 yCastle, uint256 gameIDTwo) = Position.get(castleID);
 
@@ -141,17 +158,9 @@ contract AttackCaptureSystem is System {
       CastleOwnable.setOwner(castleID, armyOwner);
 
       // Destroy all the army which belongs to castle owner
-
-      bytes32[] memory castleOwnerArmies = LibQueries.getOwnedArmyIDs(IStore(_world()), castleOwner, gameID);
-
-      for (uint i = 0; i < castleOwnerArmies.length; i++) {
-        ArmyOwnable.deleteRecord(castleOwnerArmies[i]);
-        ArmyConfig.deleteRecord(castleOwnerArmies[i]);
-        Position.deleteRecord(castleOwnerArmies[i]);
+      if (!LibQueries.queryAddressHasCastle(IStore(_world()), castleOwner, gameID)) {
+        removeUser(castleOwner, gameID);
       }
-      takeOwnershipOfMines(castleOwner, MineType.Food, gameID);
-      takeOwnershipOfMines(castleOwner, MineType.Wood, gameID);
-      takeOwnershipOfMines(castleOwner, MineType.Gold, gameID);
 
       CastleSiegeResult.emitEphemeral(
         keccak256(abi.encodePacked(block.timestamp, armyID, castleID, gameID)),

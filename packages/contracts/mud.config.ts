@@ -132,7 +132,8 @@ export default mudConfig({
       },
       schema:{
         state:"State",
-        startBlock:"uint256"
+        startBlock:"uint256",
+        winner:"address"
       }
     },
     ResourceOwn : {

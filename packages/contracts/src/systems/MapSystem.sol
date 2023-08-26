@@ -3,12 +3,14 @@ pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { wadMul, toWadUnsafe } from "solmate/src/utils/SignedWadMath.sol";
-import { MapConfig, Position, PositionTableId, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame, Players, CreditOwn, GameMetaData, SoldierCreated } from "../codegen/Tables.sol";
+import { MapConfig, Position, PositionTableId, CastleOwnable, NumberOfUsers, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame, Players, CreditOwn, GameMetaData, SoldierCreated } from "../codegen/Tables.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { LibMath } from "../libraries/LibMath.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
+import { State } from "../codegen/Types.sol";
+
 import "./Errors.sol";
 
 contract MapSystem is System {
@@ -48,6 +50,7 @@ contract MapSystem is System {
       revert InitSystem__CapacityIsTooLow();
     }
     LimitOfGame.set(gameID, capacity);
+    GameMetaData.setState(gameID, State.Waiting);
   }
 
   function settleCastle(
@@ -64,7 +67,6 @@ contract MapSystem is System {
     if ((terrainLength < 100) || (terrainLength > 3600)) {
       revert CastleSettle__MapIsNotReady();
     }
-
     if (!Players.get(gameID, ownerCandidate)) {
       revert CastleSettle__NotPlayer();
     }
@@ -208,5 +210,19 @@ contract MapSystem is System {
       revert MoveArmy__TileIsNotEmpty();
     }
     Position.set(armyID, x, y, gameID);
+  }
+
+  function claimWinner(address winnerCandidate, uint256 gameID) public {
+    if (!Players.get(gameID, winnerCandidate)) {
+      revert GameSystem__NotPlayer();
+    }
+    if (NumberOfUsers.get(gameID) != 1) {
+      revert GameSystem__WrongClaim();
+    }
+    if (GameMetaData.getState(gameID) != State.Started) {
+      revert GameSystem__WrongState();
+    }
+    GameMetaData.setWinner(gameID, winnerCandidate);
+    GameMetaData.setState(gameID, State.Completed);
   }
 }
