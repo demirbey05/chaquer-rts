@@ -1,12 +1,12 @@
 import { Button } from "@chakra-ui/react";
-import { findIDFromPosition } from "../../utils/findIDFromPosition";
+import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { useMUD } from "../../MUDContext";
 import { useEffect, useState } from "react";
 import { useMine } from "../../context/MineContext";
 import { useAttack } from "../../context/AttackContext";
 import { useResources } from "../../hooks/useResources";
-import { findCastleCloseArmies } from "../../utils/findCastleCloseArmies";
-import { getResourceTypeByPosition } from "../../utils/getResourceTypeByPosition";
+import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
+import { getResourceTypeByPosition } from "../../utils/helperFunctions/ResourceFuntions/getResourceTypeByPosition";
 import { useError } from "../../context/ErrorContext";
 
 export const MineCaptureDrawer = () => {

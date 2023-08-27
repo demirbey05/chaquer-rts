@@ -1,8 +1,8 @@
 import { Button } from "@chakra-ui/react";
-import { findIDFromPosition } from "../../utils/findIDFromPosition";
+import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { useMUD } from "../../MUDContext";
 import { useAttack } from "../../context/AttackContext";
-import { findCastleCloseArmies } from "../../utils/findCastleCloseArmies";
+import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
 import { useEffect, useState } from "react";
 import { useError } from "../../context/ErrorContext";
 

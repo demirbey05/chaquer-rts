@@ -1,4 +1,4 @@
-import { stringifyWrapper } from "./stringifyWrapper";
+import { stringifyWrapper } from "../../stringifyWrapper";
 
 export const isEnemyArmy = (
   position: any,
@@ -10,7 +10,8 @@ export const isEnemyArmy = (
       (element) =>
         !myArmyPositions.some(
           (data: any) =>
-            stringifyWrapper(data.position)=== stringifyWrapper(element.position)
+            stringifyWrapper(data.position) ===
+            stringifyWrapper(element.position)
         )
     );
     if (filteredArray) {

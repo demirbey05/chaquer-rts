@@ -1,4 +1,4 @@
-import { stringifyWrapper } from "./stringifyWrapper";
+import { stringifyWrapper } from "../../stringifyWrapper";
 
 export const isEnemyCastle = (
   position: any,

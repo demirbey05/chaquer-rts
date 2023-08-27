@@ -4,11 +4,8 @@ import { usePlayer } from '../../context/PlayerContext';
 import { useNumberOfUsers } from '../../hooks/useNumberOfUsers';
 import { useIsMineInitialized } from '../../hooks/useIsMineInitialized';
 import { useMUD } from '../../MUDContext';
-<<<<<<< HEAD
 import { useError } from '../../context/ErrorContext';
-=======
-import { limitOfUser } from '../../constants';
->>>>>>> a48338496a481df06b342f3c67948c75f8e6d5e9
+import { limitOfUser } from '../../utils/constants/constants';
 
 export const PlayerWaitingStage = () => {
     const connectedUserNumber = Number(useNumberOfUsers(1)?.value.numOfUsers);

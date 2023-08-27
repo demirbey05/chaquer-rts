@@ -10,7 +10,7 @@ import { UserNameModal } from '../../components/PlayerComp/UserNameModal';
 import { useMUD } from "../../MUDContext";
 import { flatten2D } from "../../utils/terrainArray";
 import { ethers } from "ethers";
-import { limitOfUser } from "../../constants";
+import { limitOfUser } from "../../utils/constants/constants";
 
 export const Menu = () => {
   const {

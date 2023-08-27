@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/react";
 import { useMUD } from "../../MUDContext";
-import { findIDFromPosition } from "../../utils/findIDFromPosition";
+import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { useAttack } from "../../context/AttackContext";
 import { useError } from "../../context/ErrorContext";
 

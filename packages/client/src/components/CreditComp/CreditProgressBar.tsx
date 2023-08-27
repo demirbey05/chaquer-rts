@@ -1,7 +1,7 @@
 import "../../styles/globals.css";
 import { usePlayer } from '../../context/PlayerContext';
 import { useCredit } from '../../hooks/useCredit';
-import { getNumberFromBigInt } from "../../utils/getNumberFromBigInt";
+import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 
 export const CreditProgressBar = () => {
     const { userWallet } = usePlayer();

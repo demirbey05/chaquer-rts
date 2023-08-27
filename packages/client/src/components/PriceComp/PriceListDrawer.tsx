@@ -5,7 +5,7 @@ import { useResourcePrices } from "../../hooks/useResourcePrices";
 import { useIsMineInitialized } from '../../hooks/useIsMineInitialized';
 import { usePlayer } from '../../context/PlayerContext';
 import { useMUD } from "../../MUDContext";
-import { getNumberFromBigInt } from "../../utils/getNumberFromBigInt";
+import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { useError } from '../../context/ErrorContext';
 
 export const PriceListDrawer = () => {
