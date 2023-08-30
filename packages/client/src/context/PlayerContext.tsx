@@ -5,7 +5,7 @@ import { useCastle } from "./CastleContext";
 import { useCastlePositionByAddress } from "../hooks/useCastlePositionByAddress";
 
 type PlayerContextType = {
-  userWallet: Wallet | undefined
+  userWallet: string | undefined
   userName: string | undefined;
   setUserName: (value: string) => void;
   saveUserName: () => void;
