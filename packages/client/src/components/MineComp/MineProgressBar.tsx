@@ -11,8 +11,8 @@ export const MineProgressBar = () => {
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { systemCalls } = useMUD();
 
-    const numberOfResource: any = useNumberOfResource(userWallet!.address, 1)?.value;
-    const isMineInited: any = useIsMineInitialized(1)?.value.isInited;
+    const numberOfResource = useNumberOfResource(userWallet, 1);
+    const isMineInited = useIsMineInitialized(1);
 
     useEffect(() => {
         if (!isPlayerLost && isMineInited) {
@@ -34,13 +34,13 @@ export const MineProgressBar = () => {
         <div className="mine-progress-bar">
             <div className="row">
                 <div className="col-4 mine-progress-bar-col">
-                    🌽: {numberOfResource ? Number(numberOfResource.numOfFood) : 1000}
+                    🌽: {numberOfResource ? Number(numberOfResource.numOfFood) : 100}
                 </div>
                 <div className="col-4 mine-progress-bar-col">
-                    🪓: {numberOfResource ? Number(numberOfResource.numOfWood) : 1000}
+                    🪓: {numberOfResource ? Number(numberOfResource.numOfWood) : 100}
                 </div>
                 <div className="col-4 mine-progress-bar-col">
-                    ⛏️: {numberOfResource ? Number(numberOfResource.numOfGold) : 1000}
+                    ⛏️: {numberOfResource ? Number(numberOfResource.numOfGold) : 100}
                 </div>
             </div>
         </div>

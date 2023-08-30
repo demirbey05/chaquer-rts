@@ -60,10 +60,10 @@ const WarResult = (props: WarResultPropTypes) => {
     if (props.data.data?.isDraw === true) {
         return <p className='text-white mb-3' key={props.key}><span className='bg-primary p-2'>You</span> {props.text} <span className='bg-primary p-2'>Enemy</span> (Draw)</p>
     }
-    else if (props.data.data?.winner === props.userWallet?.address.toLocaleLowerCase()) {
+    else if (props.data.data?.winner === props.userWallet) {
         return <p className='text-white mb-3' key={props.key}><span className='bg-success p-2'>You</span> {props.text} <span className='bg-danger p-2'>Enemy</span> (Win)</p>
     }
-    else if (props.data.data?.loser === props.userWallet?.address.toLocaleLowerCase()) {
+    else if (props.data.data?.loser === props.userWallet) {
         return <p className='text-white mb-3' key={props.key}><span className='bg-danger p-2'>You</span> {props.text} <span className='bg-success p-2'>Enemy</span> (Lose)</p>
     }
     return null;

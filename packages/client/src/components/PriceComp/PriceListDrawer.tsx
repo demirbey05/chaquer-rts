@@ -14,7 +14,7 @@ export const PriceListDrawer = () => {
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { systemCalls } = useMUD();
 
-    const isMineInited = useIsMineInitialized(1)?.value.isInited;
+    const isMineInited = useIsMineInitialized(1);
     const armyPrices = useArmyPrices();
     const resourcePrices = useResourcePrices();
 

@@ -1,8 +1,10 @@
 import { useMUD } from "../MUDContext";
-import { useRow } from "@latticexyz/react";
+import { useComponentValue } from "@latticexyz/react";
+import { encodeEntity } from "@latticexyz/store-sync/recs";
 
 export function useNumberOfResource(address: string, gameID: number) {
-    const { network: { storeCache } } = useMUD();
-    const numberOfResources = useRow(storeCache, { table: "ResourceOwn", key: { owner: address, gameID: BigInt(gameID) } });
+    const { components } = useMUD();
+    const numberOfResources = useComponentValue(components.ResourceOwn, encodeEntity(components.ResourceOwn.metadata.keySchema, { owner: address, gameID: BigInt(gameID) }));
+    console.log(numberOfResources)
     return numberOfResources;
 }

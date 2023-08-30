@@ -8,8 +8,8 @@ import { useError } from '../../context/ErrorContext';
 import { limitOfUser } from '../../utils/constants/constants';
 
 export const PlayerWaitingStage = () => {
-    const connectedUserNumber = Number(useNumberOfUsers(1)?.value.numOfUsers);
-    const isMineInited = useIsMineInitialized(1)?.value.isInited;
+    const connectedUserNumber = useNumberOfUsers(1);
+    const isMineInited = useIsMineInitialized(1)
     const checkMineAlreadyInited = localStorage.getItem("mineinit")
 
     const { setPlayerWaitingStage } = usePlayer();

@@ -25,7 +25,7 @@ export const ArmyInfoDrawer = () => {
     const { userWallet } = usePlayer()
     const [isOpen, setIsOpen] = useState(false);
 
-    const myArmyPosition: any = useMyArmy(userWallet!.address.toLocaleLowerCase())[0];
+    const myArmyPosition: any = useMyArmy(userWallet)[0];
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen);

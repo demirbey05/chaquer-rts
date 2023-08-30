@@ -1,8 +1,19 @@
 import { useMUD } from "../MUDContext";
-import { useRow } from "@latticexyz/react";
+import { useComponentValue } from "@latticexyz/react";
+import { encodeEntity } from "@latticexyz/store-sync/recs";
+import { useState, useEffect } from "react";
 
 export function useNumberOfUsers(gameID: number) {
-    const { network: { storeCache } } = useMUD();
-    const NumberOfUsers = useRow(storeCache, { table: "NumberOfUsers", key: { gameId: BigInt(gameID) } });
-    return NumberOfUsers;
+    const { components } = useMUD();
+    const [numberOfUsers, setNumberOfUsers] = useState(0);
+
+    const value = useComponentValue(components.NumberOfUsers,
+        encodeEntity(components.NumberOfUsers.metadata.keySchema, { gameId: BigInt(gameID) }));
+
+    useEffect(() => {
+        if (value) {
+            setNumberOfUsers(Number(value.numOfUsers));
+        }
+    }, [value])
+    return numberOfUsers;
 }

@@ -1,4 +1,4 @@
-import { getBurnerWallet } from "@latticexyz/std-client";
+import { getBurnerPrivateKey } from "@latticexyz/common";
 import { Wallet } from "ethers";
 import { useRef, useState, useEffect, useContext, createContext, ReactNode } from "react";
 import { useCastle } from "./CastleContext";
@@ -37,7 +37,7 @@ const PlayerContext = createContext<PlayerContextType>({
 });
 
 const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { children: ReactNode; }) => {
-  const { current: userWallet } = useRef(new Wallet(getBurnerWallet().value))
+  const { current: userWallet } = useRef(new Wallet(getBurnerPrivateKey()).address)
   const [userName, setUserName] = useState<string>();
   const [isPlayerLost, setIsPlayerLost] = useState<boolean>(false);
 
@@ -47,7 +47,7 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
   const [playerWaitingStage, setPlayerWaitingStage] = useState<boolean>(true);
 
   const { isCastleDeployedBefore, isCastleSettled } = useCastle();
-  const myCastlePosition = useCastlePositionByAddress(userWallet!.address.toLocaleLowerCase());
+  const myCastlePosition = useCastlePositionByAddress(userWallet);
 
   useEffect(() => {
     if ((myCastlePosition && (myCastlePosition.length === 0) && isCastleDeployedBefore && isCastleSettled)) {

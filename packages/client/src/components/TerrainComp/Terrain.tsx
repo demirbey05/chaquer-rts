@@ -74,12 +74,12 @@ export const Terrain = (props: DataProp) => {
   const fromArmyPositionRef = useRef<Coord>({ x: "-1", y: "-1" });
 
   const castlePositions = useCastlePositions();
-  const myCastlePosition = useCastlePositionByAddress(userWallet!.address.toLocaleLowerCase());
-  const armyPositions: any = useArmyPositions()[0];
-  const myArmyPosition: any = useMyArmy(userWallet!.address.toLocaleLowerCase())[0];
-  const myArmyNumber = useMyArmy(userWallet!.address.toLocaleLowerCase())[1];
+  const myCastlePosition = useCastlePositionByAddress(userWallet);
+  const armyPositions = useArmyPositions()[0];
+  const myArmyPosition: any = useMyArmy(userWallet)[0];
+  const myArmyNumber = useMyArmy(userWallet)[1];
   const resources = useResources();
-  const myResourcePositions = useResourcePositionByAddress(userWallet!.address.toLocaleLowerCase());
+  const myResourcePositions = useResourcePositionByAddress(userWallet);
 
   // Handle Clicks
   const handleClick = async (e: any) => {

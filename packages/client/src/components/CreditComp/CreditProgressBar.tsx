@@ -5,7 +5,7 @@ import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions
 
 export const CreditProgressBar = () => {
     const { userWallet } = usePlayer();
-    const credit: any = useCredit(1, userWallet!.address)?.value.amount;
+    const credit = useCredit(1, userWallet);
 
     return (
         <div className="credit-progress-bar">

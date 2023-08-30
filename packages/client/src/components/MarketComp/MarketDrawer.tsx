@@ -33,7 +33,7 @@ export const MarketDrawer = () => {
     const [is500FoodDisabled, setIs500FoodDisabled] = useState<boolean>(true);
     const [is500GoldDisabled, setIs500GoldDisabled] = useState<boolean>(true);
 
-    const numberOfResource: any = useNumberOfResource(userWallet!.address, 1)?.value;
+    const numberOfResource: any = useNumberOfResource(userWallet, 1);
 
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {

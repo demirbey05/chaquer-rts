@@ -1,4 +1,4 @@
-import { awaitStreamValue, uuid } from "@latticexyz/utils";
+import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
 import { Entity } from "@latticexyz/recs";
@@ -6,7 +6,7 @@ import { Entity } from "@latticexyz/recs";
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
-  { worldSend, txReduced$ }: SetupNetworkResult,
+  { worldContract, waitForTransaction }: SetupNetworkResult,
   { Position }: ClientComponents
 ) {
   const initMapDataSystem = async (
@@ -16,13 +16,13 @@ export function createSystemCalls(
     terrain: string
   ) => {
     try {
-      const tx = await worldSend("initMapData", [
-        gameID,
+      const tx = await worldContract.write.initMapData([
+        BigInt(gameID),
         width,
         height,
         terrain,
       ]);
-      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      await waitForTransaction(tx);
       return tx;
     } catch (e) {
       console.log(e);
@@ -32,8 +32,8 @@ export function createSystemCalls(
 
   const settleCastle = async (x: number, y: number, gameID: number) => {
     try {
-      const tx = await worldSend("settleCastle", [x, y, gameID]);
-      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      const tx = await worldContract.write.settleCastle([x, y, BigInt(gameID)]);
+      await waitForTransaction(tx);
       return tx;
     } catch (e) {
       console.log(e);
@@ -50,12 +50,12 @@ export function createSystemCalls(
     gameID: number
   ) => {
     try {
-      const tx = await worldSend("settleArmy", [
+      const tx = await worldContract.write.settleArmy([
         x,
         y,
         { numSwordsman, numArcher, numCavalry, gameID },
       ]);
-      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      await waitForTransaction(tx);
       return tx;
     } catch (e) {
       console.log(e);
@@ -75,8 +75,13 @@ export function createSystemCalls(
       value: { x, y },
     });
     try {
-      const tx = await worldSend("armyMove", [armyID, x, y, gameID]);
-      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      const tx = await worldContract.write.armyMove([
+        armyID,
+        x,
+        y,
+        BigInt(gameID),
+      ]);
+      await waitForTransaction(tx);
       return tx;
     } catch (e) {
       console.log(e);
@@ -92,8 +97,12 @@ export function createSystemCalls(
     gameID: number
   ) => {
     try {
-      const tx = await worldSend("attackToArmy", [armyOne, armyTwo, gameID]);
-      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      const tx = await worldContract.write.attackToArmy([
+        armyOne,
+        armyTwo,
+        BigInt(gameID),
+      ]);
+      await waitForTransaction(tx);
       return tx;
     } catch (e) {
       console.log(e);
@@ -103,8 +112,8 @@ export function createSystemCalls(
 
   const castleCapture = async (armyID: string, castleID: string) => {
     try {
-      const tx = await worldSend("captureCastle", [armyID, castleID]);
-      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      const tx = await worldContract.write.captureCastle([armyID, castleID]);
+      await waitForTransaction(tx);
       return tx;
     } catch (e) {
       console.log(e);
@@ -114,8 +123,8 @@ export function createSystemCalls(
 
   const joinGame = async (userName: string, gameID: number) => {
     try {
-      const tx = await worldSend("joinGame", [gameID, userName]);
-      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      const tx = await worldContract.write.joinGame([BigInt(gameID), userName]);
+      await waitForTransaction(tx);
       return tx;
     } catch (e) {
       console.log(e);
@@ -125,8 +134,11 @@ export function createSystemCalls(
 
   const InitNumberOfGamer = async (gameID: number, limit: number) => {
     try {
-      const tx = await worldSend("InitNumberOfGamer", [gameID, limit]);
-      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      const tx = await worldContract.write.InitNumberOfGamer([
+        BigInt(gameID),
+        BigInt(limit),
+      ]);
+      await waitForTransaction(tx);
       return tx;
     } catch (e) {
       console.log(e);
@@ -136,8 +148,11 @@ export function createSystemCalls(
 
   const commitSeed = async (gameID: number, seed: number) => {
     try {
-      const tx = await worldSend("commitSeed", [gameID, seed]);
-      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      const tx = await worldContract.write.commitSeed([
+        BigInt(gameID),
+        BigInt(seed),
+      ]);
+      await waitForTransaction(tx);
       return tx;
     } catch (e) {
       console.log(e);
@@ -147,8 +162,8 @@ export function createSystemCalls(
 
   const resourceSystemInit = async (gameID: number) => {
     try {
-      const tx = await worldSend("resourceSystemInit", [gameID]);
-      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      const tx = await worldContract.write.resourceSystemInit([BigInt(gameID)]);
+      await waitForTransaction(tx);
       return tx;
     } catch (e) {
       console.log(e);
@@ -158,8 +173,8 @@ export function createSystemCalls(
 
   const captureMine = async (armyID: string, mineID: string) => {
     try {
-      const tx = await worldSend("captureMine", [armyID, mineID]);
-      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      const tx = await worldContract.write.captureMine([armyID, mineID]);
+      await waitForTransaction(tx);
       return tx;
     } catch (e) {
       console.log(e);
@@ -169,8 +184,8 @@ export function createSystemCalls(
 
   const collectResource = async (gameID: number) => {
     try {
-      const tx = await worldSend("collectResource", [gameID]);
-      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      const tx = await worldContract.write.collectResource([BigInt(gameID)]);
+      await waitForTransaction(tx);
       return tx;
     } catch (e) {
       console.log(e);
@@ -184,8 +199,12 @@ export function createSystemCalls(
     mineType: number
   ) => {
     try {
-      const tx = await worldSend("sellResource", [gameID, amount, mineType]);
-      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      const tx = await worldContract.write.sellResource([
+        BigInt(gameID),
+        BigInt(amount),
+        mineType,
+      ]);
+      await waitForTransaction(tx);
       return tx;
     } catch (e) {
       console.log(e);
@@ -195,8 +214,8 @@ export function createSystemCalls(
 
   const updatePrices = async (gameID: number) => {
     try {
-      const tx = await worldSend("updatePrices", [gameID]);
-      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+      const tx = await worldContract.write.updatePrices([BigInt(gameID)]);
+      await waitForTransaction(tx);
       return tx;
     } catch (e) {
       console.log(e);

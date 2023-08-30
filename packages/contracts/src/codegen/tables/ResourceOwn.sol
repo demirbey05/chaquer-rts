@@ -27,16 +27,7 @@ struct ResourceOwnData {
 }
 
 library ResourceOwn {
-  /** Get the table's schema */
-  function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](3);
-    _schema[0] = SchemaType.UINT256;
-    _schema[1] = SchemaType.UINT256;
-    _schema[2] = SchemaType.UINT256;
-
-    return SchemaLib.encode(_schema);
-  }
-
+  /** Get the table's key schema */
   function getKeySchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](2);
     _schema[0] = SchemaType.ADDRESS;
@@ -45,35 +36,39 @@ library ResourceOwn {
     return SchemaLib.encode(_schema);
   }
 
-  /** Get the table's metadata */
-  function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](3);
-    _fieldNames[0] = "numOfFood";
-    _fieldNames[1] = "numOfWood";
-    _fieldNames[2] = "numOfGold";
-    return ("ResourceOwn", _fieldNames);
+  /** Get the table's value schema */
+  function getValueSchema() internal pure returns (Schema) {
+    SchemaType[] memory _schema = new SchemaType[](3);
+    _schema[0] = SchemaType.UINT256;
+    _schema[1] = SchemaType.UINT256;
+    _schema[2] = SchemaType.UINT256;
+
+    return SchemaLib.encode(_schema);
   }
 
-  /** Register the table's schema */
-  function registerSchema() internal {
-    StoreSwitch.registerSchema(_tableId, getSchema(), getKeySchema());
+  /** Get the table's key names */
+  function getKeyNames() internal pure returns (string[] memory keyNames) {
+    keyNames = new string[](2);
+    keyNames[0] = "owner";
+    keyNames[1] = "gameID";
   }
 
-  /** Register the table's schema (using the specified store) */
-  function registerSchema(IStore _store) internal {
-    _store.registerSchema(_tableId, getSchema(), getKeySchema());
+  /** Get the table's field names */
+  function getFieldNames() internal pure returns (string[] memory fieldNames) {
+    fieldNames = new string[](3);
+    fieldNames[0] = "numOfFood";
+    fieldNames[1] = "numOfWood";
+    fieldNames[2] = "numOfGold";
   }
 
-  /** Set the table's metadata */
-  function setMetadata() internal {
-    (string memory _tableName, string[] memory _fieldNames) = getMetadata();
-    StoreSwitch.setMetadata(_tableId, _tableName, _fieldNames);
+  /** Register the table's key schema, value schema, key names and value names */
+  function register() internal {
+    StoreSwitch.registerTable(_tableId, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
-  /** Set the table's metadata (using the specified store) */
-  function setMetadata(IStore _store) internal {
-    (string memory _tableName, string[] memory _fieldNames) = getMetadata();
-    _store.setMetadata(_tableId, _tableName, _fieldNames);
+  /** Register the table's key schema, value schema, key names and value names (using the specified store) */
+  function register(IStore _store) internal {
+    _store.registerTable(_tableId, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /** Get numOfFood */
@@ -82,7 +77,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0, getValueSchema());
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -92,7 +87,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0, getValueSchema());
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -102,7 +97,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((numOfFood)));
+    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((numOfFood)), getValueSchema());
   }
 
   /** Set numOfFood (using the specified store) */
@@ -111,7 +106,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((numOfFood)));
+    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((numOfFood)), getValueSchema());
   }
 
   /** Get numOfWood */
@@ -120,7 +115,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1, getValueSchema());
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -130,7 +125,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1, getValueSchema());
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -140,7 +135,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((numOfWood)));
+    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((numOfWood)), getValueSchema());
   }
 
   /** Set numOfWood (using the specified store) */
@@ -149,7 +144,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((numOfWood)));
+    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((numOfWood)), getValueSchema());
   }
 
   /** Get numOfGold */
@@ -158,7 +153,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2, getValueSchema());
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -168,7 +163,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 2, getValueSchema());
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -178,7 +173,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 2, abi.encodePacked((numOfGold)));
+    StoreSwitch.setField(_tableId, _keyTuple, 2, abi.encodePacked((numOfGold)), getValueSchema());
   }
 
   /** Set numOfGold (using the specified store) */
@@ -187,7 +182,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    _store.setField(_tableId, _keyTuple, 2, abi.encodePacked((numOfGold)));
+    _store.setField(_tableId, _keyTuple, 2, abi.encodePacked((numOfGold)), getValueSchema());
   }
 
   /** Get the full data */
@@ -196,7 +191,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    bytes memory _blob = StoreSwitch.getRecord(_tableId, _keyTuple, getSchema());
+    bytes memory _blob = StoreSwitch.getRecord(_tableId, _keyTuple, getValueSchema());
     return decode(_blob);
   }
 
@@ -206,7 +201,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    bytes memory _blob = _store.getRecord(_tableId, _keyTuple, getSchema());
+    bytes memory _blob = _store.getRecord(_tableId, _keyTuple, getValueSchema());
     return decode(_blob);
   }
 
@@ -218,7 +213,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    StoreSwitch.setRecord(_tableId, _keyTuple, _data);
+    StoreSwitch.setRecord(_tableId, _keyTuple, _data, getValueSchema());
   }
 
   /** Set the full data using individual values (using the specified store) */
@@ -236,7 +231,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    _store.setRecord(_tableId, _keyTuple, _data);
+    _store.setRecord(_tableId, _keyTuple, _data, getValueSchema());
   }
 
   /** Set the full data using the data struct */
@@ -259,15 +254,17 @@ library ResourceOwn {
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(uint256 numOfFood, uint256 numOfWood, uint256 numOfGold) internal view returns (bytes memory) {
+  function encode(uint256 numOfFood, uint256 numOfWood, uint256 numOfGold) internal pure returns (bytes memory) {
     return abi.encodePacked(numOfFood, numOfWood, numOfGold);
   }
 
   /** Encode keys as a bytes32 array using this table's schema */
-  function encodeKeyTuple(address owner, uint256 gameID) internal pure returns (bytes32[] memory _keyTuple) {
-    _keyTuple = new bytes32[](2);
+  function encodeKeyTuple(address owner, uint256 gameID) internal pure returns (bytes32[] memory) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
+
+    return _keyTuple;
   }
 
   /* Delete all data for given keys */
@@ -276,7 +273,7 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    StoreSwitch.deleteRecord(_tableId, _keyTuple);
+    StoreSwitch.deleteRecord(_tableId, _keyTuple, getValueSchema());
   }
 
   /* Delete all data for given keys (using the specified store) */
@@ -285,6 +282,6 @@ library ResourceOwn {
     _keyTuple[0] = bytes32(uint256(uint160(owner)));
     _keyTuple[1] = bytes32(uint256(gameID));
 
-    _store.deleteRecord(_tableId, _keyTuple);
+    _store.deleteRecord(_tableId, _keyTuple, getValueSchema());
   }
 }

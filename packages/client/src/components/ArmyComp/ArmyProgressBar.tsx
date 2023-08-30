@@ -8,7 +8,7 @@ import { usePlayer } from '../../context/PlayerContext';
 export const ArmyProgressBar = () => {
     const { numberOfArmy, isArmyMoveStage } = useArmy();
     const { userWallet } = usePlayer()
-    const myArmyPosition: any = useMyArmy(userWallet!.address.toLocaleLowerCase())[0];
+    const myArmyPosition: any = useMyArmy(userWallet)[0];
 
     useEffect(() => {
         if (numberOfArmy === 1) {
