@@ -5,7 +5,6 @@ import { useMUD } from "../../MUDContext";
 import { Button, Tooltip } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useArmy } from "../../context/ArmyContext";
-import { CustomToastMessage } from "../ErrorMonitoringComp/CustomToastMessage";
 import { useError } from "../../context/ErrorContext";
 
 export const ArmySettleModal = () => {

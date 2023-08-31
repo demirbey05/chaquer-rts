@@ -11,6 +11,7 @@ import { useMUD } from "../../MUDContext";
 import { flatten2D } from "../../utils/terrainArray";
 import { ethers } from "ethers";
 import { limitOfUser } from "../../utils/constants/constants";
+import { GameTuttorial } from "../../components/TipsComp/GameTuttorial";
 
 export const Menu = () => {
   const {
@@ -67,6 +68,9 @@ export const Menu = () => {
           {refresh !== 0 && <StartGameButton isLoading={isLoading} handleTerrain={handleTerrain} />}
           <RegenerateButton isLoading={isLoading} refresh={refresh} handleRefresh={handleRefresh} />
           {refresh !== 0 && (
+            <GameTuttorialButton />
+          )}
+          {refresh !== 0 && (
             <div className="text-center mt-2 mb-2">
               <TerrainTypeInfoModal />
             </div>
@@ -74,6 +78,7 @@ export const Menu = () => {
         </div>
       </div>
       <UserNameModal />
+      <GameTuttorial />
     </div >
   );
 }
@@ -154,6 +159,23 @@ const RegenerateButton = (props: RegenerateButtonPropTypes) => {
         marginTop={props.refresh === 0 ? "300px" : "0"}
       >
         {props.refresh === 0 ? "Enter the Game" : "Regenerate the Terrain"}
+      </Button>
+    </div>
+  )
+}
+
+const GameTuttorialButton = () => {
+  return (
+    <div className="text-center mt-2 mb-2">
+      <Button
+        data-bs-toggle="modal"
+        data-bs-target="#tuttorialModal1"
+        colorScheme="whiteAlpha"
+        textColor="dark"
+        p="8"
+        width="200px"
+      >
+        Game Tuttorial
       </Button>
     </div>
   )

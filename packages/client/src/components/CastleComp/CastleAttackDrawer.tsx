@@ -169,7 +169,7 @@ const CastleAttackModalArmyCardRow = (props: CastleAttackModalArmyCardRowPropTyp
 const CastleAttackModalHeader = () => {
   return (
     <h5 className="offcanvas-title text-center text-white" id="castleAttackDrawerLabel">
-      War - Army Information
+      Castle Capture | War - Army Information
     </h5>
   )
 }

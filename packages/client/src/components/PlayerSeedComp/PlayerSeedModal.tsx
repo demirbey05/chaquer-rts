@@ -41,7 +41,7 @@ export const PlayerSeedModal = () => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false} isCentered={true}>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent className="bg-dark text-white">
                 <ModalHeader className='text-center text-2xl'>Player Seed Stage</ModalHeader>
                 <hr />
                 <ModalBody>

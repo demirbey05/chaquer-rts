@@ -6,7 +6,7 @@ import { useCastlePositionByAddress } from "../hooks/useCastlePositionByAddress"
 
 type PlayerContextType = {
   userWallet: string | undefined
-  userName: string | undefined;
+  userName: string | null | undefined;
   setUserName: (value: string) => void;
   saveUserName: () => void;
   removeUserName: () => void;
@@ -22,7 +22,7 @@ type PlayerContextType = {
 
 const PlayerContext = createContext<PlayerContextType>({
   userWallet: undefined,
-  userName: undefined,
+  userName: null,
   setUserName: () => { },
   saveUserName: () => { },
   removeUserName: () => { },
@@ -38,7 +38,7 @@ const PlayerContext = createContext<PlayerContextType>({
 
 const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { children: ReactNode; }) => {
   const { current: userWallet } = useRef(new Wallet(getBurnerPrivateKey()).address)
-  const [userName, setUserName] = useState<string>();
+  const [userName, setUserName] = useState<string | null | undefined>();
   const [isPlayerLost, setIsPlayerLost] = useState<boolean>(false);
 
   const [playerSeed, setPlayerSeed] = useState<number>();
@@ -49,11 +49,11 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
   const { isCastleDeployedBefore, isCastleSettled } = useCastle();
   const myCastlePosition = useCastlePositionByAddress(userWallet);
 
-  useEffect(() => {
+  /*useEffect(() => {
     if ((myCastlePosition && (myCastlePosition.length === 0) && isCastleDeployedBefore && isCastleSettled)) {
       setIsPlayerLost(true);
     }
-  }, [myCastlePosition, isCastleDeployedBefore, isCastleSettled])
+  }, [myCastlePosition, isCastleDeployedBefore, isCastleSettled])*/
 
   useEffect(() => {
     if (isPlayerLost) {

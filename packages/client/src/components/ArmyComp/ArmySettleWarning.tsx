@@ -5,7 +5,7 @@ export const ArmySettleWarning = () => {
   return (
     <div className='warning-on-top'>
       <h2>
-        Please settle your army
+        Click orange tiles to settle your army
       </h2>
     </div>
   );

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Button } from "@chakra-ui/react";
 import { usePlayer } from '../../context/PlayerContext';
 import { useEffect, useState } from 'react';
 import { useMUD } from '../../MUDContext';
@@ -59,7 +60,14 @@ export const UserNameModal = () => {
                         }
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-dark border-white" data-bs-dismiss="modal">Close</button>
+                        <Button
+                            colorScheme="red"
+                            border="solid"
+                            textColor="dark"
+                            data-bs-dismiss="modal"
+                        >
+                            Back to Menu
+                        </Button>
                         {
                             disable ? <JoinToGameButton disable={disable} /> :
                                 (
@@ -77,12 +85,14 @@ export const UserNameModal = () => {
 
 
 const JoinToGameButton = ({ disable, onClick }: any) => {
-    return <button
-        disabled={disable}
-        onClick={onClick}
-        type="button"
-        className="btn btn-dark border-white"
-        data-bs-dismiss="modal">
+    return <Button
+        colorScheme="whatsapp"
+        border="solid"
+        textColor="dark"
+        data-bs-dismiss="modal"
+        isDisabled={disable}
+        onClick={() => onClick()}
+    >
         Join to the Game
-    </button>
+    </Button>
 }

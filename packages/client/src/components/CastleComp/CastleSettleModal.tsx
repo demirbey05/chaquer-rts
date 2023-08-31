@@ -38,7 +38,7 @@ export const CastleSettleModal = () => {
         aria-hidden="true"
       >
         <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
+          <div className="modal-content bg-dark text-white">
             <div className="modal-header justify-center">
               <h1 className="modal-title text-2xl" id="castleSettleModalLabel">
                 Castle Settlement
