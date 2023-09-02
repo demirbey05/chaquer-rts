@@ -172,7 +172,7 @@ export const MarketDrawer = () => {
                 (document.getElementById('Food') as HTMLInputElement).value = '';
             }
             else {
-                setErrorMessage("An error occurred while trying to sell food.")
+                setErrorMessage("You have no enough wood!")
                 setErrorTitle("Food Selling Error");
                 setShowError(true);
             }
@@ -187,7 +187,7 @@ export const MarketDrawer = () => {
                 (document.getElementById('Wood') as HTMLInputElement).value = '';
             }
             else {
-                setErrorMessage("An error occurred while trying to sell wood.")
+                setErrorMessage("You have no enough wood!")
                 setErrorTitle("Wood Selling Error");
                 setShowError(true);
             }
@@ -202,7 +202,7 @@ export const MarketDrawer = () => {
                 (document.getElementById('Gold') as HTMLInputElement).value = '';
             }
             else {
-                setErrorMessage("An error occurred while trying to sell gold.")
+                setErrorMessage("You have no enough gold!")
                 setErrorTitle("Gold Selling Error");
                 setShowError(true);
             }
@@ -211,13 +211,9 @@ export const MarketDrawer = () => {
 
     const handle30ResourceSell = async ({ resourceType }: any) => {
         if (resourceType !== undefined) {
-            console.log("resource type var")
             const tx = await systemCalls.sellResource(1, 30, resourceType);
-            if (tx) {
-                console.log("Success sell during 30 resource sell.")
-            }
-            else {
-                setErrorMessage("An error occurred while trying to sell 30 resources.")
+            if (tx === null) {
+                setErrorMessage("You have no 30 resources.")
                 setErrorTitle("Resource Selling Error");
                 setShowError(true);
             }
@@ -227,11 +223,8 @@ export const MarketDrawer = () => {
     const handle100ResourceSell = async ({ resourceType }: any) => {
         if (resourceType !== undefined) {
             const tx = await systemCalls.sellResource(1, 100, resourceType);
-            if (tx) {
-                console.log("Success sell during 100 resource sell.")
-            }
-            else {
-                setErrorMessage("An error occurred while trying to sell 100 resources.")
+            if (tx === null) {
+                setErrorMessage("You have no 100 resources.")
                 setErrorTitle("Resource Selling Error");
                 setShowError(true);
             }
@@ -241,11 +234,8 @@ export const MarketDrawer = () => {
     const handle500ResourceSell = async ({ resourceType }: any) => {
         if (resourceType !== undefined) {
             const tx = await systemCalls.sellResource(1, 500, resourceType);
-            if (tx) {
-                console.log("Success sell during 500 resource sell.")
-            }
-            else {
-                setErrorMessage("An error occurred while trying to sell 500 resources.")
+            if (tx === null) {
+                setErrorMessage("You have no 500 resources.")
                 setErrorTitle("Resource Selling Error");
                 setShowError(true);
             }

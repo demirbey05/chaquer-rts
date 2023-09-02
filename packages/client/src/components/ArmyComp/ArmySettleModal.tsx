@@ -2,13 +2,18 @@ import archerImg from "../../images/archer.png";
 import cavalryImg from "../../images/cavalry.png";
 import swordsmanImg from "../../images/swordsman.png";
 import { useMUD } from "../../MUDContext";
-import { Button, Tooltip } from "@chakra-ui/react";
+import { Button, Tooltip, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useArmy } from "../../context/ArmyContext";
 import { useError } from "../../context/ErrorContext";
+import { useArmyPrices } from '../../hooks/useArmyPrices';
+import { useCredit } from "../../hooks/useCredit";
+import { usePlayer } from "../../context/PlayerContext";
+import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 
 export const ArmySettleModal = () => {
-  const { armyPosition, setIsArmySettleStage, setIsArmySettled } = useArmy();
+  const { userWallet } = usePlayer();
+  const { armyPosition, setIsArmySettleStage } = useArmy();
   const { setErrorMessage, setErrorTitle, setShowError } = useError();
   const { systemCalls } = useMUD();
 
@@ -16,35 +21,48 @@ export const ArmySettleModal = () => {
   const [archerCount, setArcherCount] = useState<string>("");
   const [cavalryCount, setCavalryCount] = useState<string>("");
   const [isDisabled, setIsDisabled] = useState(true);
+  const [enoughCredit, setEnoughCredit] = useState(true);
+  const [totalCharge, setTotalCharge] = useState<number>(0);
+
+  const armyPrices = useArmyPrices(1);
+  const myCredit = useCredit(1, userWallet);
 
   useEffect(() => {
-    if (
-      (swordsmanCount && swordsmanCount.toString().length === 0) ||
-      (archerCount && archerCount.toString().length === 0) ||
-      (cavalryCount && cavalryCount.toString().length === 0)
-    ) {
+    if (!swordsmanCount || !archerCount || !cavalryCount) {
       setIsDisabled(true);
+      return;
     }
 
-    if (
-      parseInt(swordsmanCount) + parseInt(archerCount) + parseInt(cavalryCount) <= 1500 &&
-      parseInt(swordsmanCount) + parseInt(archerCount) + parseInt(cavalryCount) > 0
-    ) {
-      setIsDisabled(false);
+    const parsedSwordsmanCount = parseInt(swordsmanCount);
+    const parsedArcherCount = parseInt(archerCount);
+    const parsedCavalryCount = parseInt(cavalryCount);
+
+    const totalTroops = parsedSwordsmanCount + parsedArcherCount + parsedCavalryCount;
+
+    if (totalTroops <= 0 || totalTroops > 500) {
+      setIsDisabled(true);
+    } else if (!armyPrices || !myCredit) {
+      setIsDisabled(true);
     } else {
-      setIsDisabled(true);
-    }
+      const totalCharge =
+        parsedSwordsmanCount * Number(getNumberFromBigInt(armyPrices.priceSwordsman)) +
+        parsedArcherCount * Number(getNumberFromBigInt(armyPrices.priceArcher)) +
+        parsedCavalryCount * Number(getNumberFromBigInt(armyPrices.priceCavalry));
 
-    if (
-      (parseInt(swordsmanCount) > 500 || parseInt(swordsmanCount) < 0) ||
-      (parseInt(archerCount) > 500 || parseInt(archerCount) < 0) ||
-      (parseInt(cavalryCount) > 500 || parseInt(cavalryCount) < 0)
-    ) {
-      setIsDisabled(true);
+      if (totalCharge > parseInt(getNumberFromBigInt(myCredit))) {
+        setIsDisabled(true);
+        setEnoughCredit(false);
+        setTotalCharge(totalCharge);
+      } else {
+        setIsDisabled(false);
+        setEnoughCredit(true);
+      }
     }
-  }, [swordsmanCount, archerCount, cavalryCount]);
+  }, [swordsmanCount, archerCount, cavalryCount, armyPrices, myCredit]);
+
 
   const handleClick = async () => {
+    setIsArmySettleStage(false);
     const tx = await systemCalls.settleArmy(
       armyPosition.x,
       armyPosition.y,
@@ -54,9 +72,6 @@ export const ArmySettleModal = () => {
       1
     );
     if (tx) {
-      setIsArmySettled(true);
-      setIsArmySettleStage(false);
-
       setSwordsmanCount('');
       setArcherCount('');
       setCavalryCount('');
@@ -66,7 +81,7 @@ export const ArmySettleModal = () => {
       (document.getElementById('Archer') as HTMLInputElement).value = '';
     }
     else {
-      setErrorMessage("An error occurred during army settlement!")
+      setErrorMessage("You have no enough credit!")
       setErrorTitle("Army Settlement Error")
       setShowError(true)
     }
@@ -84,7 +99,7 @@ export const ArmySettleModal = () => {
         <div className="modal-content">
           <div className="modal-header justify-center">
             <Tooltip label="Please determine the number of warriors that will hold in
-                  the army. You can deploy maximum 1500 army in the total and 500 for each type." placement="top-start" bg="blue.400" fontSize="md">
+                  the army. You can deploy maximum 500 soldiers in an army." placement="top-start" bg="blue.400" fontSize="md">
               <h1 className="modal-title text-2xl" id="armySettleModalLabel">
                 Army Settlement
               </h1>
@@ -92,6 +107,13 @@ export const ArmySettleModal = () => {
           </div>
           <div className="modal-body">
             <div className="container-fluid">
+              {
+                !enoughCredit &&
+                <Alert status='warning'>
+                  <AlertIcon />
+                  <AlertTitle>You have no enough credit, sell some resources! Total Charge: {totalCharge} 💰</AlertTitle>
+                </Alert>
+              }
               <div className="row mt-2">
                 <ArmySettleInputBody imageSource={swordsmanImg}
                   soldierName={"Swordsman"}

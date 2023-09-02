@@ -1,19 +1,18 @@
 import { useMUD } from "../MUDContext";
-import { useObservableValue } from "@latticexyz/react";
+import { useComponentValue } from "@latticexyz/react";
+import { encodeEntity } from "@latticexyz/store-sync/recs";
 import { useState, useEffect } from "react";
 
-export function useArmyPrices() {
+export function useArmyPrices(gameID: number) {
     const { components } = useMUD();
-
-    const prices = useObservableValue(components.ArmyPrices.update$);
-
     const [armyPrices, setArmyPrices] = useState<any>();
+    const value = useComponentValue(components.ArmyPrices, encodeEntity(components.ArmyPrices.metadata.keySchema, { gameID: BigInt(gameID) }));
 
     useEffect(() => {
-        if (prices) {
-            setArmyPrices(prices.value[0]);
+        if (value) {
+            setArmyPrices(value)
         }
-    }, [prices]);
+    }, [value])
 
     return armyPrices;
 }

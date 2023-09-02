@@ -12,6 +12,8 @@ import { flatten2D } from "../../utils/terrainArray";
 import { ethers } from "ethers";
 import { limitOfUser } from "../../utils/constants/constants";
 import { GameTuttorial } from "../../components/TipsComp/GameTuttorial";
+import { usePlayerIsValid } from "../../hooks/usePlayerIsValid";
+import { usePlayer } from "../../context/PlayerContext";
 
 export const Menu = () => {
   const {
@@ -27,6 +29,8 @@ export const Menu = () => {
   } = useTerrain();
 
   const { systemCalls } = useMUD();
+  const { userWallet } = usePlayer();
+  const userValid = usePlayerIsValid(1, userWallet);
 
   const handleRefresh = (event: any) => {
     setIsLoading(true);

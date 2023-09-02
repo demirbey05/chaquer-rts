@@ -15,7 +15,7 @@ export const PriceListDrawer = () => {
     const { systemCalls } = useMUD();
 
     const isMineInited = useIsMineInitialized(1);
-    const armyPrices = useArmyPrices();
+    const armyPrices = useArmyPrices(1);
     const resourcePrices = useResourcePrices();
 
     useEffect(() => {
@@ -26,7 +26,6 @@ export const PriceListDrawer = () => {
                     setErrorMessage("An error occurred during updating army prices.")
                     setErrorTitle("Price Updating Error")
                     setShowError(true)
-                    return;
                 }
             }, 1000);
 

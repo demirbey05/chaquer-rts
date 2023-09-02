@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 
 export function usePlayerIsValid(gameID: number, address: string) {
     const { components } = useMUD();
-    const [isPlayer, setIsPlayer] = useState<boolean>(false);
+    const [isPlayer, setIsPlayer] = useState<boolean | undefined>();
     const value = useComponentValue(components.Players, encodeEntity(components.Players.metadata.keySchema, { userAddress: address, gameId: BigInt(gameID) }));
 
     useEffect(() => {
