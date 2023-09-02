@@ -39,16 +39,19 @@ export const ArmySettleModal = () => {
 
     const totalTroops = parsedSwordsmanCount + parsedArcherCount + parsedCavalryCount;
 
+    const totalCharge =
+      parsedSwordsmanCount * Number(getNumberFromBigInt(armyPrices.priceSwordsman)) +
+      parsedArcherCount * Number(getNumberFromBigInt(armyPrices.priceArcher)) +
+      parsedCavalryCount * Number(getNumberFromBigInt(armyPrices.priceCavalry));
+
     if (totalTroops <= 0 || totalTroops > 500) {
       setIsDisabled(true);
+      setTotalCharge(totalCharge);
     } else if (!armyPrices || !myCredit) {
       setIsDisabled(true);
+      setEnoughCredit(false);
+      setTotalCharge(totalCharge);
     } else {
-      const totalCharge =
-        parsedSwordsmanCount * Number(getNumberFromBigInt(armyPrices.priceSwordsman)) +
-        parsedArcherCount * Number(getNumberFromBigInt(armyPrices.priceArcher)) +
-        parsedCavalryCount * Number(getNumberFromBigInt(armyPrices.priceCavalry));
-
       if (totalCharge > parseInt(getNumberFromBigInt(myCredit))) {
         setIsDisabled(true);
         setEnoughCredit(false);

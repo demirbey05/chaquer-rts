@@ -16,7 +16,7 @@ export const PriceListDrawer = () => {
 
     const isMineInited = useIsMineInitialized(1);
     const armyPrices = useArmyPrices(1);
-    const resourcePrices = useResourcePrices();
+    const resourcePrices = useResourcePrices(1);
 
     useEffect(() => {
         if (!isPlayerLost && isMineInited) {

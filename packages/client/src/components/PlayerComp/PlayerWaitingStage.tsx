@@ -1,8 +1,10 @@
 import '../../styles/globals.css';
+import { Progress, CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { usePlayer } from '../../context/PlayerContext';
 import { useNumberOfUsers } from '../../hooks/useNumberOfUsers';
 import { useIsMineInitialized } from '../../hooks/useIsMineInitialized';
+import { useCountOfPlayerSeed } from '../../hooks/useCountOfPlayerSeed';
 import { useMUD } from '../../MUDContext';
 import { useError } from '../../context/ErrorContext';
 import { limitOfUser } from '../../utils/constants/constants';
@@ -10,30 +12,15 @@ import { limitOfUser } from '../../utils/constants/constants';
 export const PlayerWaitingStage = () => {
     const connectedUserNumber = useNumberOfUsers(1);
     const isMineInited = useIsMineInitialized(1)
-    const checkMineAlreadyInited = localStorage.getItem("mineinit")
+    const playerSeedCount = useCountOfPlayerSeed(1);
 
     const { setPlayerWaitingStage } = usePlayer();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { systemCalls } = useMUD()
 
-    const [count, setCount] = useState(5);
-    const [resourceInitStage, setResourceInitStage] = useState<boolean>();
+    const [count, setCount] = useState(3);
 
-    // Bring initializade button when all players connected
     useEffect(() => {
-        if (connectedUserNumber && (connectedUserNumber === limitOfUser)) {
-            setResourceInitStage(true)
-        }
-    }, [connectedUserNumber]);
-
-    // Set counter from 10
-    useEffect(() => {
-        if (localStorage.getItem('mineinit')) {
-            setPlayerWaitingStage(false)
-        }
-
-        setResourceInitStage(false)
-
         if (isMineInited && count > 0) {
             const interval = setInterval(() => {
                 setCount(prevCount => prevCount - 1);
@@ -49,7 +36,6 @@ export const PlayerWaitingStage = () => {
     useEffect(() => {
         if (count === 0 && isMineInited) {
             setPlayerWaitingStage(false);
-            localStorage.setItem('mineinit', "true");
         }
     }, [count, isMineInited])
 
@@ -69,14 +55,38 @@ export const PlayerWaitingStage = () => {
         <div id="overlay" className="waiting-for-players-fade-overlay">
             <div className="waiting-for-players-message-container">
                 {
-                    connectedUserNumber && connectedUserNumber !== limitOfUser &&
+                    (playerSeedCount !== limitOfUser) &&
                     <>
                         <span className="waiting-for-players-info-message">Waiting for other players...</span>
-                        <span className="waiting-for-players-info-message">Need {limitOfUser - connectedUserNumber} player to start the game. ({connectedUserNumber}/{limitOfUser})</span>
+                        <span className="waiting-for-players-info-message d-flex align-items-center">
+                            {
+                                (
+                                    connectedUserNumber !== limitOfUser ?
+                                        `Need ${limitOfUser - connectedUserNumber} player to start the game` :
+                                        "All players are connected, please initalize the resources to start the game"
+                                )
+                            }
+                            <CircularProgress className='ms-4' value={(Number(connectedUserNumber) / Number(limitOfUser)) * 100} color='green.400' thickness='12px'>
+                                <CircularProgressLabel>({connectedUserNumber}/{limitOfUser})</CircularProgressLabel>
+                            </CircularProgress>
+                        </span>
+                        <Progress size='sm' colorScheme={"whatsapp"} isIndeterminate />
                     </>
                 }
-                {isMineInited && checkMineAlreadyInited === null && <span className="waiting-for-players-info-message">Game is starting in {count} seconds.</span>}
-                {!isMineInited && resourceInitStage && <button onClick={() => InitResources()} className="waiting-for-players-info-message btn btn-outline-light">Initialize Resources</button>}
+                {
+                    !isMineInited && (playerSeedCount === limitOfUser) &&
+                    <button onClick={() => InitResources()}
+                        className="waiting-for-players-info-message btn btn-outline-light">
+                        Initialize Resources
+                    </button>
+                }
+                {
+                    isMineInited &&
+                    <span className="waiting-for-players-info-message">
+                        Game is starting in {count} seconds.
+                        <Progress size='sm' colorScheme={"whatsapp"} value={count * 34} />
+                    </span>
+                }
             </div>
         </div >
     )

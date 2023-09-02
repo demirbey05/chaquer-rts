@@ -1,19 +1,18 @@
 import { useMUD } from "../MUDContext";
-import { useObservableValue } from "@latticexyz/react";
+import { useComponentValue } from "@latticexyz/react";
+import { encodeEntity } from "@latticexyz/store-sync/recs";
 import { useState, useEffect } from "react";
 
-export function useResourcePrices() {
+export function useResourcePrices(gameID: number) {
     const { components } = useMUD();
-
-    const prices = useObservableValue(components.ResourcePrices.update$);
-
     const [resourcePrices, setResourcePrices] = useState<any>();
+    const value = useComponentValue(components.ResourcePrices, encodeEntity(components.ResourcePrices.metadata.keySchema, { gameID: BigInt(gameID) }));
 
     useEffect(() => {
-        if (prices) {
-            setResourcePrices(prices.value[0]);
+        if (value) {
+            setResourcePrices(value)
         }
-    }, [prices]);
+    }, [value])
 
     return resourcePrices;
 }
