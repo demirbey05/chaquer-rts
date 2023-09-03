@@ -8,8 +8,6 @@ type PlayerContextType = {
   userWallet: string | undefined
   userName: string | null | undefined;
   setUserName: (value: string) => void;
-  saveUserName: () => void;
-  removeUserName: () => void;
   playerSeed: number | undefined;
   setPlayerSeed: (value: number) => void;
   playerSeedStage: boolean | undefined;
@@ -24,8 +22,6 @@ const PlayerContext = createContext<PlayerContextType>({
   userWallet: undefined,
   userName: null,
   setUserName: () => { },
-  saveUserName: () => { },
-  removeUserName: () => { },
   playerSeed: undefined,
   setPlayerSeed: () => { },
   playerSeedStage: true,
@@ -57,17 +53,9 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
 
   useEffect(() => {
     if (isPlayerLost) {
-      removeUserName();
       removePlayerSeedStage();
-      removeMineInitStage();
     }
   }, [isPlayerLost])
-
-  useEffect(() => {
-    if (localStorage.getItem('username')) {
-      setUserName(localStorage.getItem('username'))
-    }
-  }, [userName])
 
   useEffect(() => {
     if (localStorage.getItem('playerSeedStage')) {
@@ -75,20 +63,8 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
     }
   }, [playerSeedStage])
 
-  const saveUserName = () => {
-    if (userName) {
-      localStorage.setItem('username', userName)
-    }
-  }
-
   const savePlayerSeedStage = () => {
     localStorage.setItem('playerSeedStage', "false");
-  }
-
-  const removeUserName = () => {
-    if (localStorage.getItem('username')) {
-      localStorage.removeItem('username')
-    }
   }
 
   const removePlayerSeedStage = () => {
@@ -97,18 +73,10 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
     }
   }
 
-  const removeMineInitStage = () => {
-    if (localStorage.getItem('mineinit')) {
-      localStorage.removeItem('mineinit')
-    }
-  }
-
   const results: PlayerContextType = {
     userWallet,
     userName,
     setUserName,
-    saveUserName,
-    removeUserName,
     playerSeed,
     setPlayerSeed,
     playerSeedStage,

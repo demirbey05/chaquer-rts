@@ -12,8 +12,7 @@ import { flatten2D } from "../../utils/terrainArray";
 import { ethers } from "ethers";
 import { limitOfUser } from "../../utils/constants/constants";
 import { GameTuttorial } from "../../components/TipsComp/GameTuttorial";
-import { usePlayerIsValid } from "../../hooks/usePlayerIsValid";
-import { usePlayer } from "../../context/PlayerContext";
+import { useNumberOfUsers } from "../../hooks/useNumberOfUsers";
 
 export const Menu = () => {
   const {
@@ -29,8 +28,8 @@ export const Menu = () => {
   } = useTerrain();
 
   const { systemCalls } = useMUD();
-  const { userWallet } = usePlayer();
-  const userValid = usePlayerIsValid(1, userWallet);
+
+  const numberOfUsers = useNumberOfUsers(1);
 
   const handleRefresh = (event: any) => {
     setIsLoading(true);
@@ -43,9 +42,11 @@ export const Menu = () => {
 
   const handleTerrain = async () => {
     saveTerrain();
-    const data: string = ethers.utils.hexlify(flatten2D(map));
-    await systemCalls.initMapDataSystem(1, width, height, data);
-    await systemCalls.InitNumberOfGamer(1, limitOfUser);
+    if (!numberOfUsers) {
+      const data: string = ethers.utils.hexlify(flatten2D(map));
+      await systemCalls.initMapDataSystem(1, width, height, data);
+      await systemCalls.InitNumberOfGamer(1, limitOfUser);
+    }
   };
 
   const terrainStyles = [8, 14];
