@@ -55,8 +55,8 @@ export const UserNameModal = () => {
                     <div className="modal-body">
                         {
                             !localStorage.getItem('username')
-                                ? <input onChange={(e: any) => handleInput(e)} type="text" className="form-control" id="usernameinput" placeholder="Please enter your username" />
-                                : <input defaultValue={userName} type="text" className="form-control" id="usernameinput" readOnly />
+                                ? <input onChange={(e: any) => handleInput(e)} type="text" className="form-control dark-input bg-dark text-white" id="usernameinput" placeholder="Please enter your username" />
+                                : <input defaultValue={userName} type="text" className="form-control dark-input bg-dark text-white" id="usernameinput" readOnly />
                         }
                     </div>
                     <div className="modal-footer">

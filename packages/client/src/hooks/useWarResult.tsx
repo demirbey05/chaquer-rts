@@ -1,7 +1,6 @@
 import { useObservableValue } from "@latticexyz/react";
 import { useMUD } from "../MUDContext";
 import { useEffect, useState } from "react";
-import { BoundedQueue } from "../utils/structs/BoundedQueue";
 import { ComponentValue } from "@latticexyz/recs";
 
 export function useWarResult(maxElementSize: number) {
@@ -9,20 +8,36 @@ export function useWarResult(maxElementSize: number) {
 
     const armyWarResult = useObservableValue(components.BattleResult.update$);
     const castleCaptureResult = useObservableValue(components.CastleSiegeResult.update$);
+    const mineCaptureResult = useObservableValue(components.MineCaptureResult.update$);
 
-    const [lastFive, setLastFive] = useState<BoundedQueue<ComponentValue<any, undefined>>>(new BoundedQueue(maxElementSize))
+    const [lastFive, setLastFive] = useState<ComponentValue<any, undefined>[]>([]);
 
     useEffect(() => {
         if (armyWarResult) {
-            setLastFive((n: any) => { n.enqueue({ data: armyWarResult?.value[0], type: "army" }); return n })
+            setLastFive((prevResults) => [
+                ...prevResults.slice(-maxElementSize + 1),
+                { data: armyWarResult?.value[0], type: "army" },
+            ]);
         }
     }, [armyWarResult])
 
     useEffect(() => {
         if (castleCaptureResult) {
-            setLastFive((n: any) => { n.enqueue({ data: castleCaptureResult?.value[0], type: "castle" }); return n })
+            setLastFive((prevResults) => [
+                ...prevResults.slice(-maxElementSize + 1),
+                { data: castleCaptureResult?.value[0], type: "castle" },
+            ]);
         }
     }, [castleCaptureResult])
+
+    useEffect(() => {
+        if (mineCaptureResult) {
+            setLastFive((prevResults) => [
+                ...prevResults.slice(-maxElementSize + 1),
+                { data: mineCaptureResult?.value[0], type: "mine" },
+            ]);
+        }
+    }, [mineCaptureResult])
 
     return lastFive;
 }

@@ -45,7 +45,12 @@ export const PlayerSeedModal = () => {
                 <ModalHeader className='text-center text-2xl'>Player Seed Stage</ModalHeader>
                 <hr />
                 <ModalBody>
-                    <input ref={initialRef} onChange={(e: any) => handleInput(e)} type="number" className="form-control" id="usernameinput" placeholder='Enter player seed for better game experience' />
+                    <input ref={initialRef}
+                        onChange={(e: any) => handleInput(e)}
+                        type="number"
+                        className="form-control dark-input bg-dark text-white"
+                        id="usernameinput"
+                        placeholder='Enter player seed between 1-100' />
                 </ModalBody>
                 <ModalFooter>
                     <Button isDisabled={disable}

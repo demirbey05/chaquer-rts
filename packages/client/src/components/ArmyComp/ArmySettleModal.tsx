@@ -99,7 +99,7 @@ export const ArmySettleModal = () => {
       aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
+        <div className="modal-content bg-dark text-white">
           <div className="modal-header justify-center">
             <Tooltip label="Please determine the number of warriors that will hold in
                   the army. You can deploy maximum 500 soldiers in an army." placement="top-start" bg="blue.400" fontSize="md">
