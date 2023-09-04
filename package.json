@@ -8,12 +8,12 @@
     "dev:contracts": "pnpm --filter 'contracts' dev",
     "foundry:up": "curl -L https://foundry.paradigm.xyz | bash && bash $HOME/.foundry/bin/foundryup",
     "initialize": "pnpm recursive run initialize",
-    "mud:up": "pnpm recursive exec mud set-version -v canary && pnpm install",
+    "mud:up": "pnpm mud set-version --tag main && pnpm install",
     "prepare": "(forge --version || pnpm foundry:up)",
     "test": "pnpm recursive run test"
   },
   "devDependencies": {
-    "@latticexyz/cli": "2.0.0-next.4",
+    "@latticexyz/cli": "2.0.0-main-5f808d2d",
     "@typescript-eslint/eslint-plugin": "5.46.1",
     "@typescript-eslint/parser": "5.46.1",
     "concurrently": "^8.0.1",
@@ -26,7 +26,7 @@
     "pnpm": "8.x"
   },
   "dependencies": {
-    "@latticexyz/config": "^1.42.0",
+    "@latticexyz/config": "2.0.0-main-5f808d2d",
     "snapsync": "link:@latticexyz/world/snapsync"
   }
 }
