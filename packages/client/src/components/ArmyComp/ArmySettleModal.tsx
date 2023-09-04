@@ -112,7 +112,7 @@ export const ArmySettleModal = () => {
             <div className="container-fluid">
               {
                 !enoughCredit &&
-                <Alert status='warning'>
+                <Alert status='warning' color={"black"}>
                   <AlertIcon />
                   <AlertTitle>You have no enough credit, sell some resources! Total Charge: {totalCharge} 💰</AlertTitle>
                 </Alert>

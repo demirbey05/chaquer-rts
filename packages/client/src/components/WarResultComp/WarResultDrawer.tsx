@@ -1,14 +1,16 @@
 import "../../styles/globals.css";
+import warResultIcon from '../../images/warResult.png';
 import { useState } from "react";
 import { usePlayer } from '../../context/PlayerContext';
 import { useWarResult } from '../../hooks/useWarResult';
-import warResultIcon from '../../images/warResult.png';
+import { useMyUsername } from "../../hooks/useMyUsername";
 import { Button } from "@chakra-ui/react";
 
 export const WarResultDrawer = () => {
     const [isOpen, setIsOpen] = useState(true);
-    const warResults = useWarResult(5);
+    const warResults = useWarResult(4);
     const { userWallet } = usePlayer();
+    const username = useMyUsername(1, userWallet)
 
     const toggleOffcanvas = () => {
         setIsOpen(!isOpen);
@@ -37,13 +39,13 @@ export const WarResultDrawer = () => {
                     {
                         warResults && warResults.map((data, key) => {
                             if (data.type === "army") {
-                                return <WarResult text={"⚔️"} data={data} userWallet={userWallet} key={key} />
+                                return <WarResult username={username} text={"⚔️"} data={data} userWallet={userWallet} key={key} />
                             }
                             else if (data.type === "mine") {
-                                return <WarResult text={"⚔️💰"} data={data} userWallet={userWallet} key={key} />
+                                return <WarResult username={username} text={"⚔️💰"} data={data} userWallet={userWallet} key={key} />
                             }
                             else {
-                                return <WarResult text={"⚔️🏰"} data={data} userWallet={userWallet} key={key} />
+                                return <WarResult username={username} text={"⚔️🏰"} data={data} userWallet={userWallet} key={key} />
                             }
                         })
                     }
@@ -56,18 +58,64 @@ export const WarResultDrawer = () => {
 interface WarResultPropTypes {
     text: string,
     data: any,
-    userWallet: any
+    userWallet: any,
+    username: string
 }
 
 const WarResult = (props: WarResultPropTypes) => {
     if (props.data.data?.isDraw === true) {
-        return <p className='text-white mb-3'><span className='bg-primary p-2'>You</span> {props.text} <span className='bg-primary p-2'>Enemy</span> (Draw)</p>
+        return <Result text={props.text}
+            data={props.data}
+            userWallet={props.userWallet}
+            username={props.username}
+            resultText={"Draw"}
+            myBgColor={"bg-primary"}
+            enemyBgColor={"bg-primary"} />
     }
     else if (props.data.data?.winner === props.userWallet) {
-        return <p className='text-white mb-3'><span className='bg-success p-2'>You</span> {props.text} <span className='bg-danger p-2'>Enemy</span> (Win)</p>
+        return <Result text={props.text}
+            data={props.data}
+            userWallet={props.userWallet}
+            username={props.username}
+            resultText={"Win"}
+            myBgColor={"bg-success"}
+            enemyBgColor={"bg-danger"} />
     }
     else if (props.data.data?.loser === props.userWallet) {
-        return <p className='text-white mb-3'><span className='bg-danger p-2'>You</span> {props.text} <span className='bg-success p-2'>Enemy</span> (Lose)</p>
+        return <Result text={props.text}
+            data={props.data}
+            userWallet={props.userWallet}
+            username={props.username}
+            resultText={"Lose"}
+            myBgColor={"bg-danger"}
+            enemyBgColor={"bg-success"} />
     }
     return null;
+}
+
+interface ResultPropTypes {
+    text: string,
+    data: any,
+    userWallet: any,
+    username: string,
+    resultText: string,
+    myBgColor: string,
+    enemyBgColor: string
+}
+
+const Result = (props: ResultPropTypes) => {
+    return <p className='text-white mb-3'>
+        <span className={`${props.myBgColor} p-2`}>
+            {props.username && props.username.length < 9 ? props.username : "You"}
+        </span>
+        <span className="me-2 ms-2">
+            {props.text}
+        </span>
+        <span className={`${props.enemyBgColor} p-2`}>
+            Enemy
+        </span>
+        <span className="ms-2">
+            ({props.resultText})
+        </span>
+    </p>
 }
