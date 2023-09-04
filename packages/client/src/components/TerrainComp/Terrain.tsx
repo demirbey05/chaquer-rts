@@ -29,6 +29,11 @@ import { isEnemyCastle } from "../../utils/helperFunctions/CastleFunctions/isEne
 import { isMyResource } from "../../utils/helperFunctions/ResourceFuntions/isMyResource";
 import { isUserClickedMine } from "../../utils/helperFunctions/ResourceFuntions/isUserClickedMine";
 import MapImg from '../../images/map.png';
+import { isResourcePosition } from "../../utils/helperFunctions/ResourceFuntions/isResourcePosition";
+import { isCastlePosition } from "../../utils/helperFunctions/CastleFunctions/isCastlePosition";
+import { isArmyPosition } from "../../utils/helperFunctions/ArmyFunctions/isArmyPosition";
+import { armySettlePositions } from "../../utils/helperFunctions/ArmyFunctions/armySettlePositions";
+import { isManhattanPosition } from "../../utils/helperFunctions/CustomFunctions/isManhattanPosition";
 
 export type DataProp = {
   width: number;
@@ -230,11 +235,32 @@ export const Terrain = (props: DataProp) => {
   useEffect(() => {
     if (castlePositions) {
       castlePositions.map(
-        (data) =>
-          (document.getElementById(`${data.y},${data.x}`)!.innerHTML = "🏰")
+        (data) => {
+          document.getElementById(`${data.y},${data.x}`)!.innerHTML = "🏰";
+          document.getElementById(`${data.y},${data.x}`)!.style.pointerEvents = "none";
+        }
       );
     }
   }, [castlePositions])
+
+  // Make castles unclickable during castle settlement
+  useEffect(() => {
+    if (castlePositions && !isCastleSettled) {
+      castlePositions.map(
+        (data) => {
+          document.getElementById(`${data.y},${data.x}`)!.style.pointerEvents = "none";
+        }
+      );
+    }
+
+    if (isCastleSettled) {
+      castlePositions.map(
+        (data) => {
+          document.getElementById(`${data.y},${data.x}`)!.style.pointerEvents = "auto";
+        }
+      );
+    }
+  }, [castlePositions, isCastleSettled])
 
   // Deploy resource emojis
   useEffect(() => {
@@ -269,16 +295,29 @@ export const Terrain = (props: DataProp) => {
     };
   }, [myResourcePositions])
 
-  //Makes castle position unClickable to not cause bug during army settlement
+  //Makes castle, army and resource positions unClickable to not cause bug during army settlement
   useEffect(() => {
-    if (castlePositions) {
+    if (castlePositions && isArmySettleStage) {
       castlePositions.map((data) => {
-        document
-          .getElementById(`${data.y},${data.x}`)!
-          .setAttribute("data-bs-toggle", "");
+        document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-toggle", "");
+        document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "");
       });
     }
-  }, [isArmySettleStage, castlePositions]);
+
+    if (armyPositions && isArmySettleStage) {
+      armyPositions.map((data) => {
+        document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-toggle", "");
+        document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-target", "");
+      });
+    }
+
+    if (resources && isArmySettleStage) {
+      resources.map((data) => {
+        document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-toggle", "");
+        document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-target", "");
+      });
+    }
+  }, [isArmySettleStage, castlePositions, armyPositions, resources]);
 
   // Deploy army emojis to position. Add border for user's army.
   useEffect(() => {
@@ -320,16 +359,11 @@ export const Terrain = (props: DataProp) => {
   useEffect(() => {
     armyPositions.map((data: any) => {
       if (isAttackStage && fromArmyPosition) {
-        // Set data-bs-toggle for army
-        getManhattanPositions({ x: parseInt(fromArmyPosition.x), y: parseInt(fromArmyPosition.y) }).some((position: any) => {
-          return (position.x === parseInt(data.position.x) && position.y === parseInt(data.position.y))
-        }) &&
+        isManhattanPosition(data, fromArmyPosition.x, fromArmyPosition.y) &&
           !isMyArmy({ x: data.position.x, y: data.position.y }, myArmyPosition) &&
           document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
-        // Set data-bs-target for army
-        getManhattanPositions({ x: parseInt(fromArmyPosition.x), y: parseInt(fromArmyPosition.y) }).some((position: any) => {
-          return (position.x === parseInt(data.position.x) && position.y === parseInt(data.position.y))
-        }) &&
+
+        isManhattanPosition(data, fromArmyPosition.x, fromArmyPosition.y) &&
           !isMyArmy({ x: data.position.x, y: data.position.y }, myArmyPosition) &&
           document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-target", "#armyAttackDrawer");
       }
@@ -337,16 +371,10 @@ export const Terrain = (props: DataProp) => {
 
     castlePositions.map((data: any) => {
       if (isAttackStage && fromArmyPosition) {
-        // Set data-bs-toggle for army
-        getManhattanPositions({ x: parseInt(fromArmyPosition.x), y: parseInt(fromArmyPosition.y) }).some((position: any) => {
-          return (position.x === parseInt(data.x) && position.y === parseInt(data.y))
-        }) &&
+        isManhattanPosition(data, fromArmyPosition.x, fromArmyPosition.y) &&
           isEnemyCastle({ x: data.x, y: data.y }, myCastlePosition, castlePositions) &&
           document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
-        // Set data-bs-target for army
-        getManhattanPositions({ x: parseInt(fromArmyPosition.x), y: parseInt(fromArmyPosition.y) }).some((position: any) => {
-          return (position.x === parseInt(data.x) && position.y === parseInt(data.y))
-        }) &&
+        isManhattanPosition(data, fromArmyPosition.x, fromArmyPosition.y) &&
           isEnemyCastle({ x: data.x, y: data.y }, myCastlePosition, castlePositions) &&
           document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "#castleAttackDrawer");
       }
@@ -377,16 +405,10 @@ export const Terrain = (props: DataProp) => {
   useEffect(() => {
     resources.map((data: any) => {
       if (isMineStage && fromArmyPosition) {
-        // Set data-bs-toggle for army
-        getManhattanPositions({ x: parseInt(fromArmyPosition.x), y: parseInt(fromArmyPosition.y) }).some((position: any) => {
-          return (position.x === parseInt(data.positions.x) && position.y === parseInt(data.positions.y))
-        }) &&
+        isManhattanPosition(data.positions, fromArmyPosition.x, fromArmyPosition.y) &&
           !isMyResource(data.positions.x, data.positions.y, myResourcePositions) &&
           document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
-        // Set data-bs-target for army
-        getManhattanPositions({ x: parseInt(fromArmyPosition.x), y: parseInt(fromArmyPosition.y) }).some((position: any) => {
-          return (position.x === parseInt(data.positions.x) && position.y === parseInt(data.positions.y))
-        }) &&
+        isManhattanPosition(data.positions, fromArmyPosition.x, fromArmyPosition.y) &&
           !isMyResource(data.positions.x, data.positions.y, myResourcePositions) &&
           document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-target", "#mineCaptureDrawer");
       }
@@ -414,19 +436,13 @@ export const Terrain = (props: DataProp) => {
       }).map((data) => {
         if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
           canCastleBeSettle(values[data.x][data.y]) &&
-            myCastlePosition && !myCastlePosition.find((element: { x: number; y: number }) => {
-              return (
-                element.x.toString() == data.x.toString() &&
-                element.y.toString() == data.y.toString()
-              );
-            }) && !props.isBorder &&
-            document
-              .getElementById(`${data.y},${data.x}`)
-              ?.classList.add("borderHoverMove");
+            !isCastlePosition(data.x, data.y, myCastlePosition) &&
+            !props.isBorder &&
+            document.getElementById(`${data.y},${data.x}`)?.classList.add("blueTileEffect");
 
-          myCastlePosition && myCastlePosition.find((element: { x: number; y: number }) => {
-            document.getElementById(`${element.y},${element.x}`)!.style.pointerEvents = "none"
-          })
+          if (isCastlePosition(data.x, data.y, myCastlePosition)) {
+            document.getElementById(`${data.y},${data.x}`)!.style.pointerEvents = "none"
+          }
         }
       });
 
@@ -439,40 +455,55 @@ export const Terrain = (props: DataProp) => {
           y: parseInt(fromArmyPosition.y),
         }).map((data) => {
           if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
-            canCastleBeSettle(values[data.x][data.y]) &&
-              document
-                .getElementById(`${data.y},${data.x}`)
-                ?.classList.remove("borderHoverMove");
+            if (canCastleBeSettle(values[data.x][data.y])) {
+              document.getElementById(`${data.y},${data.x}`)?.classList.remove("blueTileEffect");
+            }
 
-            myCastlePosition && myCastlePosition.find((element: { x: number; y: number }) => {
-              document.getElementById(`${element.y},${element.x}`)!.style.pointerEvents = "auto"
-            })
+            if (isCastlePosition(data.x, data.y, myCastlePosition)) {
+              document.getElementById(`${data.y},${data.x}`)!.style.pointerEvents = "auto"
+            }
           }
         });
       }
     }
   }, [fromArmyPosition, isArmyMoveStage, myCastlePosition]);
 
-  //Orange hover effect when user deploys an army
+  //Orange hover effect and data-bs assign when user deploys an army
   useEffect(() => {
     if (isArmySettleStage && myCastlePosition) {
       myCastlePosition.map((position: any) => {
         getManhattanPositions(position).map(
           (data) => {
             if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
-              canCastleBeSettle(values[data.x][data.y]) && !props.isBorder &&
-                document.getElementById(`${data.y},${data.x}`)?.classList.add("borderHoverArmy")
+              if (
+                numberOfArmy !== 5 &&
+                !props.isBorder &&
+                !isResourcePosition(data.x, data.y, resources) &&
+                !isCastlePosition(data.x, data.y, castlePositions) &&
+                !isArmyPosition(data.x, data.y, armyPositions) &&
+                armySettlePositions(data.x, data.y, myCastlePosition)
+              ) {
+                const element = document.getElementById(`${data.y},${data.x}`)!;
+                if (element) {
+                  element.classList.add("orangeTileEffect");
+                  element.setAttribute("data-bs-toggle", "modal");
+                  element.setAttribute("data-bs-target", "#armySettleModal");
+                }
+              }
             }
           }
         );
       });
-    } else if (!isArmySettleStage && myCastlePosition) {
+    } else if (!isArmySettleStage && myCastlePosition && numberOfArmy !== 5) {
       myCastlePosition.map((position: any) => {
         getManhattanPositions(position).map(
           (data) => {
             if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
-              canCastleBeSettle(values[data.x][data.y]) &&
-                document.getElementById(`${data.y},${data.x}`)?.classList.remove("borderHoverArmy")
+              if (armySettlePositions(data.x, data.y, myCastlePosition)) {
+                document.getElementById(`${data.y},${data.x}`)?.classList.remove("orangeTileEffect")
+                document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-toggle", "");
+                document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-target", "");
+              }
             }
           }
         );
@@ -519,47 +550,19 @@ export const Terrain = (props: DataProp) => {
                 className={`
                 ${!props.isBorder &&
                   canCastleBeSettle(values[row][column]) &&
-                  "borderHover"
+                  "hoverTileEffect"
                   }`}
                 data-bs-toggle={`${canCastleBeSettle(values[row][column]) &&
                   !isCastleSettled &&
                   !props.isBorder
                   ? "modal"
                   : ""
-                  }${canCastleBeSettle(values[row][column]) &&
-                    isCastleSettled &&
-                    !props.isBorder &&
-                    isArmySettleStage &&
-                    numberOfArmy !== 5 &&
-                    myCastlePosition &&
-                    myCastlePosition.length > 0 &&
-                    myCastlePosition.some((position: any) => {
-                      return getManhattanPositions(position).some(
-                        (item) => item.x === row && item.y === column
-                      );
-                    })
-                    ? "modal"
-                    : ""
                   }`}
                 data-bs-target={`${canCastleBeSettle(values[row][column]) &&
                   !isCastleSettled &&
                   !props.isBorder
                   ? "#castleSettleModal"
                   : ""
-                  }${canCastleBeSettle(values[row][column]) &&
-                    isCastleSettled &&
-                    !props.isBorder &&
-                    isArmySettleStage &&
-                    numberOfArmy !== 5 &&
-                    myCastlePosition &&
-                    myCastlePosition.length > 0 &&
-                    myCastlePosition.some((position: any) => {
-                      return getManhattanPositions(position).some(
-                        (item) => item.x === row && item.y === column
-                      );
-                    })
-                    ? "#armySettleModal"
-                    : ""
                   }`}
               ></span>
             );

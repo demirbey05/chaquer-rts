@@ -45,12 +45,6 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
   const { isCastleDeployedBefore, isCastleSettled } = useCastle();
   const myCastlePosition = useCastlePositionByAddress(userWallet);
 
-  /*useEffect(() => {
-    if ((myCastlePosition && (myCastlePosition.length === 0) && isCastleDeployedBefore && isCastleSettled)) {
-      setIsPlayerLost(true);
-    }
-  }, [myCastlePosition, isCastleDeployedBefore, isCastleSettled])*/
-
   useEffect(() => {
     if (isPlayerLost) {
       removePlayerSeedStage();

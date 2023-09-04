@@ -24,12 +24,12 @@ input::-webkit-inner-spin-button {
 }
 
 /*Border hover that user always see*/
-.borderHover {
+.hoverTileEffect {
     display: inline-block;
     position: relative;
 }
 
-.borderHover::after {
+.hoverTileEffect::after {
     content: '';
     position: absolute;
     top: 0;
@@ -38,7 +38,7 @@ input::-webkit-inner-spin-button {
     left: 0;
 }
 
-.borderHover:hover::after {
+.hoverTileEffect:hover::after {
     background:
         linear-gradient(to right, black 4px, transparent 4px) 0 0,
         linear-gradient(to right, black 4px, transparent 4px) 0 100%,
@@ -54,12 +54,12 @@ input::-webkit-inner-spin-button {
 }
 
 /*Border hover when user deploys and army*/
-.borderHoverArmy {
+.orangeTileEffect {
     display: inline-block;
     position: relative;
 }
 
-.borderHoverArmy::after {
+.orangeTileEffect::after {
     content: '';
     position: absolute;
     top: 0;
@@ -70,17 +70,17 @@ input::-webkit-inner-spin-button {
     transition: box-shadow .1s ease;
 }
 
-.borderHoverArmy::after {
+.orangeTileEffect::after {
     box-shadow: inset 0 0 0 25px rgba(250, 130, 4, 0.5);
 }
 
 /*Border hover when user moves and army*/
-.borderHoverMove {
+.blueTileEffect {
     display: inline-block;
     position: relative;
 }
 
-.borderHoverMove::after {
+.blueTileEffect::after {
     content: '';
     position: absolute;
     top: 0;
@@ -91,7 +91,7 @@ input::-webkit-inner-spin-button {
     transition: box-shadow .1s ease;
 }
 
-.borderHoverMove::after {
+.blueTileEffect::after {
     box-shadow: inset 0 0 0 25px rgba(50, 50, 170, 0.5);
 }
 
