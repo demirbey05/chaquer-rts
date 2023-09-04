@@ -10,7 +10,7 @@ import { IWorld } from "../codegen/world/IWorld.sol";
 import { LibMath } from "../libraries/LibMath.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
 import { State } from "../codegen/Types.sol";
-
+import { maxArmyNum } from "./Constants.sol";
 import "./Errors.sol";
 
 contract MapSystem is System {
@@ -151,7 +151,7 @@ contract MapSystem is System {
       revert ArmySettle__TileIsNotEmpty();
     }
     // You can have three army
-    if (LibQueries.queryGetArmyNumber(IStore(_world()), ownerCandidate, config.gameID) >= 3) {
+    if (LibQueries.queryGetArmyNumber(IStore(_world()), ownerCandidate, config.gameID) >= maxArmyNum) {
       revert ArmySettle__NoArmyRight();
     }
     if (!LibQueries.queryAddressHasCastle(IStore(_world()), ownerCandidate, config.gameID)) {
