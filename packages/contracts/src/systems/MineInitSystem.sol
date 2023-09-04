@@ -25,7 +25,14 @@ contract MineInitSystem is System {
     if (LibQueries.getOwnedCastleIDs(IStore(_world()), sender, gameID).length == 0) {
       revert MineSystem__NoCastleOfUsers();
     }
-    PlayerSeeds.push(gameID, seed);
+    if (GameMetaData.getState(gameID) != State.Seed) {
+      revert MineSystem__WrongState();
+    }
+    PlayerSeeds.pushSeeds(gameID, seed);
+    PlayerSeeds.pushSeedUsers(gameID, sender);
+    if (PlayerSeeds.lengthSeedUsers(gameID) == LimitOfGame.get(gameID) - 1) {
+      GameMetaData.setState(gameID, State.Started);
+    }
   }
 
   function resourceSystemInit(uint256 gameID) public {
@@ -33,7 +40,7 @@ contract MineInitSystem is System {
     uint32 width = MapConfig.getWidth(gameID);
     uint32 height = MapConfig.getHeight(gameID);
     uint256 currentNumOfUser = NumberOfUsers.get(gameID);
-    uint256[] memory playerSeeds = PlayerSeeds.get(gameID);
+    uint256[] memory playerSeeds = PlayerSeeds.getSeeds(gameID);
 
     if (currentNumOfUser != limit) {
       revert MineSystem__GameIsNotFull();

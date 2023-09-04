@@ -9,7 +9,9 @@ enum MineType {
 }
 
 enum State {
+  None,
   Waiting,
+  Seed,
   Started,
   Completed
 }

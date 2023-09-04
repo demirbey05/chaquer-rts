@@ -63,6 +63,7 @@ contract MapSystem is System {
     uint32 width = MapConfig.getWidth(gameID);
     uint32 height = MapConfig.getHeight(gameID);
     uint256 terrainLength = MapConfig.lengthTerrain(gameID);
+    uint256 numOfCastle = GameMetaData.getNumberOfCastle(gameID);
 
     if ((terrainLength < 100) || (terrainLength > 3600)) {
       revert CastleSettle__MapIsNotReady();
@@ -74,7 +75,6 @@ contract MapSystem is System {
     if (!(x < height && y < width && x >= 0 && y >= 0)) {
       revert CastleSettle__CoordinatesOutOfBound();
     }
-
     // If there is any entity in that position
     if (LibQueries.queryPositionEntity(IStore(_world()), x, y, gameID) > 0) {
       revert CastleSettle__TileIsNotEmpty();
@@ -93,6 +93,11 @@ contract MapSystem is System {
 
     Position.set(entityID, x, y, gameID);
     CastleOwnable.set(entityID, ownerCandidate, gameID);
+    GameMetaData.setNumberOfCastle(gameID, numOfCastle + 1);
+
+    if (numOfCastle == LimitOfGame.get(gameID) - 1) {
+      GameMetaData.setState(gameID, State.Seed);
+    }
 
     return entityID;
   }
@@ -156,6 +161,9 @@ contract MapSystem is System {
     }
     if (!LibQueries.queryAddressHasCastle(IStore(_world()), ownerCandidate, config.gameID)) {
       revert ArmySettle__NoCastle();
+    }
+    if (GameMetaData.getState(config.gameID) != State.Started) {
+      revert ArmySettle__WrongState();
     }
 
     bytes32[] memory castleIds = LibQueries.getOwnedCastleIDs(IStore(_world()), ownerCandidate, config.gameID);

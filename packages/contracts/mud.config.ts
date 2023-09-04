@@ -75,7 +75,8 @@ export default mudConfig({
         gameId:"uint256"
       },
       schema:{
-        seeds:"uint256[]"
+        seeds:"uint256[]",
+        seedUsers:"address[]"
       }
     },
     NumberOfUsers:{
@@ -133,7 +134,8 @@ export default mudConfig({
       schema:{
         state:"State",
         startBlock:"uint256",
-        winner:"address"
+        winner:"address",
+        numberOfCastle:"uint256"
       }
     },
     ResourceOwn : {
@@ -210,7 +212,7 @@ export default mudConfig({
   
   enums: {
     MineType: ["Food","Wood","Gold"],
-    State:["Waiting","Started","Completed"]
+    State:["None","Waiting","Seed","Started","Completed"]
   },
   modules: [
     {

@@ -5,7 +5,7 @@ import { PlayerSeeds } from "../codegen/Tables.sol";
 
 library LibRandom {
   function generateRandomNumber(bytes32 previousHash, uint256 gameID) internal returns (bytes32) {
-    uint256[] memory seeds = PlayerSeeds.get(gameID);
+    uint256[] memory seeds = PlayerSeeds.getSeeds(gameID);
     uint seedIndex = uint(blockhash(block.number - 1)) % seeds.length;
     bytes32 hashNumber = keccak256(abi.encodePacked(block.difficulty, block.timestamp, seeds[seedIndex], previousHash));
     return hashNumber;

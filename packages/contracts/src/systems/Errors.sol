@@ -27,6 +27,7 @@ error ArmySettle__TooFarToSettle();
 error ArmySettle__TooManySoldier();
 error ArmySettle__WrongTerrainType();
 error ArmySettle__UnsufficientBalance();
+error ArmySettle__WrongState();
 
 // Army Move System
 
@@ -55,6 +56,7 @@ error MineSystem__NotAllUsersSubmitSeed();
 error MineSystem__ResourceInitialized();
 error MineSystem__RandomizationError();
 error MineSystem__NoCastleOfUsers();
+error MineSystem__WrongState();
 
 // Identity System Errors
 error IdentitySystem__AlreadyJoined();

@@ -20,6 +20,11 @@ import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCou
 bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16(""), bytes16("PlayerSeeds")));
 bytes32 constant PlayerSeedsTableId = _tableId;
 
+struct PlayerSeedsData {
+  uint256[] seeds;
+  address[] seedUsers;
+}
+
 library PlayerSeeds {
   /** Get the table's key schema */
   function getKeySchema() internal pure returns (Schema) {
@@ -31,8 +36,9 @@ library PlayerSeeds {
 
   /** Get the table's value schema */
   function getValueSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](1);
+    SchemaType[] memory _schema = new SchemaType[](2);
     _schema[0] = SchemaType.UINT256_ARRAY;
+    _schema[1] = SchemaType.ADDRESS_ARRAY;
 
     return SchemaLib.encode(_schema);
   }
@@ -45,8 +51,9 @@ library PlayerSeeds {
 
   /** Get the table's field names */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
-    fieldNames = new string[](1);
+    fieldNames = new string[](2);
     fieldNames[0] = "seeds";
+    fieldNames[1] = "seedUsers";
   }
 
   /** Register the table's key schema, value schema, key names and value names */
@@ -60,7 +67,7 @@ library PlayerSeeds {
   }
 
   /** Get seeds */
-  function get(uint256 gameId) internal view returns (uint256[] memory seeds) {
+  function getSeeds(uint256 gameId) internal view returns (uint256[] memory seeds) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
@@ -69,7 +76,7 @@ library PlayerSeeds {
   }
 
   /** Get seeds (using the specified store) */
-  function get(IStore _store, uint256 gameId) internal view returns (uint256[] memory seeds) {
+  function getSeeds(IStore _store, uint256 gameId) internal view returns (uint256[] memory seeds) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
@@ -78,7 +85,7 @@ library PlayerSeeds {
   }
 
   /** Set seeds */
-  function set(uint256 gameId, uint256[] memory seeds) internal {
+  function setSeeds(uint256 gameId, uint256[] memory seeds) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
@@ -86,7 +93,7 @@ library PlayerSeeds {
   }
 
   /** Set seeds (using the specified store) */
-  function set(IStore _store, uint256 gameId, uint256[] memory seeds) internal {
+  function setSeeds(IStore _store, uint256 gameId, uint256[] memory seeds) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
@@ -94,7 +101,7 @@ library PlayerSeeds {
   }
 
   /** Get the length of seeds */
-  function length(uint256 gameId) internal view returns (uint256) {
+  function lengthSeeds(uint256 gameId) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
@@ -105,7 +112,7 @@ library PlayerSeeds {
   }
 
   /** Get the length of seeds (using the specified store) */
-  function length(IStore _store, uint256 gameId) internal view returns (uint256) {
+  function lengthSeeds(IStore _store, uint256 gameId) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
@@ -119,7 +126,7 @@ library PlayerSeeds {
    * Get an item of seeds
    * (unchecked, returns invalid data if index overflows)
    */
-  function getItem(uint256 gameId, uint256 _index) internal view returns (uint256) {
+  function getItemSeeds(uint256 gameId, uint256 _index) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
@@ -140,7 +147,7 @@ library PlayerSeeds {
    * Get an item of seeds (using the specified store)
    * (unchecked, returns invalid data if index overflows)
    */
-  function getItem(IStore _store, uint256 gameId, uint256 _index) internal view returns (uint256) {
+  function getItemSeeds(IStore _store, uint256 gameId, uint256 _index) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
@@ -158,7 +165,7 @@ library PlayerSeeds {
   }
 
   /** Push an element to seeds */
-  function push(uint256 gameId, uint256 _element) internal {
+  function pushSeeds(uint256 gameId, uint256 _element) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
@@ -166,7 +173,7 @@ library PlayerSeeds {
   }
 
   /** Push an element to seeds (using the specified store) */
-  function push(IStore _store, uint256 gameId, uint256 _element) internal {
+  function pushSeeds(IStore _store, uint256 gameId, uint256 _element) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
@@ -174,7 +181,7 @@ library PlayerSeeds {
   }
 
   /** Pop an element from seeds */
-  function pop(uint256 gameId) internal {
+  function popSeeds(uint256 gameId) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
@@ -182,7 +189,7 @@ library PlayerSeeds {
   }
 
   /** Pop an element from seeds (using the specified store) */
-  function pop(IStore _store, uint256 gameId) internal {
+  function popSeeds(IStore _store, uint256 gameId) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
@@ -193,7 +200,7 @@ library PlayerSeeds {
    * Update an element of seeds at `_index`
    * (checked only to prevent modifying other tables; can corrupt own data if index overflows)
    */
-  function update(uint256 gameId, uint256 _index, uint256 _element) internal {
+  function updateSeeds(uint256 gameId, uint256 _index, uint256 _element) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
@@ -206,7 +213,7 @@ library PlayerSeeds {
    * Update an element of seeds (using the specified store) at `_index`
    * (checked only to prevent modifying other tables; can corrupt own data if index overflows)
    */
-  function update(IStore _store, uint256 gameId, uint256 _index, uint256 _element) internal {
+  function updateSeeds(IStore _store, uint256 gameId, uint256 _index, uint256 _element) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
@@ -215,15 +222,245 @@ library PlayerSeeds {
     }
   }
 
+  /** Get seedUsers */
+  function getSeedUsers(uint256 gameId) internal view returns (address[] memory seedUsers) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1, getValueSchema());
+    return (SliceLib.getSubslice(_blob, 0, _blob.length).decodeArray_address());
+  }
+
+  /** Get seedUsers (using the specified store) */
+  function getSeedUsers(IStore _store, uint256 gameId) internal view returns (address[] memory seedUsers) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1, getValueSchema());
+    return (SliceLib.getSubslice(_blob, 0, _blob.length).decodeArray_address());
+  }
+
+  /** Set seedUsers */
+  function setSeedUsers(uint256 gameId, address[] memory seedUsers) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    StoreSwitch.setField(_tableId, _keyTuple, 1, EncodeArray.encode((seedUsers)), getValueSchema());
+  }
+
+  /** Set seedUsers (using the specified store) */
+  function setSeedUsers(IStore _store, uint256 gameId, address[] memory seedUsers) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    _store.setField(_tableId, _keyTuple, 1, EncodeArray.encode((seedUsers)), getValueSchema());
+  }
+
+  /** Get the length of seedUsers */
+  function lengthSeedUsers(uint256 gameId) internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 1, getValueSchema());
+    unchecked {
+      return _byteLength / 20;
+    }
+  }
+
+  /** Get the length of seedUsers (using the specified store) */
+  function lengthSeedUsers(IStore _store, uint256 gameId) internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 1, getValueSchema());
+    unchecked {
+      return _byteLength / 20;
+    }
+  }
+
+  /**
+   * Get an item of seedUsers
+   * (unchecked, returns invalid data if index overflows)
+   */
+  function getItemSeedUsers(uint256 gameId, uint256 _index) internal view returns (address) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    unchecked {
+      bytes memory _blob = StoreSwitch.getFieldSlice(
+        _tableId,
+        _keyTuple,
+        1,
+        getValueSchema(),
+        _index * 20,
+        (_index + 1) * 20
+      );
+      return (address(Bytes.slice20(_blob, 0)));
+    }
+  }
+
+  /**
+   * Get an item of seedUsers (using the specified store)
+   * (unchecked, returns invalid data if index overflows)
+   */
+  function getItemSeedUsers(IStore _store, uint256 gameId, uint256 _index) internal view returns (address) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    unchecked {
+      bytes memory _blob = _store.getFieldSlice(
+        _tableId,
+        _keyTuple,
+        1,
+        getValueSchema(),
+        _index * 20,
+        (_index + 1) * 20
+      );
+      return (address(Bytes.slice20(_blob, 0)));
+    }
+  }
+
+  /** Push an element to seedUsers */
+  function pushSeedUsers(uint256 gameId, address _element) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    StoreSwitch.pushToField(_tableId, _keyTuple, 1, abi.encodePacked((_element)), getValueSchema());
+  }
+
+  /** Push an element to seedUsers (using the specified store) */
+  function pushSeedUsers(IStore _store, uint256 gameId, address _element) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    _store.pushToField(_tableId, _keyTuple, 1, abi.encodePacked((_element)), getValueSchema());
+  }
+
+  /** Pop an element from seedUsers */
+  function popSeedUsers(uint256 gameId) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    StoreSwitch.popFromField(_tableId, _keyTuple, 1, 20, getValueSchema());
+  }
+
+  /** Pop an element from seedUsers (using the specified store) */
+  function popSeedUsers(IStore _store, uint256 gameId) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    _store.popFromField(_tableId, _keyTuple, 1, 20, getValueSchema());
+  }
+
+  /**
+   * Update an element of seedUsers at `_index`
+   * (checked only to prevent modifying other tables; can corrupt own data if index overflows)
+   */
+  function updateSeedUsers(uint256 gameId, uint256 _index, address _element) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    unchecked {
+      StoreSwitch.updateInField(_tableId, _keyTuple, 1, _index * 20, abi.encodePacked((_element)), getValueSchema());
+    }
+  }
+
+  /**
+   * Update an element of seedUsers (using the specified store) at `_index`
+   * (checked only to prevent modifying other tables; can corrupt own data if index overflows)
+   */
+  function updateSeedUsers(IStore _store, uint256 gameId, uint256 _index, address _element) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    unchecked {
+      _store.updateInField(_tableId, _keyTuple, 1, _index * 20, abi.encodePacked((_element)), getValueSchema());
+    }
+  }
+
+  /** Get the full data */
+  function get(uint256 gameId) internal view returns (PlayerSeedsData memory _table) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    bytes memory _blob = StoreSwitch.getRecord(_tableId, _keyTuple, getValueSchema());
+    return decode(_blob);
+  }
+
+  /** Get the full data (using the specified store) */
+  function get(IStore _store, uint256 gameId) internal view returns (PlayerSeedsData memory _table) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    bytes memory _blob = _store.getRecord(_tableId, _keyTuple, getValueSchema());
+    return decode(_blob);
+  }
+
+  /** Set the full data using individual values */
+  function set(uint256 gameId, uint256[] memory seeds, address[] memory seedUsers) internal {
+    bytes memory _data = encode(seeds, seedUsers);
+
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    StoreSwitch.setRecord(_tableId, _keyTuple, _data, getValueSchema());
+  }
+
+  /** Set the full data using individual values (using the specified store) */
+  function set(IStore _store, uint256 gameId, uint256[] memory seeds, address[] memory seedUsers) internal {
+    bytes memory _data = encode(seeds, seedUsers);
+
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameId));
+
+    _store.setRecord(_tableId, _keyTuple, _data, getValueSchema());
+  }
+
+  /** Set the full data using the data struct */
+  function set(uint256 gameId, PlayerSeedsData memory _table) internal {
+    set(gameId, _table.seeds, _table.seedUsers);
+  }
+
+  /** Set the full data using the data struct (using the specified store) */
+  function set(IStore _store, uint256 gameId, PlayerSeedsData memory _table) internal {
+    set(_store, gameId, _table.seeds, _table.seedUsers);
+  }
+
+  /**
+   * Decode the tightly packed blob using this table's schema.
+   * Undefined behaviour for invalid blobs.
+   */
+  function decode(bytes memory _blob) internal pure returns (PlayerSeedsData memory _table) {
+    // 0 is the total byte length of static data
+    PackedCounter _encodedLengths = PackedCounter.wrap(Bytes.slice32(_blob, 0));
+
+    // Store trims the blob if dynamic fields are all empty
+    if (_blob.length > 0) {
+      // skip static data length + dynamic lengths word
+      uint256 _start = 32;
+      uint256 _end;
+      unchecked {
+        _end = 32 + _encodedLengths.atIndex(0);
+      }
+      _table.seeds = (SliceLib.getSubslice(_blob, _start, _end).decodeArray_uint256());
+
+      _start = _end;
+      unchecked {
+        _end += _encodedLengths.atIndex(1);
+      }
+      _table.seedUsers = (SliceLib.getSubslice(_blob, _start, _end).decodeArray_address());
+    }
+  }
+
   /** Tightly pack full data using this table's schema */
-  function encode(uint256[] memory seeds) internal pure returns (bytes memory) {
+  function encode(uint256[] memory seeds, address[] memory seedUsers) internal pure returns (bytes memory) {
     PackedCounter _encodedLengths;
     // Lengths are effectively checked during copy by 2**40 bytes exceeding gas limits
     unchecked {
-      _encodedLengths = PackedCounterLib.pack(seeds.length * 32);
+      _encodedLengths = PackedCounterLib.pack(seeds.length * 32, seedUsers.length * 20);
     }
 
-    return abi.encodePacked(_encodedLengths.unwrap(), EncodeArray.encode((seeds)));
+    return abi.encodePacked(_encodedLengths.unwrap(), EncodeArray.encode((seeds)), EncodeArray.encode((seedUsers)));
   }
 
   /** Encode keys as a bytes32 array using this table's schema */
