@@ -21,7 +21,7 @@ contract EconomySystem is System {
   //@dev maybe game state check should be applied in the further
   //@dev last collect time should have initial value and initialized with map system
 
-  function collectResource(uint256 gameID) public {
+  function collectResource(uint256 gameID) internal {
     address owner = _msgSender();
     bytes32[] memory foodMines = LibQueries.getMines(IStore(_world()), owner, gameID, MineType.Food);
     bytes32[] memory woodMines = LibQueries.getMines(IStore(_world()), owner, gameID, MineType.Wood);
@@ -86,7 +86,7 @@ contract EconomySystem is System {
     }
   }
 
-  function updatePrices(uint256 gameID) public {
+  function updateEconomyData(uint256 gameID) public {
     uint256 startBlock = GameMetaData.getStartBlock(gameID);
     uint256 priceFood = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Food, block.number - startBlock);
     uint256 priceWood = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Wood, block.number - startBlock);
@@ -102,6 +102,8 @@ contract EconomySystem is System {
     ArmyPrices.setPriceSwordsman(gameID, swordsmanPrice);
     ArmyPrices.setPriceArcher(gameID, archerPrice);
     ArmyPrices.setPriceCavalry(gameID, cavalryPrice);
+
+    collectResource(gameID);
   }
 
   // Functions for test purposes

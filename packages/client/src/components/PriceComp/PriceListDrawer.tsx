@@ -21,13 +21,13 @@ export const PriceListDrawer = () => {
     useEffect(() => {
         if (!isPlayerLost && isMineInited) {
             const interval = setInterval(async () => {
-                const tx = await systemCalls.updatePrices(1);
+                const tx = await systemCalls.updateEconomyData(1);
                 if (tx == null) {
                     setErrorMessage("An error occurred during updating army prices.")
                     setErrorTitle("Price Updating Error")
                     setShowError(true)
                 }
-            }, 1000);
+            }, 3000);
 
             return () => clearInterval(interval);
         }

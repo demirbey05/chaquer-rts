@@ -14,22 +14,6 @@ export const MineProgressBar = () => {
     const numberOfResource = useNumberOfResource(userWallet, 1);
     const isMineInited = useIsMineInitialized(1);
 
-    useEffect(() => {
-        if (!isPlayerLost && isMineInited) {
-            const interval = setInterval(async () => {
-                const tx = await systemCalls.collectResource(1);
-                if (tx == null) {
-                    setErrorMessage("An error occured while collecting resources.")
-                    setErrorTitle("Resource Collect Error")
-                    setShowError(true)
-                    return;
-                }
-            }, 1000);
-
-            return () => clearInterval(interval);
-        }
-    }, [isPlayerLost, isMineInited])
-
     return (
         <div className="mine-progress-bar">
             <div className="row">

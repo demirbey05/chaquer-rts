@@ -6,11 +6,9 @@ pragma solidity >=0.8.0;
 import { MineType } from "./../Types.sol";
 
 interface IEconomySystem {
-  function collectResource(uint256 gameID) external;
-
   function sellResource(uint256 gameID, uint256 amount, MineType mineType) external;
 
-  function updatePrices(uint256 gameID) external;
+  function updateEconomyData(uint256 gameID) external;
 
   function economyIncreaseResource(address user, uint256 gameID) external;
 
