@@ -118,7 +118,7 @@ input::-webkit-inner-spin-button {
 
 .progress {
     display: flex;
-    width: 30%;
+    width: 19%;
     height: 100%;
     background-color: lightgray;
     justify-content: center;

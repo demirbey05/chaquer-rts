@@ -86,6 +86,7 @@ export const UserNameModal = () => {
                             </Alert>
                         }
                         {
+                            // Fix for joining game after someone lose castle
                             !userValid && numberOfUsers !== limitOfUser &&
                             <input onChange={(e: any) => handleInput(e)}
                                 type="text"

@@ -88,7 +88,7 @@ export const Terrain = (props: DataProp) => {
       if (isArmySettleStage) {
         setIsArmySettleStage(false);
       }
-      else if (!isArmySettleStage && numberOfArmy < 3) {
+      else if (!isArmySettleStage && numberOfArmy < 5) {
         setIsArmySettleStage(true);
       }
     }
@@ -530,7 +530,7 @@ export const Terrain = (props: DataProp) => {
                     isCastleSettled &&
                     !props.isBorder &&
                     isArmySettleStage &&
-                    numberOfArmy !== 3 &&
+                    numberOfArmy !== 5 &&
                     myCastlePosition &&
                     myCastlePosition.length > 0 &&
                     myCastlePosition.some((position: any) => {
@@ -550,7 +550,7 @@ export const Terrain = (props: DataProp) => {
                     isCastleSettled &&
                     !props.isBorder &&
                     isArmySettleStage &&
-                    numberOfArmy !== 3 &&
+                    numberOfArmy !== 5 &&
                     myCastlePosition &&
                     myCastlePosition.length > 0 &&
                     myCastlePosition.some((position: any) => {
