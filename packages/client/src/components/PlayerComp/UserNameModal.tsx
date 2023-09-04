@@ -7,6 +7,7 @@ import { useError } from '../../context/ErrorContext';
 import { usePlayerIsValid } from "../../hooks/usePlayerIsValid";
 import { useNumberOfUsers } from "../../hooks/useNumberOfUsers";
 import { limitOfUser } from "../../utils/constants/constants";
+import { useGameState } from '../../hooks/useGameState';
 
 export const UserNameModal = () => {
     const { systemCalls } = useMUD()
@@ -18,12 +19,16 @@ export const UserNameModal = () => {
     const [gameIsFull, setGameIsFull] = useState<string>("");
 
     const userValid = usePlayerIsValid(1, userWallet);
-
+    const gameState = useGameState(1);
     const numberOfUsers = useNumberOfUsers(1);
 
     useEffect(() => {
-        if (numberOfUsers === limitOfUser) {
+        if (gameState === 3) {
             if (userValid) {
+                setDisable(false)
+                setGameIsFull("");
+            }
+            else if (userValid === false) {
                 setDisable(false)
                 setGameIsFull("");
             }
@@ -32,23 +37,33 @@ export const UserNameModal = () => {
                 setGameIsFull("The game is full. Reached the player limit.")
             }
         }
-        else if (userValid) {
-            setDisable(false)
+        else if (gameState === 2) {
+            if (numberOfUsers === limitOfUser) {
+                if (userValid) {
+                    setDisable(false)
+                    setGameIsFull("");
+                }
+                else {
+                    setDisable(true)
+                    setGameIsFull("The game is full. Reached the player limit.")
+                }
+            }
         }
-        else if (userName && (userName.length > 2 && userName.length < 32)) {
-            setDisable(false)
+        else if (gameState === 1) {
+            setDisable(false);
+            setGameIsFull("");
         }
         else {
-            setDisable(true)
+            setDisable(false)
         }
-    }, [userName, numberOfUsers, userValid]);
+    }, [gameState, userValid, numberOfUsers, limitOfUser]);
 
     const handleInput = (e: any) => {
         setUserName(e.target.value)
     }
 
     const onClick = async () => {
-        if (!userValid) {
+        if (!userValid && gameState === 1) {
             const tx = await systemCalls.joinGame(userName!, 1);
             if (tx == null) {
                 setErrorMessage("An error occurred while trying to join to the game.")
@@ -70,7 +85,7 @@ export const UserNameModal = () => {
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content bg-dark text-white">
                     {
-                        !userValid && numberOfUsers !== limitOfUser &&
+                        !userValid && gameState !== 3 &&
                         <div className="modal-header justify-center">
                             <h1 className="modal-title text-2xl" id="userNameModalLabel">
                                 Username
@@ -79,15 +94,14 @@ export const UserNameModal = () => {
                     }
                     <div className="modal-body">
                         {
-                            gameIsFull.length > 0 &&
+                            userValid === undefined && gameState === 3 &&
                             <Alert status='warning' color="black">
                                 <AlertIcon />
                                 <AlertTitle>{gameIsFull}</AlertTitle>
                             </Alert>
                         }
                         {
-                            // Fix for joining game after someone lose castle
-                            !userValid && numberOfUsers !== limitOfUser &&
+                            !userValid && gameState !== 3 &&
                             <input onChange={(e: any) => handleInput(e)}
                                 type="text"
                                 className="form-control dark-input bg-dark text-white"
@@ -95,7 +109,7 @@ export const UserNameModal = () => {
                                 placeholder="Please enter your username" />
                         }
                         {
-                            ((userValid && numberOfUsers === limitOfUser) || (userValid && numberOfUsers !== limitOfUser)) &&
+                            (((userValid || userValid === false) && gameState !== 0)) &&
                             <p>It seems you leave the game. Click Join to the Game button to reconnect to the game.</p>
                         }
                     </div>

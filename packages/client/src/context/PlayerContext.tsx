@@ -5,6 +5,8 @@ import { useNumberOfUsers } from "../hooks/useNumberOfUsers";
 import { usePlayerIsValid } from "../hooks/usePlayerIsValid";
 import { useMUD } from "../MUDContext";
 import { useCastlePositionByAddress } from "../hooks/useCastlePositionByAddress";
+import { useGameState } from "../hooks/useGameState";
+import { useWinnerAddress } from "../hooks/useWinnerAddress";
 
 type PlayerContextType = {
   userWallet: string | undefined
@@ -35,32 +37,36 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
 
   const [playerSeed, setPlayerSeed] = useState<number>();
 
-  const numberOfUser = useNumberOfUsers(1);
-  const userValid = usePlayerIsValid(1, userWallet);
-  const myCastlePositions = useCastlePositionByAddress(userWallet)
-
   const { systemCalls } = useMUD();
 
+  const numberOfUser = useNumberOfUsers(1);
+  const userValid = usePlayerIsValid(1, userWallet);
+  const gameState = useGameState(1);
+  const winnerAddress = useWinnerAddress(1);
+
   useEffect(() => {
-    if (!userValid && (myCastlePositions && myCastlePositions.length === 0)) {
+    if (!userValid && (gameState === 3 || gameState === 4)) {
       setIsPlayerLost(true)
     }
-  }, [userValid])
+  }, [userValid, gameState])
 
   useEffect(() => {
     const fetchData = async () => {
-      if (userValid && numberOfUser === 1 && (myCastlePositions && myCastlePositions.length > 0)) {
-        console.log("Buraya geldi");
-        const tx = await systemCalls.claimWinner(1, userWallet);
-        if (tx) {
+      if (userValid && numberOfUser === 1 && (gameState === 3 || gameState === 4)) {
+        if (winnerAddress && (winnerAddress === userWallet)) {
           setIsPlayerWinner(true);
+        } else {
+          const tx = await systemCalls.claimWinner(1, userWallet);
+          if (tx) {
+            setIsPlayerWinner(true);
+          }
         }
       }
     };
 
     fetchData();
 
-  }, [userValid, numberOfUser]);
+  }, [userValid, numberOfUser, gameState, winnerAddress]);
 
   const results: PlayerContextType = {
     userWallet,

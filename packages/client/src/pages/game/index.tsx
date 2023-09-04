@@ -63,10 +63,10 @@ export const Game = () => {
       {!isCastleSettled && !isPlayerLost && <CastleSettleModal />}
       {isCastleSettled && gameState === 1 && !isPlayerLost && <PlayerWaitingStage />}
       {gameState === 2 && !isPlayerLost && <PlayerSeedModal />}
-      {gameState === 2 && (playerSeedCount === limitOfUser) && !mineInited && <MineInitStage />}
+      {(playerSeedCount === limitOfUser) && !mineInited && <MineInitStage />}
       {gameState === 3 && isArmySettleStage && !isPlayerLost && mineInited && <ArmySettleWarning />}
       {gameState === 3 && isArmyMoveStage && !isPlayerLost && mineInited && <ArmyMoveWarning />}
-      {gameState === 3 && mineInited && <SettingsDrawer />}
+      {(gameState === 3 || gameState === 4) && mineInited && <SettingsDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmyProgressBar />}
       {gameState === 3 && !isPlayerLost && mineInited && <MineProgressBar />}
       {gameState === 3 && !isPlayerLost && mineInited && <CreditProgressBar />}

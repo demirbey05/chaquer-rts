@@ -174,7 +174,9 @@ export const Terrain = (props: DataProp) => {
           if (movingArmyIdMap !== null) {
             movingArmyId.current = [...movingArmyIdMap][0];
           }
+
           setIsArmyMoveStage(false);
+
           if (toArmyPositionRef.current && isArmyMoveStage) {
             const tx = await systemCalls.moveArmy(
               movingArmyId.current,

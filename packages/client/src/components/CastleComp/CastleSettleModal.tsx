@@ -4,7 +4,7 @@ import { useCastle } from "../../context/CastleContext";
 import { useError } from "../../context/ErrorContext";
 
 export const CastleSettleModal = () => {
-  const { isCastleSettled, tempCastle, setCastle, setIsCastleDeployedBefore, setIsCastleSettled } = useCastle();
+  const { isCastleSettled, tempCastle, setCastle, setIsCastleSettled } = useCastle();
   const { setShowError, setErrorMessage, setErrorTitle } = useError();
   const { systemCalls } = useMUD();
 
@@ -19,7 +19,6 @@ export const CastleSettleModal = () => {
     setIsCastleSettled(true);
     if (tx) {
       setCastle({ x: tempCastle.x, y: tempCastle.y });
-      setIsCastleDeployedBefore(true)
     }
     else {
       setErrorMessage("An error occurred during castle settlement.")

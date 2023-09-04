@@ -13,6 +13,7 @@ import { ethers } from "ethers";
 import { limitOfUser } from "../../utils/constants/constants";
 import { GameTuttorial } from "../../components/TipsComp/GameTuttorial";
 import { useNumberOfUsers } from "../../hooks/useNumberOfUsers";
+import { useGameState } from "../../hooks/useGameState";
 
 export const Menu = () => {
   const {
@@ -30,6 +31,7 @@ export const Menu = () => {
   const { systemCalls } = useMUD();
 
   const numberOfUsers = useNumberOfUsers(1);
+  const gameState = useGameState(1);
 
   const handleRefresh = (event: any) => {
     setIsLoading(true);
@@ -42,7 +44,7 @@ export const Menu = () => {
 
   const handleTerrain = async () => {
     saveTerrain();
-    if (!numberOfUsers) {
+    if (!gameState) {
       const data: string = ethers.utils.hexlify(flatten2D(map));
       await systemCalls.initMapDataSystem(1, width, height, data);
       await systemCalls.InitNumberOfGamer(1, limitOfUser);
