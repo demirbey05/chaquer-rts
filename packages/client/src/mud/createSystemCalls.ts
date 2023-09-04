@@ -6,7 +6,7 @@ import { Entity } from "@latticexyz/recs";
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
-  { worldContract, waitForTransaction,publicClient }: SetupNetworkResult,
+  { worldContract, waitForTransaction, publicClient }: SetupNetworkResult,
   { Position }: ClientComponents
 ) {
   const initMapDataSystem = async (
@@ -212,6 +212,20 @@ export function createSystemCalls(
     }
   };
 
+  const claimWinner = async (gameID: number, address: string) => {
+    try {
+      const tx = await worldContract.write.claimWinner([
+        address,
+        BigInt(gameID)
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
   return {
     initMapDataSystem,
     settleCastle,
@@ -226,5 +240,6 @@ export function createSystemCalls(
     InitNumberOfGamer,
     sellResource,
     updateEconomyData,
+    claimWinner,
   };
 }

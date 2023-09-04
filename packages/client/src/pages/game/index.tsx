@@ -17,24 +17,34 @@ import { CastleSettleWarning } from "../../components/CastleComp/CastleSettleWar
 import { CastleSettleModal } from "../../components/CastleComp/CastleSettleModal"
 import { CastleAttackDrawer } from "../../components/CastleComp/CastleAttackDrawer";
 import { PlayerLostWarning } from "../../components/PlayerComp/PlayerLostWarning";
+import { PlayerWonAnimation } from "../../components/PlayerComp/PlayerWonAnimation";
 import { PlayerWaitingStage } from "../../components/PlayerComp/PlayerWaitingStage";
 import { PlayerSeedModal } from '../../components/PlayerSeedComp/PlayerSeedModal';
 import { SettingsDrawer } from "../../components/SettingsComp/SettingsDrawer";
 import { MineCaptureDrawer } from "../../components/MineComp/MineCaptureDrawer";
 import { MineProgressBar } from '../../components/MineComp/MineProgressBar';
+import { MineInitStage } from '../../components/MineComp/MineInitStage';
 import { WarResultDrawer } from "../../components/WarResultComp/WarResultDrawer";
 import { CreditProgressBar } from '../../components/CreditComp/CreditProgressBar';
 import { MarketDrawer } from "../../components/MarketComp/MarketDrawer";
 import { PriceListDrawer } from "../../components/PriceComp/PriceListDrawer";
 import { ShortCutTips } from "../../components/TipsComp/ShortCutTips";
 import { ZoomHandler } from "../../components/ZoomComp/ZoomHandler";
+import { useGameState } from "../../hooks/useGameState";
+import { useCountOfPlayerSeed } from "../../hooks/useCountOfPlayerSeed";
+import { limitOfUser } from "../../utils/constants/constants";
+import { useIsMineInitialized } from "../../hooks/useIsMineInitialized";
 
 export const Game = () => {
   const { width, height } = useTerrain();
   const { isCastleSettled } = useCastle();
   const { isArmySettleStage, isArmyMoveStage } = useArmy();
-  const { playerSeedStage, playerWaitingStage, isPlayerLost } = usePlayer();
+  const { isPlayerLost, isPlayerWinner } = usePlayer();
   const [zoomLevel, setZoomLevel] = useState(1);
+
+  const gameState = useGameState(1);
+  const playerSeedCount = useCountOfPlayerSeed(1);
+  const mineInited = useIsMineInitialized(1);
 
   const values = map;
   const terrainStyles = [0, 40];
@@ -49,27 +59,28 @@ export const Game = () => {
 
   return (
     <>
-      {!isCastleSettled && <CastleSettleWarning />}
-      {isCastleSettled && isArmySettleStage && <ArmySettleWarning />}
-      {isArmyMoveStage && <ArmyMoveWarning />}
+      {!isCastleSettled && !isPlayerLost && <CastleSettleWarning />}
+      {!isCastleSettled && !isPlayerLost && <CastleSettleModal />}
+      {isCastleSettled && gameState === 1 && !isPlayerLost && <PlayerWaitingStage />}
+      {gameState === 2 && !isPlayerLost && <PlayerSeedModal />}
+      {gameState === 2 && (playerSeedCount === limitOfUser) && !mineInited && <MineInitStage />}
+      {gameState === 3 && isArmySettleStage && !isPlayerLost && mineInited && <ArmySettleWarning />}
+      {gameState === 3 && isArmyMoveStage && !isPlayerLost && mineInited && <ArmyMoveWarning />}
+      {gameState === 3 && mineInited && <SettingsDrawer />}
+      {gameState === 3 && !isPlayerLost && mineInited && <ArmyProgressBar />}
+      {gameState === 3 && !isPlayerLost && mineInited && <MineProgressBar />}
+      {gameState === 3 && !isPlayerLost && mineInited && <CreditProgressBar />}
+      {gameState === 3 && !isPlayerLost && mineInited && <ArmyInfoDrawer />}
+      {gameState === 3 && !isPlayerLost && mineInited && <MarketDrawer />}
+      {gameState === 3 && !isPlayerLost && mineInited && <PriceListDrawer />}
+      {gameState === 3 && !isPlayerLost && mineInited && <ShortCutTips />}
+      {gameState === 3 && !isPlayerLost && mineInited && <WarResultDrawer />}
+      {gameState === 3 && !isPlayerLost && mineInited && <ArmySettleModal />}
+      {gameState === 3 && !isPlayerLost && mineInited && <ArmyAttackDrawer />}
+      {gameState === 3 && !isPlayerLost && mineInited && <CastleAttackDrawer />}
+      {gameState === 3 && !isPlayerLost && mineInited && <MineCaptureDrawer />}
       {isPlayerLost && <PlayerLostWarning />}
-      {isCastleSettled && playerSeedStage && <PlayerSeedModal />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && <SettingsDrawer />}
-      {isCastleSettled && !playerSeedStage && playerWaitingStage && <PlayerWaitingStage />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ArmyProgressBar />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <MineProgressBar />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <CreditProgressBar />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ArmyInfoDrawer />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <MarketDrawer />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <PriceListDrawer />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ShortCutTips />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <WarResultDrawer />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ArmySettleModal />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <ArmyAttackDrawer />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <CastleAttackDrawer />}
-      {isCastleSettled && !playerSeedStage && !playerWaitingStage && !isPlayerLost && <MineCaptureDrawer />}
-      {!isCastleSettled && <CastleSettleModal />}
-
+      {gameState === 4 && isPlayerWinner && <PlayerWonAnimation />}
 
       {<ZoomHandler zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />}
       <ScrollContainer className="scrollable-container" style={scrollContainerStyles}>

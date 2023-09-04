@@ -30,7 +30,7 @@ contract MineInitSystem is System {
     }
     PlayerSeeds.pushSeeds(gameID, seed);
     PlayerSeeds.pushSeedUsers(gameID, sender);
-    if (PlayerSeeds.lengthSeedUsers(gameID) == LimitOfGame.get(gameID) - 1) {
+    if (PlayerSeeds.lengthSeedUsers(gameID) == LimitOfGame.get(gameID)) {
       GameMetaData.setState(gameID, State.Started);
     }
   }

@@ -1,7 +1,9 @@
 import { getBurnerPrivateKey } from "@latticexyz/common";
 import { Wallet } from "ethers";
 import { useRef, useState, useEffect, useContext, createContext, ReactNode } from "react";
-import { useCastle } from "./CastleContext";
+import { useNumberOfUsers } from "../hooks/useNumberOfUsers";
+import { usePlayerIsValid } from "../hooks/usePlayerIsValid";
+import { useMUD } from "../MUDContext";
 import { useCastlePositionByAddress } from "../hooks/useCastlePositionByAddress";
 
 type PlayerContextType = {
@@ -10,12 +12,8 @@ type PlayerContextType = {
   setUserName: (value: string) => void;
   playerSeed: number | undefined;
   setPlayerSeed: (value: number) => void;
-  playerSeedStage: boolean | undefined;
-  setPlayerSeedStage: (value: boolean) => void;
-  savePlayerSeedStage: () => void;
-  playerWaitingStage: boolean | undefined;
-  setPlayerWaitingStage: (value: boolean) => void;
   isPlayerLost: boolean | undefined;
+  isPlayerWinner: boolean | undefined;
 };
 
 const PlayerContext = createContext<PlayerContextType>({
@@ -24,48 +22,45 @@ const PlayerContext = createContext<PlayerContextType>({
   setUserName: () => { },
   playerSeed: undefined,
   setPlayerSeed: () => { },
-  playerSeedStage: true,
-  setPlayerSeedStage: () => { },
-  savePlayerSeedStage: () => { },
-  playerWaitingStage: undefined,
-  setPlayerWaitingStage: () => { },
-  isPlayerLost: false
+  isPlayerLost: false,
+  isPlayerWinner: false,
 });
 
 const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { children: ReactNode; }) => {
   const { current: userWallet } = useRef(new Wallet(getBurnerPrivateKey()).address)
   const [userName, setUserName] = useState<string | null | undefined>();
+
   const [isPlayerLost, setIsPlayerLost] = useState<boolean>(false);
+  const [isPlayerWinner, setIsPlayerWinner] = useState<boolean>(false);
 
   const [playerSeed, setPlayerSeed] = useState<number>();
-  const [playerSeedStage, setPlayerSeedStage] = useState<boolean>(true);
 
-  const [playerWaitingStage, setPlayerWaitingStage] = useState<boolean>(true);
+  const numberOfUser = useNumberOfUsers(1);
+  const userValid = usePlayerIsValid(1, userWallet);
+  const myCastlePositions = useCastlePositionByAddress(userWallet)
 
-  const { isCastleDeployedBefore, isCastleSettled } = useCastle();
-  const myCastlePosition = useCastlePositionByAddress(userWallet);
-
-  useEffect(() => {
-    if (isPlayerLost) {
-      removePlayerSeedStage();
-    }
-  }, [isPlayerLost])
+  const { systemCalls } = useMUD();
 
   useEffect(() => {
-    if (localStorage.getItem('playerSeedStage')) {
-      setPlayerSeedStage(false)
+    if (!userValid && (myCastlePositions && myCastlePositions.length === 0)) {
+      setIsPlayerLost(true)
     }
-  }, [playerSeedStage])
+  }, [userValid])
 
-  const savePlayerSeedStage = () => {
-    localStorage.setItem('playerSeedStage', "false");
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      if (userValid && numberOfUser === 1 && (myCastlePositions && myCastlePositions.length > 0)) {
+        console.log("Buraya geldi");
+        const tx = await systemCalls.claimWinner(1, userWallet);
+        if (tx) {
+          setIsPlayerWinner(true);
+        }
+      }
+    };
 
-  const removePlayerSeedStage = () => {
-    if (localStorage.getItem('playerSeedStage')) {
-      localStorage.removeItem('playerSeedStage')
-    }
-  }
+    fetchData();
+
+  }, [userValid, numberOfUser]);
 
   const results: PlayerContextType = {
     userWallet,
@@ -73,12 +68,8 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
     setUserName,
     playerSeed,
     setPlayerSeed,
-    playerSeedStage,
-    setPlayerSeedStage,
-    savePlayerSeedStage,
-    playerWaitingStage,
-    setPlayerWaitingStage,
-    isPlayerLost
+    isPlayerLost,
+    isPlayerWinner
   };
 
   return (
