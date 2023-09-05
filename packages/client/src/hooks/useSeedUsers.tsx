@@ -3,15 +3,15 @@ import { useComponentValue } from "@latticexyz/react";
 import { encodeEntity } from "@latticexyz/store-sync/recs";
 import { useState, useEffect } from "react";
 
-export function useSeedUsers(gameID: number) {
+export function useSeedUsers(gameID: number, address: string) {
     const { components } = useMUD();
-    const [seeds, setSeeds] = useState<string[]>();
-    const value = useComponentValue(components.PlayerSeeds, encodeEntity(components.PlayerSeeds.metadata.keySchema, { gameId: BigInt(gameID) }));
+    const [seedEntereed, setSeedEntered] = useState<boolean>(false);
+    const value = useComponentValue(components.SeedInited, encodeEntity(components.SeedInited.metadata.keySchema, { gameId: BigInt(gameID), user: address }));
 
     useEffect(() => {
         if (value) {
-            setSeeds(value.seedUsers)
+            setSeedEntered(value.seedInit)
         }
     }, [value])
-    return seeds;
+    return seedEntereed;
 }

@@ -361,11 +361,11 @@ export const Terrain = (props: DataProp) => {
   useEffect(() => {
     armyPositions.map((data: any) => {
       if (isAttackStage && fromArmyPosition) {
-        isManhattanPosition(data, fromArmyPosition.x, fromArmyPosition.y) &&
+        isManhattanPosition(data.position, fromArmyPosition.x, fromArmyPosition.y) &&
           !isMyArmy({ x: data.position.x, y: data.position.y }, myArmyPosition) &&
           document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
 
-        isManhattanPosition(data, fromArmyPosition.x, fromArmyPosition.y) &&
+        isManhattanPosition(data.position, fromArmyPosition.x, fromArmyPosition.y) &&
           !isMyArmy({ x: data.position.x, y: data.position.y }, myArmyPosition) &&
           document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-target", "#armyAttackDrawer");
       }

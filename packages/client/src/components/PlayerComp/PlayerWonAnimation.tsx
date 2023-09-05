@@ -1,11 +1,12 @@
 import '../../styles/globals.css';
+import winnerAnimation from '../../images/gifs/winner_animation.gif';
 
 export const PlayerWonAnimation = () => {
     return (
-        <div className="warning-on-top">
-            <h2>
-                Your are the winner. Congrats!!!
-            </h2>
+        <div className='winnerModal'>
+            <div className='winnerModal-content'>
+                <img src={winnerAnimation} alt="winner_animation" width={"768px"} />
+            </div>
         </div>
     )
 }
