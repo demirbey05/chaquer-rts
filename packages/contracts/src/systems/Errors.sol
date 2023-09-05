@@ -83,3 +83,11 @@ error EconomySystem__InsufficientSource();
 error GameSystem__NotPlayer();
 error GameSystem__WrongClaim();
 error GameSystem__WrongState();
+
+// Naval System Errors
+error NavalSystem__UnsufficientBalance();
+error NavalSystem__ArmyIsTooFar();
+error NavalSystem__ArmySizeIsLow();
+error NavalSystem__NotSeaSide();
+error NavalSystem__TileIsNotEmpty();
+error NavalSystem__WrongTile();

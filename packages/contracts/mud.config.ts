@@ -215,6 +215,13 @@ export default mudConfig({
         priceArcher:"uint256",
         priceCavalry:"uint256"
       }
+    },
+    DockOwnable: {
+      schema: {
+        owner: "address",
+        gameID: "uint256",
+      },
+      dataStruct: false,
     }
   },
   
@@ -242,6 +249,11 @@ export default mudConfig({
       name: "KeysWithValueModule",
       root: true,
       args: [resolveTableId("ResourceOwnable")],
+    },
+    {
+      name: "KeysWithValueModule",
+      root: true,
+      args: [resolveTableId("DockOwnable")],
     },
   ],
 });

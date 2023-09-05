@@ -10,11 +10,22 @@ import { IEconomySystem } from "./IEconomySystem.sol";
 import { IIdentitySystem } from "./IIdentitySystem.sol";
 import { IMapSystem } from "./IMapSystem.sol";
 import { IMineInitSystem } from "./IMineInitSystem.sol";
+import { INavalSystem } from "./INavalSystem.sol";
+import { ITestUtilSystem } from "./ITestUtilSystem.sol";
 
 /**
  * The IWorld interface includes all systems dynamically added to the World
  * during the deploy process.
  */
-interface IWorld is IBaseWorld, IAttackCaptureSystem, IEconomySystem, IIdentitySystem, IMapSystem, IMineInitSystem {
+interface IWorld is
+  IBaseWorld,
+  IAttackCaptureSystem,
+  IEconomySystem,
+  IIdentitySystem,
+  IMapSystem,
+  IMineInitSystem,
+  INavalSystem,
+  ITestUtilSystem
+{
 
 }
