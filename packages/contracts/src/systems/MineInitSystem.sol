@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
-import { PlayerSeeds, Players, LimitOfGame, GameMetaData, NumberOfUsers, ResourceInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, MineCaptureResult, ArmyConfig, ArmyOwnable } from "../codegen/Tables.sol";
+import { PlayerSeeds, Players, LimitOfGame, GameMetaData, NumberOfUsers, ResourceInited, SeedInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, MineCaptureResult, ArmyConfig, ArmyOwnable } from "../codegen/Tables.sol";
 import { MineType } from "../codegen/Types.sol";
 import { LibRandom, LibQueries, LibAttack, LibUtils, LibMath } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
@@ -28,9 +28,12 @@ contract MineInitSystem is System {
     if (GameMetaData.getState(gameID) != State.Seed) {
       revert MineSystem__WrongState();
     }
-    PlayerSeeds.pushSeeds(gameID, seed);
-    PlayerSeeds.pushSeedUsers(gameID, sender);
-    if (PlayerSeeds.lengthSeedUsers(gameID) == LimitOfGame.get(gameID)) {
+    if (SeedInited.get(gameID, sender)) {
+      revert MineSystem__SeedInited();
+    }
+    PlayerSeeds.push(gameID, seed);
+    SeedInited.set(gameID, sender, true);
+    if (PlayerSeeds.length(gameID) == LimitOfGame.get(gameID)) {
       GameMetaData.setState(gameID, State.Started);
     }
   }
@@ -40,7 +43,7 @@ contract MineInitSystem is System {
     uint32 width = MapConfig.getWidth(gameID);
     uint32 height = MapConfig.getHeight(gameID);
     uint256 currentNumOfUser = NumberOfUsers.get(gameID);
-    uint256[] memory playerSeeds = PlayerSeeds.getSeeds(gameID);
+    uint256[] memory playerSeeds = PlayerSeeds.get(gameID);
 
     if (currentNumOfUser != limit) {
       revert MineSystem__GameIsNotFull();

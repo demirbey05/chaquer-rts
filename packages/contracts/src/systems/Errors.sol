@@ -57,6 +57,7 @@ error MineSystem__ResourceInitialized();
 error MineSystem__RandomizationError();
 error MineSystem__NoCastleOfUsers();
 error MineSystem__WrongState();
+error MineSystem__SeedInited();
 
 // Identity System Errors
 error IdentitySystem__AlreadyJoined();

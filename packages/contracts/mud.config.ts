@@ -76,7 +76,15 @@ export default mudConfig({
       },
       schema:{
         seeds:"uint256[]",
-        seedUsers:"address[]"
+      }
+    },
+    SeedInited:{
+      keySchema:{
+        gameId:"uint256",
+        user:"address"
+      },
+      schema:{
+        seedInit:"bool"
       }
     },
     NumberOfUsers:{
