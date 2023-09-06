@@ -222,7 +222,31 @@ export default mudConfig({
         gameID: "uint256",
       },
       dataStruct: false,
-    }
+    },
+    DockCaptureResult:{
+      schema:{
+        winner:"address",
+        loser:"address",
+        isDraw:"bool"
+      },
+      ephemeral:true,
+    },
+    FleetConfig: {
+      schema: {
+        numSmall: "uint32",
+        numMedium: "uint32",
+        numBig: "uint32",
+        gameID: "uint256",
+      },
+      dataStruct: true,
+    },
+    FleetOwnable: {
+      schema: {
+        owner: "address",
+        gameID: "uint256",
+      },
+      dataStruct: false,
+    },
   },
   
   enums: {
@@ -254,6 +278,11 @@ export default mudConfig({
       name: "KeysWithValueModule",
       root: true,
       args: [resolveTableId("DockOwnable")],
+    },
+    {
+      name: "KeysWithValueModule",
+      root: true,
+      args: [resolveTableId("FleetOwnable")],
     },
   ],
 });

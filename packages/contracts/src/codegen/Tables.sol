@@ -28,3 +28,6 @@ import { SoldierCreated, SoldierCreatedTableId } from "./tables/SoldierCreated.s
 import { ResourcePrices, ResourcePricesData, ResourcePricesTableId } from "./tables/ResourcePrices.sol";
 import { ArmyPrices, ArmyPricesData, ArmyPricesTableId } from "./tables/ArmyPrices.sol";
 import { DockOwnable, DockOwnableTableId } from "./tables/DockOwnable.sol";
+import { DockCaptureResult, DockCaptureResultData, DockCaptureResultTableId } from "./tables/DockCaptureResult.sol";
+import { FleetConfig, FleetConfigData, FleetConfigTableId } from "./tables/FleetConfig.sol";
+import { FleetOwnable, FleetOwnableTableId } from "./tables/FleetOwnable.sol";

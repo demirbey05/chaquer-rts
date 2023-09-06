@@ -5,9 +5,10 @@ pragma solidity ^0.8.0;
 import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
-import { LibQueries, LibMath } from "../libraries/Libraries.sol";
-import { baseCostDock, requiredArmySize, baseWoodCostDock } from "./Constants.sol";
-import { CreditOwn, Position, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn } from "../codegen/Tables.sol";
+import { LibQueries, LibMath, LibNaval, LibUtils, LibAttack } from "../libraries/Libraries.sol";
+import { EntityType } from "../libraries/Types.sol";
+import { baseCostDock, requiredArmySize, baseWoodCostDock, maxShipInFleet, smallCreditCost, smallWoodCost, mediumCreditCost, mediumWoodCost, bigCreditCost, bigWoodCost } from "./Constants.sol";
+import { CreditOwn, Position, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, DockCaptureResult, ArmyOwnable } from "../codegen/Tables.sol";
 
 contract NavalSystem is System {
   function buildDock(
@@ -28,18 +29,18 @@ contract NavalSystem is System {
       revert NavalSystem__UnsufficientBalance();
     }
     // Army is far away
-    if (!isInManhattanDistance(requestedArmy, coord_x, coord_y, 3)) {
+    if (!LibNaval.isInManhattanDistance(requestedArmy, coord_x, coord_y, 3)) {
       revert NavalSystem__ArmyIsTooFar();
     }
 
     // Army size is low
-    if (!checkArmySize(requestedArmy, requiredArmySize)) {
+    if (!LibNaval.checkArmySize(requestedArmy, requiredArmySize)) {
       revert NavalSystem__ArmySizeIsLow();
     }
 
     // Location is not one step away from the naval area
 
-    if (!checkSeaSide(coord_x, coord_y, gameID, width)) {
+    if (!LibNaval.checkSeaSide(coord_x, coord_y, gameID, width)) {
       revert NavalSystem__NotSeaSide();
     }
 
@@ -63,32 +64,112 @@ contract NavalSystem is System {
     return entityID;
   }
 
-  function isInManhattanDistance(
-    bytes32 armyID,
-    uint32 coord_x,
-    uint32 coord_y,
-    uint32 threshold
-  ) internal returns (bool) {
-    (uint32 x, uint32 y, ) = Position.get(armyID);
-    uint32 distanceBetween = LibMath.manhattan(x, y, coord_x, coord_y);
-    return distanceBetween <= threshold;
+  function captureDock(bytes32 armyID, bytes32 dockID) public {
+    address armyOwner = ArmyOwnable.getOwner(armyID);
+    address dockOwner = DockOwnable.getOwner(dockID);
+
+    // Some Checks
+    if (armyOwner == dockOwner) {
+      revert NavalCapture__FriendFireNotAllowed();
+    }
+    if (armyOwner != msg.sender) {
+      revert NavalCapture__NoAuthorization();
+    }
+    (uint32 xArmy, uint32 yArmy, uint256 gameID) = Position.get(armyID);
+    (uint32 xDock, uint32 yDock, uint256 gameIDTwo) = Position.get(dockID);
+
+    uint32 distanceBetween = LibMath.manhattan(xArmy, yArmy, xDock, yDock);
+
+    if (!(distanceBetween <= 3)) {
+      revert NavalCapture__TooFarToAttack();
+    }
+    if (gameID != gameIDTwo) {
+      revert NavalCapture__NonMatchedGameID();
+    }
+
+    bytes32[] memory ownerArmiesSurroundDock = LibUtils.findSurroundingArmies(
+      IStore(_world()),
+      dockID,
+      gameID,
+      EntityType.Dock
+    );
+    uint result = LibAttack.warCaptureCastle(armyID, ownerArmiesSurroundDock);
+
+    if (result == 1) {
+      DockOwnable.setOwner(dockID, armyOwner);
+
+      // Destroy all the army which belongs to castle owner
+
+      for (uint i = 0; i < ownerArmiesSurroundDock.length; i++) {
+        if (ownerArmiesSurroundDock[i] == bytes32(0)) {
+          continue;
+        }
+        ArmyOwnable.deleteRecord(ownerArmiesSurroundDock[i]);
+        ArmyConfig.deleteRecord(ownerArmiesSurroundDock[i]);
+        Position.deleteRecord(ownerArmiesSurroundDock[i]);
+      }
+
+      DockCaptureResult.emitEphemeral(
+        keccak256(abi.encodePacked(block.timestamp, armyID, dockID, gameID)),
+        armyOwner,
+        dockOwner,
+        false
+      );
+    } else if (result == 0) {
+      DockCaptureResult.emitEphemeral(
+        keccak256(abi.encodePacked(block.timestamp, armyID, dockID, gameID)),
+        armyOwner,
+        dockOwner,
+        true
+      );
+    } else {
+      DockCaptureResult.emitEphemeral(
+        keccak256(abi.encodePacked(block.timestamp, armyID, dockID, gameID)),
+        dockOwner,
+        armyOwner,
+        false
+      );
+    }
   }
 
-  function checkArmySize(bytes32 armyID, uint32 threshold) internal returns (bool) {
-    ArmyConfigData memory config = ArmyConfig.get(armyID);
-    return (config.numSwordsman + config.numArcher + config.numCavalry) >= threshold;
-  }
-
-  function checkSeaSide(
+  function settleFleet(
     uint32 x,
     uint32 y,
-    uint256 gameID,
-    uint32 width
-  ) internal returns (bool) {
-    return
-      MapConfig.getItemTerrain(gameID, (x + 1) * width + y)[0] == hex"02" ||
-      MapConfig.getItemTerrain(gameID, (x - 1) * width + y)[0] == hex"02" ||
-      MapConfig.getItemTerrain(gameID, x * width + (y + 1))[0] == hex"02" ||
-      MapConfig.getItemTerrain(gameID, x * width + (y - 1))[0] == hex"02";
+    bytes32 dockID,
+    uint32 numSmall,
+    uint32 numMedium,
+    uint32 numBig,
+    uint256 gameID
+  ) public returns (bytes32) {
+    address ownerCandidate = _msgSender();
+    uint32 width = MapConfig.getWidth(IStore(_world()), config.gameID);
+    uint256 costCredit = numSmall * smallCreditCost + numMedium * mediumCreditCost + numBig * bigCreditCost;
+    uint256 woodCost = numSmall * smallWoodCost + numMedium * mediumWoodCost + numBig * bigWoodCost;
+    uint256 totalCredit = CreditOwn.get(gameID, sender);
+    uint256 totalWood = ResourceOwn.getNumOfWood(sender, gameID);
+
+    if (MapConfig.getItemTerrain(config.gameID, x * width + y)[0] != hex"02") {
+      revert FleetSettle__WrongTerrainType();
+    }
+    // If there is an another entity at that coordinate
+    if (LibQueries.queryPositionEntity(IStore(_world()), x, y, config.gameID) > 0) {
+      revert FleetSettle__TileIsNotEmpty();
+    }
+    if (totalCredit < costCredit * 1e18 || totalWood < woodCost) {
+      revert FleetSettle__InsufficientBalance();
+    }
+    if (numMedium + numBig + numSmall > maxShipInFleet) {
+      revert FleetSettle__TooManyShip();
+    }
+    (uint32 xDock, uint32 yDock, ) = Position.get(dockID);
+
+    if (LibMath.manhattan(x, y, xDock, yDock) > 3) {
+      revert FleetSettle__TooFarFromDock();
+    }
+
+    bytes32 entityID = keccak256(abi.encodePacked(x, y, "Fleet", ownerCandidate, gameID));
+    //Execution
+
+    return entityID;
   }
 }

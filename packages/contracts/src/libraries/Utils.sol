@@ -3,7 +3,7 @@
 pragma solidity ^0.8.0;
 import { BattleResult, RemainingData, EntityType } from "./Types.sol";
 import "./Libraries.sol";
-import { CastleOwnable, Position, ResourceOwnable } from "../codegen/Tables.sol";
+import { CastleOwnable, Position, ResourceOwnable, DockOwnable } from "../codegen/Tables.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 
 error ErrorInCalculatingBattleScores();
@@ -98,6 +98,8 @@ library LibUtils {
       owner = CastleOwnable.getOwner(entityID);
     } else if (entityType == EntityType.Mine) {
       owner = ResourceOwnable.getOwner(entityID);
+    } else if (entityType == EntityType.Dock) {
+      owner = DockOwnable.getOwner(entityID);
     }
 
     bytes32[] memory allArmies = LibQueries.getOwnedArmyIDs(world, owner, gameID);

@@ -165,7 +165,7 @@ contract MapSystem is System {
     if (GameMetaData.getState(config.gameID) != State.Started) {
       revert ArmySettle__WrongState();
     }
-
+    //@dev can be optimized by getting castleID as an argument !!!!!!!
     bytes32[] memory castleIds = LibQueries.getOwnedCastleIDs(IStore(_world()), ownerCandidate, config.gameID);
     uint256 castleClose = 0;
     for (uint i = 0; i < castleIds.length; i++) {
