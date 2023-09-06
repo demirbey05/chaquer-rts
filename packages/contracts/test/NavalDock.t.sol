@@ -7,7 +7,7 @@ import { CreditOwn, ResourceOwn, DockOwnable, Position } from "../src/codegen/Ta
 import { baseCostDock, baseWoodCostDock } from "../src/systems/Constants.sol";
 pragma solidity ^0.8.0;
 
-contract BuildDockTest is NakamoTest {
+contract NavalDockTest is NakamoTest {
   address payable[] users;
 
   function setUp() public override {

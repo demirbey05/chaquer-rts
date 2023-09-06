@@ -182,4 +182,27 @@ contract NavalSystem is System {
     CreditOwn.set(fleet.gameID, ownerCandidate, totalCredit - (costCredit * 1e18));
     return entityID;
   }
+
+  function moveFleet(
+    bytes32 fleetID,
+    uint32 x,
+    uint32 y
+  ) public {
+    address fleetOwner = FleetOwnable.getOwner(fleetID);
+    if (fleetOwner != (_msgSender())) {
+      revert FleetMove__NoAuthorization();
+    }
+    (uint32 xFleet, uint32 yFleet, uint256 gameID) = Position.get(fleetID);
+    uint32 width = MapConfig.getWidth(gameID);
+    if (MapConfig.getItemTerrain(gameID, x * width + y)[0] != hex"02") {
+      revert FleetMove__WrongTerrainType();
+    }
+    if (LibQueries.queryPositionEntity(IStore(_world()), x, y, gameID) > 0) {
+      revert FleetMove__TileIsNotEmpty();
+    }
+    if (LibMath.manhattan(x, y, xFleet, yFleet) > 3) {
+      revert FleetMove__TooFar();
+    }
+    Position.set(fleetID, x, y, gameID);
+  }
 }

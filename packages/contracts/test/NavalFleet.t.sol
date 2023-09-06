@@ -7,7 +7,7 @@ import { NakamoTest } from "./utils/NakamoTest.sol";
 import "../src/systems/Errors.sol";
 import { CreditOwn, ResourceOwn, DockOwnable, Position } from "../src/codegen/Tables.sol";
 
-contract DockCaptureTest is NakamoTest {
+contract NavalFleetTest is NakamoTest {
   address payable[] users;
   address constant testUser1 = 0xa45448cea0B6258807380390D61125be4ac6566B;
 

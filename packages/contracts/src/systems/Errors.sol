@@ -101,3 +101,7 @@ error FleetSettle__InsufficientBalance();
 error FleetSettle__TooManyShip();
 error FleetSettle__TooFarFromDock();
 error FleetSettle__TooManyFleet();
+error FleetMove__NoAuthorization();
+error FleetMove__TileIsNotEmpty();
+error FleetMove__TooFar();
+error FleetMove__WrongTerrainType();

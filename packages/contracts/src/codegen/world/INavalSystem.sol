@@ -11,4 +11,6 @@ interface INavalSystem {
   function captureDock(bytes32 armyID, bytes32 dockID) external;
 
   function settleFleet(uint32 x, uint32 y, bytes32 dockID, FleetConfigData memory fleet) external returns (bytes32);
+
+  function moveFleet(bytes32 fleetID, uint32 x, uint32 y) external;
 }
