@@ -42,6 +42,7 @@ import { MineCaptureEvent } from "./Events/MineCaptureEvent";
 import { DockSettleEvent } from "./Events/DockSettleEvent";
 import { ArmyMoveEvent } from "./Events/ArmyMoveEvent";
 import { isValidTerrainType } from "../../utils/helperFunctions/CustomFunctions/isValidTerrainType";
+import { isMyDock } from "../../utils/helperFunctions/SeaFunctions/isMyDock";
 
 export type DataProp = {
   width: number;
@@ -160,7 +161,7 @@ export const Terrain = (props: DataProp) => {
       else if (isPositionNextToSea(toArmyPositionRef.current.x, toArmyPositionRef.current.y, values) && isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition)) {
         DockSettleEvent(setIsMineStage, setIsAttackStage, setIsArmyMoveStage, setFromArmyPosition, setArmyPositionToSettleDock, fromArmyPositionRef, setDockPosition, toArmyPositionRef);
       }
-      else if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y])) {
+      else if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y]) && !isMyCastle(myCastlePosition, toArmyPositionRef.current.x, toArmyPositionRef.current.y) && !isMyDock(parseInt(fromArmyPositionRef.current.x), parseInt(fromArmyPositionRef.current.y), myDockPositions)) {
         await ArmyMoveEvent(setIsAttackStage, setIsMineStage, setDockSettleStage, fromArmyPositionRef, setIsArmyMoveStage, toArmyPositionRef, isArmyMoveStage, fromArmyPosition, setFromArmyPosition, components, movingArmyId, systemCalls, setErrorMessage, setErrorTitle, setShowError);
       }
     }

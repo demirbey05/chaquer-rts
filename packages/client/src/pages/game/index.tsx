@@ -52,6 +52,7 @@ export const Game = () => {
   const scrollContainerStyles = {
     zIndex: "0",
     height: "100vh",
+    minWidth: "100vh",
     overflow: "scroll",
     backgroundImage: `url(${gameBgImg})`,
     backgroundRepeat: "no-repeat",

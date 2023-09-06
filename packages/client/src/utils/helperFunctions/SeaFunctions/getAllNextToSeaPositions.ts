@@ -3,7 +3,7 @@ import { isPositionNextToSea } from "./isPositionNextToSea";
 const rows = Array.from({ length: 50 }, (v, i) => i);
 const columns = Array.from({ length: 50 }, (v, i) => i);
 
-export const getDockPositions = (values: number[][]) => {
+export const getAllNextToSeaPositions = (values: number[][]) => {
   const positions: { row: number; column: number }[] = [];
 
   if (values) {

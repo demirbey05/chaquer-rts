@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+body::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    -ms-overflow-style: none;
+}
+
+body {
+    scrollbar-width: none;
+}
+
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
@@ -386,6 +398,20 @@ input::-webkit-inner-spin-button {
     top: 0;
     left: -400px;
     transition: left 0.3s ease;
+}
+
+.army-info-drawer::-webkit-scrollbar {
+    width: 10px;
+}
+
+.army-info-drawer::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+.army-info-drawer::-webkit-scrollbar-thumb {
+    background: rgb(106, 106, 106);
+    border-radius: 10px;
 }
 
 .army-info-drawer.open {

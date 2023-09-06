@@ -108,12 +108,12 @@ export const DockSettleModal = () => {
                                 Dock Settlement
                             </h1>
                         </div>
-                        <div className="modal-body">
+                        <div className="modal-body font-bold">
                             <span>{"You are going to deploy a dock ⚓. Price of this dock ⚓ is "}</span>
                             {myDockPositions && (100 * (myDockPositions.length + 1))} 💰 + {myDockPositions && (1500 * (myDockPositions.length + 1))} 🪓 ,
                             <span>{" are you sure?"}</span>
                         </div>
-                        <div className="modal-footer">
+                        <div className="modal-footer d-flex justify-between">
                             <Button
                                 colorScheme="linkedin"
                                 border="solid"
@@ -121,7 +121,7 @@ export const DockSettleModal = () => {
                                 data-bs-dismiss="modal"
                                 onClick={() => handleMove()}
                             >
-                                Just Move the Army
+                                Move Army
                             </Button>
                             <Button
                                 colorScheme="red"
