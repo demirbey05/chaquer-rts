@@ -18,7 +18,7 @@ import { useMyArmy } from "../../hooks/useMyArmy";
 import { useResources } from "../../hooks/useResources";
 import { useMyResourcePositions } from "../../hooks/useMyResourcePositions";
 import { useDockPositions } from "../../hooks/useDockPositions";
-import { findIDFromPosition, Coord } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { Coord } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { getTerrainAsset } from '../../utils/helperFunctions/CustomFunctions/getTerrainAsset';
 import { isMyCastle } from '../../utils/helperFunctions/CastleFunctions/isMyCastle';
 import { isUserClickedManhattanPosition } from '../../utils/helperFunctions/CustomFunctions/isUserClickedManhattanPosition';
@@ -26,7 +26,6 @@ import { getDataAtrY, getDataAtrX } from "../../utils/helperFunctions/CustomFunc
 import { canCastleBeSettle } from "../../utils/helperFunctions/CastleFunctions/canCastleBeSettle";
 import { isMyArmy } from "../../utils/helperFunctions/ArmyFunctions/isMyArmy";
 import { isEnemyArmy } from "../../utils/helperFunctions/ArmyFunctions/isEnemyArmy";
-import { getMyArmyConfigByPosition, getEnemyArmyConfigByPosition } from "../../utils/helperFunctions/ArmyFunctions/getArmyConfigByPosition";
 import { isEnemyCastle } from "../../utils/helperFunctions/CastleFunctions/isEnemyCastle";
 import { isUserClickedMine } from "../../utils/helperFunctions/ResourceFuntions/isUserClickedMine";
 import { useMyDockPositions } from "../../hooks/useMyDockPositions";
@@ -37,6 +36,12 @@ import { ArmyEffects } from "./Effects/ArmyEffects";
 import { AttackEffects } from "./Effects/AttackEffects";
 import { HoverEffects } from "./Effects/HoverEffects";
 import { DockEffects } from "./Effects/DockEffects";
+import { ArmyAttackEvent } from "./Events/ArmyAttackEvent";
+import { CastleAttackEvent } from "./Events/CastleAttackEvent";
+import { MineCaptureEvent } from "./Events/MineCaptureEvent";
+import { DockSettleEvent } from "./Events/DockSettleEvent";
+import { ArmyMoveEvent } from "./Events/ArmyMoveEvent";
+import { isValidTerrainType } from "../../utils/helperFunctions/CustomFunctions/isValidTerrainType";
 
 export type DataProp = {
   width: number;
@@ -110,7 +115,6 @@ export const Terrain = (props: DataProp) => {
   const dockPositions = useDockPositions();
   const myDockPositions = useMyDockPositions(userWallet)
 
-  // Handle Clicks
   const handleClick = async (e: any) => {
     // For Putting army Grid with clicking castle
     if (!isArmyMoveStage && isMyCastle(myCastlePosition, getDataAtrX(e), getDataAtrY(e))) {
@@ -132,7 +136,7 @@ export const Terrain = (props: DataProp) => {
       setArmyPosition({ x: getDataAtrX(e), y: getDataAtrY(e) });
     }
 
-    //Logic of ArmyMove-ArmyAttack-CastleAttack
+    // Logic of Army-Castle-Mine-Dock Attack and Dock Settle
     if (!fromArmyPosition && isCastleSettled && !isArmySettleStage && myArmyPosition && isMyArmy({ x: getDataAtrX(e), y: getDataAtrY(e) }, myArmyPosition)) {
       setFromArmyPosition({ x: getDataAtrX(e), y: getDataAtrY(e) });
       setIsArmyMoveStage(true);
@@ -144,102 +148,20 @@ export const Terrain = (props: DataProp) => {
       toArmyPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
       fromArmyPositionRef.current = { x: fromArmyPosition.x, y: fromArmyPosition.y, };
 
-      //If user attack to the enemy army
       if (isEnemyArmy(toArmyPositionRef.current, armyPositions, myArmyPosition)) {
-        setIsArmyMoveStage(false);
-        setIsMineStage(false)
-        setDockSettleStage(false);
-        setFromArmyPosition(undefined);
-        setAttackFromArmyPositionToArmy(fromArmyPositionRef.current);
-        setAttackToArmyPositionToArmy(toArmyPositionRef.current);
-        setMyArmyConfig(
-          getMyArmyConfigByPosition({ x: fromArmyPositionRef.current.x, y: fromArmyPositionRef.current.y, }, myArmyPosition)
-        );
-        setEnemyArmyConfig(
-          getEnemyArmyConfigByPosition(
-            { x: toArmyPositionRef.current.x, y: toArmyPositionRef.current.y }, armyPositions)
-        );
-        toArmyPositionRef.current = { x: -1, y: -1 };
-        fromArmyPositionRef.current = { x: "-1", y: "-1" };
+        ArmyAttackEvent(setIsArmyMoveStage, setIsMineStage, setDockSettleStage, setFromArmyPosition, setAttackFromArmyPositionToArmy, setAttackToArmyPositionToArmy, fromArmyPositionRef, toArmyPositionRef, setMyArmyConfig, setEnemyArmyConfig, myArmyPosition, armyPositions);
       }
-      //If user attack to the enemy castle
       else if (isEnemyCastle(toArmyPositionRef.current, myCastlePosition, castlePositions)) {
-        setIsArmyMoveStage(false)
-        setIsMineStage(false)
-        setDockSettleStage(false)
-        setFromArmyPosition(undefined);
-        setAttackFromArmyPositionToCastle(fromArmyPositionRef.current);
-        setAttackToArmyPositionToCastle(toArmyPositionRef.current);
-        setMyArmyConfig(
-          getMyArmyConfigByPosition({ x: fromArmyPositionRef.current.x, y: fromArmyPositionRef.current.y, }, myArmyPosition)
-        );
-        toArmyPositionRef.current = { x: -1, y: -1 };
-        fromArmyPositionRef.current = { x: "-1", y: "-1" };
+        CastleAttackEvent(setIsArmyMoveStage, setIsMineStage, setDockSettleStage, setFromArmyPosition, setAttackFromArmyPositionToCastle, setAttackToArmyPositionToCastle, fromArmyPositionRef, toArmyPositionRef, setMyArmyConfig, myArmyPosition)
       }
-      //If user capture the mine
       else if (isUserClickedMine(toArmyPositionRef.current.x, toArmyPositionRef.current.y, resources)) {
-        setIsArmyMoveStage(false)
-        setIsAttackStage(false)
-        setDockSettleStage(false)
-        setFromArmyPosition(undefined);
-        setAttackFromArmyPositionToMine(fromArmyPositionRef.current);
-        setTargetMinePosition(toArmyPositionRef.current);
-        setMyArmyConfig(
-          getMyArmyConfigByPosition({ x: fromArmyPositionRef.current.x, y: fromArmyPositionRef.current.y, }, myArmyPosition)
-        );
-        toArmyPositionRef.current = { x: -1, y: -1 };
-        fromArmyPositionRef.current = { x: "-1", y: "-1" };
+        MineCaptureEvent(setIsArmyMoveStage, setIsAttackStage, setDockSettleStage, setFromArmyPosition, setAttackFromArmyPositionToMine, fromArmyPositionRef, setTargetMinePosition, toArmyPositionRef, setMyArmyConfig, myArmyPosition);
       }
-      // If user settle a dock
       else if (isPositionNextToSea(toArmyPositionRef.current.x, toArmyPositionRef.current.y, values) && isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition)) {
-        setIsMineStage(false)
-        setIsArmyMoveStage(false)
-        setIsAttackStage(false)
-        setFromArmyPosition(undefined)
-        setArmyPositionToSettleDock(fromArmyPositionRef.current)
-        setDockPosition(toArmyPositionRef.current)
-        toArmyPositionRef.current = { x: -1, y: -1 };
-        fromArmyPositionRef.current = { x: "-1", y: "-1" };
+        DockSettleEvent(setIsMineStage, setIsAttackStage, setIsArmyMoveStage, setFromArmyPosition, setArmyPositionToSettleDock, fromArmyPositionRef, setDockPosition, toArmyPositionRef);
       }
-      else {
-        if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y])) {
-          setIsAttackStage(false)
-          setIsMineStage(false)
-          setDockSettleStage(false);
-
-          const movingArmyIdMap = findIDFromPosition(
-            fromArmyPositionRef.current,
-            components.Position
-          );
-
-          if (movingArmyIdMap !== null) {
-            movingArmyId.current = [...movingArmyIdMap][0];
-          }
-
-          setIsArmyMoveStage(false);
-
-          if (toArmyPositionRef.current && isArmyMoveStage) {
-            const tx = await systemCalls.moveArmy(
-              movingArmyId.current,
-              toArmyPositionRef.current.x,
-              toArmyPositionRef.current.y,
-              1
-            )
-            if (tx == null) {
-              setErrorMessage("An error occurred while trying to move army.")
-              setErrorTitle("Army Move Error")
-              setShowError(true)
-              return
-            }
-
-            document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
-            document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
-
-            setFromArmyPosition(undefined);
-            toArmyPositionRef.current = { x: -1, y: -1 };
-            fromArmyPositionRef.current = { x: "-1", y: "-1" };
-          }
-        }
+      else if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y])) {
+        await ArmyMoveEvent(setIsAttackStage, setIsMineStage, setDockSettleStage, fromArmyPositionRef, setIsArmyMoveStage, toArmyPositionRef, isArmyMoveStage, fromArmyPosition, setFromArmyPosition, components, movingArmyId, systemCalls, setErrorMessage, setErrorTitle, setShowError);
       }
     }
     else {
@@ -298,7 +220,7 @@ export const Terrain = (props: DataProp) => {
                 }}
                 className={`
                 ${!props.isBorder &&
-                  canCastleBeSettle(values[row][column]) &&
+                  isValidTerrainType(values[row][column]) &&
                   "hoverTileEffect"
                   }`}
                 data-bs-toggle={`${canCastleBeSettle(values[row][column]) &&

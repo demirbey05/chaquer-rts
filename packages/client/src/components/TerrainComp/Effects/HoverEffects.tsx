@@ -9,7 +9,7 @@ import { armySettlePositions } from '../../../utils/helperFunctions/ArmyFunction
 export const HoverEffects = (armyPositions: any[], resources: any[], numberOfArmy: any, isArmySettleStage: boolean | undefined, isBorder: boolean, castlePositions: any[], myCastlePosition: any[], values: number[][], fromArmyPosition: { x: any, y: any } | undefined, isArmyMoveStage: boolean | undefined) => {
     //Blue hover effect when user moves an army
     useEffect(() => {
-        if (fromArmyPosition && isArmyMoveStage) {
+        if (fromArmyPosition && isArmyMoveStage && myCastlePosition) {
             getManhattanPositions({
                 x: parseInt(fromArmyPosition.x),
                 y: parseInt(fromArmyPosition.y),
@@ -29,7 +29,7 @@ export const HoverEffects = (armyPositions: any[], resources: any[], numberOfArm
         }
 
         return () => {
-            if (fromArmyPosition) {
+            if (fromArmyPosition && myCastlePosition) {
                 getManhattanPositions({
                     x: parseInt(fromArmyPosition.x),
                     y: parseInt(fromArmyPosition.y),

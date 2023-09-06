@@ -3,10 +3,12 @@ export const isCastlePosition = (
   y: number,
   castlePosition: any[]
 ): boolean => {
-  for (const position of castlePosition) {
-    if (position.x === x && position.y === y) {
-      return true;
-    }
+  if (castlePosition && castlePosition.length > 0) {
+    castlePosition.map((position) => {
+      if (position.x === x && position.y === y) {
+        return true;
+      }
+    });
   }
 
   return false;
