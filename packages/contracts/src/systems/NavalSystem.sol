@@ -8,7 +8,7 @@ import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { LibQueries, LibMath, LibNaval, LibUtils, LibAttack } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { baseCostDock, requiredArmySize, baseWoodCostDock, maxShipInFleet, smallCreditCost, smallWoodCost, mediumCreditCost, mediumWoodCost, bigCreditCost, bigWoodCost } from "./Constants.sol";
-import { CreditOwn, Position, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, DockCaptureResult, ArmyOwnable } from "../codegen/Tables.sol";
+import { CreditOwn, Position, FleetConfigData, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, DockCaptureResult, ArmyOwnable } from "../codegen/Tables.sol";
 
 contract NavalSystem is System {
   function buildDock(
@@ -136,29 +136,31 @@ contract NavalSystem is System {
     uint32 x,
     uint32 y,
     bytes32 dockID,
-    uint32 numSmall,
-    uint32 numMedium,
-    uint32 numBig,
-    uint256 gameID
+    FleetConfigData memory fleet
   ) public returns (bytes32) {
     address ownerCandidate = _msgSender();
-    uint32 width = MapConfig.getWidth(IStore(_world()), config.gameID);
-    uint256 costCredit = numSmall * smallCreditCost + numMedium * mediumCreditCost + numBig * bigCreditCost;
-    uint256 woodCost = numSmall * smallWoodCost + numMedium * mediumWoodCost + numBig * bigWoodCost;
-    uint256 totalCredit = CreditOwn.get(gameID, sender);
-    uint256 totalWood = ResourceOwn.getNumOfWood(sender, gameID);
+    uint32 width = MapConfig.getWidth(IStore(_world()), fleet.gameID);
+    uint256 costCredit = fleet.numSmall *
+      smallCreditCost +
+      fleet.numMedium *
+      mediumCreditCost +
+      fleet.numBig *
+      bigCreditCost;
+    uint256 woodCost = fleet.numSmall * smallWoodCost + fleet.numMedium * mediumWoodCost + fleet.numBig * bigWoodCost;
+    uint256 totalCredit = CreditOwn.get(fleet.gameID, ownerCandidate);
+    uint256 totalWood = ResourceOwn.getNumOfWood(ownerCandidate, fleet.gameID);
 
-    if (MapConfig.getItemTerrain(config.gameID, x * width + y)[0] != hex"02") {
+    if (MapConfig.getItemTerrain(fleet.gameID, x * width + y)[0] != hex"02") {
       revert FleetSettle__WrongTerrainType();
     }
     // If there is an another entity at that coordinate
-    if (LibQueries.queryPositionEntity(IStore(_world()), x, y, config.gameID) > 0) {
+    if (LibQueries.queryPositionEntity(IStore(_world()), x, y, fleet.gameID) > 0) {
       revert FleetSettle__TileIsNotEmpty();
     }
     if (totalCredit < costCredit * 1e18 || totalWood < woodCost) {
       revert FleetSettle__InsufficientBalance();
     }
-    if (numMedium + numBig + numSmall > maxShipInFleet) {
+    if (fleet.numMedium + fleet.numBig + fleet.numSmall > maxShipInFleet) {
       revert FleetSettle__TooManyShip();
     }
     (uint32 xDock, uint32 yDock, ) = Position.get(dockID);
@@ -166,8 +168,11 @@ contract NavalSystem is System {
     if (LibMath.manhattan(x, y, xDock, yDock) > 3) {
       revert FleetSettle__TooFarFromDock();
     }
+    if (LibQueries.getFleetNumber(IStore(_world()), ownerCandidate, fleet.gameID) >= 3) {
+      revert FleetSettle__TooManyFleet();
+    }
 
-    bytes32 entityID = keccak256(abi.encodePacked(x, y, "Fleet", ownerCandidate, gameID));
+    bytes32 entityID = keccak256(abi.encodePacked(x, y, "Fleet", ownerCandidate, fleet.gameID));
     //Execution
 
     return entityID;

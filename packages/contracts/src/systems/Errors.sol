@@ -100,3 +100,4 @@ error FleetSettle__TileIsNotEmpty();
 error FleetSettle__InsufficientBalance();
 error FleetSettle__TooManyShip();
 error FleetSettle__TooFarFromDock();
+error FleetSettle__TooManyFleet();
