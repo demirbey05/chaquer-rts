@@ -8,7 +8,7 @@ import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { LibQueries, LibMath, LibNaval, LibUtils, LibAttack } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { baseCostDock, requiredArmySize, baseWoodCostDock, maxShipInFleet, smallCreditCost, smallWoodCost, mediumCreditCost, mediumWoodCost, bigCreditCost, bigWoodCost } from "./Constants.sol";
-import { CreditOwn, Position, FleetConfigData, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, DockCaptureResult, ArmyOwnable } from "../codegen/Tables.sol";
+import { CreditOwn, FleetOwnable, FleetConfig, Position, FleetConfigData, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, DockCaptureResult, ArmyOwnable } from "../codegen/Tables.sol";
 
 contract NavalSystem is System {
   function buildDock(
@@ -168,13 +168,18 @@ contract NavalSystem is System {
     if (LibMath.manhattan(x, y, xDock, yDock) > 3) {
       revert FleetSettle__TooFarFromDock();
     }
-    if (LibQueries.getFleetNumber(IStore(_world()), ownerCandidate, fleet.gameID) >= 3) {
+    if (
+      LibQueries.getFleetNumber(IStore(_world()), ownerCandidate, fleet.gameID) >=
+      LibQueries.getDocksLength(IStore(_world()), ownerCandidate, fleet.gameID)
+    ) {
       revert FleetSettle__TooManyFleet();
     }
-
     bytes32 entityID = keccak256(abi.encodePacked(x, y, "Fleet", ownerCandidate, fleet.gameID));
-    //Execution
-
+    Position.set(entityID, x, y, fleet.gameID);
+    FleetConfig.set(entityID, fleet);
+    FleetOwnable.set(entityID, ownerCandidate, fleet.gameID);
+    ResourceOwn.setNumOfWood(ownerCandidate, fleet.gameID, totalWood - woodCost);
+    CreditOwn.set(fleet.gameID, ownerCandidate, totalCredit - (costCredit * 1e18));
     return entityID;
   }
 }
