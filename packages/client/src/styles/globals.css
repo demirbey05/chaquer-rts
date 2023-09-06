@@ -374,6 +374,8 @@ input::-webkit-inner-spin-button {
 /* Army Info Drawer styles */
 .army-info-drawer {
     background-color: rgba(0, 0, 0, 0.8);
+    overflow-y: auto;
+    overflow-x: hidden;
     color: white;
     z-index: 2;
     height: 600px;

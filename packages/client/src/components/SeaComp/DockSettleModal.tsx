@@ -1,17 +1,39 @@
 import { useMUD } from "../../MUDContext";
 import { Entity } from "@latticexyz/recs";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { Button } from "@chakra-ui/react";
 import { useError } from "../../context/ErrorContext";
 import { useSea } from "../../context/SeaContext";
+import { usePlayer } from "../../context/PlayerContext";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { useMyDockPositions } from "../../hooks/useMyDockPositions";
+import { useCredit } from "../../hooks/useCredit";
+import { useNumberOfResource } from "../../hooks/useNumberOfResource";
+import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 
 export const DockSettleModal = () => {
     const { systemCalls, components } = useMUD();
     const movingArmyId = useRef<Entity>("0" as Entity);
+    const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
     const { armyPositionToSettleDock, dockPosition, setDockPosition, setArmyPositionToSettleDock, setDockSettleStage } = useSea();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
+    const { userWallet } = usePlayer();
+
+    const myDockPositions = useMyDockPositions(userWallet);
+    const myCredit = useCredit(1, userWallet);
+    const myResources = useNumberOfResource(userWallet, 1);
+
+    useEffect(() => {
+        if (myDockPositions && myCredit && myResources) {
+            if (Number(getNumberFromBigInt(myCredit)) >= (100 * (myDockPositions.length + 1)) && Number(myResources.numOfWood) >= (1500 * (myDockPositions.length + 1))) {
+                setIsDisabled(false)
+            }
+            else {
+                setIsDisabled(true)
+            }
+        }
+    }, [myDockPositions, myCredit, myResources])
 
     const handleSettle = async () => {
         const movingArmyIdMap = findIDFromPosition(
@@ -87,7 +109,9 @@ export const DockSettleModal = () => {
                             </h1>
                         </div>
                         <div className="modal-body">
-                            You are going to settle a Dock, are you sure?
+                            <span>{"You are going to deploy a dock ⚓. Price of this dock ⚓ is "}</span>
+                            {myDockPositions && (100 * (myDockPositions.length + 1))} 💰 + {myDockPositions && (1500 * (myDockPositions.length + 1))} 🪓 ,
+                            <span>{" are you sure?"}</span>
                         </div>
                         <div className="modal-footer">
                             <Button
@@ -112,6 +136,7 @@ export const DockSettleModal = () => {
                                 border="solid"
                                 textColor="dark"
                                 data-bs-dismiss="modal"
+                                isDisabled={isDisabled}
                                 onClick={() => handleSettle()}
                             >
                                 Settle Dock

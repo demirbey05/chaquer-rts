@@ -4,10 +4,7 @@ export interface Coord {
   y: string;
 }
 
-export const findIDFromPosition = (
-  coordinate: Coord | any,
-  posComponent: any
-) => {
+export const findIDFromPosition = (coordinate: Coord, posComponent: any) => {
   const matchingEntities = runQuery([
     HasValue(posComponent, {
       x: Number(coordinate.x),
