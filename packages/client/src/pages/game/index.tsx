@@ -34,6 +34,7 @@ import { useGameState } from "../../hooks/useGameState";
 import { useCountOfPlayerSeed } from "../../hooks/useCountOfPlayerSeed";
 import { limitOfUser } from "../../utils/constants/constants";
 import { useIsMineInitialized } from "../../hooks/useIsMineInitialized";
+import { DockSettleModal } from "../../components/SeaComp/DockSettleModal";
 
 export const Game = () => {
   const { width, height } = useTerrain();
@@ -79,6 +80,7 @@ export const Game = () => {
       {gameState === 3 && !isPlayerLost && mineInited && <ArmyAttackDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <CastleAttackDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <MineCaptureDrawer />}
+      {gameState === 3 && !isPlayerLost && mineInited && <DockSettleModal />}
       {isPlayerLost && <PlayerLostWarning />}
       {gameState === 4 && isPlayerWinner && <PlayerWonAnimation />}
 

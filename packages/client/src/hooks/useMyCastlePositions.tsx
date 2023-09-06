@@ -3,7 +3,7 @@ import { useMUD } from "../MUDContext";
 import { HasValue, getComponentValue } from "@latticexyz/recs";
 import { useState, useEffect } from "react";
 
-export function useCastlePositionByAddress(address: any) {
+export function useMyCastlePositions(address: any) {
   const { components } = useMUD();
 
   const castleEntity = useEntityQuery([HasValue(components.CastleOwnable, { owner: address })]);

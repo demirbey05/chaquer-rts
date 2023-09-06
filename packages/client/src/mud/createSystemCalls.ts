@@ -225,6 +225,22 @@ export function createSystemCalls(
       return null;
     }
   };
+  
+  const buildDock = async ( x: number, y: number, armyID: string, gameID: number) => {
+    try {
+      const tx = await worldContract.write.buildDock([
+        x,
+        y,
+        armyID,
+        BigInt(gameID)
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
 
   return {
     initMapDataSystem,
@@ -241,5 +257,6 @@ export function createSystemCalls(
     sellResource,
     updateEconomyData,
     claimWinner,
+    buildDock
   };
 }

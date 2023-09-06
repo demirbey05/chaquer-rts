@@ -13,6 +13,7 @@ import { ArmyProvider } from "./context/ArmyContext";
 import { AttackProvider } from "./context/AttackContext";
 import { MineProvider } from "./context/MineContext";
 import { ErrorProvider } from "./context/ErrorContext";
+import { SeaProvider } from "./context/SeaContext";
 
 const rootElement = document.getElementById("react-root");
 if (!rootElement) throw new Error("React root not found");
@@ -26,15 +27,17 @@ setup().then(async (result) => {
         <ErrorProvider>
           <TerrainProvider>
             <AttackProvider>
-              <MineProvider>
-                <ArmyProvider>
-                  <CastleProvider>
-                    <PlayerProvider>
-                      <App />
-                    </PlayerProvider>
-                  </CastleProvider>
-                </ArmyProvider>
-              </MineProvider>
+              <SeaProvider>
+                <MineProvider>
+                  <ArmyProvider>
+                    <CastleProvider>
+                      <PlayerProvider>
+                        <App />
+                      </PlayerProvider>
+                    </CastleProvider>
+                  </ArmyProvider>
+                </MineProvider>
+              </SeaProvider>
             </AttackProvider>
           </TerrainProvider>
         </ErrorProvider>

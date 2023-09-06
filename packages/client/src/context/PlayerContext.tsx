@@ -4,7 +4,7 @@ import { useRef, useState, useEffect, useContext, createContext, ReactNode } fro
 import { useNumberOfUsers } from "../hooks/useNumberOfUsers";
 import { usePlayerIsValid } from "../hooks/usePlayerIsValid";
 import { useMUD } from "../MUDContext";
-import { useCastlePositionByAddress } from "../hooks/useCastlePositionByAddress";
+import { useCastlePositionByAddress } from "../hooks/useMyCastlePositions";
 import { useGameState } from "../hooks/useGameState";
 import { useWinnerAddress } from "../hooks/useWinnerAddress";
 

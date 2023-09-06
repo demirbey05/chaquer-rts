@@ -10,11 +10,11 @@ import { useMine } from "../../context/MineContext";
 import { useError } from "../../context/ErrorContext";
 import { useMUD } from "../../MUDContext";
 import { useCastlePositions } from "../../hooks/useCastlePositions";
-import { useCastlePositionByAddress } from "../../hooks/useCastlePositionByAddress";
+import { useMyCastlePositions } from "../../hooks/useMyCastlePositions";
 import { useArmyPositions } from "../../hooks/useArmyPositions";
 import { useMyArmy } from "../../hooks/useMyArmy";
 import { useResources } from "../../hooks/useResources";
-import { useResourcePositionByAddress } from "../../hooks/useResourcePositionByAddress";
+import { useMyResourcePositions } from "../../hooks/useMyResourcePositions";
 import { findIDFromPosition, Coord } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { getTerrainAsset } from '../../utils/helperFunctions/CustomFunctions/getTerrainAsset';
 import { isMyCastle } from '../../utils/helperFunctions/CastleFunctions/isMyCastle';
@@ -34,6 +34,10 @@ import { isCastlePosition } from "../../utils/helperFunctions/CastleFunctions/is
 import { isArmyPosition } from "../../utils/helperFunctions/ArmyFunctions/isArmyPosition";
 import { armySettlePositions } from "../../utils/helperFunctions/ArmyFunctions/armySettlePositions";
 import { isManhattanPosition } from "../../utils/helperFunctions/CustomFunctions/isManhattanPosition";
+import { useDockPositions } from "../../hooks/useDockPositions";
+import { useMyDockPositions } from "../../hooks/useMyDockPositions";
+import { useSea } from "../../context/SeaContext";
+import { isPositionNextToSea } from "../../utils/helperFunctions/SeaFunctions/isPositionNextToSea";
 
 export type DataProp = {
   width: number;
@@ -72,6 +76,7 @@ export const Terrain = (props: DataProp) => {
   const { userWallet } = usePlayer();
   const { isCastleSettled, setIsCastleSettled, setTempCastle } = useCastle();
   const { isMineStage, setIsMineStage, setTargetMinePosition, setAttackFromArmyPositionToMine } = useMine();
+  const { dockSettleStage, setDockSettleStage, setArmyPositionToSettleDock, armyPositionToSettleDock, setDockPosition, dockPosition } = useSea();
   const { setShowError, setErrorMessage, setErrorTitle } = useError();
 
   const movingArmyId = useRef<Entity>("0" as Entity);
@@ -79,12 +84,14 @@ export const Terrain = (props: DataProp) => {
   const fromArmyPositionRef = useRef<Coord>({ x: "-1", y: "-1" });
 
   const castlePositions = useCastlePositions();
-  const myCastlePosition = useCastlePositionByAddress(userWallet);
+  const myCastlePosition = useMyCastlePositions(userWallet);
   const armyPositions = useArmyPositions()[0];
   const myArmyPosition: any = useMyArmy(userWallet)[0];
   const myArmyNumber = useMyArmy(userWallet)[1];
   const resources = useResources();
-  const myResourcePositions = useResourcePositionByAddress(userWallet);
+  const myResourcePositions = useMyResourcePositions(userWallet);
+  const dockPositions = useDockPositions();
+  const myDockPositions = useMyDockPositions(userWallet)
 
   // Handle Clicks
   const handleClick = async (e: any) => {
@@ -114,6 +121,7 @@ export const Terrain = (props: DataProp) => {
       setIsArmyMoveStage(true);
       setIsAttackStage(true);
       setIsMineStage(true)
+      setDockSettleStage(true);
     }
     else if (fromArmyPosition && isUserClickedManhattanPosition(fromArmyPosition, getDataAtrX(e), getDataAtrY(e))) {
       toArmyPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
@@ -123,6 +131,7 @@ export const Terrain = (props: DataProp) => {
       if (isEnemyArmy(toArmyPositionRef.current, armyPositions, myArmyPosition)) {
         setIsArmyMoveStage(false);
         setIsMineStage(false)
+        setDockSettleStage(false);
         setFromArmyPosition(undefined);
         setAttackFromArmyPositionToArmy(fromArmyPositionRef.current);
         setAttackToArmyPositionToArmy(toArmyPositionRef.current);
@@ -140,6 +149,7 @@ export const Terrain = (props: DataProp) => {
       else if (isEnemyCastle(toArmyPositionRef.current, myCastlePosition, castlePositions)) {
         setIsArmyMoveStage(false)
         setIsMineStage(false)
+        setDockSettleStage(false)
         setFromArmyPosition(undefined);
         setAttackFromArmyPositionToCastle(fromArmyPositionRef.current);
         setAttackToArmyPositionToCastle(toArmyPositionRef.current);
@@ -153,6 +163,7 @@ export const Terrain = (props: DataProp) => {
       else if (isUserClickedMine(toArmyPositionRef.current.x, toArmyPositionRef.current.y, resources)) {
         setIsArmyMoveStage(false)
         setIsAttackStage(false)
+        setDockSettleStage(false)
         setFromArmyPosition(undefined);
         setAttackFromArmyPositionToMine(fromArmyPositionRef.current);
         setTargetMinePosition(toArmyPositionRef.current);
@@ -162,10 +173,23 @@ export const Terrain = (props: DataProp) => {
         toArmyPositionRef.current = { x: -1, y: -1 };
         fromArmyPositionRef.current = { x: "-1", y: "-1" };
       }
+      // If user settle a dock
+      else if (isPositionNextToSea(toArmyPositionRef.current.x, toArmyPositionRef.current.y, values) && isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition)) {
+        setIsMineStage(false)
+        setIsArmyMoveStage(false)
+        setIsAttackStage(false)
+        setFromArmyPosition(undefined)
+        setArmyPositionToSettleDock(fromArmyPositionRef.current)
+        setDockPosition(toArmyPositionRef.current)
+        toArmyPositionRef.current = { x: -1, y: -1 };
+        fromArmyPositionRef.current = { x: "-1", y: "-1" };
+      }
       else {
         if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y])) {
           setIsAttackStage(false)
           setIsMineStage(false)
+          setDockSettleStage(false);
+
           const movingArmyIdMap = findIDFromPosition(
             fromArmyPositionRef.current,
             components.Position
@@ -194,7 +218,6 @@ export const Terrain = (props: DataProp) => {
             document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
             document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
 
-            setIsAttackStage(false);
             setFromArmyPosition(undefined);
             toArmyPositionRef.current = { x: -1, y: -1 };
             fromArmyPositionRef.current = { x: "-1", y: "-1" };
@@ -203,12 +226,13 @@ export const Terrain = (props: DataProp) => {
       }
     }
     else {
-      setFromArmyPosition(undefined);
-      toArmyPositionRef.current = { x: -1, y: -1 };
-      fromArmyPositionRef.current = { x: "-1", y: "-1" };
       setIsArmyMoveStage(false);
       setIsAttackStage(false);
       setIsMineStage(false)
+      setDockSettleStage(false);
+      setFromArmyPosition(undefined);
+      toArmyPositionRef.current = { x: -1, y: -1 };
+      fromArmyPositionRef.current = { x: "-1", y: "-1" };
     }
   };
 
@@ -425,7 +449,6 @@ export const Terrain = (props: DataProp) => {
           }
         });
       }
-
     }
   }, [isMineStage])
 
@@ -513,6 +536,65 @@ export const Terrain = (props: DataProp) => {
     }
   }, [isArmySettleStage, myCastlePosition]);
 
+  /* Deploy dock emojis */
+  useEffect(() => {
+    if (dockPositions && dockPositions.length > 0) {
+      dockPositions.map(
+        (data) => {
+          document.getElementById(`${data.y},${data.x}`)!.innerHTML = "⚓";
+        }
+      );
+    }
+  }, [dockPositions])
+
+  /* Check my dock positions and add borders */
+  useEffect(() => {
+    if (myDockPositions && myDockPositions.length > 0) {
+      myDockPositions.map((position: any) => {
+        document.getElementById(`${position.y},${position.x}`)!.style.border = "2px solid rgb(245, 169, 6)";
+      });
+    }
+
+    return () => {
+      if (myDockPositions && myDockPositions.length > 0) {
+        myDockPositions.map((position: any) => {
+          if (document.getElementById(`${position.y},${position.x}`)) {
+            document.getElementById(`${position.y},${position.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
+          }
+        });
+      }
+    }
+  }, [myDockPositions])
+
+  /* Assign data-bs-toggle ve data-bs-target attributes to possible dock positions */
+  useEffect(() => {
+    if (values && dockSettleStage) {
+      rows.forEach((row) => {
+        columns.forEach((column) => {
+          const element = document.getElementById(`${column},${row}`);
+          if (element && isPositionNextToSea(row, column, values)) {
+            const position = { x: row, y: column };
+            const isPositionOccupied = isArmyPosition(position.x, position.y, armyPositions) ||
+              isMyArmy(position, myArmyPosition) ||
+              isResourcePosition(position.x, position.y, resources) ||
+              isCastlePosition(position.x, position.y, castlePositions)
+
+            if (!isPositionOccupied) {
+              console.log("Attribute verildi")
+              element.setAttribute("data-bs-toggle", "modal");
+              element.setAttribute("data-bs-target", "#dockSettleModal");
+            } else {
+              // If it was previously assigned, remove the attributes
+              console.log("Attribute çıkarıldı")
+              element.removeAttribute("data-bs-toggle");
+              element.removeAttribute("data-bs-target");
+            }
+          }
+        });
+      });
+    }
+  }, [values, rows, columns, armyPositions, resources, castlePositions, dockSettleStage, myArmyPosition]);
+
   return (
     <div className={`inline-grid ${props.isBorder && "border-4 border-black"}`}
       style={{
@@ -557,14 +639,12 @@ export const Terrain = (props: DataProp) => {
                 data-bs-toggle={`${canCastleBeSettle(values[row][column]) &&
                   !isCastleSettled &&
                   !props.isBorder
-                  ? "modal"
-                  : ""
+                  ? "modal" : ""
                   }`}
                 data-bs-target={`${canCastleBeSettle(values[row][column]) &&
                   !isCastleSettled &&
                   !props.isBorder
-                  ? "#castleSettleModal"
-                  : ""
+                  ? "#castleSettleModal" : ""
                   }`}
               ></span>
             );
