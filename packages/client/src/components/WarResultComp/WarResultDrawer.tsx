@@ -44,6 +44,9 @@ export const WarResultDrawer = () => {
                             else if (data.type === "mine") {
                                 return <WarResult username={username} text={"⚔️💰"} data={data} userWallet={userWallet} key={key} />
                             }
+                            else if (data.type === "dock") {
+                                return <WarResult username={username} text={"⚔️⚓"} data={data} userWallet={userWallet} key={key} />
+                            }
                             else {
                                 return <WarResult username={username} text={"⚔️🏰"} data={data} userWallet={userWallet} key={key} />
                             }

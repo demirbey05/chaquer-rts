@@ -5,10 +5,11 @@ import { isMyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isMyArmy"
 import { isResourcePosition } from "../../../utils/helperFunctions/ResourceFuntions/isResourcePosition";
 import { isCastlePosition } from "../../../utils/helperFunctions/CastleFunctions/isCastlePosition";
 import { isMyDock } from "../../../utils/helperFunctions/SeaFunctions/isMyDock";
+import { isManhattanPosition } from "../../../utils/helperFunctions/CustomFunctions/isManhattanPosition";
+import { isDockPosition } from "../../../utils/helperFunctions/SeaFunctions/isDockPosition";
 import { getAllNextToSeaPositions } from "../../../utils/helperFunctions/SeaFunctions/getAllNextToSeaPositions";
-import { position } from "@chakra-ui/react";
 
-export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosition: any[], armyPositions: any[], dockPositions: any[], myDockPositions: any[] | undefined, values: number[][], dockSettleStage: boolean, rows: number[], columns: number[]) => {
+export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosition: any[], armyPositions: any[], dockPositions: any[], myDockPositions: any[] | undefined, values: number[][], dockSettleStage: boolean, dockCaptureStage: boolean, rows: number[], columns: number[], fromArmyPosition: any) => {
     /* Deploy dock emojis */
     useEffect(() => {
         if (dockPositions && dockPositions.length > 0) {
@@ -51,7 +52,7 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
                             isMyArmy(position, myArmyPosition) ||
                             isResourcePosition(position.x, position.y, resources) ||
                             isCastlePosition(position.x, position.y, castlePositions) ||
-                            isMyDock(position.x, position.y, myDockPositions)
+                            isDockPosition(position.x, position.y, dockPositions)
 
                         if (!isPositionOccupied) {
                             element.setAttribute("data-bs-toggle", "modal");
@@ -73,7 +74,7 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
                                 isMyArmy(position, myArmyPosition) ||
                                 isResourcePosition(position.x, position.y, resources) ||
                                 isCastlePosition(position.x, position.y, castlePositions) ||
-                                isMyDock(position.x, position.y, myDockPositions)
+                                isDockPosition(position.x, position.y, dockPositions)
 
                             if (!isPositionOccupied) {
                                 element.setAttribute("data-bs-toggle", "");
@@ -85,4 +86,29 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
             }
         }
     }, [values, rows, columns, armyPositions, resources, castlePositions, dockSettleStage, myArmyPosition]);
+
+    // Handle Dock Capture OffCanvas
+    useEffect(() => {
+        if (dockPositions && dockCaptureStage && fromArmyPosition && myDockPositions) {
+            dockPositions.map((data: any) => {
+                isManhattanPosition(data, fromArmyPosition.x, fromArmyPosition.y) &&
+                    !isMyDock(data.x, data.y, myDockPositions) &&
+                    document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
+                isManhattanPosition(data, fromArmyPosition.x, fromArmyPosition.y) &&
+                    !isMyDock(data.x, data.y, myDockPositions) &&
+                    document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "#dockCaptureDrawer");
+            });
+        }
+
+        return () => {
+            if (dockPositions) {
+                dockPositions.map((data: any) => {
+                    if (document.getElementById(`${data.y},${data.x}`) !== null) {
+                        document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-toggle", "");
+                        document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "");
+                    }
+                });
+            }
+        }
+    }, [dockPositions, myDockPositions, dockCaptureStage, fromArmyPosition])
 }

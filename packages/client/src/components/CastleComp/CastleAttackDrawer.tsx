@@ -108,7 +108,7 @@ export const CastleAttackDrawer = () => {
             onClick={handleAttack}
             className="mr-2"
           >
-            Attack to the Enemy
+            Attack to Castle
           </Button>
           <Button
             colorScheme="red"

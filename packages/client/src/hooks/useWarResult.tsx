@@ -9,6 +9,7 @@ export function useWarResult(maxElementSize: number) {
     const armyWarResult = useObservableValue(components.BattleResult.update$);
     const castleCaptureResult = useObservableValue(components.CastleSiegeResult.update$);
     const mineCaptureResult = useObservableValue(components.MineCaptureResult.update$);
+    const dockCaptureResult = useObservableValue(components.DockCaptureResult.update$);
 
     const [lastFive, setLastFive] = useState<ComponentValue<any, undefined>[]>([]);
 
@@ -38,6 +39,15 @@ export function useWarResult(maxElementSize: number) {
             ]);
         }
     }, [mineCaptureResult])
+
+    useEffect(() => {
+        if (dockCaptureResult) {
+            setLastFive((prevResults) => [
+                ...prevResults.slice(-maxElementSize + 1),
+                { data: dockCaptureResult?.value[0], type: "dock" },
+            ]);
+        }
+    }, [dockCaptureResult])
 
     return lastFive;
 }

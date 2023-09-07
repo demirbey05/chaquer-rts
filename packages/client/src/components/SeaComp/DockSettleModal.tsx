@@ -10,6 +10,7 @@ import { useMyDockPositions } from "../../hooks/useMyDockPositions";
 import { useCredit } from "../../hooks/useCredit";
 import { useNumberOfResource } from "../../hooks/useNumberOfResource";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
+import { useArmy } from "../../context/ArmyContext";
 
 export const DockSettleModal = () => {
     const { systemCalls, components } = useMUD();
@@ -19,6 +20,7 @@ export const DockSettleModal = () => {
     const { armyPositionToSettleDock, dockPosition, setDockPosition, setArmyPositionToSettleDock, setDockSettleStage } = useSea();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { userWallet } = usePlayer();
+    const { setIsArmyMoveStage } = useArmy();
 
     const myDockPositions = useMyDockPositions(userWallet);
     const myCredit = useCredit(1, userWallet);
@@ -44,6 +46,8 @@ export const DockSettleModal = () => {
         if (movingArmyIdMap !== null) {
             movingArmyId.current = [...movingArmyIdMap][0];
         }
+
+        setIsArmyMoveStage(false)
 
         const tx = await systemCalls.buildDock(
             dockPosition.x,
