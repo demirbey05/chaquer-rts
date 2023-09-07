@@ -42,6 +42,9 @@ import { MineCaptureEvent } from "./Events/MineCaptureEvent";
 import { DockSettleEvent } from "./Events/DockSettleEvent";
 import { ArmyMoveEvent } from "./Events/ArmyMoveEvent";
 import { isValidTerrainType } from "../../utils/helperFunctions/CustomFunctions/isValidTerrainType";
+import { isMyDock } from "../../utils/helperFunctions/SeaFunctions/isMyDock";
+import { isEnemyDock } from "../../utils/helperFunctions/SeaFunctions/isEnemyDock";
+import { DockCaptureEvent } from "./Events/DockCaptureEvent";
 
 export type DataProp = {
   width: number;
@@ -95,7 +98,11 @@ export const Terrain = (props: DataProp) => {
   const { dockSettleStage,
     setDockSettleStage,
     setArmyPositionToSettleDock,
-    setDockPosition } = useSea();
+    setDockPosition,
+    setDockCaptureStage,
+    setTargetDockPosition,
+    setDockAttackerArmyPosition,
+    dockCaptureStage } = useSea();
 
   const { setShowError,
     setErrorMessage,
@@ -143,25 +150,29 @@ export const Terrain = (props: DataProp) => {
       setIsAttackStage(true);
       setIsMineStage(true)
       setDockSettleStage(true);
+      setDockCaptureStage(true);
     }
     else if (fromArmyPosition && isUserClickedManhattanPosition(fromArmyPosition, getDataAtrX(e), getDataAtrY(e))) {
       toArmyPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
       fromArmyPositionRef.current = { x: fromArmyPosition.x, y: fromArmyPosition.y, };
 
       if (isEnemyArmy(toArmyPositionRef.current, armyPositions, myArmyPosition)) {
-        ArmyAttackEvent(setIsArmyMoveStage, setIsMineStage, setDockSettleStage, setFromArmyPosition, setAttackFromArmyPositionToArmy, setAttackToArmyPositionToArmy, fromArmyPositionRef, toArmyPositionRef, setMyArmyConfig, setEnemyArmyConfig, myArmyPosition, armyPositions);
+        ArmyAttackEvent(setIsArmyMoveStage, setIsMineStage, setDockSettleStage, setDockCaptureStage, setFromArmyPosition, setAttackFromArmyPositionToArmy, setAttackToArmyPositionToArmy, fromArmyPositionRef, toArmyPositionRef, setMyArmyConfig, setEnemyArmyConfig, myArmyPosition, armyPositions);
       }
       else if (isEnemyCastle(toArmyPositionRef.current, myCastlePosition, castlePositions)) {
-        CastleAttackEvent(setIsArmyMoveStage, setIsMineStage, setDockSettleStage, setFromArmyPosition, setAttackFromArmyPositionToCastle, setAttackToArmyPositionToCastle, fromArmyPositionRef, toArmyPositionRef, setMyArmyConfig, myArmyPosition)
+        CastleAttackEvent(setIsArmyMoveStage, setIsMineStage, setDockSettleStage, setDockCaptureStage, setFromArmyPosition, setAttackFromArmyPositionToCastle, setAttackToArmyPositionToCastle, fromArmyPositionRef, toArmyPositionRef, setMyArmyConfig, myArmyPosition)
       }
       else if (isUserClickedMine(toArmyPositionRef.current.x, toArmyPositionRef.current.y, resources)) {
         MineCaptureEvent(setIsArmyMoveStage, setIsAttackStage, setDockSettleStage, setFromArmyPosition, setAttackFromArmyPositionToMine, fromArmyPositionRef, setTargetMinePosition, toArmyPositionRef, setMyArmyConfig, myArmyPosition);
       }
-      else if (isPositionNextToSea(toArmyPositionRef.current.x, toArmyPositionRef.current.y, values) && isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition)) {
-        DockSettleEvent(setIsMineStage, setIsAttackStage, setIsArmyMoveStage, setFromArmyPosition, setArmyPositionToSettleDock, fromArmyPositionRef, setDockPosition, toArmyPositionRef);
+      else if (isEnemyDock(toArmyPositionRef.current, dockPositions, myDockPositions)) {
+        DockCaptureEvent(setIsArmyMoveStage, setIsAttackStage, setDockSettleStage, setFromArmyPosition, setDockAttackerArmyPosition, fromArmyPositionRef, setTargetDockPosition, toArmyPositionRef, setMyArmyConfig, myArmyPosition)
       }
-      else if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y])) {
-        await ArmyMoveEvent(setIsAttackStage, setIsMineStage, setDockSettleStage, fromArmyPositionRef, setIsArmyMoveStage, toArmyPositionRef, isArmyMoveStage, fromArmyPosition, setFromArmyPosition, components, movingArmyId, systemCalls, setErrorMessage, setErrorTitle, setShowError);
+      else if (isPositionNextToSea(toArmyPositionRef.current.x, toArmyPositionRef.current.y, values) && isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition)) {
+        DockSettleEvent(setIsMineStage, setIsAttackStage, setIsArmyMoveStage, setDockCaptureStage, setFromArmyPosition, setArmyPositionToSettleDock, fromArmyPositionRef, setDockPosition, toArmyPositionRef);
+      }
+      else if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y]) && !isMyCastle(myCastlePosition, toArmyPositionRef.current.x, toArmyPositionRef.current.y) && !isMyDock(parseInt(fromArmyPositionRef.current.x), parseInt(fromArmyPositionRef.current.y), myDockPositions)) {
+        await ArmyMoveEvent(setIsAttackStage, setIsMineStage, setDockSettleStage, setDockCaptureStage, fromArmyPositionRef, setIsArmyMoveStage, toArmyPositionRef, isArmyMoveStage, fromArmyPosition, setFromArmyPosition, components, movingArmyId, systemCalls, setErrorMessage, setErrorTitle, setShowError);
       }
     }
     else {
@@ -169,6 +180,7 @@ export const Terrain = (props: DataProp) => {
       setIsAttackStage(false);
       setIsMineStage(false)
       setDockSettleStage(false);
+      setDockCaptureStage(false)
       setFromArmyPosition(undefined);
       toArmyPositionRef.current = { x: -1, y: -1 };
       fromArmyPositionRef.current = { x: "-1", y: "-1" };
@@ -180,7 +192,7 @@ export const Terrain = (props: DataProp) => {
   ArmyEffects(castlePositions, isArmySettleStage, armyPositions, myArmyPosition, setNumberOfArmy, myArmyNumber, resources);
   AttackEffects(myCastlePosition, castlePositions, armyPositions, myArmyPosition, isAttackStage, fromArmyPosition);
   HoverEffects(armyPositions, resources, numberOfArmy, isArmySettleStage, props.isBorder, castlePositions, myCastlePosition, values, fromArmyPosition, isArmyMoveStage);
-  DockEffects(castlePositions, resources, myArmyPosition, armyPositions, dockPositions, myDockPositions, values, dockSettleStage, rows, columns);
+  DockEffects(castlePositions, resources, myArmyPosition, armyPositions, dockPositions, myDockPositions, values, dockSettleStage, dockCaptureStage, rows, columns, fromArmyPosition);
 
   return (
     <div className={`inline-grid ${props.isBorder && "border-4 border-black"}`}

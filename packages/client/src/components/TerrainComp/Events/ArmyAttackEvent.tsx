@@ -5,6 +5,7 @@ export const ArmyAttackEvent = (
     setIsArmyMoveStage: (value: boolean) => void,
     setIsMineStage: (value: boolean) => void,
     setDockSettleStage: (value: boolean) => void,
+    setDockCaptureStage: (value: boolean) => void,
     setFromArmyPosition: any,
     setAttackFromArmyPositionToArmy: any,
     setAttackToArmyPositionToArmy: any,
@@ -18,6 +19,7 @@ export const ArmyAttackEvent = (
     setIsArmyMoveStage(false);
     setIsMineStage(false)
     setDockSettleStage(false);
+    setDockCaptureStage(false)
     setFromArmyPosition(undefined);
     setAttackFromArmyPositionToArmy(fromArmyPositionRef.current);
     setAttackToArmyPositionToArmy(toArmyPositionRef.current);

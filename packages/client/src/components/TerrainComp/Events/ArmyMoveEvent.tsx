@@ -4,6 +4,7 @@ export const ArmyMoveEvent = async (
     setIsAttackStage: (value: boolean) => void,
     setIsMineStage: (value: boolean) => void,
     setDockSettleStage: (value: boolean) => void,
+    setDockCaptureStage: (value: boolean) => void,
     fromArmyPositionRef: any,
     setIsArmyMoveStage: (value: boolean) => void,
     toArmyPositionRef: any,
@@ -20,6 +21,7 @@ export const ArmyMoveEvent = async (
     setIsAttackStage(false)
     setIsMineStage(false)
     setDockSettleStage(false);
+    setDockCaptureStage(false)
 
     const movingArmyIdMap = findIDFromPosition(
         fromArmyPositionRef.current,

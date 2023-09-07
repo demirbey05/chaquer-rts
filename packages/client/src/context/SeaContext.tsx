@@ -7,6 +7,12 @@ type SeaContextType = {
     setArmyPositionToSettleDock: (value: any) => void;
     dockPosition: any;
     setDockPosition: (value: any) => void;
+    dockCaptureStage: boolean;
+    setDockCaptureStage: (value: boolean) => void;
+    targetDockPosition: any;
+    setTargetDockPosition: (value: any) => void;
+    dockAttackerArmyPosition: any;
+    setDockAttackerArmyPosition: (value: any) => void;
 };
 
 const SeaContext = createContext<SeaContextType>({
@@ -15,7 +21,13 @@ const SeaContext = createContext<SeaContextType>({
     armyPositionToSettleDock: undefined,
     setArmyPositionToSettleDock: () => { },
     dockPosition: undefined,
-    setDockPosition: () => { }
+    setDockPosition: () => { },
+    dockCaptureStage: false,
+    setDockCaptureStage: () => { },
+    targetDockPosition: undefined,
+    setTargetDockPosition: () => { },
+    dockAttackerArmyPosition: undefined,
+    setDockAttackerArmyPosition: () => { }
 });
 
 const SeaProvider: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode; }) => {
@@ -23,13 +35,23 @@ const SeaProvider: React.FC<{ children: ReactNode }> = ({ children }: { children
     const [armyPositionToSettleDock, setArmyPositionToSettleDock] = useState<any>();
     const [dockPosition, setDockPosition] = useState<any>();
 
+    const [dockCaptureStage, setDockCaptureStage] = useState<boolean>(false);
+    const [targetDockPosition, setTargetDockPosition] = useState<any>();
+    const [dockAttackerArmyPosition, setDockAttackerArmyPosition] = useState<any>();
+
     const results: SeaContextType = {
         dockSettleStage,
         setDockSettleStage,
         armyPositionToSettleDock,
         setArmyPositionToSettleDock,
         dockPosition,
-        setDockPosition
+        setDockPosition,
+        dockCaptureStage,
+        setDockCaptureStage,
+        targetDockPosition,
+        setTargetDockPosition,
+        dockAttackerArmyPosition,
+        setDockAttackerArmyPosition
     };
 
     return (

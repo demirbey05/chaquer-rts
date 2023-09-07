@@ -1,24 +1,23 @@
 import { getMyArmyConfigByPosition } from "../../../utils/helperFunctions/ArmyFunctions/getArmyConfigByPosition"
 
-export const CastleAttackEvent = (
+export const DockCaptureEvent = (
     setIsArmyMoveStage: (value: boolean) => void,
-    setIsMineStage: (value: boolean) => void,
+    setIsAttackStage: (value: boolean) => void,
     setDockSettleStage: (value: boolean) => void,
-    setDockCaptureStage: (value: boolean) => void,
     setFromArmyPosition: any,
-    setAttackFromArmyPositionToCastle: any,
-    setAttackToArmyPositionToCastle: any,
+    setDockAttackerArmyPosition: any,
     fromArmyPositionRef: any,
+    setTargetDockPosition: any,
     toArmyPositionRef: any,
     setMyArmyConfig: any,
-    myArmyPosition: any[]) => {
+    myArmyPosition: any[]
+) => {
     setIsArmyMoveStage(false)
-    setIsMineStage(false)
+    setIsAttackStage(false)
     setDockSettleStage(false)
-    setDockCaptureStage(false)
     setFromArmyPosition(undefined);
-    setAttackFromArmyPositionToCastle(fromArmyPositionRef.current);
-    setAttackToArmyPositionToCastle(toArmyPositionRef.current);
+    setDockAttackerArmyPosition(fromArmyPositionRef.current);
+    setTargetDockPosition(toArmyPositionRef.current);
     setMyArmyConfig(
         getMyArmyConfigByPosition({ x: fromArmyPositionRef.current.x, y: fromArmyPositionRef.current.y, }, myArmyPosition)
     );

@@ -38,16 +38,16 @@ export const ResourceEffects = (myResourcePositions: any[], resources: any[], is
 
     // Handle Mine Capture OffCanvas
     useEffect(() => {
-        resources.map((data: any) => {
-            if (isMineStage && fromArmyPosition) {
+        if (isMineStage && fromArmyPosition) {
+            resources.map((data: any) => {
                 isManhattanPosition(data.positions, fromArmyPosition.x, fromArmyPosition.y) &&
                     !isMyResource(data.positions.x, data.positions.y, myResourcePositions) &&
                     document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
                 isManhattanPosition(data.positions, fromArmyPosition.x, fromArmyPosition.y) &&
                     !isMyResource(data.positions.x, data.positions.y, myResourcePositions) &&
                     document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-target", "#mineCaptureDrawer");
-            }
-        });
+            });
+        }
 
         return () => {
             if (resources) {
