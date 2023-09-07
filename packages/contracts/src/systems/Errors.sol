@@ -105,3 +105,7 @@ error FleetMove__NoAuthorization();
 error FleetMove__TileIsNotEmpty();
 error FleetMove__TooFar();
 error FleetMove__WrongTerrainType();
+error FleetAttack__FriendFireNotAllowed();
+error FleetAttack__NoAuthorization();
+error FleetAttack__NonMatchedGameID();
+error FleetAttack__TooFar();

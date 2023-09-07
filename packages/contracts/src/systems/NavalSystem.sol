@@ -8,7 +8,7 @@ import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { LibQueries, LibMath, LibNaval, LibUtils, LibAttack } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { baseCostDock, requiredArmySize, baseWoodCostDock, maxShipInFleet, smallCreditCost, smallWoodCost, mediumCreditCost, mediumWoodCost, bigCreditCost, bigWoodCost } from "./Constants.sol";
-import { CreditOwn, FleetOwnable, FleetConfig, Position, FleetConfigData, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, DockCaptureResult, ArmyOwnable } from "../codegen/Tables.sol";
+import { CreditOwn, FleetOwnable, FleetConfig, Position, FleetConfigData, NavalWarResult, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, DockCaptureResult, ArmyOwnable } from "../codegen/Tables.sol";
 
 contract NavalSystem is System {
   function buildDock(
@@ -204,5 +204,48 @@ contract NavalSystem is System {
       revert FleetMove__TooFar();
     }
     Position.set(fleetID, x, y, gameID);
+  }
+
+  function attackFleet(bytes32 fleetOne, bytes32 fleetTwo) public {
+    address fleetOneOwner = FleetOwnable.getOwner(fleetOne);
+    address fleetTwoOwner = FleetOwnable.getOwner(fleetTwo);
+    if (fleetOneOwner == fleetTwoOwner) {
+      revert FleetAttack__FriendFireNotAllowed();
+    }
+    if (fleetOneOwner != _msgSender()) {
+      revert FleetAttack__NoAuthorization();
+    }
+    (uint32 xFleetOne, uint32 yFleetOne, uint256 gameID) = Position.get(fleetOne);
+    (uint32 xFleetTwo, uint32 yFleetTwo, uint256 gameIDTwo) = Position.get(fleetTwo);
+    if (gameID != gameIDTwo) {
+      revert FleetAttack__NonMatchedGameID();
+    }
+    if (LibMath.manhattan(xFleetOne, yFleetOne, xFleetTwo, yFleetTwo) > 3) {
+      revert FleetAttack__TooFar();
+    }
+    FleetConfigData memory fleetOneConfig = FleetConfig.get(fleetOne);
+    FleetConfigData memory fleetTwoConfig = FleetConfig.get(fleetTwo);
+    (uint8 winner, FleetConfigData memory winnerNew) = LibNaval.fightTwoFleet(fleetOneConfig, fleetTwoConfig);
+    if (winner == 0) {
+      LibNaval.deleteFleet(fleetOne);
+      LibNaval.deleteFleet(fleetTwo);
+      // Ephemeral event
+      NavalWarResult.emitEphemeral(
+        keccak256(abi.encodePacked(block.timestamp, xFleetOne, yFleetOne)),
+        fleetOneOwner,
+        fleetTwoOwner,
+        true
+      );
+      return;
+    }
+    FleetConfig.set(winner == 1 ? fleetOne : fleetTwo, winnerNew);
+    LibNaval.deleteFleet(winner == 1 ? fleetTwo : fleetOne);
+    // Ephemeral event
+    NavalWarResult.emitEphemeral(
+      keccak256(abi.encodePacked(block.timestamp, xFleetOne, yFleetOne)),
+      winner == 1 ? fleetOneOwner : fleetTwoOwner,
+      winner == 1 ? fleetTwoOwner : fleetOneOwner,
+      false
+    );
   }
 }

@@ -31,3 +31,4 @@ import { DockOwnable, DockOwnableTableId } from "./tables/DockOwnable.sol";
 import { DockCaptureResult, DockCaptureResultData, DockCaptureResultTableId } from "./tables/DockCaptureResult.sol";
 import { FleetConfig, FleetConfigData, FleetConfigTableId } from "./tables/FleetConfig.sol";
 import { FleetOwnable, FleetOwnableTableId } from "./tables/FleetOwnable.sol";
+import { NavalWarResult, NavalWarResultData, NavalWarResultTableId } from "./tables/NavalWarResult.sol";

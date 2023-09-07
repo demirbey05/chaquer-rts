@@ -247,6 +247,14 @@ export default mudConfig({
       },
       dataStruct: false,
     },
+    NavalWarResult:{
+      schema:{
+        winner:"address",
+        loser:"address",
+        isDraw:"bool"
+      },
+      ephemeral:true,
+    }
   },
   
   enums: {
