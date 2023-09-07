@@ -1,53 +1,23 @@
 import { useObservableValue } from "@latticexyz/react";
 import { useMUD } from "../MUDContext";
 import { useEffect, useState } from "react";
-import { ComponentValue } from "@latticexyz/recs";
 
 export function useWarResult(maxElementSize: number) {
     const { components } = useMUD()
 
-    const armyWarResult = useObservableValue(components.BattleResult.update$);
-    const castleCaptureResult = useObservableValue(components.CastleSiegeResult.update$);
-    const mineCaptureResult = useObservableValue(components.MineCaptureResult.update$);
-    const dockCaptureResult = useObservableValue(components.DockCaptureResult.update$);
+    const warResult = useObservableValue(components.ClashResult.update$);
+    console.log(warResult)
 
-    const [lastFive, setLastFive] = useState<ComponentValue<any, undefined>[]>([]);
+    const [lastFive, setLastFive] = useState<any[]>([]);
 
     useEffect(() => {
-        if (armyWarResult) {
+        if (warResult) {
             setLastFive((prevResults) => [
                 ...prevResults.slice(-maxElementSize + 1),
-                { data: armyWarResult?.value[0], type: "army" },
+                warResult?.value[0]
             ]);
         }
-    }, [armyWarResult])
-
-    useEffect(() => {
-        if (castleCaptureResult) {
-            setLastFive((prevResults) => [
-                ...prevResults.slice(-maxElementSize + 1),
-                { data: castleCaptureResult?.value[0], type: "castle" },
-            ]);
-        }
-    }, [castleCaptureResult])
-
-    useEffect(() => {
-        if (mineCaptureResult) {
-            setLastFive((prevResults) => [
-                ...prevResults.slice(-maxElementSize + 1),
-                { data: mineCaptureResult?.value[0], type: "mine" },
-            ]);
-        }
-    }, [mineCaptureResult])
-
-    useEffect(() => {
-        if (dockCaptureResult) {
-            setLastFive((prevResults) => [
-                ...prevResults.slice(-maxElementSize + 1),
-                { data: dockCaptureResult?.value[0], type: "dock" },
-            ]);
-        }
-    }, [dockCaptureResult])
+    }, [warResult])
 
     return lastFive;
 }
