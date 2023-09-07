@@ -12,7 +12,7 @@ import "./Errors.sol";
 import { State } from "../codegen/Types.sol";
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 
-uint256 constant minePerResource = 4;
+uint256 constant minePerResource = 5;
 uint256 constant maxIter = 30;
 
 contract MineInitSystem is System {
@@ -88,7 +88,7 @@ contract MineInitSystem is System {
       previousHash = LibRandom.generateRandomNumber(previousHash, gameID);
       y = uint32(uint256(previousHash) % height);
 
-      if (MapConfig.getItemTerrain(gameID, x * width + y)[0] != hex"01") {
+      if (MapConfig.getItemTerrain(gameID, x * width + y)[0] == hex"03") {
         continue;
       }
       if (LibQueries.queryPositionEntity(IStore(_world()), x, y, gameID) > 0) {
