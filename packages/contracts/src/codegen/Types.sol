@@ -15,3 +15,11 @@ enum State {
   Started,
   Completed
 }
+
+enum ClashType {
+  Castle,
+  Mine,
+  Dock,
+  Battle,
+  NavalWar
+}

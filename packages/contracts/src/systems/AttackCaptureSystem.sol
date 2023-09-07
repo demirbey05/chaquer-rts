@@ -3,11 +3,11 @@ pragma solidity ^0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
-import { ArmyOwnable, BattleResult, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, CastleSiegeResult, ResourceOwnable, Players, NumberOfUsers } from "../codegen/Tables.sol";
+import { ArmyOwnable, ClashResult, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, ResourceOwnable, Players, NumberOfUsers } from "../codegen/Tables.sol";
 import { LibMath, LibAttack, BattleScore, LibUtils, LibQueries } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
-import { MineType } from "../codegen/Types.sol";
+import { MineType, ClashType } from "../codegen/Types.sol";
 
 contract AttackCaptureSystem is System {
   function attackToArmy(
@@ -53,11 +53,12 @@ contract AttackCaptureSystem is System {
       );
       ArmyConfig.set(armyOne, newConfig);
 
-      BattleResult.emitEphemeral(
+      ClashResult.emitEphemeral(
         keccak256(abi.encodePacked(block.timestamp, armyTwo, armyOne, battleScore.scoreArmyTwo)),
         owner,
         ownerTwo,
-        false
+        false,
+        ClashType.Battle
       );
       return 1;
     } else if (battleScore.scoreArmyOne < battleScore.scoreArmyTwo) {
@@ -72,11 +73,12 @@ contract AttackCaptureSystem is System {
         gameID
       );
       ArmyConfig.set(armyTwo, newConfig);
-      BattleResult.emitEphemeral(
+      ClashResult.emitEphemeral(
         keccak256(abi.encodePacked(block.timestamp, armyTwo, armyOne, battleScore.scoreArmyTwo)),
         ownerTwo,
         owner,
-        false
+        false,
+        ClashType.Battle
       );
       return 2;
     } else {
@@ -86,11 +88,12 @@ contract AttackCaptureSystem is System {
       ArmyConfig.deleteRecord(armyOne);
       ArmyOwnable.deleteRecord(armyOne);
       Position.deleteRecord(armyOne);
-      BattleResult.emitEphemeral(
+      ClashResult.emitEphemeral(
         keccak256(abi.encodePacked(block.timestamp, armyTwo, armyOne, battleScore.scoreArmyTwo)),
         ownerTwo,
         owner,
-        true
+        true,
+        ClashType.Battle
       );
       return 0;
     }
@@ -162,25 +165,28 @@ contract AttackCaptureSystem is System {
         removeUser(castleOwner, gameID);
       }
 
-      CastleSiegeResult.emitEphemeral(
+      ClashResult.emitEphemeral(
         keccak256(abi.encodePacked(block.timestamp, armyID, castleID, gameID)),
         armyOwner,
         castleOwner,
-        false
+        false,
+        ClashType.Castle
       );
     } else if (result == 0) {
-      CastleSiegeResult.emitEphemeral(
+      ClashResult.emitEphemeral(
         keccak256(abi.encodePacked(block.timestamp, armyID, castleID, gameID)),
         armyOwner,
         castleOwner,
-        true
+        true,
+        ClashType.Castle
       );
     } else {
-      CastleSiegeResult.emitEphemeral(
+      ClashResult.emitEphemeral(
         keccak256(abi.encodePacked(block.timestamp, armyID, castleID, gameID)),
         castleOwner,
         armyOwner,
-        false
+        false,
+        ClashType.Castle
       );
     }
   }

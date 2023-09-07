@@ -17,16 +17,20 @@ import { EncodeArray } from "@latticexyz/store/src/tightcoder/EncodeArray.sol";
 import { Schema, SchemaLib } from "@latticexyz/store/src/Schema.sol";
 import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCounter.sol";
 
-bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16(""), bytes16("DockCaptureResul")));
-bytes32 constant DockCaptureResultTableId = _tableId;
+// Import user types
+import { ClashType } from "./../Types.sol";
 
-struct DockCaptureResultData {
+bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16(""), bytes16("ClashResult")));
+bytes32 constant ClashResultTableId = _tableId;
+
+struct ClashResultData {
   address winner;
   address loser;
   bool isDraw;
+  ClashType clashType;
 }
 
-library DockCaptureResult {
+library ClashResult {
   /** Get the table's key schema */
   function getKeySchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](1);
@@ -37,10 +41,11 @@ library DockCaptureResult {
 
   /** Get the table's value schema */
   function getValueSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](3);
+    SchemaType[] memory _schema = new SchemaType[](4);
     _schema[0] = SchemaType.ADDRESS;
     _schema[1] = SchemaType.ADDRESS;
     _schema[2] = SchemaType.BOOL;
+    _schema[3] = SchemaType.UINT8;
 
     return SchemaLib.encode(_schema);
   }
@@ -53,10 +58,11 @@ library DockCaptureResult {
 
   /** Get the table's field names */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
-    fieldNames = new string[](3);
+    fieldNames = new string[](4);
     fieldNames[0] = "winner";
     fieldNames[1] = "loser";
     fieldNames[2] = "isDraw";
+    fieldNames[3] = "clashType";
   }
 
   /** Register the table's key schema, value schema, key names and value names */
@@ -70,8 +76,8 @@ library DockCaptureResult {
   }
 
   /** Emit the ephemeral event using individual values */
-  function emitEphemeral(bytes32 key, address winner, address loser, bool isDraw) internal {
-    bytes memory _data = encode(winner, loser, isDraw);
+  function emitEphemeral(bytes32 key, address winner, address loser, bool isDraw, ClashType clashType) internal {
+    bytes memory _data = encode(winner, loser, isDraw, clashType);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -80,8 +86,15 @@ library DockCaptureResult {
   }
 
   /** Emit the ephemeral event using individual values (using the specified store) */
-  function emitEphemeral(IStore _store, bytes32 key, address winner, address loser, bool isDraw) internal {
-    bytes memory _data = encode(winner, loser, isDraw);
+  function emitEphemeral(
+    IStore _store,
+    bytes32 key,
+    address winner,
+    address loser,
+    bool isDraw,
+    ClashType clashType
+  ) internal {
+    bytes memory _data = encode(winner, loser, isDraw, clashType);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -90,18 +103,23 @@ library DockCaptureResult {
   }
 
   /** Emit the ephemeral event using the data struct */
-  function emitEphemeral(bytes32 key, DockCaptureResultData memory _table) internal {
-    emitEphemeral(key, _table.winner, _table.loser, _table.isDraw);
+  function emitEphemeral(bytes32 key, ClashResultData memory _table) internal {
+    emitEphemeral(key, _table.winner, _table.loser, _table.isDraw, _table.clashType);
   }
 
   /** Emit the ephemeral event using the data struct (using the specified store) */
-  function emitEphemeral(IStore _store, bytes32 key, DockCaptureResultData memory _table) internal {
-    emitEphemeral(_store, key, _table.winner, _table.loser, _table.isDraw);
+  function emitEphemeral(IStore _store, bytes32 key, ClashResultData memory _table) internal {
+    emitEphemeral(_store, key, _table.winner, _table.loser, _table.isDraw, _table.clashType);
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(address winner, address loser, bool isDraw) internal pure returns (bytes memory) {
-    return abi.encodePacked(winner, loser, isDraw);
+  function encode(
+    address winner,
+    address loser,
+    bool isDraw,
+    ClashType clashType
+  ) internal pure returns (bytes memory) {
+    return abi.encodePacked(winner, loser, isDraw, clashType);
   }
 
   /** Encode keys as a bytes32 array using this table's schema */

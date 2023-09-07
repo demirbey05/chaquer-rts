@@ -5,10 +5,11 @@ pragma solidity ^0.8.0;
 import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
+import { ClashType } from "../codegen/Types.sol";
 import { LibQueries, LibMath, LibNaval, LibUtils, LibAttack } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { baseCostDock, requiredArmySize, baseWoodCostDock, maxShipInFleet, smallCreditCost, smallWoodCost, mediumCreditCost, mediumWoodCost, bigCreditCost, bigWoodCost } from "./Constants.sol";
-import { CreditOwn, FleetOwnable, FleetConfig, Position, FleetConfigData, NavalWarResult, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, DockCaptureResult, ArmyOwnable } from "../codegen/Tables.sol";
+import { CreditOwn, FleetOwnable, FleetConfig, Position, FleetConfigData, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, ClashResult, ArmyOwnable } from "../codegen/Tables.sol";
 
 contract NavalSystem is System {
   function buildDock(
@@ -109,25 +110,28 @@ contract NavalSystem is System {
         Position.deleteRecord(ownerArmiesSurroundDock[i]);
       }
 
-      DockCaptureResult.emitEphemeral(
+      ClashResult.emitEphemeral(
         keccak256(abi.encodePacked(block.timestamp, armyID, dockID, gameID)),
         armyOwner,
         dockOwner,
-        false
+        false,
+        ClashType.Dock
       );
     } else if (result == 0) {
-      DockCaptureResult.emitEphemeral(
+      ClashResult.emitEphemeral(
         keccak256(abi.encodePacked(block.timestamp, armyID, dockID, gameID)),
         armyOwner,
         dockOwner,
-        true
+        true,
+        ClashType.Dock
       );
     } else {
-      DockCaptureResult.emitEphemeral(
+      ClashResult.emitEphemeral(
         keccak256(abi.encodePacked(block.timestamp, armyID, dockID, gameID)),
         dockOwner,
         armyOwner,
-        false
+        false,
+        ClashType.Dock
       );
     }
   }
@@ -209,6 +213,8 @@ contract NavalSystem is System {
   function attackFleet(bytes32 fleetOne, bytes32 fleetTwo) public {
     address fleetOneOwner = FleetOwnable.getOwner(fleetOne);
     address fleetTwoOwner = FleetOwnable.getOwner(fleetTwo);
+
+    // Checks
     if (fleetOneOwner == fleetTwoOwner) {
       revert FleetAttack__FriendFireNotAllowed();
     }
@@ -223,6 +229,8 @@ contract NavalSystem is System {
     if (LibMath.manhattan(xFleetOne, yFleetOne, xFleetTwo, yFleetTwo) > 3) {
       revert FleetAttack__TooFar();
     }
+
+    // Execution
     FleetConfigData memory fleetOneConfig = FleetConfig.get(fleetOne);
     FleetConfigData memory fleetTwoConfig = FleetConfig.get(fleetTwo);
     (uint8 winner, FleetConfigData memory winnerNew) = LibNaval.fightTwoFleet(fleetOneConfig, fleetTwoConfig);
@@ -230,22 +238,24 @@ contract NavalSystem is System {
       LibNaval.deleteFleet(fleetOne);
       LibNaval.deleteFleet(fleetTwo);
       // Ephemeral event
-      NavalWarResult.emitEphemeral(
+      ClashResult.emitEphemeral(
         keccak256(abi.encodePacked(block.timestamp, xFleetOne, yFleetOne)),
         fleetOneOwner,
         fleetTwoOwner,
-        true
+        true,
+        ClashType.NavalWar
       );
       return;
     }
     FleetConfig.set(winner == 1 ? fleetOne : fleetTwo, winnerNew);
     LibNaval.deleteFleet(winner == 1 ? fleetTwo : fleetOne);
     // Ephemeral event
-    NavalWarResult.emitEphemeral(
+    ClashResult.emitEphemeral(
       keccak256(abi.encodePacked(block.timestamp, xFleetOne, yFleetOne)),
       winner == 1 ? fleetOneOwner : fleetTwoOwner,
       winner == 1 ? fleetTwoOwner : fleetOneOwner,
-      false
+      false,
+      ClashType.NavalWar
     );
   }
 }

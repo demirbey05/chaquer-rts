@@ -46,22 +46,6 @@ export default mudConfig({
       },
       dataStruct: false,
     },
-    CastleSiegeResult:{
-      schema:{
-        winner:"address",
-        loser:"address",
-        isDraw:"bool"
-      },
-      ephemeral:true,
-    },
-    BattleResult:{
-      schema:{
-        winner:"address",
-        loser:"address",
-        isDraw:"bool",
-      },
-      ephemeral:true
-    },
     Players:{
       keySchema:{
         gameId:"uint256",
@@ -126,14 +110,6 @@ export default mudConfig({
       schema:{
         isInited:"bool"
       }
-    },
-    MineCaptureResult:{
-      schema:{
-        winner:"address",
-        loser:"address",
-        isDraw:"bool"
-      },
-      ephemeral:true,
     },
     GameMetaData:{
       keySchema:{
@@ -223,14 +199,6 @@ export default mudConfig({
       },
       dataStruct: false,
     },
-    DockCaptureResult:{
-      schema:{
-        winner:"address",
-        loser:"address",
-        isDraw:"bool"
-      },
-      ephemeral:true,
-    },
     FleetConfig: {
       schema: {
         numSmall: "uint32",
@@ -247,11 +215,12 @@ export default mudConfig({
       },
       dataStruct: false,
     },
-    NavalWarResult:{
+    ClashResult:{
       schema:{
         winner:"address",
         loser:"address",
-        isDraw:"bool"
+        isDraw:"bool",
+        clashType:"ClashType"
       },
       ephemeral:true,
     }
@@ -259,7 +228,8 @@ export default mudConfig({
   
   enums: {
     MineType: ["Food","Wood","Gold"],
-    State:["None","Waiting","Seed","Started","Completed"]
+    State:["None","Waiting","Seed","Started","Completed"],
+    ClashType:["Castle","Mine","Dock","Battle","NavalWar"],
   },
   modules: [
     {

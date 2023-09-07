@@ -3,13 +3,13 @@ pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
-import { PlayerSeeds, Players, LimitOfGame, GameMetaData, NumberOfUsers, ResourceInited, SeedInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, MineCaptureResult, ArmyConfig, ArmyOwnable } from "../codegen/Tables.sol";
+import { PlayerSeeds, Players, LimitOfGame, GameMetaData, NumberOfUsers, ResourceInited, SeedInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, ClashResult, ArmyConfig, ArmyOwnable } from "../codegen/Tables.sol";
 import { MineType } from "../codegen/Types.sol";
 import { LibRandom, LibQueries, LibAttack, LibUtils, LibMath } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import "./Errors.sol";
-import { State } from "../codegen/Types.sol";
+import { State, ClashType } from "../codegen/Types.sol";
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 
 uint256 constant minePerResource = 5;
@@ -152,25 +152,28 @@ contract MineInitSystem is System {
         Position.deleteRecord(ownerArmiesSurroundCastle[i]);
       }
 
-      MineCaptureResult.emitEphemeral(
+      ClashResult.emitEphemeral(
         keccak256(abi.encodePacked(block.timestamp, armyID, mineID, gameID)),
         armyOwner,
         mineOwner,
-        false
+        false,
+        ClashType.Mine
       );
     } else if (result == 0) {
-      MineCaptureResult.emitEphemeral(
+      ClashResult.emitEphemeral(
         keccak256(abi.encodePacked(block.timestamp, armyID, mineID, gameID)),
         armyOwner,
         mineOwner,
-        true
+        true,
+        ClashType.Mine
       );
     } else {
-      MineCaptureResult.emitEphemeral(
+      ClashResult.emitEphemeral(
         keccak256(abi.encodePacked(block.timestamp, armyID, mineID, gameID)),
         mineOwner,
         armyOwner,
-        false
+        false,
+        ClashType.Mine
       );
     }
   }
