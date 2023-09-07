@@ -3,6 +3,7 @@ import { getManhattanPositions } from "../../../utils/helperFunctions/CustomFunc
 import { armySettlePositions } from "../../../utils/helperFunctions/ArmyFunctions/armySettlePositions";
 import { canFleetBeSettled } from "../../../utils/helperFunctions/SeaFunctions/canFleetBeSettled";
 import { isFleetPosition } from '../../../utils/helperFunctions/SeaFunctions/isFleetPosition';
+import shipEmoji from "../../../images/ship_emoji.png"
 
 export const FleetEffects = (myFleetPositions: any[] | undefined, fleetPositions: any[], fleetSettleStage: boolean, myDockPositions: any[] | undefined, dockPositions: any[] | undefined, isBorder: boolean, values: number[][]) => {
 
@@ -63,7 +64,7 @@ export const FleetEffects = (myFleetPositions: any[] | undefined, fleetPositions
                 const element = document.getElementById(
                     `${data.y},${data.x}`
                 )!;
-                element.innerHTML = "🚢";
+                element.innerHTML = '<img src="' + shipEmoji + '" width="30px" height="30px" />';
                 element.style.border = "2px solid rgb(245, 169, 6)";
             });
         }
@@ -71,9 +72,10 @@ export const FleetEffects = (myFleetPositions: any[] | undefined, fleetPositions
         //Puts the ship emojis to fleet positions
         if (fleetPositions) {
             fleetPositions.map((data: any) => {
-                document.getElementById(`${data.y},${data.x}`)!.innerHTML = "🚢";
+                document.getElementById(`${data.y},${data.x}`)!.innerHTML = '<img src="' + shipEmoji + '" width="30px" height="30px" />';
                 document.getElementById(`${data.y},${data.x}`)?.classList.add("fleet-emoji");
             });
         }
+
     }, [fleetPositions, myFleetPositions]);
 }
