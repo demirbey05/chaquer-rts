@@ -12,7 +12,7 @@ export const CreditProgressBar = () => {
             <div className="row">
                 <div className="col-4 credit-progress-bar-col">
                     <>
-                        💰: {credit ? getNumberFromBigInt(credit).slice(0, 14) : 0}
+                        💰: {credit ? getNumberFromBigInt(credit).slice(0, 12) : 0}
                     </>
                 </div>
             </div>

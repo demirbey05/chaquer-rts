@@ -97,5 +97,5 @@ interface PriceListItemPropTypes {
 }
 
 const PriceListItem = (props: PriceListItemPropTypes) => {
-    return <p className="border-bottom border-black d-flex justify-between"><span className="ms-2">{props.name}</span><span className="me-2">{props.price ? getNumberFromBigInt(props.price).slice(0, 14) : "0.00"} 💰</span></p>
+    return <p className="border-bottom border-black d-flex justify-between"><span className="ms-2">{props.name}</span><span className="me-2">{props.price ? getNumberFromBigInt(props.price).slice(0, 12) : "0.00"} 💰</span></p>
 }

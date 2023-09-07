@@ -37,6 +37,13 @@ export const DockSettleModal = () => {
         }
     }, [myDockPositions, myCredit, myResources])
 
+    const handleBackMap = () => {
+        setIsArmyMoveStage(false)
+        setDockSettleStage(false);
+        setArmyPositionToSettleDock(undefined);
+        setDockPosition(undefined);
+    }
+
     const handleSettle = async () => {
         const movingArmyIdMap = findIDFromPosition(
             armyPositionToSettleDock,
@@ -132,6 +139,7 @@ export const DockSettleModal = () => {
                                 border="solid"
                                 textColor="dark"
                                 data-bs-dismiss="modal"
+                                onClick={() => handleBackMap()}
                             >
                                 Back to Map
                             </Button>

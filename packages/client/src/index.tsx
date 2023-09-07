@@ -14,6 +14,7 @@ import { AttackProvider } from "./context/AttackContext";
 import { MineProvider } from "./context/MineContext";
 import { ErrorProvider } from "./context/ErrorContext";
 import { SeaProvider } from "./context/SeaContext";
+import { FleetProvider } from './context/FleetContext';
 
 const rootElement = document.getElementById("react-root");
 if (!rootElement) throw new Error("React root not found");
@@ -28,6 +29,7 @@ setup().then(async (result) => {
           <TerrainProvider>
             <AttackProvider>
               <SeaProvider>
+                <FleetProvider>
                 <MineProvider>
                   <ArmyProvider>
                     <CastleProvider>
@@ -37,6 +39,7 @@ setup().then(async (result) => {
                     </CastleProvider>
                   </ArmyProvider>
                 </MineProvider>
+                </FleetProvider>
               </SeaProvider>
             </AttackProvider>
           </TerrainProvider>

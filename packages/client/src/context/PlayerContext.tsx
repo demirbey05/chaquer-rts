@@ -1,10 +1,9 @@
+import { useRef, useState, useEffect, useContext, createContext, ReactNode } from "react";
 import { getBurnerPrivateKey } from "@latticexyz/common";
 import { Wallet } from "ethers";
-import { useRef, useState, useEffect, useContext, createContext, ReactNode } from "react";
+import { useMUD } from "../MUDContext";
 import { useNumberOfUsers } from "../hooks/useNumberOfUsers";
 import { usePlayerIsValid } from "../hooks/usePlayerIsValid";
-import { useMUD } from "../MUDContext";
-import { useCastlePositionByAddress } from "../hooks/useMyCastlePositions";
 import { useGameState } from "../hooks/useGameState";
 import { useWinnerAddress } from "../hooks/useWinnerAddress";
 

@@ -6,6 +6,7 @@ import { useTerrain } from "../../context/TerrainContext";
 import { useCastle } from "../../context/CastleContext";
 import { useArmy } from "../../context/ArmyContext";
 import { usePlayer } from "../../context/PlayerContext";
+import { useFleet } from "../../context/FleetContext";
 import { Terrain } from "../../components/TerrainComp/Terrain";
 import { ArmyInfoDrawer } from "../../components/ArmyComp/ArmyInfoDrawer";
 import { ArmyProgressBar } from "../../components/ArmyComp/ArmyProgressBar";
@@ -36,12 +37,15 @@ import { limitOfUser } from "../../utils/constants/constants";
 import { useIsMineInitialized } from "../../hooks/useIsMineInitialized";
 import { DockSettleModal } from "../../components/SeaComp/DockSettleModal";
 import { DockCaptureDrawer } from "../../components/SeaComp/DockCaptureDrawer";
+import { FleetSettleModal } from "../../components/SeaComp/FleetSettleModal";
+import { FleetSettleWarning } from "../../components/SeaComp/FleetSettleWarning";
 
 export const Game = () => {
   const { width, height } = useTerrain();
   const { isCastleSettled } = useCastle();
   const { isArmySettleStage, isArmyMoveStage } = useArmy();
   const { isPlayerLost, isPlayerWinner } = usePlayer();
+  const { fleetSettleStage } = useFleet();
   const [zoomLevel, setZoomLevel] = useState(1);
 
   const gameState = useGameState(1);
@@ -84,6 +88,8 @@ export const Game = () => {
       {gameState === 3 && !isPlayerLost && mineInited && <MineCaptureDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <DockSettleModal />}
       {gameState === 3 && !isPlayerLost && mineInited && <DockCaptureDrawer />}
+      {gameState === 3 && !isPlayerLost && mineInited && <FleetSettleModal />}
+      {gameState === 3 && fleetSettleStage && !isPlayerLost && mineInited && <FleetSettleWarning />}
       {isPlayerLost && <PlayerLostWarning />}
       {gameState === 4 && isPlayerWinner && <PlayerWonAnimation />}
 

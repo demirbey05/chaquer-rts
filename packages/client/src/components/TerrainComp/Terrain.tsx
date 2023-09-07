@@ -9,6 +9,7 @@ import { usePlayer } from "../../context/PlayerContext";
 import { useArmy } from "../../context/ArmyContext";
 import { useMine } from "../../context/MineContext";
 import { useSea } from "../../context/SeaContext";
+import { useFleet } from "../../context/FleetContext";
 import { useError } from "../../context/ErrorContext";
 import { useMUD } from "../../MUDContext";
 import { useCastlePositions } from "../../hooks/useCastlePositions";
@@ -18,6 +19,9 @@ import { useMyArmy } from "../../hooks/useMyArmy";
 import { useResources } from "../../hooks/useResources";
 import { useMyResourcePositions } from "../../hooks/useMyResourcePositions";
 import { useDockPositions } from "../../hooks/useDockPositions";
+import { useMyDockPositions } from "../../hooks/useMyDockPositions";
+import { useFleetPositions } from "../../hooks/useFleetPositions";
+import { useMyFleetPositions } from "../../hooks/useMyFleetPositions";
 import { Coord } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { getTerrainAsset } from '../../utils/helperFunctions/CustomFunctions/getTerrainAsset';
 import { isMyCastle } from '../../utils/helperFunctions/CastleFunctions/isMyCastle';
@@ -28,22 +32,22 @@ import { isMyArmy } from "../../utils/helperFunctions/ArmyFunctions/isMyArmy";
 import { isEnemyArmy } from "../../utils/helperFunctions/ArmyFunctions/isEnemyArmy";
 import { isEnemyCastle } from "../../utils/helperFunctions/CastleFunctions/isEnemyCastle";
 import { isUserClickedMine } from "../../utils/helperFunctions/ResourceFuntions/isUserClickedMine";
-import { useMyDockPositions } from "../../hooks/useMyDockPositions";
 import { isPositionNextToSea } from "../../utils/helperFunctions/SeaFunctions/isPositionNextToSea";
+import { isValidTerrainType } from "../../utils/helperFunctions/CustomFunctions/isValidTerrainType";
+import { isMyDock } from "../../utils/helperFunctions/SeaFunctions/isMyDock";
+import { isEnemyDock } from "../../utils/helperFunctions/SeaFunctions/isEnemyDock";
 import { CastleEffects } from "./Effects/CastleEffects";
 import { ResourceEffects } from "./Effects/ResourceEffects";
 import { ArmyEffects } from "./Effects/ArmyEffects";
 import { AttackEffects } from "./Effects/AttackEffects";
 import { HoverEffects } from "./Effects/HoverEffects";
 import { DockEffects } from "./Effects/DockEffects";
+import { FleetEffects } from "./Effects/FleetEffects";
 import { ArmyAttackEvent } from "./Events/ArmyAttackEvent";
 import { CastleAttackEvent } from "./Events/CastleAttackEvent";
 import { MineCaptureEvent } from "./Events/MineCaptureEvent";
 import { DockSettleEvent } from "./Events/DockSettleEvent";
 import { ArmyMoveEvent } from "./Events/ArmyMoveEvent";
-import { isValidTerrainType } from "../../utils/helperFunctions/CustomFunctions/isValidTerrainType";
-import { isMyDock } from "../../utils/helperFunctions/SeaFunctions/isMyDock";
-import { isEnemyDock } from "../../utils/helperFunctions/SeaFunctions/isEnemyDock";
 import { DockCaptureEvent } from "./Events/DockCaptureEvent";
 
 export type DataProp = {
@@ -104,6 +108,11 @@ export const Terrain = (props: DataProp) => {
     setDockAttackerArmyPosition,
     dockCaptureStage } = useSea();
 
+  const { fleetSettleStage,
+    setFleetSettleStage,
+    setDockPositionForFleetSettlement,
+    setFleetPosition } = useFleet();
+
   const { setShowError,
     setErrorMessage,
     setErrorTitle } = useError();
@@ -121,9 +130,11 @@ export const Terrain = (props: DataProp) => {
   const myResourcePositions = useMyResourcePositions(userWallet);
   const dockPositions = useDockPositions();
   const myDockPositions = useMyDockPositions(userWallet)
+  const fleetPositions = useFleetPositions();
+  const myFleetPositions = useMyFleetPositions(userWallet);
 
   const handleClick = async (e: any) => {
-    // For Putting army Grid with clicking castle
+    // Toggle orange tiles for army settlement
     if (!isArmyMoveStage && isMyCastle(myCastlePosition, getDataAtrX(e), getDataAtrY(e))) {
       if (isArmySettleStage) {
         setIsArmySettleStage(false);
@@ -131,6 +142,22 @@ export const Terrain = (props: DataProp) => {
       else if (!isArmySettleStage && numberOfArmy < 5) {
         setIsArmySettleStage(true);
       }
+    }
+
+    // Toggle orange tiles for fleet settlement
+    if (!isArmyMoveStage && isMyDock(Number(getDataAtrX(e)), Number(getDataAtrY(e)), myDockPositions)) {
+      if (fleetSettleStage) {
+        setFleetSettleStage(false);
+      }
+      else if (!fleetSettleStage && (myDockPositions && myFleetPositions && myDockPositions.length !== myFleetPositions.length)) {
+        setFleetSettleStage(true);
+        setDockPositionForFleetSettlement({ x: getDataAtrX(e), y: getDataAtrY(e) })
+      }
+    }
+
+    // Keep fleet position as temp
+    if (fleetSettleStage) {
+      setFleetPosition({ x: getDataAtrX(e), y: getDataAtrY(e) })
     }
 
     // Keep castle position as temp
@@ -193,6 +220,7 @@ export const Terrain = (props: DataProp) => {
   AttackEffects(myCastlePosition, castlePositions, armyPositions, myArmyPosition, isAttackStage, fromArmyPosition);
   HoverEffects(armyPositions, resources, numberOfArmy, isArmySettleStage, props.isBorder, castlePositions, myCastlePosition, values, fromArmyPosition, isArmyMoveStage);
   DockEffects(castlePositions, resources, myArmyPosition, armyPositions, dockPositions, myDockPositions, values, dockSettleStage, dockCaptureStage, rows, columns, fromArmyPosition);
+  FleetEffects(myFleetPositions, fleetPositions, fleetSettleStage, myDockPositions, dockPositions, props.isBorder, values);
 
   return (
     <div className={`inline-grid ${props.isBorder && "border-4 border-black"}`}

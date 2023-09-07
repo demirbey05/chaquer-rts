@@ -247,7 +247,7 @@ export function createSystemCalls(
     }
   };
 
-  const captureDock = async (armyID: string, dockID) => {
+  const captureDock = async (armyID: string, dockID: string) => {
     try {
       const tx = await worldContract.write.captureDock([armyID, dockID]);
       await waitForTransaction(tx);
@@ -255,6 +255,53 @@ export function createSystemCalls(
     } catch (e) {
       console.log(e);
       return null;
+    }
+  };
+
+  const settleFleet = async (
+    x: number,
+    y: number,
+    dockID: string,
+    numSmall: number,
+    numMedium: number,
+    numBig: number,
+    gameID: number
+  ) => {
+    try {
+      const tx = await worldContract.write.settleFleet([
+        x,
+        y,
+        dockID,
+        {
+          numSmall,
+          numMedium,
+          numBig,
+          gameID,
+        },
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
+  const moveFleet = async (fleetID: string, x: number, y: number) => {
+    const positionId = uuid();
+    Position.addOverride(positionId, {
+      entity: fleetID as Entity,
+      value: { x, y },
+    });
+    try {
+      const tx = await worldContract.write.moveFleet([fleetID, x, y]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    } finally {
+      Position.removeOverride(positionId);
     }
   };
 
@@ -275,5 +322,7 @@ export function createSystemCalls(
     claimWinner,
     buildDock,
     captureDock,
+    settleFleet,
+    moveFleet,
   };
 }
