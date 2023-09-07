@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
-import { ArmyOwnable, ClashResult, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, ResourceOwnable, Players, NumberOfUsers } from "../codegen/Tables.sol";
+import { ArmyOwnable, ClashResult, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, ResourceOwnable, Players, NumberOfUsers, DockOwnable } from "../codegen/Tables.sol";
 import { LibMath, LibAttack, BattleScore, LibUtils, LibQueries } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
@@ -41,9 +41,7 @@ contract AttackCaptureSystem is System {
     BattleScore memory battleScore = LibAttack.calculateBattleScores(armyOneConfig, armyTwoConfig);
 
     if (battleScore.scoreArmyOne > battleScore.scoreArmyTwo) {
-      ArmyConfig.deleteRecord(armyTwo);
-      ArmyOwnable.deleteRecord(armyTwo);
-      Position.deleteRecord(armyTwo);
+      LibUtils.deleteArmy(armyTwo);
 
       ArmyConfigData memory newConfig = ArmyConfigData(
         armyOneConfig.numSwordsman >> 1,
@@ -62,9 +60,7 @@ contract AttackCaptureSystem is System {
       );
       return 1;
     } else if (battleScore.scoreArmyOne < battleScore.scoreArmyTwo) {
-      ArmyConfig.deleteRecord(armyOne);
-      ArmyOwnable.deleteRecord(armyOne);
-      Position.deleteRecord(armyOne);
+      LibUtils.deleteArmy(armyOne);
 
       ArmyConfigData memory newConfig = ArmyConfigData(
         armyTwoConfig.numSwordsman >> 1,
@@ -82,12 +78,9 @@ contract AttackCaptureSystem is System {
       );
       return 2;
     } else {
-      ArmyConfig.deleteRecord(armyTwo);
-      ArmyOwnable.deleteRecord(armyTwo);
-      Position.deleteRecord(armyTwo);
-      ArmyConfig.deleteRecord(armyOne);
-      ArmyOwnable.deleteRecord(armyOne);
-      Position.deleteRecord(armyOne);
+      LibUtils.deleteArmy(armyOne);
+      LibUtils.deleteArmy(armyTwo);
+
       ClashResult.emitEphemeral(
         keccak256(abi.encodePacked(block.timestamp, armyTwo, armyOne, battleScore.scoreArmyTwo)),
         ownerTwo,
@@ -110,6 +103,17 @@ contract AttackCaptureSystem is System {
     }
   }
 
+  function takeOwnershipOfDocks(
+    address user,
+    uint256 gameID,
+    address getter
+  ) internal {
+    bytes32[] memory castleOwnerDocks = LibQueries.getDocks(IStore(_world()), user, gameID);
+    for (uint i = 0; i < castleOwnerDocks.length; i++) {
+      DockOwnable.setOwner(castleOwnerDocks[i], address(0));
+    }
+  }
+
   function removeUser(address castleOwner, uint256 gameID) internal {
     bytes32[] memory castleOwnerArmies = LibQueries.getOwnedArmyIDs(IStore(_world()), castleOwner, gameID);
 
@@ -121,6 +125,7 @@ contract AttackCaptureSystem is System {
     takeOwnershipOfMines(castleOwner, MineType.Food, gameID);
     takeOwnershipOfMines(castleOwner, MineType.Wood, gameID);
     takeOwnershipOfMines(castleOwner, MineType.Gold, gameID);
+    takeOwnershipOfDocks(castleOwner, gameID, castleOwner);
     NumberOfUsers.set(gameID, NumberOfUsers.get(gameID) - 1);
     Players.set(gameID, castleOwner, false);
   }

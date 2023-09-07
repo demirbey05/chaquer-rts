@@ -72,6 +72,15 @@ library LibQueries {
     return entities;
   }
 
+  function getDocks(
+    IStore world,
+    address owner,
+    uint256 gameID
+  ) internal view returns (bytes32[] memory) {
+    bytes32[] memory entities = getKeysWithValue(world, DockOwnableTableId, DockOwnable.encode(owner, gameID));
+    return entities;
+  }
+
   function getDocksLength(
     IStore world,
     address owner,
