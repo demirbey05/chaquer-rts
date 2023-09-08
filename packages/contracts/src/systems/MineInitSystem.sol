@@ -2,15 +2,13 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
-import { PlayerSeeds, Players, LimitOfGame, GameMetaData, NumberOfUsers, ResourceInited, SeedInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, ClashResult, ArmyConfig, ArmyOwnable } from "../codegen/Tables.sol";
+import { PlayerSeeds, Players, LimitOfGame, GameMetaData, NumberOfUsers, ResourceInited, SeedInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, ClashResult, ArmyConfig, ArmyOwnable, FleetOwnable } from "../codegen/Tables.sol";
 import { MineType } from "../codegen/Types.sol";
-import { LibRandom, LibQueries, LibAttack, LibUtils, LibMath } from "../libraries/Libraries.sol";
+import { LibRandom, LibQueries, LibAttack, LibUtils, LibMath, LibNaval } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import "./Errors.sol";
-import { State, ClashType } from "../codegen/Types.sol";
-import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
+import { State, ClashType, AttackerType } from "../codegen/Types.sol";
 
 uint256 constant minePerResource = 5;
 uint256 constant maxIter = 30;
@@ -100,81 +98,5 @@ contract MineInitSystem is System {
       i++;
     }
     return i;
-  }
-
-  function captureMine(bytes32 armyID, bytes32 mineID) public {
-    address armyOwner = ArmyOwnable.getOwner(armyID);
-    address mineOwner = ResourceOwnable.getOwner(mineID);
-
-    // Some Checks
-    if (armyOwner == mineOwner) {
-      revert MineCapture__FriendFireNotAllowed();
-    }
-    if (armyOwner != msg.sender) {
-      revert MineCapture__NoAuthorization();
-    }
-    (uint32 xArmy, uint32 yArmy, uint256 gameID) = Position.get(armyID);
-    (uint32 xMine, uint32 yMine, uint256 gameIDTwo) = Position.get(mineID);
-
-    uint32 distanceBetween = LibMath.manhattan(xArmy, yArmy, xMine, yMine);
-
-    if (!(distanceBetween <= 3)) {
-      revert MineCapture__TooFarToAttack();
-    }
-    if (gameID != gameIDTwo) {
-      revert MineCapture__NonMatchedGameID();
-    }
-
-    if (mineOwner == address(0)) {
-      ResourceOwnable.setOwner(mineID, armyOwner);
-      return;
-    }
-
-    bytes32[] memory ownerArmiesSurroundCastle = LibUtils.findSurroundingArmies(
-      IStore(_world()),
-      mineID,
-      gameID,
-      EntityType.Mine
-    );
-    uint result = LibAttack.warCaptureCastle(armyID, ownerArmiesSurroundCastle);
-
-    if (result == 1) {
-      ResourceOwnable.setOwner(mineID, armyOwner);
-
-      // Destroy all the army which belongs to castle owner
-
-      for (uint i = 0; i < ownerArmiesSurroundCastle.length; i++) {
-        if (ownerArmiesSurroundCastle[i] == bytes32(0)) {
-          continue;
-        }
-        ArmyOwnable.deleteRecord(ownerArmiesSurroundCastle[i]);
-        ArmyConfig.deleteRecord(ownerArmiesSurroundCastle[i]);
-        Position.deleteRecord(ownerArmiesSurroundCastle[i]);
-      }
-
-      ClashResult.emitEphemeral(
-        keccak256(abi.encodePacked(block.timestamp, armyID, mineID, gameID)),
-        armyOwner,
-        mineOwner,
-        false,
-        ClashType.Mine
-      );
-    } else if (result == 0) {
-      ClashResult.emitEphemeral(
-        keccak256(abi.encodePacked(block.timestamp, armyID, mineID, gameID)),
-        armyOwner,
-        mineOwner,
-        true,
-        ClashType.Mine
-      );
-    } else {
-      ClashResult.emitEphemeral(
-        keccak256(abi.encodePacked(block.timestamp, armyID, mineID, gameID)),
-        mineOwner,
-        armyOwner,
-        false,
-        ClashType.Mine
-      );
-    }
   }
 }

@@ -91,4 +91,66 @@ library LibNaval {
     FleetOwnable.deleteRecord(fleetID);
     Position.deleteRecord(fleetID);
   }
+
+  function deleteFleetGroup(bytes32[] memory fleetGroup) internal {
+    for (uint256 i = 0; i < fleetGroup.length; i++) {
+      if (fleetGroup[i] == bytes32(0)) {
+        continue;
+      }
+      deleteFleet(fleetGroup[i]);
+    }
+  }
+
+  function distributeToFleetGroup(FleetConfigData memory remainingFleet, bytes32[] memory fleetGroup) internal {
+    uint32 numFleet = 0;
+    for (uint256 i = 0; i < fleetGroup.length; i++) {
+      if (fleetGroup[i] == bytes32(0)) {
+        continue;
+      }
+      numFleet++;
+    }
+    uint32 numSmall = remainingFleet.numSmall / numFleet;
+    uint32 numMedium = remainingFleet.numMedium / numFleet;
+    uint32 numBig = remainingFleet.numBig / numFleet;
+    if (numSmall == 0 && numMedium == 0 && numBig == 0) {
+      deleteFleetGroup(fleetGroup);
+      return;
+    }
+    for (uint256 i = 0; i < fleetGroup.length; i++) {
+      if (fleetGroup[i] == bytes32(0)) {
+        continue;
+      }
+      FleetConfigData memory newConfig = FleetConfigData(numSmall, numMedium, numBig, remainingFleet.gameID);
+      FleetConfig.set(fleetGroup[i], newConfig);
+    }
+  }
+
+  function fightFleetToFleetGroup(
+    bytes32 fleetID,
+    bytes32[] memory fleetGroup,
+    uint256 gameID
+  ) internal returns (uint8) {
+    FleetConfigData memory fleetConfig = FleetConfig.get(fleetID);
+    FleetConfigData memory fleetGroupConfig = FleetConfigData(0, 0, 0, gameID);
+    for (uint256 i = 0; i < fleetGroup.length; i++) {
+      if (fleetGroup[i] == bytes32(0)) {
+        continue;
+      }
+      fleetGroupConfig.numSmall += FleetConfig.get(fleetGroup[i]).numSmall;
+      fleetGroupConfig.numMedium += FleetConfig.get(fleetGroup[i]).numMedium;
+      fleetGroupConfig.numBig += FleetConfig.get(fleetGroup[i]).numBig;
+    }
+    (uint8 result, FleetConfigData memory newConfig) = fightTwoFleet(fleetConfig, fleetGroupConfig);
+    if (result == 0) {
+      deleteFleet(fleetID);
+      deleteFleetGroup(fleetGroup);
+    } else if (result == 1) {
+      deleteFleetGroup(fleetGroup);
+      FleetConfig.set(fleetID, newConfig);
+    } else if (result == 2) {
+      deleteFleet(fleetID);
+      distributeToFleetGroup(newConfig, fleetGroup);
+    }
+    return result;
+  }
 }

@@ -6,7 +6,7 @@ import { ArmyOwnable, ArmyConfigData, Position } from "../../src/codegen/Tables.
 import { Vm } from "forge-std/Vm.sol";
 import { hasKey } from "@latticexyz/world/src/modules/keysintable/hasKey.sol";
 import { LibMath, LibQueries } from "../../src/libraries/Libraries.sol";
-import { MineType } from "../../src/codegen/Types.sol";
+import { MineType, AttackerType } from "../../src/codegen/Types.sol";
 
 address constant HEVM_ADDRESS = address(uint160(uint256(keccak256("hevm cheat code"))));
 
@@ -309,10 +309,11 @@ library TestUtils {
     IWorld world,
     bytes32 armyID,
     bytes32 mineID,
-    address user
+    address user,
+    AttackerType attackerType
   ) internal {
     vm.startPrank(user);
-    world.captureMine(armyID, mineID);
+    world.captureMine(armyID, mineID, attackerType);
     vm.stopPrank();
   }
 
@@ -328,7 +329,7 @@ library TestUtils {
     bytes32 closestMine = findClosestMine(world, xCoord, yCoord, mines);
     (uint32 xMine, uint32 yMine, ) = Position.get(world, closestMine);
     moveArmyToLocation(world, armyID, xMine, yMine, user, gameID);
-    captureMine(world, armyID, closestMine, user);
+    captureMine(world, armyID, closestMine, user, AttackerType.Army);
   }
 
   /*function collectResource(

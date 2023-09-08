@@ -98,4 +98,13 @@ library LibQueries {
     bytes32[] memory entities = getKeysWithValue(world, FleetOwnableTableId, FleetOwnable.encode(owner, gameID));
     return entities.length;
   }
+
+  function getOwnedFleetIDs(
+    IStore world,
+    address owner,
+    uint256 gameID
+  ) internal view returns (bytes32[] memory) {
+    bytes32[] memory entities = getKeysWithValue(world, FleetOwnableTableId, FleetOwnable.encode(owner, gameID));
+    return entities;
+  }
 }

@@ -9,6 +9,7 @@ import { IAttackCaptureSystem } from "./IAttackCaptureSystem.sol";
 import { IEconomySystem } from "./IEconomySystem.sol";
 import { IIdentitySystem } from "./IIdentitySystem.sol";
 import { IMapSystem } from "./IMapSystem.sol";
+import { IMineCaptureSystem } from "./IMineCaptureSystem.sol";
 import { IMineInitSystem } from "./IMineInitSystem.sol";
 import { INavalSystem } from "./INavalSystem.sol";
 import { ITestUtilSystem } from "./ITestUtilSystem.sol";
@@ -23,6 +24,7 @@ interface IWorld is
   IEconomySystem,
   IIdentitySystem,
   IMapSystem,
+  IMineCaptureSystem,
   IMineInitSystem,
   INavalSystem,
   ITestUtilSystem

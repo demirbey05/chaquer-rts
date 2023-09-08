@@ -23,3 +23,8 @@ enum ClashType {
   Battle,
   NavalWar
 }
+
+enum AttackerType {
+  Army,
+  Fleet
+}

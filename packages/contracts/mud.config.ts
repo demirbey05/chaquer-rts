@@ -230,6 +230,7 @@ export default mudConfig({
     MineType: ["Food","Wood","Gold"],
     State:["None","Waiting","Seed","Started","Completed"],
     ClashType:["Castle","Mine","Dock","Battle","NavalWar"],
+    AttackerType:["Army","Fleet"],
   },
   modules: [
     {
