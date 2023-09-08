@@ -18,6 +18,15 @@ export const PriceListDrawer = () => {
     const armyPrices = useArmyPrices(1);
     const resourcePrices = useResourcePrices(1);
 
+    const fleetPrices = {
+        smallShipCredit: 10,
+        smallShipWood: 100,
+        mediumShipCredit: 20,
+        mediumShipWood: 200,
+        bigShipCredit: 30,
+        bigShipWood: 300
+    }
+
     useEffect(() => {
         if (!isPlayerLost && isMineInited) {
             const interval = setInterval(async () => {
@@ -74,17 +83,25 @@ export const PriceListDrawer = () => {
                     <h6 className="text-center p-2 mb-2 border-bottom">Resource Prices / per</h6>
                 </Tooltip>
                 <div>
-                    <PriceListItem name={"Gold/per"} price={resourcePrices && resourcePrices.priceGold} />
-                    <PriceListItem name={"Wood/per"} price={resourcePrices && resourcePrices.priceWood} />
-                    <PriceListItem name={"Food/per"} price={resourcePrices && resourcePrices.priceFood} />
+                    <PriceListItem name={"Gold/per"} isFleetPrices={false} price={resourcePrices && resourcePrices.priceGold} />
+                    <PriceListItem name={"Wood/per"} isFleetPrices={false} price={resourcePrices && resourcePrices.priceWood} />
+                    <PriceListItem name={"Food/per"} isFleetPrices={false} price={resourcePrices && resourcePrices.priceFood} />
                 </div>
-                <Tooltip label="You can react the current army prices from here..." placement="top-start" bg="blue.400" fontSize="md">
-                    <h6 className="text-center p-2 mt-2 border-bottom">Army Prices / per</h6>
+                <Tooltip label="You can reach the current army prices from here..." placement="top-start" bg="blue.400" fontSize="md">
+                    <h6 className="text-center p-2 border-bottom">Army Prices / per</h6>
                 </Tooltip>
-                <div>
-                    <PriceListItem name={"Swordsman/per"} price={armyPrices && armyPrices.priceSwordsman} />
-                    <PriceListItem name={"Archer/per"} price={armyPrices && armyPrices.priceArcher} />
-                    <PriceListItem name={"Cavalry/per"} price={armyPrices && armyPrices.priceCavalry} />
+                <div className="mt-2">
+                    <PriceListItem name={"Swordsman/per"} isFleetPrices={false} price={armyPrices && armyPrices.priceSwordsman} />
+                    <PriceListItem name={"Archer/per"} isFleetPrices={false} price={armyPrices && armyPrices.priceArcher} />
+                    <PriceListItem name={"Cavalry/per"} isFleetPrices={false} price={armyPrices && armyPrices.priceCavalry} />
+                </div>
+                <Tooltip label="You can reach the fleet prices. They are constant." placement="top-start" bg="blue.400" fontSize="md">
+                    <h6 className="text-center p-2 mt-2 border-bottom">Fleet Prices / per</h6>
+                </Tooltip>
+                <div className="mt-2">
+                    <PriceListItem name={"Baron's Dagger/per"} isFleetPrices={true} price={`${fleetPrices.smallShipCredit} 💰 + ${fleetPrices.smallShipWood} 🪓`} />
+                    <PriceListItem name={"Knight's Galley/per"} isFleetPrices={true} price={`${fleetPrices.mediumShipCredit} 💰 + ${fleetPrices.mediumShipWood} 🪓`} />
+                    <PriceListItem name={"King's Leviathan/per"} isFleetPrices={true} price={`${fleetPrices.bigShipCredit} 💰 + ${fleetPrices.bigShipWood} 🪓`} />
                 </div>
             </div>
         </div>
@@ -93,9 +110,23 @@ export const PriceListDrawer = () => {
 
 interface PriceListItemPropTypes {
     name: string,
-    price: any
+    price: any,
+    isFleetPrices: boolean
 }
 
 const PriceListItem = (props: PriceListItemPropTypes) => {
-    return <p className="border-bottom border-black d-flex justify-between"><span className="ms-2">{props.name}</span><span className="me-2">{props.price ? getNumberFromBigInt(props.price).slice(0, 12) : "0.00"} 💰</span></p>
+    return <p className="border-bottom border-black d-flex justify-between">
+        <span className="ms-2">
+            {props.name}
+        </span>
+        {
+            !props.isFleetPrices ?
+                <span className="me-2">
+                    {props.price ? getNumberFromBigInt(props.price).slice(0, 12) : "0.00"} 💰
+                </span> :
+                <span className="me-2">
+                    {props.price ? props.price : "0.00"}
+                </span>
+        }
+    </p>
 }
