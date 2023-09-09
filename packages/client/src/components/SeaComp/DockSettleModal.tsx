@@ -62,11 +62,16 @@ export const DockSettleModal = () => {
             movingArmyId.current,
             1
         )
+
         if (tx == null) {
             setErrorMessage("An error occurred while trying to settle dock.")
             setErrorTitle("Dock Settle Error")
             setShowError(true)
             return
+        }
+        else {
+            setDockSettleStage(false);
+            setDockPosition(undefined);
         }
     };
 

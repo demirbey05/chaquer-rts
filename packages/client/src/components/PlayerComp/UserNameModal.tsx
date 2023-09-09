@@ -85,7 +85,7 @@ export const UserNameModal = () => {
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content bg-dark text-white">
                     {
-                        !userValid && gameState !== 3 &&
+                        userValid === undefined && gameState !== 3 &&
                         <div className="modal-header justify-center">
                             <h1 className="modal-title text-2xl" id="userNameModalLabel">
                                 Username
@@ -101,8 +101,8 @@ export const UserNameModal = () => {
                             </Alert>
                         }
                         {
-                            !userValid && gameState !== 3 &&
-                            <input onChange={(e: any) => handleInput(e)}
+                            userValid === undefined && gameState !== 3 &&
+                            < input onChange={(e: any) => handleInput(e)}
                                 type="text"
                                 className="form-control dark-input bg-dark text-white"
                                 id="usernameinput"
