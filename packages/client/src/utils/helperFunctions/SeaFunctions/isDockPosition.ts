@@ -10,6 +10,5 @@ export const isDockPosition = (
       }
     });
   }
-
   return false;
 };

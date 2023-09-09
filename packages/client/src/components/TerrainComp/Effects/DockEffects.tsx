@@ -47,12 +47,10 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
                     const element = document.getElementById(`${column},${row}`);
                     if (element && isPositionNextToSea(row, column, values)) {
                         const position = { x: row, y: column };
-                        console.log(position)
-                        const isPositionOccupied = isArmyPosition(position.x, position.y, armyPositions) ||
-                            isMyArmy(position, myArmyPosition) ||
+                        const isPositionOccupied = isMyArmy(position, myArmyPosition) ||
                             isResourcePosition(position.x, position.y, resources) ||
                             isCastlePosition(position.x, position.y, castlePositions) ||
-                            isDockPosition(position.x, position.y, dockPositions)
+                            isMyDock(position.x, position.y, myDockPositions)
 
                         if (!isPositionOccupied) {
                             element.setAttribute("data-bs-toggle", "modal");
@@ -70,11 +68,10 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
                         const element = document.getElementById(`${column},${row}`);
                         if (element && isPositionNextToSea(row, column, values)) {
                             const position = { x: row, y: column };
-                            const isPositionOccupied = isArmyPosition(position.x, position.y, armyPositions) ||
-                                isMyArmy(position, myArmyPosition) ||
+                            const isPositionOccupied = isMyArmy(position, myArmyPosition) ||
                                 isResourcePosition(position.x, position.y, resources) ||
                                 isCastlePosition(position.x, position.y, castlePositions) ||
-                                isDockPosition(position.x, position.y, dockPositions)
+                                isMyDock(position.x, position.y, myDockPositions)
 
                             if (!isPositionOccupied) {
                                 element.setAttribute("data-bs-toggle", "");
