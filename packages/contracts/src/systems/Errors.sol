@@ -35,6 +35,7 @@ error MoveArmy__NoAuthorized();
 error MoveArmy__TooFar();
 error MoveArmy__TileIsNotEmpty();
 error MoveArmy__WrongTerrainType();
+error MoveArmy__UnsufficientResource();
 
 //Attack System Errors
 error AttackSystem__ArmyNotBelongYou();
@@ -105,6 +106,7 @@ error FleetMove__NoAuthorization();
 error FleetMove__TileIsNotEmpty();
 error FleetMove__TooFar();
 error FleetMove__WrongTerrainType();
+error FleetMove__UnsufficientResource();
 error FleetAttack__FriendFireNotAllowed();
 error FleetAttack__NoAuthorization();
 error FleetAttack__NonMatchedGameID();

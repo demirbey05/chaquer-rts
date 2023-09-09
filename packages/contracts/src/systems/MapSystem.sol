@@ -3,14 +3,14 @@ pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { wadMul, toWadUnsafe } from "solmate/src/utils/SignedWadMath.sol";
-import { MapConfig, Position, PositionTableId, CastleOwnable, NumberOfUsers, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame, Players, CreditOwn, GameMetaData, SoldierCreated } from "../codegen/Tables.sol";
+import { MapConfig, Position, ResourceOwn, ResourceOwnData, CastleOwnable, NumberOfUsers, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame, Players, CreditOwn, GameMetaData, SoldierCreated } from "../codegen/Tables.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { LibMath } from "../libraries/LibMath.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
 import { State } from "../codegen/Types.sol";
-import { maxArmyNum } from "./Constants.sol";
+import { maxArmyNum, armyMoveFoodCost, armyMoveGoldCost } from "./Constants.sol";
 import "./Errors.sol";
 
 contract MapSystem is System {
@@ -204,6 +204,10 @@ contract MapSystem is System {
     uint32 width = MapConfig.getWidth(IStore(_world()), gameID);
     (address armyOwner, uint256 gameIDArmy) = ArmyOwnable.get(armyID);
     (uint32 xArmy, uint32 yArmy, ) = Position.get(armyID);
+    ResourceOwnData memory resourcesOfUser = ResourceOwn.get(ownerCandidate, gameID);
+    if (resourcesOfUser.numOfFood < armyMoveFoodCost || resourcesOfUser.numOfGold < armyMoveGoldCost) {
+      revert MoveArmy__UnsufficientResource();
+    }
 
     if ((armyOwner != ownerCandidate) || (gameIDArmy != gameID)) {
       revert MoveArmy__NoAuthorized();
@@ -218,6 +222,8 @@ contract MapSystem is System {
       revert MoveArmy__TileIsNotEmpty();
     }
     Position.set(armyID, x, y, gameID);
+    ResourceOwn.setNumOfFood(ownerCandidate, gameID, resourcesOfUser.numOfFood - armyMoveFoodCost);
+    ResourceOwn.setNumOfGold(ownerCandidate, gameID, resourcesOfUser.numOfGold - armyMoveGoldCost);
   }
 
   function claimWinner(address winnerCandidate, uint256 gameID) public {

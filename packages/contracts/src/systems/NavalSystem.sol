@@ -8,8 +8,8 @@ import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { ClashType } from "../codegen/Types.sol";
 import { LibQueries, LibMath, LibNaval, LibUtils, LibAttack } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
-import { baseCostDock, requiredArmySize, baseWoodCostDock, maxShipInFleet, smallCreditCost, smallWoodCost, mediumCreditCost, mediumWoodCost, bigCreditCost, bigWoodCost } from "./Constants.sol";
-import { CreditOwn, FleetOwnable, FleetConfig, Position, FleetConfigData, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, ClashResult, ArmyOwnable } from "../codegen/Tables.sol";
+import { baseCostDock, requiredArmySize, baseWoodCostDock, maxShipInFleet, smallCreditCost, smallWoodCost, mediumCreditCost, mediumWoodCost, bigCreditCost, bigWoodCost, fleetMoveFoodCost, fleetMoveGoldCost } from "./Constants.sol";
+import { CreditOwn, ResourceOwnData, FleetOwnable, FleetConfig, Position, FleetConfigData, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, ArmyOwnable } from "../codegen/Tables.sol";
 
 contract NavalSystem is System {
   function buildDock(
@@ -109,31 +109,8 @@ contract NavalSystem is System {
         ArmyConfig.deleteRecord(ownerArmiesSurroundDock[i]);
         Position.deleteRecord(ownerArmiesSurroundDock[i]);
       }
-
-      ClashResult.emitEphemeral(
-        keccak256(abi.encodePacked(block.timestamp, armyID, dockID, gameID)),
-        armyOwner,
-        dockOwner,
-        false,
-        ClashType.Dock
-      );
-    } else if (result == 0) {
-      ClashResult.emitEphemeral(
-        keccak256(abi.encodePacked(block.timestamp, armyID, dockID, gameID)),
-        armyOwner,
-        dockOwner,
-        true,
-        ClashType.Dock
-      );
-    } else {
-      ClashResult.emitEphemeral(
-        keccak256(abi.encodePacked(block.timestamp, armyID, dockID, gameID)),
-        dockOwner,
-        armyOwner,
-        false,
-        ClashType.Dock
-      );
     }
+    LibUtils.emitClashTableEvent(uint8(result), armyID, dockID, gameID, armyOwner, dockOwner, ClashType.Dock);
   }
 
   function settleFleet(
@@ -193,10 +170,15 @@ contract NavalSystem is System {
     uint32 y
   ) public {
     address fleetOwner = FleetOwnable.getOwner(fleetID);
+    (uint32 xFleet, uint32 yFleet, uint256 gameID) = Position.get(fleetID);
+    ResourceOwnData memory resourcesOfUser = ResourceOwn.get(fleetOwner, gameID);
+    if (resourcesOfUser.numOfFood < fleetMoveFoodCost || resourcesOfUser.numOfGold < fleetMoveGoldCost) {
+      revert FleetMove__UnsufficientResource();
+    }
     if (fleetOwner != (_msgSender())) {
       revert FleetMove__NoAuthorization();
     }
-    (uint32 xFleet, uint32 yFleet, uint256 gameID) = Position.get(fleetID);
+
     uint32 width = MapConfig.getWidth(gameID);
     if (MapConfig.getItemTerrain(gameID, x * width + y)[0] != hex"02") {
       revert FleetMove__WrongTerrainType();
@@ -208,54 +190,7 @@ contract NavalSystem is System {
       revert FleetMove__TooFar();
     }
     Position.set(fleetID, x, y, gameID);
-  }
-
-  function attackFleet(bytes32 fleetOne, bytes32 fleetTwo) public {
-    address fleetOneOwner = FleetOwnable.getOwner(fleetOne);
-    address fleetTwoOwner = FleetOwnable.getOwner(fleetTwo);
-
-    // Checks
-    if (fleetOneOwner == fleetTwoOwner) {
-      revert FleetAttack__FriendFireNotAllowed();
-    }
-    if (fleetOneOwner != _msgSender()) {
-      revert FleetAttack__NoAuthorization();
-    }
-    (uint32 xFleetOne, uint32 yFleetOne, uint256 gameID) = Position.get(fleetOne);
-    (uint32 xFleetTwo, uint32 yFleetTwo, uint256 gameIDTwo) = Position.get(fleetTwo);
-    if (gameID != gameIDTwo) {
-      revert FleetAttack__NonMatchedGameID();
-    }
-    if (LibMath.manhattan(xFleetOne, yFleetOne, xFleetTwo, yFleetTwo) > 3) {
-      revert FleetAttack__TooFar();
-    }
-
-    // Execution
-    FleetConfigData memory fleetOneConfig = FleetConfig.get(fleetOne);
-    FleetConfigData memory fleetTwoConfig = FleetConfig.get(fleetTwo);
-    (uint8 winner, FleetConfigData memory winnerNew) = LibNaval.fightTwoFleet(fleetOneConfig, fleetTwoConfig);
-    if (winner == 0) {
-      LibNaval.deleteFleet(fleetOne);
-      LibNaval.deleteFleet(fleetTwo);
-      // Ephemeral event
-      ClashResult.emitEphemeral(
-        keccak256(abi.encodePacked(block.timestamp, xFleetOne, yFleetOne)),
-        fleetOneOwner,
-        fleetTwoOwner,
-        true,
-        ClashType.NavalWar
-      );
-      return;
-    }
-    FleetConfig.set(winner == 1 ? fleetOne : fleetTwo, winnerNew);
-    LibNaval.deleteFleet(winner == 1 ? fleetTwo : fleetOne);
-    // Ephemeral event
-    ClashResult.emitEphemeral(
-      keccak256(abi.encodePacked(block.timestamp, xFleetOne, yFleetOne)),
-      winner == 1 ? fleetOneOwner : fleetTwoOwner,
-      winner == 1 ? fleetTwoOwner : fleetOneOwner,
-      false,
-      ClashType.NavalWar
-    );
+    ResourceOwn.setNumOfFood(fleetOwner, gameID, resourcesOfUser.numOfFood - fleetMoveFoodCost);
+    ResourceOwn.setNumOfGold(fleetOwner, gameID, resourcesOfUser.numOfGold - fleetMoveGoldCost);
   }
 }

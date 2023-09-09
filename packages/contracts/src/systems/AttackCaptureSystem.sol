@@ -3,8 +3,8 @@ pragma solidity ^0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
-import { ArmyOwnable, ClashResult, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, ResourceOwnable, Players, NumberOfUsers, DockOwnable } from "../codegen/Tables.sol";
-import { LibMath, LibAttack, BattleScore, LibUtils, LibQueries } from "../libraries/Libraries.sol";
+import { ArmyOwnable, ClashResult, FleetOwnable, FleetConfigData, FleetConfig, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, ResourceOwnable, Players, NumberOfUsers, DockOwnable } from "../codegen/Tables.sol";
+import { LibMath, LibAttack, BattleScore, LibUtils, LibQueries, LibNaval } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { MineType, ClashType } from "../codegen/Types.sol";
@@ -194,5 +194,45 @@ contract AttackCaptureSystem is System {
         ClashType.Castle
       );
     }
+  }
+
+  function attackFleet(
+    bytes32 fleetOne,
+    bytes32 fleetTwo,
+    uint256 gameID
+  ) public {
+    address fleetOneOwner = FleetOwnable.getOwner(fleetOne);
+    address fleetTwoOwner = FleetOwnable.getOwner(fleetTwo);
+    {
+      // Checks
+      if (fleetOneOwner == fleetTwoOwner) {
+        revert FleetAttack__FriendFireNotAllowed();
+      }
+      if (fleetOneOwner != _msgSender()) {
+        revert FleetAttack__NoAuthorization();
+      }
+      (uint32 xFleetOne, uint32 yFleetOne, uint256 gameIDOne) = Position.get(fleetOne);
+      (uint32 xFleetTwo, uint32 yFleetTwo, uint256 gameIDTwo) = Position.get(fleetTwo);
+      if (gameIDOne != gameIDTwo) {
+        revert FleetAttack__NonMatchedGameID();
+      }
+
+      if (LibMath.manhattan(xFleetOne, yFleetOne, xFleetTwo, yFleetTwo) > 3) {
+        revert FleetAttack__TooFar();
+      }
+    }
+
+    // Execution
+    FleetConfigData memory fleetOneConfig = FleetConfig.get(fleetOne);
+    FleetConfigData memory fleetTwoConfig = FleetConfig.get(fleetTwo);
+    (uint8 winner, FleetConfigData memory winnerNew) = LibNaval.fightTwoFleet(fleetOneConfig, fleetTwoConfig);
+    LibUtils.emitClashTableEvent(winner, fleetOne, fleetTwo, gameID, fleetOneOwner, fleetTwoOwner, ClashType.NavalWar);
+    if (winner == 0) {
+      LibNaval.deleteFleet(fleetOne);
+      LibNaval.deleteFleet(fleetTwo);
+      return;
+    }
+    FleetConfig.set(winner == 1 ? fleetOne : fleetTwo, winnerNew);
+    LibNaval.deleteFleet(winner == 1 ? fleetTwo : fleetOne);
   }
 }

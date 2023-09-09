@@ -13,9 +13,9 @@ import { wadMul, toWadUnsafe } from "solmate/src/utils/SignedWadMath.sol";
 
 uint256 constant mineRate = 30;
 uint256 constant blockRate = 0;
-uint256 constant startFood = 100;
+uint256 constant startFood = 300;
 uint256 constant startWood = 100;
-uint256 constant startGold = 100;
+uint256 constant startGold = 300;
 
 contract EconomySystem is System {
   //@dev maybe game state check should be applied in the further
