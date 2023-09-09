@@ -12,6 +12,7 @@ export const DockSettleEvent = (
     setIsMineStage(false)
     setIsAttackStage(false)
     setDockCaptureStage(false)
+    setIsArmyMoveStage(false)
     setFromArmyPosition(undefined)
     setArmyPositionToSettleDock(fromArmyPositionRef.current)
     setDockPosition(toArmyPositionRef.current)

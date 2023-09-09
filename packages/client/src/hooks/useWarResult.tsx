@@ -6,7 +6,6 @@ export function useWarResult(maxElementSize: number) {
     const { components } = useMUD()
 
     const warResult = useObservableValue(components.ClashResult.update$);
-    console.log(warResult)
 
     const [lastFive, setLastFive] = useState<any[]>([]);
 

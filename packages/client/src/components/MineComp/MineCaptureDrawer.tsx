@@ -53,7 +53,7 @@ export const MineCaptureDrawer = () => {
             setShowError(true)
             return
         }
-        const tx = await systemCalls.captureMine(attackFromArmyId[0], attackToMineId[0])
+        const tx = await systemCalls.captureMine(attackFromArmyId[0], attackToMineId[0], 0)
         if (tx == null) {
             setErrorMessage("An error occurred while trying to capture a mine.")
             setErrorTitle("Mine Capture Error")

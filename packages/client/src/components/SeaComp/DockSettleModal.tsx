@@ -98,6 +98,7 @@ export const DockSettleModal = () => {
             document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
 
             setDockSettleStage(false);
+            setIsArmyMoveStage(false)
             setArmyPositionToSettleDock(undefined);
             setDockPosition(undefined);
         };

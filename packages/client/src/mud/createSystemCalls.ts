@@ -171,9 +171,17 @@ export function createSystemCalls(
     }
   };
 
-  const captureMine = async (armyID: string, mineID: string) => {
+  const captureMine = async (
+    armyID: string,
+    mineID: string,
+    attackerType: number
+  ) => {
     try {
-      const tx = await worldContract.write.captureMine([armyID, mineID]);
+      const tx = await worldContract.write.captureMine([
+        armyID,
+        mineID,
+        attackerType,
+      ]);
       await waitForTransaction(tx);
       return tx;
     } catch (e) {

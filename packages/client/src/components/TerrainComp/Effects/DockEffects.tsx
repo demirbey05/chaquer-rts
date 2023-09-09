@@ -7,7 +7,6 @@ import { isCastlePosition } from "../../../utils/helperFunctions/CastleFunctions
 import { isMyDock } from "../../../utils/helperFunctions/SeaFunctions/isMyDock";
 import { isManhattanPosition } from "../../../utils/helperFunctions/CustomFunctions/isManhattanPosition";
 import { isDockPosition } from "../../../utils/helperFunctions/SeaFunctions/isDockPosition";
-import { getAllNextToSeaPositions } from "../../../utils/helperFunctions/SeaFunctions/getAllNextToSeaPositions";
 
 export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosition: any[], armyPositions: any[], dockPositions: any[], myDockPositions: any[] | undefined, values: number[][], dockSettleStage: boolean, dockCaptureStage: boolean, rows: number[], columns: number[], fromArmyPosition: any) => {
     /* Deploy dock emojis */
@@ -48,6 +47,7 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
                     const element = document.getElementById(`${column},${row}`);
                     if (element && isPositionNextToSea(row, column, values)) {
                         const position = { x: row, y: column };
+                        console.log(position)
                         const isPositionOccupied = isArmyPosition(position.x, position.y, armyPositions) ||
                             isMyArmy(position, myArmyPosition) ||
                             isResourcePosition(position.x, position.y, resources) ||
