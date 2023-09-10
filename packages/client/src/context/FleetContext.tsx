@@ -7,6 +7,10 @@ type FleetContextType = {
     setFleetPosition: (value: any) => void;
     dockPositionForFleetSettlement: any;
     setDockPositionForFleetSettlement: (value: any) => void;
+    isFleetMoveStage: boolean;
+    setIsFleetMoveStage: (value: boolean) => void;
+    fromFleetPosition: { x: number, y: number } | undefined;
+    setFromFleetPosition: (value: { x: number, y: number } | undefined) => void
 };
 
 const FleetContext = createContext<FleetContextType>({
@@ -15,7 +19,11 @@ const FleetContext = createContext<FleetContextType>({
     fleetPosition: undefined,
     setFleetPosition: () => { },
     dockPositionForFleetSettlement: undefined,
-    setDockPositionForFleetSettlement: () => { }
+    setDockPositionForFleetSettlement: () => { },
+    isFleetMoveStage: false,
+    setIsFleetMoveStage: () => { },
+    fromFleetPosition: undefined,
+    setFromFleetPosition: () => { }
 });
 
 const FleetProvider: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode; }) => {
@@ -23,13 +31,20 @@ const FleetProvider: React.FC<{ children: ReactNode }> = ({ children }: { childr
     const [fleetPosition, setFleetPosition] = useState<any>();
     const [dockPositionForFleetSettlement, setDockPositionForFleetSettlement] = useState<any>();
 
+    const [isFleetMoveStage, setIsFleetMoveStage] = useState<boolean>(false);
+    const [fromFleetPosition, setFromFleetPosition] = useState<{ x: number, y: number } | undefined>();
+
     const results: FleetContextType = {
         fleetSettleStage,
         setFleetSettleStage,
         fleetPosition,
         setFleetPosition,
         dockPositionForFleetSettlement,
-        setDockPositionForFleetSettlement
+        setDockPositionForFleetSettlement,
+        isFleetMoveStage,
+        setIsFleetMoveStage,
+        fromFleetPosition,
+        setFromFleetPosition
     };
 
     return (

@@ -50,7 +50,7 @@ export const FleetEffects = (myFleetPositions: any[] | undefined, fleetPositions
     // Deploy ship emojis to position. Add border for user's fleet.
     useEffect(() => {
         const clearBoard = () => {
-            const boardElements = document.getElementsByClassName("ship-emoji");
+            const boardElements = document.getElementsByClassName("fleet-emoji");
             Array.from(boardElements).forEach((element: any) => {
                 element.innerHTML = "";
                 element.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
@@ -60,22 +60,17 @@ export const FleetEffects = (myFleetPositions: any[] | undefined, fleetPositions
         if (myFleetPositions) {
             clearBoard();
 
-            myFleetPositions.forEach((data: any) => {
-                const element = document.getElementById(
-                    `${data.y},${data.x}`
-                )!;
-                element.innerHTML = '<img src="' + shipEmoji + '" width="30px" height="30px" />';
+            myFleetPositions.map((data: any) => {
+                const element = document.getElementById(`${data.y},${data.x}`)!;
+                element.innerHTML = '<img src="' + shipEmoji + '" width="25px" height="25px" />';
                 element.style.border = "2px solid rgb(245, 169, 6)";
             });
         }
 
         //Puts the ship emojis to fleet positions
-        if (fleetPositions) {
-            fleetPositions.map((data: any) => {
-                document.getElementById(`${data.y},${data.x}`)!.innerHTML = '<img src="' + shipEmoji + '" width="30px" height="30px" />';
-                document.getElementById(`${data.y},${data.x}`)?.classList.add("fleet-emoji");
-            });
-        }
-
+        fleetPositions.map((data: any) => {
+            document.getElementById(`${data.y},${data.x}`)!.innerHTML = '<img src="' + shipEmoji + '" width="25px" height="25px" />';
+            document.getElementById(`${data.y},${data.x}`)?.classList.add("fleet-emoji");
+        });
     }, [fleetPositions, myFleetPositions]);
 }

@@ -5,8 +5,9 @@ import { isCastlePosition } from '../../../utils/helperFunctions/CastleFunctions
 import { isResourcePosition } from '../../../utils/helperFunctions/ResourceFuntions/isResourcePosition';
 import { isArmyPosition } from '../../../utils/helperFunctions/ArmyFunctions/isArmyPosition';
 import { armySettlePositions } from '../../../utils/helperFunctions/ArmyFunctions/armySettlePositions';
+import { canFleetBeSettled } from '../../../utils/helperFunctions/SeaFunctions/canFleetBeSettled';
 
-export const HoverEffects = (armyPositions: any[], resources: any[], numberOfArmy: any, isArmySettleStage: boolean | undefined, isBorder: boolean, castlePositions: any[], myCastlePosition: any[], values: number[][], fromArmyPosition: { x: any, y: any } | undefined, isArmyMoveStage: boolean | undefined) => {
+export const HoverEffects = (fromFleetPosition: any, isFleetMoveStage: boolean, armyPositions: any[], resources: any[], numberOfArmy: any, isArmySettleStage: boolean | undefined, isBorder: boolean, castlePositions: any[], myCastlePosition: any[], values: number[][], fromArmyPosition: { x: any, y: any } | undefined, isArmyMoveStage: boolean | undefined) => {
     //Blue hover effect when user moves an army
     useEffect(() => {
         if (fromArmyPosition && isArmyMoveStage && myCastlePosition) {
@@ -90,4 +91,36 @@ export const HoverEffects = (armyPositions: any[], resources: any[], numberOfArm
             });
         }
     }, [isArmySettleStage, myCastlePosition]);
+
+    //Yellow hover effect when user moves a fleet
+    useEffect(() => {
+        if (fromFleetPosition && isFleetMoveStage) {
+            getManhattanPositions({
+                x: parseInt(fromFleetPosition.x),
+                y: parseInt(fromFleetPosition.y),
+            }).map((data) => {
+                if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
+                    canFleetBeSettled(values[data.x][data.y]) &&
+                        !isBorder &&
+                        document.getElementById(`${data.y},${data.x}`)?.classList.add("yellowTileEffect");
+                }
+            });
+
+        }
+
+        return () => {
+            if (fromFleetPosition) {
+                getManhattanPositions({
+                    x: parseInt(fromFleetPosition.x),
+                    y: parseInt(fromFleetPosition.y),
+                }).map((data) => {
+                    if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
+                        if (canFleetBeSettled(values[data.x][data.y])) {
+                            document.getElementById(`${data.y},${data.x}`)?.classList.remove("yellowTileEffect");
+                        }
+                    }
+                });
+            }
+        }
+    }, [fromArmyPosition, isFleetMoveStage]);
 }

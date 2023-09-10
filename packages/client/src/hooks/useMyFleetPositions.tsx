@@ -9,7 +9,7 @@ export function useMyFleetPositions(address: any) {
     const fleetEntity = useEntityQuery([HasValue(components.FleetOwnable, { owner: address })]);
 
     const [fleetPositions, setFleetPositions] = useState<any[]>();
-    const value = useObservableValue(components.FleetOwnable.update$);
+    const value = useObservableValue(components.Position.update$);
 
     useEffect(() => {
         const positions = fleetEntity.map((entityIndex) => {
