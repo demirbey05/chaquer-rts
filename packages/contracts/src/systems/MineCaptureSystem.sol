@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Position, ResourceOwnable, ArmyOwnable, FleetOwnable } from "../codegen/Tables.sol";
+import { Position, ResourceOwnable, ArmyOwnable, FleetOwnable, ColorOwnable, AddressToUsername } from "../codegen/Tables.sol";
 import { LibUtils, LibMath } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
@@ -41,6 +41,7 @@ contract MineCaptureSystem is System {
 
     if (mineOwner == address(0)) {
       ResourceOwnable.setOwner(mineID, attackerOwner);
+      ColorOwnable.setColorIndex(mineID, AddressToUsername.getColorIndex(attackerOwner, gameID));
       return;
     }
 

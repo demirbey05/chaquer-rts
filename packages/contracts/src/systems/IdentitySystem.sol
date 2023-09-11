@@ -35,8 +35,8 @@ contract IdentitySystem is System {
       revert IdentitySystem__InvalidUserName();
     }
 
-    AddressToUsername.set(sender, gameID, userName);
+    AddressToUsername.set(sender, gameID, currentNumOfUser + 1, userName);
     Players.set(gameID, sender, true);
-    NumberOfUsers.set(gameID, NumberOfUsers.get(gameID) + 1);
+    NumberOfUsers.set(gameID, currentNumOfUser + 1);
   }
 }

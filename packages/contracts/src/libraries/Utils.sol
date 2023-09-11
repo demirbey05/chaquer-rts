@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import { BattleResult, RemainingData, EntityType } from "./Types.sol";
 import "./Libraries.sol";
 import { AttackerType, ClashType } from "../codegen/Types.sol";
-import { CastleOwnable, Position, ResourceOwnable, DockOwnable, ArmyConfig, ArmyOwnable, ClashResult } from "../codegen/Tables.sol";
+import { CastleOwnable, Position, ResourceOwnable, DockOwnable, ArmyConfig, ArmyOwnable, ClashResult, ColorOwnable, AddressToUsername } from "../codegen/Tables.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 
 error ErrorInCalculatingBattleScores();
@@ -121,6 +121,7 @@ library LibUtils {
     ArmyOwnable.deleteRecord(armyID);
     ArmyConfig.deleteRecord(armyID);
     Position.deleteRecord(armyID);
+    ColorOwnable.deleteRecord(armyID);
   }
 
   function findSurroundingAttackerEntities(
@@ -203,6 +204,7 @@ library LibUtils {
 
     if (result == 1) {
       ResourceOwnable.setOwner(mineID, attackerOwner);
+      ColorOwnable.setColorIndex(mineID, AddressToUsername.getColorIndex(attackerOwner, gameID));
 
       // Destroy all the army which belongs to castle owner
 
@@ -227,6 +229,7 @@ library LibUtils {
     uint8 result = LibNaval.fightFleetToFleetGroup(attackerID, ownerEntitiesSurrondMine, gameID);
     if (result == 1) {
       ResourceOwnable.setOwner(mineID, attackerOwner);
+      ColorOwnable.setColorIndex(mineID, AddressToUsername.getColorIndex(attackerOwner, gameID));
     }
     emitClashTableEvent(result, attackerID, mineID, gameID, attackerOwner, mineOwner, ClashType.Mine);
   }

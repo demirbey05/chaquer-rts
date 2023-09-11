@@ -1,7 +1,7 @@
 //SPDX-License-Identifier:MIT
 
 pragma solidity ^0.8.0;
-import { ArmyConfig, ArmyConfigData, Position, MapConfig, FleetConfigData, FleetConfig, FleetOwnable } from "../codegen/Tables.sol";
+import { ArmyConfig, ArmyConfigData, Position, MapConfig, FleetConfigData, FleetConfig, FleetOwnable, ColorOwnable } from "../codegen/Tables.sol";
 import { LibMath } from "./LibMath.sol";
 
 library LibNaval {
@@ -90,6 +90,7 @@ library LibNaval {
     FleetConfig.deleteRecord(fleetID);
     FleetOwnable.deleteRecord(fleetID);
     Position.deleteRecord(fleetID);
+    ColorOwnable.deleteRecord(fleetID);
   }
 
   function deleteFleetGroup(bytes32[] memory fleetGroup) internal {

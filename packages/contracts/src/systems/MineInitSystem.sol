@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { PlayerSeeds, Players, LimitOfGame, GameMetaData, NumberOfUsers, ResourceInited, SeedInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, ClashResult, ArmyConfig, ArmyOwnable, FleetOwnable } from "../codegen/Tables.sol";
+import { PlayerSeeds, Players, LimitOfGame, GameMetaData, NumberOfUsers, ResourceInited, ColorOwnable, SeedInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, ClashResult, ArmyConfig, ArmyOwnable, FleetOwnable } from "../codegen/Tables.sol";
 import { MineType } from "../codegen/Types.sol";
 import { LibRandom, LibQueries, LibAttack, LibUtils, LibMath, LibNaval } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
@@ -95,6 +95,7 @@ contract MineInitSystem is System {
       bytes32 entityID = keccak256(abi.encodePacked(x, y, "Mine", gameID));
       Position.set(entityID, x, y, gameID);
       ResourceOwnable.set(entityID, ResourceOwnableData(mineType, address(0), gameID));
+      ColorOwnable.set(entityID, 0, gameID);
       i++;
     }
     return i;

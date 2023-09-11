@@ -93,7 +93,9 @@ export default mudConfig({
         gameId:"uint256"
       },
       schema:{
-        userName:"string"
+        colorIndex:"uint256",
+        userName:"string",
+        
       }
     },
     ResourceOwnable :{
@@ -223,6 +225,12 @@ export default mudConfig({
         clashType:"ClashType"
       },
       ephemeral:true,
+    },
+    ColorOwnable:{
+      schema:{
+        colorIndex:"uint256",
+        gameID:"uint256"
+      }
     }
   },
   

@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { wadMul, toWadUnsafe } from "solmate/src/utils/SignedWadMath.sol";
-import { MapConfig, Position, ResourceOwn, ResourceOwnData, CastleOwnable, NumberOfUsers, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame, Players, CreditOwn, GameMetaData, SoldierCreated } from "../codegen/Tables.sol";
+import { MapConfig, Position, ResourceOwn, ResourceOwnData, ColorOwnable, AddressToUsername, CastleOwnable, NumberOfUsers, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame, Players, CreditOwn, GameMetaData, SoldierCreated } from "../codegen/Tables.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
@@ -94,6 +94,7 @@ contract MapSystem is System {
     Position.set(entityID, x, y, gameID);
     CastleOwnable.set(entityID, ownerCandidate, gameID);
     GameMetaData.setNumberOfCastle(gameID, numOfCastle + 1);
+    ColorOwnable.set(entityID, AddressToUsername.getColorIndex(ownerCandidate, gameID), gameID);
 
     if (numOfCastle == LimitOfGame.get(gameID) - 1) {
       GameMetaData.setState(gameID, State.Seed);
@@ -190,6 +191,7 @@ contract MapSystem is System {
     Position.set(entityID, x, y, config.gameID);
     ArmyOwnable.set(entityID, ownerCandidate, config.gameID);
     ArmyConfig.set(entityID, config.numSwordsman, config.numArcher, config.numCavalry, config.gameID);
+    ColorOwnable.set(entityID, AddressToUsername.getColorIndex(ownerCandidate, config.gameID), config.gameID);
 
     return entityID;
   }

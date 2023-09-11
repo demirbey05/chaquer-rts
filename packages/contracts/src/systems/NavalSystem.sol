@@ -9,7 +9,7 @@ import { ClashType } from "../codegen/Types.sol";
 import { LibQueries, LibMath, LibNaval, LibUtils, LibAttack } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { baseCostDock, requiredArmySize, baseWoodCostDock, maxShipInFleet, smallCreditCost, smallWoodCost, mediumCreditCost, mediumWoodCost, bigCreditCost, bigWoodCost, fleetMoveFoodCost, fleetMoveGoldCost } from "./Constants.sol";
-import { CreditOwn, ResourceOwnData, FleetOwnable, FleetConfig, Position, FleetConfigData, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, ArmyOwnable } from "../codegen/Tables.sol";
+import { CreditOwn, ColorOwnable, AddressToUsername, ResourceOwnData, FleetOwnable, FleetConfig, Position, FleetConfigData, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, ArmyOwnable } from "../codegen/Tables.sol";
 
 contract NavalSystem is System {
   function buildDock(
@@ -60,6 +60,7 @@ contract NavalSystem is System {
 
     Position.set(entityID, coord_x, coord_y, gameID);
     DockOwnable.set(entityID, sender, gameID);
+    ColorOwnable.set(entityID, AddressToUsername.getColorIndex(sender, gameID), gameID);
     CreditOwn.set(gameID, sender, totalCredit - (creditCost * 1e18));
     ResourceOwn.setNumOfWood(sender, gameID, totalWood - woodCost);
     return entityID;
@@ -98,6 +99,7 @@ contract NavalSystem is System {
 
     if (result == 1) {
       DockOwnable.setOwner(dockID, armyOwner);
+      ColorOwnable.setColorIndex(dockID, AddressToUsername.getColorIndex(armyOwner, gameID));
 
       // Destroy all the army which belongs to castle owner
 
@@ -105,9 +107,7 @@ contract NavalSystem is System {
         if (ownerArmiesSurroundDock[i] == bytes32(0)) {
           continue;
         }
-        ArmyOwnable.deleteRecord(ownerArmiesSurroundDock[i]);
-        ArmyConfig.deleteRecord(ownerArmiesSurroundDock[i]);
-        Position.deleteRecord(ownerArmiesSurroundDock[i]);
+        LibUtils.deleteArmy(ownerArmiesSurroundDock[i]);
       }
     }
     LibUtils.emitClashTableEvent(uint8(result), armyID, dockID, gameID, armyOwner, dockOwner, ClashType.Dock);
@@ -159,6 +159,7 @@ contract NavalSystem is System {
     Position.set(entityID, x, y, fleet.gameID);
     FleetConfig.set(entityID, fleet);
     FleetOwnable.set(entityID, ownerCandidate, fleet.gameID);
+    ColorOwnable.set(entityID, AddressToUsername.getColorIndex(ownerCandidate, fleet.gameID), fleet.gameID);
     ResourceOwn.setNumOfWood(ownerCandidate, fleet.gameID, totalWood - woodCost);
     CreditOwn.set(fleet.gameID, ownerCandidate, totalCredit - (costCredit * 1e18));
     return entityID;
