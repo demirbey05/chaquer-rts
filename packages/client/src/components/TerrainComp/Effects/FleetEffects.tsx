@@ -60,16 +60,16 @@ export const FleetEffects = (myFleetPositions: any[] | undefined, fleetPositions
 
             myFleetPositions.map((data: any) => {
                 const element = document.getElementById(`${data.myFleetPosition.y},${data.myFleetPosition.x}`)!;
-                element.innerHTML = '<img src="' + shipEmoji + '" width="20px" height="25px" />';
+                element.innerHTML = '<img src="' + shipEmoji + '" width="20px" height="20px" />';
                 element.style.border = "2px solid";
-                element.style.borderColor = colorPath[data.myFleetColor.colorIndex];
+                element.style.borderColor = colorPath[Number(data.myFleetColor.colorIndex)];
             });
         }
 
         //Puts the ship emojis to fleet positions
         fleetPositions.map((data: any) => {
-            document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)!.innerHTML = '<img src="' + shipEmoji + '" width="25px" height="25px" />';
-            document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)!.style.borderColor = colorPath[data.fleetColor.colorIndex];
+            document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)!.innerHTML = '<img src="' + shipEmoji + '" width="20px" height="20px" />';
+            document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)!.style.borderColor = colorPath[Number(data.fleetColor.colorIndex)];
             document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)?.classList.add("fleet-emoji");
         });
     }, [fleetPositions, myFleetPositions]);

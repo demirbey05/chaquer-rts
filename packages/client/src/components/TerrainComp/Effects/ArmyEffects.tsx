@@ -46,7 +46,7 @@ export const ArmyEffects = (castlePositions: any[], isArmySettleStage: boolean |
                 )!;
                 element.innerHTML = "⚔️";
                 element.style.border = "2px solid";
-                element.style.borderColor = colorPath[data.myArmyColor.colorIndex];
+                element.style.borderColor = colorPath[Number(data.myArmyColor.colorIndex)];
             });
         }
 
@@ -57,7 +57,7 @@ export const ArmyEffects = (castlePositions: any[], isArmySettleStage: boolean |
             const element = document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!;
             element.innerHTML = "⚔️";
             element.style.border = "2px solid";
-            element.style.borderColor = colorPath[data.armyColor.colorIndex]
+            element.style.borderColor = colorPath[Number(data.armyColor.colorIndex)]
             element.classList.add("army-emoji");
         });
     }, [armyPositions, myArmyPosition]);

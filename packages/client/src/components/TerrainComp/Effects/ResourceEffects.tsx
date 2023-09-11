@@ -9,7 +9,7 @@ export const ResourceEffects = (myResourcePositions: any[], resources: any[], is
         if (myResourcePositions) {
             myResourcePositions.map((position: any) => {
                 document.getElementById(`${position.myResourcePosition.y},${position.myResourcePosition.x}`)!.style.border = "2px solid";
-                document.getElementById(`${position.myResourcePosition.y},${position.myResourcePosition.x}`)!.style.borderColor = colorPath[position.myResourceColor.colorIndex];
+                document.getElementById(`${position.myResourcePosition.y},${position.myResourcePosition.x}`)!.style.borderColor = colorPath[Number(position.myResourceColor.colorIndex)];
             })
         }
 
@@ -17,19 +17,19 @@ export const ResourceEffects = (myResourcePositions: any[], resources: any[], is
             resources.map(data => {
                 if (data.resource.sourceType === 0) {
                     document.getElementById(`${data.positions.y},${data.positions.x}`)!.innerHTML = "🌽";
-                    if (data.color.colorIndex !== 0) {
+                    if (Number(data.color.colorIndex) !== 0) {
                         document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.borderColor = colorPath[data.color.colorIndex];
                     }
                 }
                 else if (data.resource.sourceType === 1) {
                     document.getElementById(`${data.positions.y},${data.positions.x}`)!.innerHTML = "🪓";
-                    if (data.color.colorIndex !== 0) {
+                    if (Number(data.color.colorIndex) !== 0) {
                         document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.borderColor = colorPath[data.color.colorIndex];
                     }
                 }
                 else {
                     document.getElementById(`${data.positions.y},${data.positions.x}`)!.innerHTML = "⛏️";
-                    if (data.color.colorIndex !== 0) {
+                    if (Number(data.color.colorIndex) !== 0) {
                         document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.borderColor = colorPath[data.color.colorIndex];
                     }
                 }

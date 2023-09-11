@@ -1,12 +1,10 @@
 import { useEffect } from "react"
 import { isPositionNextToSea } from "../../../utils/helperFunctions/SeaFunctions/isPositionNextToSea";
-import { isArmyPosition } from "../../../utils/helperFunctions/ArmyFunctions/isArmyPosition";
 import { isMyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isMyArmy";
 import { isResourcePosition } from "../../../utils/helperFunctions/ResourceFuntions/isResourcePosition";
 import { isCastlePosition } from "../../../utils/helperFunctions/CastleFunctions/isCastlePosition";
 import { isMyDock } from "../../../utils/helperFunctions/SeaFunctions/isMyDock";
 import { isManhattanPosition } from "../../../utils/helperFunctions/CustomFunctions/isManhattanPosition";
-import { isDockPosition } from "../../../utils/helperFunctions/SeaFunctions/isDockPosition";
 import { colorPath } from "../../../utils/constants/constants";
 
 export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosition: any[], armyPositions: any[], dockPositions: any[], myDockPositions: any[] | undefined, values: number[][], dockSettleStage: boolean, dockCaptureStage: boolean, rows: number[], columns: number[], fromArmyPosition: any) => {
@@ -16,7 +14,7 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
             dockPositions.map(
                 (data) => {
                     document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.innerHTML = "⚓";
-                    document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.borderColor = colorPath[data.dockColor.colorIndex];
+                    document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.borderColor = colorPath[Number(data.dockColor.colorIndex)];
                 }
             );
         }
@@ -27,7 +25,7 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
         if (myDockPositions && myDockPositions.length > 0) {
             myDockPositions.map((position: any) => {
                 document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.border = "2px solid";
-                document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.borderColor = colorPath[position.myDockColor.colorIndex];
+                document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.borderColor = colorPath[Number(position.myDockColor.colorIndex)];
             });
         }
 

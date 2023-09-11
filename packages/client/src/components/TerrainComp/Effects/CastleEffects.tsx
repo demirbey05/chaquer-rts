@@ -8,7 +8,7 @@ export const CastleEffects = (myCastlePosition: any[], setIsCastleSettled: (valu
         if (myCastlePosition && myCastlePosition.length > 0) {
             myCastlePosition.map((position: any) => {
                 document.getElementById(`${position.myCastlePosition.y},${position.myCastlePosition.x}`)!.style.border = "2px solid";
-                document.getElementById(`${position.myCastlePosition.y},${position.myCastlePosition.x}`)!.style.borderColor = colorPath[position.myCastleColor.colorIndex];
+                document.getElementById(`${position.myCastlePosition.y},${position.myCastlePosition.x}`)!.style.borderColor = colorPath[Number(position.myCastleColor.colorIndex)];
             });
             setIsCastleSettled(true);
         }
@@ -31,7 +31,7 @@ export const CastleEffects = (myCastlePosition: any[], setIsCastleSettled: (valu
                 (data) => {
                     document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.innerHTML = "🏰";
                     document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.style.border = "2px solid";
-                    document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.style.borderColor = colorPath[data.castleColor.colorIndex];
+                    document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.style.borderColor = colorPath[Number(data.castleColor.colorIndex)];
                     document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.style.pointerEvents = "none";
                 }
             );
