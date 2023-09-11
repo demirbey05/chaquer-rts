@@ -1,6 +1,6 @@
 import "../../styles/globals.css";
 import { useEffect } from 'react'
-import { useMyArmy } from '../../hooks/useMyArmy';
+import { useMyArmy } from '../../hooks/ArmyHooks/useMyArmy';
 import { Tooltip } from '@chakra-ui/react'
 import { useArmy } from '../../context/ArmyContext';
 import { usePlayer } from '../../context/PlayerContext';

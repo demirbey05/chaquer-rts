@@ -4,7 +4,7 @@ import cavalryImg from "../../images/cavalry.png";
 import swordsmanImg from "../../images/swordsman.png";
 import { MdLocationPin } from 'react-icons/md'
 import { Button } from "@chakra-ui/react";
-import { useMyArmy } from "../../hooks/useMyArmy";
+import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
 import { usePlayer } from "../../context/PlayerContext";
 
 // Scroll to div by id as middle of the screen

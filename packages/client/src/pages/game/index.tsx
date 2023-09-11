@@ -7,6 +7,10 @@ import { useCastle } from "../../context/CastleContext";
 import { useArmy } from "../../context/ArmyContext";
 import { usePlayer } from "../../context/PlayerContext";
 import { useFleet } from "../../context/FleetContext";
+import { useGameState } from "../../hooks/useGameState";
+import { useCountOfPlayerSeed } from "../../hooks/IdentityHooks/useCountOfPlayerSeed";
+import { limitOfUser } from "../../utils/constants/constants";
+import { useIsMineInitialized } from "../../hooks/ResourceHooks/useIsMineInitialized";
 import { Terrain } from "../../components/TerrainComp/Terrain";
 import { ArmyInfoDrawer } from "../../components/ArmyComp/ArmyInfoDrawer";
 import { ArmyProgressBar } from "../../components/ArmyComp/ArmyProgressBar";
@@ -31,16 +35,13 @@ import { MarketDrawer } from "../../components/MarketComp/MarketDrawer";
 import { PriceListDrawer } from "../../components/PriceComp/PriceListDrawer";
 import { ShortCutTips } from "../../components/TipsComp/ShortCutTips";
 import { ZoomHandler } from "../../components/ZoomComp/ZoomHandler";
-import { useGameState } from "../../hooks/useGameState";
-import { useCountOfPlayerSeed } from "../../hooks/useCountOfPlayerSeed";
-import { limitOfUser } from "../../utils/constants/constants";
-import { useIsMineInitialized } from "../../hooks/useIsMineInitialized";
 import { DockSettleModal } from "../../components/SeaComp/DockSettleModal";
 import { DockCaptureDrawer } from "../../components/SeaComp/DockCaptureDrawer";
 import { FleetSettleModal } from "../../components/SeaComp/FleetSettleModal";
 import { FleetSettleWarning } from "../../components/SeaComp/FleetSettleWarning";
 import { FleetMoveWarning } from "../../components/SeaComp/FleetMoveWarning";
 import { FleetAttackDrawer } from "../../components/SeaComp/FleetAttackDrawer";
+import { UsersInGameDrawer } from "../../components/PlayerComp/UsersInGameDrawer";
 
 export const Game = () => {
   const { width, height } = useTerrain();
@@ -76,6 +77,7 @@ export const Game = () => {
       {gameState === 3 && isArmySettleStage && !isPlayerLost && mineInited && <ArmySettleWarning />}
       {gameState === 3 && isArmyMoveStage && !isPlayerLost && mineInited && <ArmyMoveWarning />}
       {(gameState === 3 || gameState === 4) && mineInited && <SettingsDrawer />}
+      {gameState === 3 && !isPlayerLost && mineInited && <UsersInGameDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmyProgressBar />}
       {gameState === 3 && !isPlayerLost && mineInited && <MineProgressBar />}
       {gameState === 3 && !isPlayerLost && mineInited && <CreditProgressBar />}

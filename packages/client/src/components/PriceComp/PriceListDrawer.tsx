@@ -1,8 +1,8 @@
 import { Button, Tooltip } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { useArmyPrices } from "../../hooks/useArmyPrices";
-import { useResourcePrices } from "../../hooks/useResourcePrices";
-import { useIsMineInitialized } from '../../hooks/useIsMineInitialized';
+import { useArmyPrices } from "../../hooks/EconomyHooks/useArmyPrices";
+import { useResourcePrices } from "../../hooks/EconomyHooks/useResourcePrices";
+import { useIsMineInitialized } from '../../hooks/ResourceHooks/useIsMineInitialized';
 import { usePlayer } from '../../context/PlayerContext';
 import { useMUD } from "../../MUDContext";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";

@@ -5,7 +5,7 @@ import { Button } from "@chakra-ui/react";
 import { useState } from "react";
 import { usePlayer } from '../../context/PlayerContext';
 import { useWarResult } from '../../hooks/useWarResult';
-import { useMyUsername } from "../../hooks/useMyUsername";
+import { useMyUsername } from "../../hooks/IdentityHooks/useMyUsername";
 
 
 export const WarResultDrawer = () => {

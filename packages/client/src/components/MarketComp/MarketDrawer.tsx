@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@chakra-ui/react";
 import { Tooltip } from "@chakra-ui/react"
 import { useMUD } from "../../MUDContext";
-import { useNumberOfResource } from '../../hooks/useNumberOfResource';
+import { useNumberOfResource } from '../../hooks/ResourceHooks/useNumberOfResource';
 import { usePlayer } from '../../context/PlayerContext';
 import { useError } from "../../context/ErrorContext";
 

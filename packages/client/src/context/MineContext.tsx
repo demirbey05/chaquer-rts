@@ -5,8 +5,8 @@ type MineContextType = {
     setIsMineStage: (value: boolean) => void;
     targetMinePosition: any | undefined;
     setTargetMinePosition: (value: any) => void;
-    attackFromArmyPositionToMine: any | undefined;
-    setAttackFromArmyPositionToMine: (value: any) => void;
+    attackerArmyPosition: any | undefined;
+    setAttackerArmyPosition: (value: any) => void;
 };
 
 const MineContext = createContext<MineContextType>({
@@ -14,22 +14,22 @@ const MineContext = createContext<MineContextType>({
     setIsMineStage: () => { },
     targetMinePosition: undefined,
     setTargetMinePosition: () => { },
-    attackFromArmyPositionToMine: undefined,
-    setAttackFromArmyPositionToMine: () => { }
+    attackerArmyPosition: undefined,
+    setAttackerArmyPosition: () => { }
 });
 
 const MineProvider: React.FC<{ children: ReactNode }> = ({ children, }: { children: ReactNode; }) => {
     const [isMineStage, setIsMineStage] = useState<boolean>();
     const [targetMinePosition, setTargetMinePosition] = useState<any>();
-    const [attackFromArmyPositionToMine, setAttackFromArmyPositionToMine] = useState<any>();
+    const [attackerArmyPosition, setAttackerArmyPosition] = useState<any>();
 
     const results: MineContextType = {
         isMineStage,
         setIsMineStage,
         targetMinePosition,
         setTargetMinePosition,
-        attackFromArmyPositionToMine,
-        setAttackFromArmyPositionToMine
+        attackerArmyPosition,
+        setAttackerArmyPosition
     };
 
     return (

@@ -1,7 +1,7 @@
 import { Progress, Tooltip } from '@chakra-ui/react'
 import { useMUD } from '../../MUDContext';
 import { useError } from '../../context/ErrorContext';
-import { useIsMineInitialized } from '../../hooks/useIsMineInitialized';
+import { useIsMineInitialized } from '../../hooks/ResourceHooks/useIsMineInitialized';
 
 export const MineInitStage = () => {
     const { systemCalls } = useMUD();

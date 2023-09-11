@@ -458,6 +458,26 @@ input::-webkit-inner-spin-button {
     left: 0;
 }
 
+/* Players in the game Drawer styles */
+.players-in-game-drawer {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    z-index: 2;
+    height: 200px;
+    width: 200px;
+    padding: 10px;
+    margin-top: 90px;
+    border-radius: 25px;
+    position: fixed;
+    top: 0;
+    left: -400px;
+    transition: left 0.3s ease;
+}
+
+.players-in-game-drawer.open {
+    left: 0;
+}
+
 /* The Modal (background) */
 .winnerModal {
     position: absolute;
@@ -475,4 +495,11 @@ input::-webkit-inner-spin-button {
 .winnerModal-content {
     margin: auto;
     display: block;
+}
+
+.player-color-circle {
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    display: inline-block;
 }

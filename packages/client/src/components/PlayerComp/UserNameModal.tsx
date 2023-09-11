@@ -4,8 +4,8 @@ import { usePlayer } from '../../context/PlayerContext';
 import { useEffect, useState } from 'react';
 import { useMUD } from '../../MUDContext';
 import { useError } from '../../context/ErrorContext';
-import { usePlayerIsValid } from "../../hooks/usePlayerIsValid";
-import { useNumberOfUsers } from "../../hooks/useNumberOfUsers";
+import { usePlayerIsValid } from "../../hooks/IdentityHooks/usePlayerIsValid";
+import { useNumberOfUsers } from "../../hooks/IdentityHooks/useNumberOfUsers";
 import { limitOfUser } from "../../utils/constants/constants";
 import { useGameState } from '../../hooks/useGameState';
 

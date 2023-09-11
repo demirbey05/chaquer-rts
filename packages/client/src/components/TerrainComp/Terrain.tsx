@@ -12,16 +12,16 @@ import { useSea } from "../../context/SeaContext";
 import { useFleet } from "../../context/FleetContext";
 import { useError } from "../../context/ErrorContext";
 import { useMUD } from "../../MUDContext";
-import { useCastlePositions } from "../../hooks/useCastlePositions";
-import { useMyCastlePositions } from "../../hooks/useMyCastlePositions";
-import { useArmyPositions } from "../../hooks/useArmyPositions";
-import { useMyArmy } from "../../hooks/useMyArmy";
-import { useResources } from "../../hooks/useResources";
-import { useMyResourcePositions } from "../../hooks/useMyResourcePositions";
-import { useDockPositions } from "../../hooks/useDockPositions";
-import { useMyDockPositions } from "../../hooks/useMyDockPositions";
-import { useFleetPositions } from "../../hooks/useFleetPositions";
-import { useMyFleetPositions } from "../../hooks/useMyFleetPositions";
+import { useCastlePositions } from "../../hooks/CastleHooks/useCastlePositions";
+import { useMyCastlePositions } from "../../hooks/CastleHooks/useMyCastlePositions";
+import { useArmyPositions } from "../../hooks/ArmyHooks/useArmyPositions";
+import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
+import { useResources } from "../../hooks/ResourceHooks/useResources";
+import { useMyResourcePositions } from "../../hooks/ResourceHooks/useMyResourcePositions";
+import { useDockPositions } from "../../hooks/SeaHooks/useDockPositions";
+import { useMyDockPositions } from "../../hooks/SeaHooks/useMyDockPositions";
+import { useFleetPositions } from "../../hooks/SeaHooks/useFleetPositions";
+import { useMyFleetPositions } from "../../hooks/SeaHooks/useMyFleetPositions";
 import { Coord } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { getTerrainAsset } from '../../utils/helperFunctions/CustomFunctions/getTerrainAsset';
 import { isMyCastle } from '../../utils/helperFunctions/CastleFunctions/isMyCastle';
@@ -103,7 +103,7 @@ export const Terrain = (props: DataProp) => {
   const { isMineStage,
     setIsMineStage,
     setTargetMinePosition,
-    setAttackFromArmyPositionToMine } = useMine();
+    setAttackerArmyPosition } = useMine();
 
   const { dockSettleStage,
     setDockSettleStage,
@@ -231,7 +231,7 @@ export const Terrain = (props: DataProp) => {
         CastleAttackEvent(setIsArmyMoveStage, setIsMineStage, setDockSettleStage, setDockCaptureStage, setFromArmyPosition, setAttackFromArmyPositionToCastle, setAttackToArmyPositionToCastle, fromArmyPositionRef, toArmyPositionRef, setMyArmyConfig, myArmyPosition)
       }
       else if (isUserClickedMine(toArmyPositionRef.current.x, toArmyPositionRef.current.y, resources)) {
-        MineCaptureEvent(setIsArmyMoveStage, setIsAttackStage, setDockSettleStage, setFromArmyPosition, setAttackFromArmyPositionToMine, fromArmyPositionRef, setTargetMinePosition, toArmyPositionRef, setMyArmyConfig, myArmyPosition);
+        MineCaptureEvent(setIsArmyMoveStage, setIsAttackStage, setDockSettleStage, setFromArmyPosition, setAttackerArmyPosition, fromArmyPositionRef, setTargetMinePosition, toArmyPositionRef, setMyArmyConfig, myArmyPosition);
       }
       else if (isEnemyDock(toArmyPositionRef.current, dockPositions, myDockPositions)) {
         DockCaptureEvent(setIsArmyMoveStage, setIsAttackStage, setDockSettleStage, setFromArmyPosition, setDockAttackerArmyPosition, fromArmyPositionRef, setTargetDockPosition, toArmyPositionRef, setMyArmyConfig, myArmyPosition)

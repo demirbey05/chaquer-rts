@@ -1,4 +1,4 @@
-import { useMUD } from "../MUDContext";
+import { useMUD } from "../../MUDContext";
 import { useEntityQuery, useObservableValue } from "@latticexyz/react";
 import { Has, getComponentValue } from "@latticexyz/recs";
 import { useState, useEffect } from "react";

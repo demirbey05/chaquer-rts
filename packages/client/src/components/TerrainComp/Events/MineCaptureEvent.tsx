@@ -5,7 +5,7 @@ export const MineCaptureEvent = (
     setIsAttackStage: (value: boolean) => void,
     setDockSettleStage: (value: boolean) => void,
     setFromArmyPosition: any,
-    setAttackFromArmyPositionToMine: any,
+    setAttackerArmyPosition: any,
     fromArmyPositionRef: any,
     setTargetMinePosition: any,
     toArmyPositionRef: any,
@@ -16,7 +16,7 @@ export const MineCaptureEvent = (
     setIsAttackStage(false)
     setDockSettleStage(false)
     setFromArmyPosition(undefined);
-    setAttackFromArmyPositionToMine(fromArmyPositionRef.current);
+    setAttackerArmyPosition(fromArmyPositionRef.current);
     setTargetMinePosition(toArmyPositionRef.current);
     setMyArmyConfig(
         getMyArmyConfigByPosition({ x: fromArmyPositionRef.current.x, y: fromArmyPositionRef.current.y, }, myArmyPosition)

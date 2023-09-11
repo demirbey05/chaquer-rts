@@ -7,10 +7,10 @@ import { useMUD } from "../../MUDContext";
 import { usePlayer } from "../../context/PlayerContext";
 import { useError } from "../../context/ErrorContext";
 import { useFleet } from "../../context/FleetContext";
-import { useCredit } from "../../hooks/useCredit";
+import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
-import { useNumberOfResource } from "../../hooks/useNumberOfResource";
+import { useNumberOfResource } from "../../hooks/ResourceHooks/useNumberOfResource";
 
 export const FleetSettleModal = () => {
     const { userWallet } = usePlayer();

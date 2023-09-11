@@ -1,6 +1,6 @@
 import "../../styles/globals.css";
 import { usePlayer } from '../../context/PlayerContext';
-import { useCredit } from '../../hooks/useCredit';
+import { useCredit } from '../../hooks/EconomyHooks/useCredit';
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 
 export const CreditProgressBar = () => {

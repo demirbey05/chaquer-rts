@@ -1,18 +1,17 @@
 import map from "../../../map.json";
 import chaquerImg from '../../images/chaquer_bg.jpg';
+import { ethers } from "ethers";
+import { Button } from "@chakra-ui/react";
 import { Terrain } from "../../components/TerrainComp/Terrain";
-import { generatePerlinValues } from "../../terrain-helper/utils";
 import { TerrainSpinner } from "../../components/TerrainComp/TerrainSpinner";
 import { TerrainTypeInfoModal } from "../../components/TerrainComp/TerrainTypeInfoModal";
-import { Button } from "@chakra-ui/react";
-import { useTerrain } from "../../context/TerrainContext.js"
 import { UserNameModal } from '../../components/PlayerComp/UserNameModal';
-import { useMUD } from "../../MUDContext";
-import { flatten2D } from "../../utils/terrainArray";
-import { ethers } from "ethers";
-import { limitOfUser } from "../../utils/constants/constants";
 import { GameTuttorial } from "../../components/TipsComp/GameTuttorial";
-import { useNumberOfUsers } from "../../hooks/useNumberOfUsers";
+import { generatePerlinValues } from "../../terrain-helper/utils";
+import { useMUD } from "../../MUDContext";
+import { useTerrain } from "../../context/TerrainContext.js"
+import { flatten2D } from "../../utils/terrainArray";
+import { limitOfUser } from "../../utils/constants/constants";
 import { useGameState } from "../../hooks/useGameState";
 
 export const Menu = () => {
@@ -30,7 +29,6 @@ export const Menu = () => {
 
   const { systemCalls } = useMUD();
 
-  const numberOfUsers = useNumberOfUsers(1);
   const gameState = useGameState(1);
 
   const handleRefresh = (event: any) => {
@@ -72,7 +70,7 @@ export const Menu = () => {
           <h2 className="text-center text-white text-6xl border-top border-bottom font-bold">
             Chaquer
           </h2>
-          {refresh !== 0 && <StartGameButton isLoading={isLoading} handleTerrain={handleTerrain} />}
+          {refresh !== 0 && <StartGameButton gameState={gameState} isLoading={isLoading} handleTerrain={handleTerrain} />}
           <RegenerateButton isLoading={isLoading} refresh={refresh} handleRefresh={handleRefresh} />
           {refresh !== 0 && (
             <GameTuttorialButton />
@@ -124,7 +122,8 @@ const TerrainMap = (props: TerrainMapPropStyles) => {
 
 interface StartGameButtonPropTypes {
   isLoading: boolean,
-  handleTerrain: any
+  handleTerrain: any,
+  gameState: any
 }
 
 const StartGameButton = (props: StartGameButtonPropTypes) => {
@@ -138,7 +137,7 @@ const StartGameButton = (props: StartGameButtonPropTypes) => {
         p="8"
         mt="16"
         width="200px"
-        isDisabled={props.isLoading}
+        isDisabled={props.isLoading && props.gameState}
         onClick={props.handleTerrain}
       >
         Start the Game

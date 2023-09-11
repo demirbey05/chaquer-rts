@@ -6,8 +6,8 @@ import { Button, Tooltip, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react"
 import { useState, useEffect } from "react";
 import { useArmy } from "../../context/ArmyContext";
 import { useError } from "../../context/ErrorContext";
-import { useArmyPrices } from '../../hooks/useArmyPrices';
-import { useCredit } from "../../hooks/useCredit";
+import { useArmyPrices } from '../../hooks/EconomyHooks/useArmyPrices';
+import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { usePlayer } from "../../context/PlayerContext";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 

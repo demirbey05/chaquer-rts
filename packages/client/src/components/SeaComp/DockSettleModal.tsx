@@ -6,9 +6,9 @@ import { useError } from "../../context/ErrorContext";
 import { useSea } from "../../context/SeaContext";
 import { usePlayer } from "../../context/PlayerContext";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
-import { useMyDockPositions } from "../../hooks/useMyDockPositions";
-import { useCredit } from "../../hooks/useCredit";
-import { useNumberOfResource } from "../../hooks/useNumberOfResource";
+import { useMyDockPositions } from "../../hooks/SeaHooks/useMyDockPositions";
+import { useCredit } from "../../hooks/EconomyHooks/useCredit";
+import { useNumberOfResource } from "../../hooks/ResourceHooks/useNumberOfResource";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { useArmy } from "../../context/ArmyContext";
 

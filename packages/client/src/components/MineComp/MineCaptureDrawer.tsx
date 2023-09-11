@@ -4,14 +4,14 @@ import { useMUD } from "../../MUDContext";
 import { useEffect, useState } from "react";
 import { useMine } from "../../context/MineContext";
 import { useAttack } from "../../context/AttackContext";
-import { useResources } from "../../hooks/useResources";
+import { useResources } from "../../hooks/ResourceHooks/useResources";
 import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
 import { getResourceTypeByPosition } from "../../utils/helperFunctions/ResourceFuntions/getResourceTypeByPosition";
 import { useError } from "../../context/ErrorContext";
 
 export const MineCaptureDrawer = () => {
     const { components, systemCalls } = useMUD();
-    const { targetMinePosition, setIsMineStage, attackFromArmyPositionToMine } = useMine();
+    const { targetMinePosition, setIsMineStage, attackerArmyPosition } = useMine();
     const { setMyArmyConfig, setEnemyArmyConfig, myArmyConfig } = useAttack();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
 
@@ -37,7 +37,7 @@ export const MineCaptureDrawer = () => {
 
     const handleCapture = async () => {
         const attackFromArmyId = [...findIDFromPosition(
-            attackFromArmyPositionToMine,
+            attackerArmyPosition,
             components.Position,
         )];
 

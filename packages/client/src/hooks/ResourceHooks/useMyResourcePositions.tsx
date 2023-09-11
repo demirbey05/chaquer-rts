@@ -1,5 +1,5 @@
 import { useEntityQuery, useObservableValue } from "@latticexyz/react";
-import { useMUD } from "../MUDContext";
+import { useMUD } from "../../MUDContext";
 import { HasValue, getComponentValue } from "@latticexyz/recs";
 import { useState, useEffect } from "react";
 

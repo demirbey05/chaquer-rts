@@ -2,10 +2,10 @@ import { useRef, useState, useEffect, useContext, createContext, ReactNode } fro
 import { getBurnerPrivateKey } from "@latticexyz/common";
 import { Wallet } from "ethers";
 import { useMUD } from "../MUDContext";
-import { useNumberOfUsers } from "../hooks/useNumberOfUsers";
-import { usePlayerIsValid } from "../hooks/usePlayerIsValid";
+import { useNumberOfUsers } from "../hooks/IdentityHooks/useNumberOfUsers";
+import { usePlayerIsValid } from "../hooks/IdentityHooks/usePlayerIsValid";
 import { useGameState } from "../hooks/useGameState";
-import { useWinnerAddress } from "../hooks/useWinnerAddress";
+import { useWinnerAddress } from "../hooks/IdentityHooks/useWinnerAddress";
 
 type PlayerContextType = {
   userWallet: string | undefined
