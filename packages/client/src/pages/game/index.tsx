@@ -40,6 +40,7 @@ import { DockCaptureDrawer } from "../../components/SeaComp/DockCaptureDrawer";
 import { FleetSettleModal } from "../../components/SeaComp/FleetSettleModal";
 import { FleetSettleWarning } from "../../components/SeaComp/FleetSettleWarning";
 import { FleetMoveWarning } from "../../components/SeaComp/FleetMoveWarning";
+import { FleetAttackDrawer } from "../../components/SeaComp/FleetAttackDrawer";
 
 export const Game = () => {
   const { width, height } = useTerrain();
@@ -92,6 +93,7 @@ export const Game = () => {
       {gameState === 3 && !isPlayerLost && mineInited && <FleetSettleModal />}
       {gameState === 3 && fleetSettleStage && !isPlayerLost && mineInited && <FleetSettleWarning />}
       {gameState === 3 && isFleetMoveStage && !isPlayerLost && mineInited && <FleetMoveWarning />}
+      {gameState === 3 && !isPlayerLost && mineInited && <FleetAttackDrawer />}
       {isPlayerLost && <PlayerLostWarning />}
       {gameState === 4 && isPlayerWinner && <PlayerWonAnimation />}
 

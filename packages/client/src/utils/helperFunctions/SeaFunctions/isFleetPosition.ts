@@ -5,7 +5,7 @@ export const isFleetPosition = (
 ): boolean => {
   if (fleetPositions && fleetPositions.length > 0) {
     fleetPositions.map((position) => {
-      if (position.x === x && position.y === y) {
+      if (position.fleetPosition.x === x && position.fleetPosition.y === y) {
         return true;
       }
     });

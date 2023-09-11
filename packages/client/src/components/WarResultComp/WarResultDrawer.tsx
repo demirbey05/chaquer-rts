@@ -1,5 +1,6 @@
 import "../../styles/globals.css";
 import warResultIcon from '../../images/warResult.png';
+import shipEmoji from '../../images/ship_emoji.png';
 import { Button } from "@chakra-ui/react";
 import { useState } from "react";
 import { usePlayer } from '../../context/PlayerContext';
@@ -54,7 +55,7 @@ export const WarResultDrawer = () => {
                                 return <WarResult username={username} text={"⚔️🏰"} data={data} userWallet={userWallet} key={key} />
                             }
                             else {
-                                return <WarResult username={username} text={"⚔️🚢"} data={data} userWallet={userWallet} key={key} />
+                                return <WarResult username={username} text={"⚔️🌊"} data={data} userWallet={userWallet} key={key} />
                             }
                         })
                     }

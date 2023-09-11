@@ -313,6 +313,25 @@ export function createSystemCalls(
     }
   };
 
+  const attackFleet = async (
+    fleetOne: string,
+    fleetTwo: string,
+    gameID: number
+  ) => {
+    try {
+      const tx = await worldContract.write.attackFleet([
+        fleetOne,
+        fleetTwo,
+        BigInt(gameID),
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
   return {
     initMapDataSystem,
     settleCastle,
@@ -332,5 +351,6 @@ export function createSystemCalls(
     captureDock,
     settleFleet,
     moveFleet,
+    attackFleet,
   };
 }

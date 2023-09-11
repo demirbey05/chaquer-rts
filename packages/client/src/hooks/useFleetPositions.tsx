@@ -9,13 +9,15 @@ export function useFleetPositions() {
     const fleetEntites = useEntityQuery([Has(components.FleetOwnable)]);
     const value = useObservableValue(components.Position.update$);
 
-    const [fleetPositions, setFleetPositions] = useState<any[]>([]);
+    const [fleet, setFleet] = useState<any[]>([]);
     useEffect(() => {
-        const positions = fleetEntites.map((entityIndex) =>
-            getComponentValue(components.Position, entityIndex)
-        );
-        setFleetPositions(positions);
+        const fleets = fleetEntites.map((entityIndex) => {
+            const fleetPosition = getComponentValue(components.Position, entityIndex);
+            const fleetConfig = getComponentValue(components.FleetConfig, entityIndex);
+            return { fleetPosition, fleetConfig }
+        });
+        setFleet(fleets);
     }, [fleetEntites, value]);
 
-    return fleetPositions;
+    return fleet;
 }

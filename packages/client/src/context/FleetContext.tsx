@@ -10,7 +10,17 @@ type FleetContextType = {
     isFleetMoveStage: boolean;
     setIsFleetMoveStage: (value: boolean) => void;
     fromFleetPosition: { x: number, y: number } | undefined;
-    setFromFleetPosition: (value: { x: number, y: number } | undefined) => void
+    setFromFleetPosition: (value: { x: number, y: number } | undefined) => void;
+    attackerFleetPosition: { x: number, y: number } | undefined;
+    setAttackerFleetPosition: (value: { x: number, y: number } | undefined) => void;
+    targetFleetPosition: { x: number, y: number } | undefined;
+    setTargetFleetPosition: (value: { x: number, y: number } | undefined) => void;
+    myFleetConfig: any;
+    setMyFleetConfig: (value: any) => void;
+    enemyFleetConfig: any;
+    setEnemyFleetConfig: (value: any) => void;
+    isFleetAttackStage: boolean;
+    setIsFleetAttackStage: (value: boolean) => void;
 };
 
 const FleetContext = createContext<FleetContextType>({
@@ -23,7 +33,17 @@ const FleetContext = createContext<FleetContextType>({
     isFleetMoveStage: false,
     setIsFleetMoveStage: () => { },
     fromFleetPosition: undefined,
-    setFromFleetPosition: () => { }
+    setFromFleetPosition: () => { },
+    attackerFleetPosition: undefined,
+    setAttackerFleetPosition: () => { },
+    targetFleetPosition: undefined,
+    setTargetFleetPosition: () => { },
+    myFleetConfig: undefined,
+    setMyFleetConfig: () => { },
+    enemyFleetConfig: undefined,
+    setEnemyFleetConfig: () => { },
+    isFleetAttackStage: false,
+    setIsFleetAttackStage: () => { }
 });
 
 const FleetProvider: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode; }) => {
@@ -33,6 +53,12 @@ const FleetProvider: React.FC<{ children: ReactNode }> = ({ children }: { childr
 
     const [isFleetMoveStage, setIsFleetMoveStage] = useState<boolean>(false);
     const [fromFleetPosition, setFromFleetPosition] = useState<{ x: number, y: number } | undefined>();
+
+    const [isFleetAttackStage, setIsFleetAttackStage] = useState<boolean>(false);
+    const [attackerFleetPosition, setAttackerFleetPosition] = useState<{ x: number, y: number } | undefined>();
+    const [targetFleetPosition, setTargetFleetPosition] = useState<{ x: number, y: number } | undefined>();
+    const [myFleetConfig, setMyFleetConfig] = useState<any>();
+    const [enemyFleetConfig, setEnemyFleetConfig] = useState<any>();
 
     const results: FleetContextType = {
         fleetSettleStage,
@@ -44,7 +70,17 @@ const FleetProvider: React.FC<{ children: ReactNode }> = ({ children }: { childr
         isFleetMoveStage,
         setIsFleetMoveStage,
         fromFleetPosition,
-        setFromFleetPosition
+        setFromFleetPosition,
+        attackerFleetPosition,
+        setAttackerFleetPosition,
+        targetFleetPosition,
+        setTargetFleetPosition,
+        myFleetConfig,
+        setMyFleetConfig,
+        enemyFleetConfig,
+        setEnemyFleetConfig,
+        isFleetAttackStage,
+        setIsFleetAttackStage
     };
 
     return (

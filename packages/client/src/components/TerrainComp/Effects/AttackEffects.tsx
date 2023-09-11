@@ -2,8 +2,9 @@ import { useEffect } from "react"
 import { isManhattanPosition } from "../../../utils/helperFunctions/CustomFunctions/isManhattanPosition";
 import { isMyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isMyArmy";
 import { isEnemyCastle } from "../../../utils/helperFunctions/CastleFunctions/isEnemyCastle";
+import { isMyFleet } from "../../../utils/helperFunctions/SeaFunctions/isMyFleet";
 
-export const AttackEffects = (myCastlePosition: any[], castlePositions: any[], armyPositions: any[], myArmyPosition: any[], isAttackStage: boolean | undefined, fromArmyPosition: { x: any, y: any } | undefined,) => {
+export const AttackEffects = (myFleetPositions: any[], fleetPositions: any[], fromFleetPosition: any, isFleetAttackStage: boolean, myCastlePosition: any[], castlePositions: any[], armyPositions: any[], myArmyPosition: any[], isAttackStage: boolean | undefined, fromArmyPosition: { x: any, y: any } | undefined,) => {
     // Handle Army and Castle Attack OffCanvas
     useEffect(() => {
         armyPositions.map((data: any) => {
@@ -49,4 +50,30 @@ export const AttackEffects = (myCastlePosition: any[], castlePositions: any[], a
             }
         }
     }, [isAttackStage]);
+
+    // Handle fleet attack drawer
+    useEffect(() => {
+        fleetPositions.map((data: any) => {
+            if (isFleetAttackStage && fromFleetPosition) {
+                isManhattanPosition(data.fleetPosition, fromFleetPosition.x, fromFleetPosition.y) &&
+                    !isMyFleet({ x: data.fleetPosition.x, y: data.fleetPosition.y }, myFleetPositions) &&
+                    document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
+
+                isManhattanPosition(data.fleetPosition, fromFleetPosition.x, fromFleetPosition.y) &&
+                    !isMyFleet({ x: data.fleetPosition.x, y: data.fleetPosition.y }, myFleetPositions) &&
+                    document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)!.setAttribute("data-bs-target", "#fleetAttackDrawer");
+            }
+        });
+
+        return () => {
+            if (fleetPositions.length > 0) {
+                fleetPositions.map((data: any) => {
+                    if (document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`) !== null) {
+                        document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)!.setAttribute("data-bs-toggle", "");
+                        document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)!.setAttribute("data-bs-target", "");
+                    }
+                })
+            }
+        }
+    }, [isFleetAttackStage]);
 }

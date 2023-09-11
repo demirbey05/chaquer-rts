@@ -14,7 +14,7 @@ import { useNumberOfResource } from "../../hooks/useNumberOfResource";
 
 export const FleetSettleModal = () => {
     const { userWallet } = usePlayer();
-    const { fleetPosition, setFleetSettleStage, dockPositionForFleetSettlement, setDockPositionForFleetSettlement } = useFleet();
+    const { fleetPosition, setFleetSettleStage, dockPositionForFleetSettlement } = useFleet();
     const { setErrorMessage, setErrorTitle, setShowError } = useError();
     const { systemCalls, components } = useMUD();
 
