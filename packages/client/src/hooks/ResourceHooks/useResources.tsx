@@ -18,6 +18,10 @@ export function useResources() {
             getComponentValue(components.Position, entityIndex)
         );
 
+        const resourceColor = resourceEntites.map((entityIndex) =>
+            getComponentValue(components.ColorOwnable, entityIndex)
+        );
+
         const resource = resourceEntites.map((entityIndex) =>
             getComponentValue(components.ResourceOwnable, entityIndex)
         );
@@ -26,6 +30,7 @@ export function useResources() {
         const combinedData = positions.map((pos, index) => ({
             positions: pos,
             resource: resource[index],
+            color: resourceColor[index]
         }));
 
         setResources(combinedData);

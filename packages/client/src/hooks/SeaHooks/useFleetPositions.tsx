@@ -14,7 +14,8 @@ export function useFleetPositions() {
         const fleets = fleetEntites.map((entityIndex) => {
             const fleetPosition = getComponentValue(components.Position, entityIndex);
             const fleetConfig = getComponentValue(components.FleetConfig, entityIndex);
-            return { fleetPosition, fleetConfig }
+            const fleetColor = getComponentValue(components.ColorOwnable, entityIndex);
+            return { fleetPosition, fleetConfig, fleetColor }
         });
         setFleet(fleets);
     }, [fleetEntites, value]);

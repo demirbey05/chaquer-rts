@@ -4,13 +4,16 @@ export const isEnemyDock = (
   myDockPositions: any[] | undefined
 ) => {
   const isInDockPositions = dockPositions.some(
-    (dock) => dock.x === Number(position.x) && dock.y === Number(position.y)
+    (dock) =>
+      dock.dockPosition.x === Number(position.x) &&
+      dock.dockPosition.y === Number(position.y)
   );
 
   const isNotInMyDockPositions = myDockPositions
     ? !myDockPositions.some(
         (myDock) =>
-          myDock.x === Number(position.x) && myDock.y === Number(position.y)
+          myDock.myDockPosition.x === Number(position.x) &&
+          myDock.myDockPosition.y === Number(position.y)
       )
     : true;
 

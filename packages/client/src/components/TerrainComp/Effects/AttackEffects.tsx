@@ -9,42 +9,42 @@ export const AttackEffects = (myFleetPositions: any[], fleetPositions: any[], fr
     useEffect(() => {
         armyPositions.map((data: any) => {
             if (isAttackStage && fromArmyPosition) {
-                isManhattanPosition(data.position, fromArmyPosition.x, fromArmyPosition.y) &&
-                    !isMyArmy({ x: data.position.x, y: data.position.y }, myArmyPosition) &&
-                    document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
+                isManhattanPosition(data.armyPosition, fromArmyPosition.x, fromArmyPosition.y) &&
+                    !isMyArmy({ x: data.armyPosition.x, y: data.armyPosition.y }, myArmyPosition) &&
+                    document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
 
-                isManhattanPosition(data.position, fromArmyPosition.x, fromArmyPosition.y) &&
-                    !isMyArmy({ x: data.position.x, y: data.position.y }, myArmyPosition) &&
-                    document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-target", "#armyAttackDrawer");
+                isManhattanPosition(data.armyPosition, fromArmyPosition.x, fromArmyPosition.y) &&
+                    !isMyArmy({ x: data.armyPosition.x, y: data.armyPosition.y }, myArmyPosition) &&
+                    document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.setAttribute("data-bs-target", "#armyAttackDrawer");
             }
         });
 
         castlePositions.map((data: any) => {
             if (isAttackStage && fromArmyPosition) {
-                isManhattanPosition(data, fromArmyPosition.x, fromArmyPosition.y) &&
-                    isEnemyCastle({ x: data.x, y: data.y }, myCastlePosition, castlePositions) &&
-                    document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
-                isManhattanPosition(data, fromArmyPosition.x, fromArmyPosition.y) &&
-                    isEnemyCastle({ x: data.x, y: data.y }, myCastlePosition, castlePositions) &&
-                    document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "#castleAttackDrawer");
+                isManhattanPosition(data.castlePosition, fromArmyPosition.x, fromArmyPosition.y) &&
+                    isEnemyCastle({ x: data.castlePosition.x, y: data.castlePosition.y }, myCastlePosition, castlePositions) &&
+                    document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
+                isManhattanPosition(data.castlePosition, fromArmyPosition.x, fromArmyPosition.y) &&
+                    isEnemyCastle({ x: data.castlePosition.x, y: data.castlePosition.y }, myCastlePosition, castlePositions) &&
+                    document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.setAttribute("data-bs-target", "#castleAttackDrawer");
             }
         });
 
         return () => {
             if (castlePositions.length > 0) {
                 castlePositions.map((data: any) => {
-                    if (document.getElementById(`${data.y},${data.x}`) !== null) {
-                        document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-toggle", "");
-                        document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "");
+                    if (document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`) !== null) {
+                        document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.setAttribute("data-bs-toggle", "");
+                        document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.setAttribute("data-bs-target", "");
                     }
                 });
             }
 
             if (armyPositions.length > 0) {
                 armyPositions.map((data: any) => {
-                    if (document.getElementById(`${data.position.y},${data.position.x}`) !== null) {
-                        document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-toggle", "");
-                        document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-target", "");
+                    if (document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`) !== null) {
+                        document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.setAttribute("data-bs-toggle", "");
+                        document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.setAttribute("data-bs-target", "");
                     }
                 })
             }

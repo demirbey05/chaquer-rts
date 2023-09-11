@@ -9,19 +9,18 @@ export function useArmyPositions() {
   const armyEntities = useEntityQuery([Has(components.ArmyOwnable)]);
   const value = useObservableValue(components.Position.update$);
 
-  const [armyPositions, setArmyPositions] = useState<any[]>([]);
-  const [armyConfig, setArmyConfig] = useState<any>(0);
+  const [army, setArmy] = useState<any[]>([]);
 
   useEffect(() => {
-    const positions = armyEntities.map((entityIndex) => {
-      const position = getComponentValue(components.Position, entityIndex);
+    const army = armyEntities.map((entityIndex) => {
+      const armyPosition = getComponentValue(components.Position, entityIndex);
       const armyConfig = getComponentValue(components.ArmyConfig, entityIndex);
-      return { position, armyConfig };
+      const armyColor = getComponentValue(components.ColorOwnable, entityIndex);
+      return { armyPosition, armyConfig, armyColor };
     });
 
-    setArmyPositions(positions);
-    setArmyConfig(armyConfig)
+    setArmy(army)
   }, [armyEntities, value]);
 
-  return [armyPositions, armyConfig];
+  return army;
 }

@@ -51,7 +51,7 @@ export const UsersInGameDrawer = () => {
                     {
                         users ?
                             users.map((user: any, key) => {
-                                return <UserInfoRow key={key} username={user.userName} color={colorPath[Number(user.colorIndex) - 1]} />
+                                return <UserInfoRow key={key} username={user.userName} color={colorPath[Number(user.colorIndex)]} />
                             }) :
                             "No available user"
                     }

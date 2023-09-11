@@ -80,9 +80,9 @@ export const ArmyAttackDrawer = () => {
       <div className="offcanvas-body small">
         <div className="row">
           <ArmyAttackModalCard
-            numSwordsman={myArmyConfig && myArmyConfig.armyConfig.numSwordsman}
-            numArcher={myArmyConfig && myArmyConfig.armyConfig.numArcher}
-            numCavalry={myArmyConfig && myArmyConfig.armyConfig.numCavalry}
+            numSwordsman={myArmyConfig && myArmyConfig.myArmyConfig.numSwordsman}
+            numArcher={myArmyConfig && myArmyConfig.myArmyConfig.numArcher}
+            numCavalry={myArmyConfig && myArmyConfig.myArmyConfig.numCavalry}
             title={"My Army"}
             titleBg={"success"} />
           < ArmyAttackModalCard

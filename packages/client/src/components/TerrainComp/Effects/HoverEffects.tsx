@@ -6,6 +6,7 @@ import { isResourcePosition } from '../../../utils/helperFunctions/ResourceFunti
 import { isArmyPosition } from '../../../utils/helperFunctions/ArmyFunctions/isArmyPosition';
 import { armySettlePositions } from '../../../utils/helperFunctions/ArmyFunctions/armySettlePositions';
 import { canFleetBeSettled } from '../../../utils/helperFunctions/SeaFunctions/canFleetBeSettled';
+import { isMyCastle } from '../../../utils/helperFunctions/CastleFunctions/isMyCastle';
 
 export const HoverEffects = (fromFleetPosition: any, isFleetMoveStage: boolean, armyPositions: any[], resources: any[], numberOfArmy: any, isArmySettleStage: boolean | undefined, isBorder: boolean, castlePositions: any[], myCastlePosition: any[], values: number[][], fromArmyPosition: { x: any, y: any } | undefined, isArmyMoveStage: boolean | undefined) => {
     //Blue hover effect when user moves an army
@@ -17,11 +18,11 @@ export const HoverEffects = (fromFleetPosition: any, isFleetMoveStage: boolean, 
             }).map((data) => {
                 if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
                     canCastleBeSettle(values[data.x][data.y]) &&
-                        !isCastlePosition(data.x, data.y, myCastlePosition) &&
+                        !isMyCastle(myCastlePosition, data.x, data.y) &&
                         !isBorder &&
                         document.getElementById(`${data.y},${data.x}`)?.classList.add("blueTileEffect");
 
-                    if (isCastlePosition(data.x, data.y, myCastlePosition)) {
+                    if (isMyCastle(myCastlePosition, data.x, data.y)) {
                         document.getElementById(`${data.y},${data.x}`)!.style.pointerEvents = "none"
                     }
                 }
@@ -40,7 +41,7 @@ export const HoverEffects = (fromFleetPosition: any, isFleetMoveStage: boolean, 
                             document.getElementById(`${data.y},${data.x}`)?.classList.remove("blueTileEffect");
                         }
 
-                        if (isCastlePosition(data.x, data.y, myCastlePosition)) {
+                        if (isMyCastle(myCastlePosition, data.x, data.y)) {
                             document.getElementById(`${data.y},${data.x}`)!.style.pointerEvents = "auto"
                         }
                     }
@@ -53,7 +54,7 @@ export const HoverEffects = (fromFleetPosition: any, isFleetMoveStage: boolean, 
     useEffect(() => {
         if (isArmySettleStage && myCastlePosition) {
             myCastlePosition.map((position: any) => {
-                getManhattanPositions(position).map(
+                getManhattanPositions(position.myCastlePosition).map(
                     (data) => {
                         if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
                             if (
@@ -77,7 +78,7 @@ export const HoverEffects = (fromFleetPosition: any, isFleetMoveStage: boolean, 
             });
         } else if (!isArmySettleStage && myCastlePosition && numberOfArmy !== 5) {
             myCastlePosition.map((position: any) => {
-                getManhattanPositions(position).map(
+                getManhattanPositions(position.myCastlePosition).map(
                     (data) => {
                         if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
                             if (armySettlePositions(data.x, data.y, myCastlePosition)) {

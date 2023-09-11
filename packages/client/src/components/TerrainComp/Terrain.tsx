@@ -143,9 +143,8 @@ export const Terrain = (props: DataProp) => {
 
   const castlePositions = useCastlePositions();
   const myCastlePosition = useMyCastlePositions(userWallet);
-  const armyPositions = useArmyPositions()[0];
-  const myArmyPosition: any = useMyArmy(userWallet)[0];
-  const myArmyNumber = useMyArmy(userWallet)[1];
+  const armyPositions = useArmyPositions();
+  const myArmyPosition = useMyArmy(userWallet);
   const resources = useResources();
   const myResourcePositions = useMyResourcePositions(userWallet);
   const dockPositions = useDockPositions();
@@ -257,7 +256,7 @@ export const Terrain = (props: DataProp) => {
 
   CastleEffects(myCastlePosition, setIsCastleSettled, castlePositions, isCastleSettled);
   ResourceEffects(myResourcePositions, resources, isMineStage, fromArmyPosition);
-  ArmyEffects(castlePositions, isArmySettleStage, armyPositions, myArmyPosition, setNumberOfArmy, myArmyNumber, resources);
+  ArmyEffects(castlePositions, isArmySettleStage, armyPositions, myArmyPosition, setNumberOfArmy, myArmyPosition.length, resources);
   AttackEffects(myFleetPositions, fleetPositions, fromFleetPosition, isFleetAttackStage, myCastlePosition, castlePositions, armyPositions, myArmyPosition, isAttackStage, fromArmyPosition);
   HoverEffects(fromFleetPosition, isFleetMoveStage, armyPositions, resources, numberOfArmy, isArmySettleStage, props.isBorder, castlePositions, myCastlePosition, values, fromArmyPosition, isArmyMoveStage);
   DockEffects(castlePositions, resources, myArmyPosition, armyPositions, dockPositions, myDockPositions, values, dockSettleStage, dockCaptureStage, rows, columns, fromArmyPosition);

@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+import { colorPath } from "../../../utils/constants/constants";
 import { isManhattanPosition } from "../../../utils/helperFunctions/CustomFunctions/isManhattanPosition";
 import { isMyResource } from "../../../utils/helperFunctions/ResourceFuntions/isMyResource";
 
@@ -7,7 +8,8 @@ export const ResourceEffects = (myResourcePositions: any[], resources: any[], is
     useEffect(() => {
         if (myResourcePositions) {
             myResourcePositions.map((position: any) => {
-                document.getElementById(`${position.y},${position.x}`)!.style.border = "2px solid rgb(245, 169, 6)";
+                document.getElementById(`${position.myResourcePosition.y},${position.myResourcePosition.x}`)!.style.border = "2px solid";
+                document.getElementById(`${position.myResourcePosition.y},${position.myResourcePosition.x}`)!.style.borderColor = colorPath[position.myResourceColor.colorIndex];
             })
         }
 
@@ -15,12 +17,21 @@ export const ResourceEffects = (myResourcePositions: any[], resources: any[], is
             resources.map(data => {
                 if (data.resource.sourceType === 0) {
                     document.getElementById(`${data.positions.y},${data.positions.x}`)!.innerHTML = "🌽";
+                    if (data.color.colorIndex !== 0) {
+                        document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.borderColor = colorPath[data.color.colorIndex];
+                    }
                 }
                 else if (data.resource.sourceType === 1) {
                     document.getElementById(`${data.positions.y},${data.positions.x}`)!.innerHTML = "🪓";
+                    if (data.color.colorIndex !== 0) {
+                        document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.borderColor = colorPath[data.color.colorIndex];
+                    }
                 }
                 else {
                     document.getElementById(`${data.positions.y},${data.positions.x}`)!.innerHTML = "⛏️";
+                    if (data.color.colorIndex !== 0) {
+                        document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.borderColor = colorPath[data.color.colorIndex];
+                    }
                 }
             })
         }
@@ -28,8 +39,8 @@ export const ResourceEffects = (myResourcePositions: any[], resources: any[], is
         return () => {
             if (myResourcePositions) {
                 myResourcePositions.map((position: any) => {
-                    if (document.getElementById(`${position.y},${position.x}`)) {
-                        document.getElementById(`${position.y},${position.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
+                    if (document.getElementById(`${position.myResourcePosition.y},${position.myResourcePosition.x}`)) {
+                        document.getElementById(`${position.myResourcePosition.y},${position.myResourcePosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
                     }
                 });
             }

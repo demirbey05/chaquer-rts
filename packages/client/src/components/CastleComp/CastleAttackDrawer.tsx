@@ -89,9 +89,9 @@ export const CastleAttackDrawer = () => {
       <div className="offcanvas-body small">
         <div className="row">
           <CastleAttackModalArmyCard title={"My Army"} titleBg={"success"}
-            numSwordsman={myArmyConfig && myArmyConfig.armyConfig.numSwordsman}
-            numArcher={myArmyConfig && myArmyConfig.armyConfig.numArcher}
-            numCavalry={myArmyConfig && myArmyConfig.armyConfig.numCavalry} />
+            numSwordsman={myArmyConfig && myArmyConfig.myArmyConfig.numSwordsman}
+            numArcher={myArmyConfig && myArmyConfig.myArmyConfig.numArcher}
+            numCavalry={myArmyConfig && myArmyConfig.myArmyConfig.numCavalry} />
           <CastleAttackModalArmyCard title={"Enemy Army"} titleBg={"danger"}
             numSwordsman={castleArmy && castleArmy.numSwordsman}
             numArcher={castleArmy && castleArmy.numArcher}

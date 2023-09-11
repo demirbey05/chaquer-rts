@@ -4,7 +4,7 @@ export const isArmyPosition = (
   armyPositions: any[]
 ): boolean => {
   for (const data of armyPositions) {
-    if (data.position.x === x && data.position.y === y) {
+    if (data.armyPosition.x === x && data.armyPosition.y === y) {
       return true;
     }
   }

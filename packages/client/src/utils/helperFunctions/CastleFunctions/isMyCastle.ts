@@ -1,8 +1,11 @@
-export const isMyCastle = (myCastlePosition: any, x: number, y: number) => {
-  const myCastle = myCastlePosition.find(
-    (element: { x: number; y: number }) => {
-      return element.x == x && element.y == y;
-    }
-  );
-  return myCastle;
+export const isMyCastle = (myCastlePosition: any[], x: any, y: any) => {
+  if (myCastlePosition) {
+    return myCastlePosition.some((data: any) => {
+      return (
+        data.myCastlePosition.x.toString() === x.toString() &&
+        data.myCastlePosition.y.toString() === y.toString()
+      );
+    });
+  }
+  return false;
 };

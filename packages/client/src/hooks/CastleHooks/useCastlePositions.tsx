@@ -9,13 +9,17 @@ export function useCastlePositions() {
   const castleEntities = useEntityQuery([Has(components.CastleOwnable)]);
   const value = useObservableValue(components.CastleOwnable.update$);
 
-  const [castlePositions, setCastlePositions] = useState<any[]>([]);
+  const [castle, setCastle] = useState<any[]>([]);
   useEffect(() => {
-    const positions = castleEntities.map((entityIndex) =>
-      getComponentValue(components.Position, entityIndex)
+    const positions = castleEntities.map((entityIndex) => {
+      const castlePosition = getComponentValue(components.Position, entityIndex);
+      const castleColor = getComponentValue(components.ColorOwnable, entityIndex);
+      return { castlePosition, castleColor }
+    }
+
     );
-    setCastlePositions(positions);
+    setCastle(positions);
   }, [castleEntities, value]);
 
-  return castlePositions;
+  return castle;
 }

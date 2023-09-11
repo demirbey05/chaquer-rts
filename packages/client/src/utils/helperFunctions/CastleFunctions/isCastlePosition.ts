@@ -5,7 +5,7 @@ export const isCastlePosition = (
 ): boolean => {
   if (castlePosition && castlePosition.length > 0) {
     castlePosition.map((position) => {
-      if (position.x === x && position.y === y) {
+      if (position.castlePosition.x === x && position.castlePosition.y === y) {
         return true;
       }
     });

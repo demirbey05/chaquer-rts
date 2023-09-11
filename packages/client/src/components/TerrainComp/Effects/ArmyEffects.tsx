@@ -1,19 +1,20 @@
 import { useEffect } from "react"
+import { colorPath } from "../../../utils/constants/constants";
 
 export const ArmyEffects = (castlePositions: any[], isArmySettleStage: boolean | undefined, armyPositions: any[], myArmyPosition: any[], setNumberOfArmy: any, myArmyNumber: any, resources: any[]) => {
     //Makes castle, army and resource positions unClickable to not cause bug during army settlement
     useEffect(() => {
         if (castlePositions && isArmySettleStage) {
             castlePositions.map((data) => {
-                document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-toggle", "");
-                document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "");
+                document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.setAttribute("data-bs-toggle", "");
+                document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.setAttribute("data-bs-target", "");
             });
         }
 
         if (armyPositions && isArmySettleStage) {
             armyPositions.map((data) => {
-                document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-toggle", "");
-                document.getElementById(`${data.position.y},${data.position.x}`)!.setAttribute("data-bs-target", "");
+                document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.setAttribute("data-bs-toggle", "");
+                document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.setAttribute("data-bs-target", "");
             });
         }
 
@@ -41,10 +42,11 @@ export const ArmyEffects = (castlePositions: any[], isArmySettleStage: boolean |
 
             myArmyPosition.forEach((data: any) => {
                 const element = document.getElementById(
-                    `${data.position.y},${data.position.x}`
+                    `${data.myArmyPosition.y},${data.myArmyPosition.x}`
                 )!;
                 element.innerHTML = "⚔️";
-                element.style.border = "2px solid rgb(245, 169, 6)";
+                element.style.border = "2px solid";
+                element.style.borderColor = colorPath[data.myArmyColor.colorIndex];
             });
         }
 
@@ -52,12 +54,11 @@ export const ArmyEffects = (castlePositions: any[], isArmySettleStage: boolean |
 
         //Puts the army emojis to army positions
         armyPositions.map((data: any) => {
-            document.getElementById(
-                `${data.position.y},${data.position.x}`
-            )!.innerHTML = "⚔️";
-            document
-                .getElementById(`${data.position.y},${data.position.x}`)
-                ?.classList.add("army-emoji");
+            const element = document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!;
+            element.innerHTML = "⚔️";
+            element.style.border = "2px solid";
+            element.style.borderColor = colorPath[data.armyColor.colorIndex]
+            element.classList.add("army-emoji");
         });
     }, [armyPositions, myArmyPosition]);
 }

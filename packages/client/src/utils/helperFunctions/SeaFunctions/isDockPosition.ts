@@ -5,7 +5,7 @@ export const isDockPosition = (
 ): boolean => {
   if (dockPositions && dockPositions.length > 0) {
     dockPositions.map((position) => {
-      if (position.x === x && position.y === y) {
+      if (position.dockPosition.x === x && position.dockPosition.y === y) {
         return true;
       }
     });

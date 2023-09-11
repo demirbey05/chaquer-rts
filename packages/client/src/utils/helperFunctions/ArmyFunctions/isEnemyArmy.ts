@@ -10,15 +10,15 @@ export const isEnemyArmy = (
       (element) =>
         !myArmyPositions.some(
           (data: any) =>
-            stringifyWrapper(data.position) ===
-            stringifyWrapper(element.position)
+            stringifyWrapper(data.myArmyPosition) ===
+            stringifyWrapper(element.armyPosition)
         )
     );
     if (filteredArray) {
       return filteredArray.some((data: any) => {
         return (
-          data.position.x.toString() === position.x.toString() &&
-          data.position.y.toString() === position.y.toString()
+          data.armyPosition.x.toString() === position.x.toString() &&
+          data.armyPosition.y.toString() === position.y.toString()
         );
       });
     }

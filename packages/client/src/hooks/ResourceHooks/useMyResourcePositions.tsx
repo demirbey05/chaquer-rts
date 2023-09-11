@@ -8,15 +8,17 @@ export function useMyResourcePositions(address: any) {
 
     const resourceEntity = useEntityQuery([HasValue(components.ResourceOwnable, { owner: address })]);
 
-    const [resourcePosition, setResourcePosition] = useState<any>();
+    const [resources, setResources] = useState<any>();
     const value = useObservableValue(components.ResourceOwnable.update$);
 
     useEffect(() => {
-        const resourcePosition = resourceEntity.map((entityIndex) => {
-            return getComponentValue(components.Position, entityIndex);
+        const resource = resourceEntity.map((entityIndex) => {
+            const myResourcePosition = getComponentValue(components.Position, entityIndex);
+            const myResourceColor = getComponentValue(components.Position, entityIndex);
+            return { myResourcePosition, myResourceColor };
         })
-        setResourcePosition(resourcePosition);
+        setResources(resource);
     }, [resourceEntity, value]);
 
-    return resourcePosition;
+    return resources;
 }

@@ -1,9 +1,9 @@
+import shipEmoji from "../../../images/ship_emoji.png"
 import { useEffect } from "react";
 import { getManhattanPositions } from "../../../utils/helperFunctions/CustomFunctions/getManhattanPositions";
-import { armySettlePositions } from "../../../utils/helperFunctions/ArmyFunctions/armySettlePositions";
 import { canFleetBeSettled } from "../../../utils/helperFunctions/SeaFunctions/canFleetBeSettled";
 import { isFleetPosition } from '../../../utils/helperFunctions/SeaFunctions/isFleetPosition';
-import shipEmoji from "../../../images/ship_emoji.png"
+import { colorPath } from "../../../utils/constants/constants";
 
 export const FleetEffects = (myFleetPositions: any[] | undefined, fleetPositions: any[], fleetSettleStage: boolean, myDockPositions: any[] | undefined, dockPositions: any[] | undefined, isBorder: boolean, values: number[][]) => {
 
@@ -11,7 +11,7 @@ export const FleetEffects = (myFleetPositions: any[] | undefined, fleetPositions
     useEffect(() => {
         if (fleetSettleStage && myDockPositions && fleetPositions) {
             myDockPositions.map((position: any) => {
-                getManhattanPositions(position).map(
+                getManhattanPositions(position.myDockPosition).map(
                     (data) => {
                         if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
                             if (
@@ -32,14 +32,12 @@ export const FleetEffects = (myFleetPositions: any[] | undefined, fleetPositions
             });
         } else if (!fleetSettleStage && myDockPositions) {
             myDockPositions.map((position: any) => {
-                getManhattanPositions(position).map(
+                getManhattanPositions(position.myDockPosition).map(
                     (data) => {
                         if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
-                            if (armySettlePositions(data.x, data.y, myDockPositions)) {
-                                document.getElementById(`${data.y},${data.x}`)?.classList.remove("orangeTileEffect")
-                                document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-toggle", "");
-                                document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-target", "");
-                            }
+                            document.getElementById(`${data.y},${data.x}`)?.classList.remove("orangeTileEffect")
+                            document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-toggle", "");
+                            document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-target", "");
                         }
                     }
                 );
@@ -63,13 +61,15 @@ export const FleetEffects = (myFleetPositions: any[] | undefined, fleetPositions
             myFleetPositions.map((data: any) => {
                 const element = document.getElementById(`${data.myFleetPosition.y},${data.myFleetPosition.x}`)!;
                 element.innerHTML = '<img src="' + shipEmoji + '" width="20px" height="25px" />';
-                element.style.border = "2px solid rgb(245, 169, 6)";
+                element.style.border = "2px solid";
+                element.style.borderColor = colorPath[data.myFleetColor.colorIndex];
             });
         }
 
         //Puts the ship emojis to fleet positions
         fleetPositions.map((data: any) => {
             document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)!.innerHTML = '<img src="' + shipEmoji + '" width="25px" height="25px" />';
+            document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)!.style.borderColor = colorPath[data.fleetColor.colorIndex];
             document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)?.classList.add("fleet-emoji");
         });
     }, [fleetPositions, myFleetPositions]);

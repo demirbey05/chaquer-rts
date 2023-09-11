@@ -7,6 +7,7 @@ import { isCastlePosition } from "../../../utils/helperFunctions/CastleFunctions
 import { isMyDock } from "../../../utils/helperFunctions/SeaFunctions/isMyDock";
 import { isManhattanPosition } from "../../../utils/helperFunctions/CustomFunctions/isManhattanPosition";
 import { isDockPosition } from "../../../utils/helperFunctions/SeaFunctions/isDockPosition";
+import { colorPath } from "../../../utils/constants/constants";
 
 export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosition: any[], armyPositions: any[], dockPositions: any[], myDockPositions: any[] | undefined, values: number[][], dockSettleStage: boolean, dockCaptureStage: boolean, rows: number[], columns: number[], fromArmyPosition: any) => {
     /* Deploy dock emojis */
@@ -14,7 +15,8 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
         if (dockPositions && dockPositions.length > 0) {
             dockPositions.map(
                 (data) => {
-                    document.getElementById(`${data.y},${data.x}`)!.innerHTML = "⚓";
+                    document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.innerHTML = "⚓";
+                    document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.borderColor = colorPath[data.dockColor.colorIndex];
                 }
             );
         }
@@ -24,15 +26,16 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
     useEffect(() => {
         if (myDockPositions && myDockPositions.length > 0) {
             myDockPositions.map((position: any) => {
-                document.getElementById(`${position.y},${position.x}`)!.style.border = "2px solid rgb(245, 169, 6)";
+                document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.border = "2px solid";
+                document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.borderColor = colorPath[position.myDockColor.colorIndex];
             });
         }
 
         return () => {
             if (myDockPositions && myDockPositions.length > 0) {
                 myDockPositions.map((position: any) => {
-                    if (document.getElementById(`${position.y},${position.x}`)) {
-                        document.getElementById(`${position.y},${position.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
+                    if (document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)) {
+                        document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
                     }
                 });
             }
@@ -88,21 +91,21 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
     useEffect(() => {
         if (dockPositions && dockCaptureStage && fromArmyPosition && myDockPositions) {
             dockPositions.map((data: any) => {
-                isManhattanPosition(data, fromArmyPosition.x, fromArmyPosition.y) &&
-                    !isMyDock(data.x, data.y, myDockPositions) &&
-                    document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
-                isManhattanPosition(data, fromArmyPosition.x, fromArmyPosition.y) &&
-                    !isMyDock(data.x, data.y, myDockPositions) &&
-                    document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "#dockCaptureDrawer");
+                isManhattanPosition(data.dockPosition, fromArmyPosition.x, fromArmyPosition.y) &&
+                    !isMyDock(data.dockPosition.x, data.dockPosition.y, myDockPositions) &&
+                    document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
+                isManhattanPosition(data.dockPosition, fromArmyPosition.x, fromArmyPosition.y) &&
+                    !isMyDock(data.dockPosition.x, data.dockPosition.y, myDockPositions) &&
+                    document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.setAttribute("data-bs-target", "#dockCaptureDrawer");
             });
         }
 
         return () => {
             if (dockPositions) {
                 dockPositions.map((data: any) => {
-                    if (document.getElementById(`${data.y},${data.x}`) !== null) {
-                        document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-toggle", "");
-                        document.getElementById(`${data.y},${data.x}`)!.setAttribute("data-bs-target", "");
+                    if (document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`) !== null) {
+                        document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.setAttribute("data-bs-toggle", "");
+                        document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.setAttribute("data-bs-target", "");
                     }
                 });
             }

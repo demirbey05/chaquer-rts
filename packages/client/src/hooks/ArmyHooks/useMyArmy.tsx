@@ -10,20 +10,19 @@ export function useMyArmy(address: any) {
     HasValue(components.ArmyOwnable, { owner: address }),
   ]);
 
-  const [armyPositions, setArmyPositions] = useState<any[]>([]);
-  const [userArmyNumber, setUserArmyNumber] = useState<number>(0);
+  const [myArmy, setMyArmy] = useState<any[]>([]);
   const value = useObservableValue(components.Position.update$);
 
   useEffect(() => {
-    const positions = armyEntities.map((entityIndex) => {
-      const position = getComponentValue(components.Position, entityIndex);
-      const armyConfig = getComponentValue(components.ArmyConfig, entityIndex);
-      return { position, armyConfig };
+    const army = armyEntities.map((entityIndex) => {
+      const myArmyPosition = getComponentValue(components.Position, entityIndex);
+      const myArmyConfig = getComponentValue(components.ArmyConfig, entityIndex);
+      const myArmyColor = getComponentValue(components.ColorOwnable, entityIndex);
+      return { myArmyPosition, myArmyConfig, myArmyColor };
     });
 
-    setArmyPositions(positions);
-    setUserArmyNumber(positions.length);
+    setMyArmy(army)
   }, [armyEntities, value]);
 
-  return [armyPositions, userArmyNumber];
+  return myArmy;
 }

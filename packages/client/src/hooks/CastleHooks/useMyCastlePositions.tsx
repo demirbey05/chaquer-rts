@@ -8,15 +8,17 @@ export function useMyCastlePositions(address: any) {
 
   const castleEntity = useEntityQuery([HasValue(components.CastleOwnable, { owner: address })]);
 
-  const [castlePositions, setCastlePositions] = useState<any>();
+  const [castle, setCastle] = useState<any>();
   const value = useObservableValue(components.CastleOwnable.update$);
 
   useEffect(() => {
     const castlePosition = castleEntity.map((entityIndex) => {
-      return getComponentValue(components.Position, entityIndex);
+      const myCastlePosition = getComponentValue(components.Position, entityIndex);
+      const myCastleColor = getComponentValue(components.ColorOwnable, entityIndex);
+      return { myCastlePosition, myCastleColor }
     })
-    setCastlePositions(castlePosition);
+    setCastle(castlePosition);
   }, [castleEntity, value]);
 
-  return castlePositions;
+  return castle;
 }

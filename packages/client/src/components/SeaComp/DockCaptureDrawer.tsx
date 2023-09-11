@@ -88,9 +88,9 @@ export const DockCaptureDrawer = () => {
             <div className="offcanvas-body small">
                 <div className="row">
                     <DockDrawerArmyCard title={"My Army"} titleBg={"success"}
-                        numSwordsman={myArmyConfig && myArmyConfig.armyConfig.numSwordsman}
-                        numArcher={myArmyConfig && myArmyConfig.armyConfig.numArcher}
-                        numCavalry={myArmyConfig && myArmyConfig.armyConfig.numCavalry} />
+                        numSwordsman={myArmyConfig && myArmyConfig.myArmyConfig.numSwordsman}
+                        numArcher={myArmyConfig && myArmyConfig.myArmyConfig.numArcher}
+                        numCavalry={myArmyConfig && myArmyConfig.myArmyConfig.numCavalry} />
                     <DockDrawerArmyCard title={"Enemy Army"} titleBg={"danger"}
                         numSwordsman={dockArmy && dockArmy.numSwordsman}
                         numArcher={dockArmy && dockArmy.numArcher}
