@@ -476,28 +476,3 @@ input::-webkit-inner-spin-button {
     margin: auto;
     display: block;
 }
-
-/* Player Seed Modal */
-.playerSeedModal {
-    position: relative;
-    background-color: #212529;
-    border-radius: 5px;
-    margin: auto;
-    padding: 20px;
-    width: 400px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-.playerSeedModal-header {
-    text-align: center;
-    color: white;
-}
-
-.playerSeedModal-footer {
-    text-align: center;
-    margin-top: 10px;
-}
-
-.playerSeedModal-body {
-    padding: 20px;
-}

@@ -20,7 +20,7 @@ import { CastleAttackDrawer } from "../../components/CastleComp/CastleAttackDraw
 import { PlayerLostWarning } from "../../components/PlayerComp/PlayerLostWarning";
 import { PlayerWonAnimation } from "../../components/PlayerComp/PlayerWonAnimation";
 import { PlayerWaitingStage } from "../../components/PlayerComp/PlayerWaitingStage";
-import { PlayerSeedModal } from '../../components/PlayerSeedComp/PlayerSeedModal';
+import { PlayerSeedStage } from '../../components/PlayerSeedComp/PlayerSeedStage';
 import { SettingsDrawer } from "../../components/SettingsComp/SettingsDrawer";
 import { MineCaptureDrawer } from "../../components/MineComp/MineCaptureDrawer";
 import { MineProgressBar } from '../../components/MineComp/MineProgressBar';
@@ -71,7 +71,7 @@ export const Game = () => {
       {!isCastleSettled && !isPlayerLost && <CastleSettleWarning />}
       {!isCastleSettled && !isPlayerLost && <CastleSettleModal />}
       {isCastleSettled && gameState === 1 && !isPlayerLost && <PlayerWaitingStage />}
-      {gameState === 2 && !isPlayerLost && <PlayerSeedModal />}
+      {gameState === 2 && !isPlayerLost && <PlayerSeedStage />}
       {(playerSeedCount === limitOfUser) && !mineInited && <MineInitStage />}
       {gameState === 3 && isArmySettleStage && !isPlayerLost && mineInited && <ArmySettleWarning />}
       {gameState === 3 && isArmyMoveStage && !isPlayerLost && mineInited && <ArmyMoveWarning />}
