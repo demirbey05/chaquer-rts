@@ -1,10 +1,10 @@
-import { Button } from "@chakra-ui/react";
-import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
-import { useMUD } from "../../MUDContext";
-import { useAttack } from "../../context/AttackContext";
-import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
 import { useEffect, useState } from "react";
+import { Button } from "@chakra-ui/react";
+import { useMUD } from "../../context/MUDContext";
+import { useAttack } from "../../context/AttackContext";
 import { useError } from "../../context/ErrorContext";
+import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
 
 export const CastleAttackDrawer = () => {
   const { components, systemCalls } = useMUD();

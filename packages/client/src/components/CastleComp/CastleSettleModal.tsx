@@ -1,4 +1,4 @@
-import { useMUD } from "../../MUDContext";
+import { useMUD } from "../../context/MUDContext";
 import { Button } from "@chakra-ui/react";
 import { useCastle } from "../../context/CastleContext";
 import { useError } from "../../context/ErrorContext";

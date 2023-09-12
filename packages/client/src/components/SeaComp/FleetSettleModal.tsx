@@ -3,7 +3,7 @@ import mediumShipImg from "../../images/medium_ship.png";
 import largeShipImg from "../../images/large_ship.png";
 import { useState, useEffect, useRef } from "react";
 import { Button, Tooltip, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
-import { useMUD } from "../../MUDContext";
+import { useMUD } from "../../context/MUDContext";
 import { usePlayer } from "../../context/PlayerContext";
 import { useError } from "../../context/ErrorContext";
 import { useFleet } from "../../context/FleetContext";

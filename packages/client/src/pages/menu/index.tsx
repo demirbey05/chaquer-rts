@@ -8,7 +8,7 @@ import { TerrainTypeInfoModal } from "../../components/TerrainComp/TerrainTypeIn
 import { UserNameModal } from '../../components/PlayerComp/UserNameModal';
 import { GameTuttorial } from "../../components/TipsComp/GameTuttorial";
 import { generatePerlinValues } from "../../terrain-helper/utils";
-import { useMUD } from "../../MUDContext";
+import { useMUD } from "../../context/MUDContext";
 import { useTerrain } from "../../context/TerrainContext.js"
 import { flatten2D } from "../../utils/terrainArray";
 import { limitOfUser } from "../../utils/constants/constants";

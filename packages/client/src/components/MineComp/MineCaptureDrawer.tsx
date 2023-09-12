@@ -1,13 +1,13 @@
-import { Button } from "@chakra-ui/react";
-import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
-import { useMUD } from "../../MUDContext";
 import { useEffect, useState } from "react";
+import { Button } from "@chakra-ui/react";
+import { useMUD } from "../../context/MUDContext";
 import { useMine } from "../../context/MineContext";
 import { useAttack } from "../../context/AttackContext";
+import { useError } from "../../context/ErrorContext";
 import { useResources } from "../../hooks/ResourceHooks/useResources";
 import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
 import { getResourceTypeByPosition } from "../../utils/helperFunctions/ResourceFuntions/getResourceTypeByPosition";
-import { useError } from "../../context/ErrorContext";
+import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 
 export const MineCaptureDrawer = () => {
     const { components, systemCalls } = useMUD();
@@ -66,7 +66,7 @@ export const MineCaptureDrawer = () => {
         setEnemyArmyConfig(undefined);
     };
 
-    const mineCaptureCanvasStyles = {
+    const mineCaptureDrawerStyles = {
         width: "500px",
         left: "0",
         right: "0",
@@ -81,7 +81,7 @@ export const MineCaptureDrawer = () => {
             className="offcanvas offcanvas-bottom rounded-4 font-bold text-white"
             data-bs-keyboard="false"
             data-bs-backdrop="false"
-            style={mineCaptureCanvasStyles}
+            style={mineCaptureDrawerStyles}
             tabIndex={-1}
             id="mineCaptureDrawer"
             aria-labelledby="mineCaptureDrawerLabel"
@@ -89,11 +89,11 @@ export const MineCaptureDrawer = () => {
             <MineCaptureModalHeader resourceType={getResourceTypeByPosition(resources, targetMinePosition)} />
             <div className="offcanvas-body small">
                 <div className="row">
-                    <CastleAttackModalArmyCard title={"My Army"} titleBg={"success"}
+                    <MineCaptureDrawerArmyCard title={"My Army"} titleBg={"success"}
                         numSwordsman={myArmyConfig && myArmyConfig.myArmyConfig.numSwordsman}
                         numArcher={myArmyConfig && myArmyConfig.myArmyConfig.numArcher}
                         numCavalry={myArmyConfig && myArmyConfig.myArmyConfig.numCavalry} />
-                    <CastleAttackModalArmyCard title={"Enemy Army"} titleBg={"danger"}
+                    <MineCaptureDrawerArmyCard title={"Enemy Army"} titleBg={"danger"}
                         numSwordsman={mineArmy && mineArmy.numSwordsman}
                         numArcher={mineArmy && mineArmy.numArcher}
                         numCavalry={mineArmy && mineArmy.numCavalry} />
@@ -144,7 +144,7 @@ const MineCaptureModalHeader = ({ resourceType }: MineCaptureModalHeaderProps) =
     )
 }
 
-interface CastleAttackModalArmyCardPropTypes {
+interface MineCaptureDrawerArmyCardPropTypes {
     title: string,
     titleBg: string,
     numSwordsman: number,
@@ -152,7 +152,7 @@ interface CastleAttackModalArmyCardPropTypes {
     numCavalry: number
 }
 
-const CastleAttackModalArmyCard = (props: CastleAttackModalArmyCardPropTypes) => {
+const MineCaptureDrawerArmyCard = (props: MineCaptureDrawerArmyCardPropTypes) => {
     return (
         <>
             <div className="col-6">

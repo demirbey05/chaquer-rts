@@ -1,5 +1,5 @@
 import { useObservableValue } from "@latticexyz/react";
-import { useMUD } from "../MUDContext";
+import { useMUD } from "../context/MUDContext";
 import { useEffect, useState } from "react";
 
 export function useWarResult(maxElementSize: number) {

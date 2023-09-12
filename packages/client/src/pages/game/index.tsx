@@ -9,8 +9,8 @@ import { usePlayer } from "../../context/PlayerContext";
 import { useFleet } from "../../context/FleetContext";
 import { useGameState } from "../../hooks/useGameState";
 import { useCountOfPlayerSeed } from "../../hooks/IdentityHooks/useCountOfPlayerSeed";
-import { limitOfUser } from "../../utils/constants/constants";
 import { useIsMineInitialized } from "../../hooks/ResourceHooks/useIsMineInitialized";
+import { limitOfUser } from "../../utils/constants/constants";
 import { Terrain } from "../../components/TerrainComp/Terrain";
 import { ArmyInfoDrawer } from "../../components/ArmyComp/ArmyInfoDrawer";
 import { ArmyProgressBar } from "../../components/ProgressComp/ArmyProgressBar";
@@ -27,7 +27,7 @@ import { PlayerWaitingStage } from "../../components/PlayerComp/PlayerWaitingSta
 import { PlayerSeedStage } from '../../components/PlayerSeedComp/PlayerSeedStage';
 import { SettingsDrawer } from "../../components/SettingsComp/SettingsDrawer";
 import { MineCaptureDrawer } from "../../components/MineComp/MineCaptureDrawer";
-import { MineProgressBar } from '../../components/MineComp/MineProgressBar';
+import { MineProgressBar } from '../../components/ProgressComp/MineProgressBar';
 import { MineInitStage } from '../../components/MineComp/MineInitStage';
 import { WarResultDrawer } from "../../components/WarResultComp/WarResultDrawer";
 import { CreditProgressBar } from '../../components/ProgressComp/CreditProgressBar';

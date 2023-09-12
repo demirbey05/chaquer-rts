@@ -1,7 +1,7 @@
 import "../../styles/globals.css";
 import { Progress } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import { useMUD } from '../../MUDContext';
+import { useMUD } from '../../context/MUDContext';
 import { useError } from '../../context/ErrorContext';
 import { useGameState } from "../../hooks/useGameState";
 

@@ -1,4 +1,4 @@
-import { useMUD } from "../../MUDContext";
+import { useMUD } from "../../context/MUDContext";
 import { Entity } from "@latticexyz/recs";
 import { useRef, useEffect, useState } from "react";
 import { Button } from "@chakra-ui/react";

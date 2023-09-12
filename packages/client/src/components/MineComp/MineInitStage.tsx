@@ -1,5 +1,5 @@
 import { Progress, Tooltip } from '@chakra-ui/react'
-import { useMUD } from '../../MUDContext';
+import { useMUD } from '../../context/MUDContext';
 import { useError } from '../../context/ErrorContext';
 import { useIsMineInitialized } from '../../hooks/ResourceHooks/useIsMineInitialized';
 

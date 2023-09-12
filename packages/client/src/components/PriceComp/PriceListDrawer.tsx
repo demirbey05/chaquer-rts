@@ -4,7 +4,7 @@ import { useArmyPrices } from "../../hooks/EconomyHooks/useArmyPrices";
 import { useResourcePrices } from "../../hooks/EconomyHooks/useResourcePrices";
 import { useIsMineInitialized } from '../../hooks/ResourceHooks/useIsMineInitialized';
 import { usePlayer } from '../../context/PlayerContext';
-import { useMUD } from "../../MUDContext";
+import { useMUD } from "../../context/MUDContext";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { useError } from '../../context/ErrorContext';
 

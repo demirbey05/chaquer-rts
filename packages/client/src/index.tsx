@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client";
 import mudConfig from "contracts/mud.config";
 import { App } from "./App";
 import { setup } from "./mud/setup";
-import { MUDProvider } from "./MUDContext";
+import { MUDProvider } from "./context/MUDContext";
 import { TerrainProvider } from "./context/TerrainContext";
 import { ChakraProvider } from "@chakra-ui/react";
 import { PlayerProvider } from './context/PlayerContext';
@@ -30,15 +30,15 @@ setup().then(async (result) => {
             <AttackProvider>
               <SeaProvider>
                 <FleetProvider>
-                <MineProvider>
-                  <ArmyProvider>
-                    <CastleProvider>
-                      <PlayerProvider>
-                        <App />
-                      </PlayerProvider>
-                    </CastleProvider>
-                  </ArmyProvider>
-                </MineProvider>
+                  <MineProvider>
+                    <ArmyProvider>
+                      <CastleProvider>
+                        <PlayerProvider>
+                          <App />
+                        </PlayerProvider>
+                      </CastleProvider>
+                    </ArmyProvider>
+                  </MineProvider>
                 </FleetProvider>
               </SeaProvider>
             </AttackProvider>

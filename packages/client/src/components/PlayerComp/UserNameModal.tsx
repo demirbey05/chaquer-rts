@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { Button, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
 import { usePlayer } from '../../context/PlayerContext';
-import { useEffect, useState } from 'react';
-import { useMUD } from '../../MUDContext';
+import { useMUD } from '../../context/MUDContext';
 import { useError } from '../../context/ErrorContext';
 import { usePlayerIsValid } from "../../hooks/IdentityHooks/usePlayerIsValid";
 import { useNumberOfUsers } from "../../hooks/IdentityHooks/useNumberOfUsers";
-import { limitOfUser } from "../../utils/constants/constants";
 import { useGameState } from '../../hooks/useGameState';
+import { limitOfUser } from "../../utils/constants/constants";
 
 export const UserNameModal = () => {
     const { systemCalls } = useMUD()
@@ -50,13 +50,18 @@ export const UserNameModal = () => {
             }
         }
         else if (gameState === 1) {
-            setDisable(false);
-            setGameIsFull("");
+            if (userName && userName.length >= 3 && userName.length <= 31) {
+                setDisable(false);
+                setGameIsFull("");
+            }
+            else {
+                setDisable(true)
+            }
         }
         else {
-            setDisable(false)
+            setDisable(true)
         }
-    }, [gameState, userValid, numberOfUsers, limitOfUser]);
+    }, [gameState, userValid, numberOfUsers, limitOfUser, userName]);
 
     const handleInput = (e: any) => {
         setUserName(e.target.value)

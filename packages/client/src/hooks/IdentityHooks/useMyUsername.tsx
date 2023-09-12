@@ -1,4 +1,4 @@
-import { useMUD } from "../../MUDContext";
+import { useMUD } from "../../context/MUDContext";
 import { useComponentValue } from "@latticexyz/react";
 import { encodeEntity } from "@latticexyz/store-sync/recs";
 import { useState, useEffect } from "react";

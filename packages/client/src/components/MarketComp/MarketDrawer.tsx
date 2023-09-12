@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { Button } from "@chakra-ui/react";
-import { Tooltip } from "@chakra-ui/react"
-import { useMUD } from "../../MUDContext";
-import { useNumberOfResource } from '../../hooks/ResourceHooks/useNumberOfResource';
+import { Button, Tooltip } from "@chakra-ui/react";
+import { useMUD } from "../../context/MUDContext";
 import { usePlayer } from '../../context/PlayerContext';
 import { useError } from "../../context/ErrorContext";
+import { useNumberOfResource } from '../../hooks/ResourceHooks/useNumberOfResource';
+
 
 export const MarketDrawer = () => {
     const { userWallet } = usePlayer();

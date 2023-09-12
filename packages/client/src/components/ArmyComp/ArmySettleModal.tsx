@@ -1,14 +1,14 @@
 import archerImg from "../../images/archer.png";
 import cavalryImg from "../../images/cavalry.png";
 import swordsmanImg from "../../images/swordsman.png";
-import { useMUD } from "../../MUDContext";
+import { useMUD } from "../../context/MUDContext";
 import { Button, Tooltip, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useArmy } from "../../context/ArmyContext";
 import { useError } from "../../context/ErrorContext";
+import { usePlayer } from "../../context/PlayerContext";
 import { useArmyPrices } from '../../hooks/EconomyHooks/useArmyPrices';
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
-import { usePlayer } from "../../context/PlayerContext";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 
 export const ArmySettleModal = () => {
