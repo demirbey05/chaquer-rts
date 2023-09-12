@@ -4,8 +4,9 @@ import { getManhattanPositions } from "../../../utils/helperFunctions/CustomFunc
 import { canFleetBeSettled } from "../../../utils/helperFunctions/SeaFunctions/canFleetBeSettled";
 import { isFleetPosition } from '../../../utils/helperFunctions/SeaFunctions/isFleetPosition';
 import { colorPath } from "../../../utils/constants/constants";
+import { isMyFleet } from "../../../utils/helperFunctions/SeaFunctions/isMyFleet";
 
-export const FleetEffects = (myFleetPositions: any[] | undefined, fleetPositions: any[], fleetSettleStage: boolean, myDockPositions: any[] | undefined, dockPositions: any[] | undefined, isBorder: boolean, values: number[][]) => {
+export const FleetEffects = (myFleetPositions: any[] | undefined, fleetPositions: any[], fleetSettleStage: boolean, myDockPositions: any[] | undefined, isBorder: boolean, values: number[][]) => {
 
     // Orange hover effect for fleet deployment
     useEffect(() => {
@@ -17,7 +18,7 @@ export const FleetEffects = (myFleetPositions: any[] | undefined, fleetPositions
                             if (
                                 !isBorder &&
                                 canFleetBeSettled(values[data.x][data.y]) &&
-                                !isFleetPosition(data.x, data.y, fleetPositions)
+                                !isMyFleet({ x: data.x, y: data.y }, myFleetPositions)
                             ) {
                                 const element = document.getElementById(`${data.y},${data.x}`)!;
                                 if (element) {

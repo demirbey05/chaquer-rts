@@ -7,7 +7,7 @@ export const CastleEffects = (myCastlePosition: any[], setIsCastleSettled: (valu
         //Checks that if the user has already settled the castle
         if (myCastlePosition && myCastlePosition.length > 0) {
             myCastlePosition.map((position: any) => {
-                document.getElementById(`${position.myCastlePosition.y},${position.myCastlePosition.x}`)!.style.border = "2px solid";
+                document.getElementById(`${position.myCastlePosition.y},${position.myCastlePosition.x}`)!.style.border = "4px solid";
                 document.getElementById(`${position.myCastlePosition.y},${position.myCastlePosition.x}`)!.style.borderColor = colorPath[Number(position.myCastleColor.colorIndex)];
             });
             setIsCastleSettled(true);
@@ -30,7 +30,7 @@ export const CastleEffects = (myCastlePosition: any[], setIsCastleSettled: (valu
             castlePositions.map(
                 (data) => {
                     document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.innerHTML = "🏰";
-                    document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.style.border = "2px solid";
+                    document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.style.border = "4px solid";
                     document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.style.borderColor = colorPath[Number(data.castleColor.colorIndex)];
                     document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.style.pointerEvents = "none";
                 }

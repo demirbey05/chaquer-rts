@@ -50,7 +50,6 @@ import { DockSettleEvent } from "./Events/DockSettleEvent";
 import { ArmyMoveEvent } from "./Events/ArmyMoveEvent";
 import { DockCaptureEvent } from "./Events/DockCaptureEvent";
 import { canFleetBeSettled } from "../../utils/helperFunctions/SeaFunctions/canFleetBeSettled";
-import { isFleetPosition } from "../../utils/helperFunctions/SeaFunctions/isFleetPosition";
 import { isMyFleet } from "../../utils/helperFunctions/SeaFunctions/isMyFleet";
 import { FleetMoveEvent } from "./Events/FleetMoveEvent";
 import { FleetAttackEvent } from "./Events/FleetAttackEvent";
@@ -164,7 +163,7 @@ export const Terrain = (props: DataProp) => {
     }
 
     // Toggle orange tiles for fleet settlement
-    if (!isArmyMoveStage && isMyDock(Number(getDataAtrX(e)), Number(getDataAtrY(e)), myDockPositions)) {
+    if (!isFleetMoveStage && isMyDock(Number(getDataAtrX(e)), Number(getDataAtrY(e)), myDockPositions)) {
       if (fleetSettleStage) {
         setFleetSettleStage(false);
       }
@@ -189,13 +188,14 @@ export const Terrain = (props: DataProp) => {
       setArmyPosition({ x: getDataAtrX(e), y: getDataAtrY(e) });
     }
 
-    if (!fromFleetPosition && isMyFleet({ x: getDataAtrX(e), y: getDataAtrY(e) }, myFleetPositions)) {
+    if (!fromFleetPosition && isMyFleet({ x: getDataAtrX(e), y: getDataAtrY(e) }, myFleetPositions) && !fleetSettleStage) {
       setFromFleetPosition({ x: getDataAtrX(e), y: getDataAtrY(e) });
       setIsFleetMoveStage(true);
       setIsFleetAttackStage(true)
     } else if (fromFleetPosition && isUserClickedManhattanPosition(fromFleetPosition, getDataAtrX(e), getDataAtrY(e))) {
       toFleetPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
       fromFleetPositionRef.current = { x: fromFleetPosition.x.toString(), y: fromFleetPosition.y.toString() };
+
       if (canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y]) && isEnemyFleet({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, myFleetPositions, fleetPositions)) {
         FleetAttackEvent(setIsFleetMoveStage, setFromFleetPosition, setAttackerFleetPosition, setTargetFleetPosition, fromFleetPositionRef, toFleetPositionRef, setMyFleetConfig, setEnemyFleetConfig, myFleetPositions, fleetPositions);
       }
@@ -224,6 +224,7 @@ export const Terrain = (props: DataProp) => {
       fromArmyPositionRef.current = { x: fromArmyPosition.x, y: fromArmyPosition.y, };
 
       if (isEnemyArmy(toArmyPositionRef.current, armyPositions, myArmyPosition)) {
+        console.log("Buraya geldi")
         ArmyAttackEvent(setIsArmyMoveStage, setIsMineStage, setDockSettleStage, setDockCaptureStage, setFromArmyPosition, setAttackFromArmyPositionToArmy, setAttackToArmyPositionToArmy, fromArmyPositionRef, toArmyPositionRef, setMyArmyConfig, setEnemyArmyConfig, myArmyPosition, armyPositions);
       }
       else if (isEnemyCastle(toArmyPositionRef.current, myCastlePosition, castlePositions)) {
@@ -258,9 +259,9 @@ export const Terrain = (props: DataProp) => {
   ResourceEffects(myResourcePositions, resources, isMineStage, fromArmyPosition);
   ArmyEffects(castlePositions, isArmySettleStage, armyPositions, myArmyPosition, setNumberOfArmy, myArmyPosition.length, resources);
   AttackEffects(myFleetPositions, fleetPositions, fromFleetPosition, isFleetAttackStage, myCastlePosition, castlePositions, armyPositions, myArmyPosition, isAttackStage, fromArmyPosition);
-  HoverEffects(fromFleetPosition, isFleetMoveStage, armyPositions, resources, numberOfArmy, isArmySettleStage, props.isBorder, castlePositions, myCastlePosition, values, fromArmyPosition, isArmyMoveStage);
+  HoverEffects(dockPositions, fromFleetPosition, isFleetMoveStage, armyPositions, resources, numberOfArmy, isArmySettleStage, props.isBorder, castlePositions, myCastlePosition, values, fromArmyPosition, isArmyMoveStage);
   DockEffects(castlePositions, resources, myArmyPosition, armyPositions, dockPositions, myDockPositions, values, dockSettleStage, dockCaptureStage, rows, columns, fromArmyPosition);
-  FleetEffects(myFleetPositions, fleetPositions, fleetSettleStage, myDockPositions, dockPositions, props.isBorder, values);
+  FleetEffects(myFleetPositions, fleetPositions, fleetSettleStage, myDockPositions, props.isBorder, values);
 
   return (
     <div className={`inline-grid ${props.isBorder && "border-4 border-black"}`}

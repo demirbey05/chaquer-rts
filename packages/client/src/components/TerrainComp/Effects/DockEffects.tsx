@@ -6,6 +6,7 @@ import { isCastlePosition } from "../../../utils/helperFunctions/CastleFunctions
 import { isMyDock } from "../../../utils/helperFunctions/SeaFunctions/isMyDock";
 import { isManhattanPosition } from "../../../utils/helperFunctions/CustomFunctions/isManhattanPosition";
 import { colorPath } from "../../../utils/constants/constants";
+import { isArmyPosition } from "../../../utils/helperFunctions/ArmyFunctions/isArmyPosition";
 
 export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosition: any[], armyPositions: any[], dockPositions: any[], myDockPositions: any[] | undefined, values: number[][], dockSettleStage: boolean, dockCaptureStage: boolean, rows: number[], columns: number[], fromArmyPosition: any) => {
     /* Deploy dock emojis */
@@ -14,6 +15,7 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
             dockPositions.map(
                 (data) => {
                     document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.innerHTML = "⚓";
+                    document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.border = "4px solid";
                     document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.borderColor = colorPath[Number(data.dockColor.colorIndex)];
                 }
             );
@@ -24,7 +26,7 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
     useEffect(() => {
         if (myDockPositions && myDockPositions.length > 0) {
             myDockPositions.map((position: any) => {
-                document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.border = "2px solid";
+                document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.border = "4px solid";
                 document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.borderColor = colorPath[Number(position.myDockColor.colorIndex)];
             });
         }
@@ -42,13 +44,13 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
 
     /* Assign data-bs-toggle ve data-bs-target attributes to possible dock positions */
     useEffect(() => {
-        if (values && dockSettleStage) {
+        if (values && dockSettleStage && fromArmyPosition) {
             rows.forEach((row) => {
                 columns.forEach((column) => {
                     const element = document.getElementById(`${column},${row}`);
-                    if (element && isPositionNextToSea(row, column, values)) {
+                    if (element && isPositionNextToSea(row, column, values) && isManhattanPosition({ x: row, y: column }, fromArmyPosition.x, fromArmyPosition.y)) {
                         const position = { x: row, y: column };
-                        const isPositionOccupied = isMyArmy(position, myArmyPosition) ||
+                        const isPositionOccupied = isArmyPosition(position.x, position.y, armyPositions) ||
                             isResourcePosition(position.x, position.y, resources) ||
                             isCastlePosition(position.x, position.y, castlePositions) ||
                             isMyDock(position.x, position.y, myDockPositions)
@@ -68,22 +70,14 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
                     columns.forEach((column) => {
                         const element = document.getElementById(`${column},${row}`);
                         if (element && isPositionNextToSea(row, column, values)) {
-                            const position = { x: row, y: column };
-                            const isPositionOccupied = isMyArmy(position, myArmyPosition) ||
-                                isResourcePosition(position.x, position.y, resources) ||
-                                isCastlePosition(position.x, position.y, castlePositions) ||
-                                isMyDock(position.x, position.y, myDockPositions)
-
-                            if (!isPositionOccupied) {
-                                element.setAttribute("data-bs-toggle", "");
-                                element.setAttribute("data-bs-target", "");
-                            }
+                            element.setAttribute("data-bs-toggle", "");
+                            element.setAttribute("data-bs-target", "");
                         }
                     });
                 });
             }
         }
-    }, [values, rows, columns, armyPositions, resources, castlePositions, dockSettleStage, myArmyPosition]);
+    }, [values, rows, columns, armyPositions, resources, castlePositions, dockSettleStage, myArmyPosition, fromArmyPosition]);
 
     // Handle Dock Capture OffCanvas
     useEffect(() => {
