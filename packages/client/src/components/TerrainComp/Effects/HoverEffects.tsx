@@ -8,6 +8,7 @@ import { armySettlePositions } from '../../../utils/helperFunctions/ArmyFunction
 import { canFleetBeSettled } from '../../../utils/helperFunctions/SeaFunctions/canFleetBeSettled';
 import { isMyCastle } from '../../../utils/helperFunctions/CastleFunctions/isMyCastle';
 import { isDockPosition } from '../../../utils/helperFunctions/SeaFunctions/isDockPosition';
+import { isEnemyCastle } from '../../../utils/helperFunctions/CastleFunctions/isEnemyCastle';
 
 export const HoverEffects = (dockPositions: any[], fromFleetPosition: any, isFleetMoveStage: boolean, armyPositions: any[], resources: any[], numberOfArmy: any, isArmySettleStage: boolean | undefined, isBorder: boolean, castlePositions: any[], myCastlePosition: any[], values: number[][], fromArmyPosition: { x: any, y: any } | undefined, isArmyMoveStage: boolean | undefined) => {
     //Blue hover effect when user moves an army
@@ -63,7 +64,8 @@ export const HoverEffects = (dockPositions: any[], fromFleetPosition: any, isFle
                                 canCastleBeSettle(values[data.x][data.y]) &&
                                 !isBorder &&
                                 !isResourcePosition(data.x, data.y, resources) &&
-                                !isCastlePosition(data.x, data.y, castlePositions) &&
+                                !isEnemyCastle({ x: data.x, y: data.y }, myCastlePosition, castlePositions) &&
+                                !isMyCastle(myCastlePosition, data.x, data.y) &&
                                 !isArmyPosition(data.x, data.y, armyPositions) &&
                                 !isDockPosition(data.x, data.y, dockPositions) &&
                                 armySettlePositions(data.x, data.y, myCastlePosition)

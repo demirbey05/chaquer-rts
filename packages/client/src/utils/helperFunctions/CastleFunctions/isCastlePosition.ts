@@ -5,7 +5,10 @@ export const isCastlePosition = (
 ): boolean => {
   if (castlePosition && castlePosition.length > 0) {
     castlePosition.map((position) => {
-      if (position.castlePosition.x === x && position.castlePosition.y === y) {
+      if (
+        position.castlePosition.x.toString() === x.toString() &&
+        position.castlePosition.y.toString() === y.toString()
+      ) {
         return true;
       }
     });
