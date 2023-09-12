@@ -28,7 +28,7 @@ export const ArmyProgressBar = () => {
                     <Progress border={"2px"} bgColor={"transparent"} hasStripe isAnimated height={"32px"} value={myFleetPositions ? myFleetPositions.length : 0} max={(myDockPositions && myDockPositions!.length !== 0) ? myDockPositions?.length : 1} borderRadius="10px">
                         <ProgressLabel fontSize="15px" className='text-dark d-flex justify-center align-items-center'>
                             <img className='me-2' src={shipEmoji} alt="ship-emoji" width={"20px"} height={"20px"} />
-                            {myFleetPositions ? myFleetPositions.length : 0} / {(myDockPositions && myDockPositions!.length !== 0) ? myDockPositions?.length : 1}
+                            {myFleetPositions ? myFleetPositions.length : 0} / {myDockPositions ? myDockPositions?.length : 0}
                             <img className='ms-2' src={shipEmoji} alt="ship-emoji" width={"20px"} height={"20px"} />
                         </ProgressLabel>
                     </Progress>
