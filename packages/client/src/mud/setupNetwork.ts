@@ -29,7 +29,7 @@ export async function setupNetwork() {
 
   const clientOptions = {
     chain: networkConfig.chain,
-    transport: transportObserver(fallback([webSocket(undefined,{retryCount:0}), http()])),
+    transport: transportObserver(fallback([webSocket(undefined,{retryCount:0}), http(undefined,{retryCount:0})])),
     pollingInterval: 1000,
   } as const satisfies ClientConfig;
 
