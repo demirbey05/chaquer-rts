@@ -3,7 +3,7 @@ import { colorPath } from "../../../utils/constants/constants";
 import { isManhattanPosition } from "../../../utils/helperFunctions/CustomFunctions/isManhattanPosition";
 import { isMyResource } from "../../../utils/helperFunctions/ResourceFuntions/isMyResource";
 
-export const ResourceEffects = (myResourcePositions: any[], resources: any[], isMineStage: boolean | undefined, fromArmyPosition: { x: any, y: any } | undefined) => {
+export const ResourceEffects = (fromFleetPosition: any, seaMineStage: boolean, myResourcePositions: any[], resources: any[], isMineStage: boolean | undefined, fromArmyPosition: { x: any, y: any } | undefined) => {
     // Deploy resource emojis
     useEffect(() => {
         if (myResourcePositions) {
@@ -73,5 +73,30 @@ export const ResourceEffects = (myResourcePositions: any[], resources: any[], is
                 });
             }
         }
-    }, [isMineStage])
+    }, [isMineStage, fromArmyPosition])
+
+    // Handle Sea Mine Capture OffCanvas
+    useEffect(() => {
+        if (resources && seaMineStage && fromFleetPosition) {
+            resources.map((data: any) => {
+                isManhattanPosition(data.positions, fromFleetPosition.x, fromFleetPosition.y) &&
+                    !isMyResource(data.positions.x, data.positions.y, myResourcePositions) &&
+                    document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
+                isManhattanPosition(data.positions, fromFleetPosition.x, fromFleetPosition.y) &&
+                    !isMyResource(data.positions.x, data.positions.y, myResourcePositions) &&
+                    document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-target", "#seaMineCaptureDrawer");
+            });
+        }
+
+        return () => {
+            if (resources) {
+                resources.map((data: any) => {
+                    if (document.getElementById(`${data.positions.y},${data.positions.x}`) !== null) {
+                        document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-toggle", "");
+                        document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-target", "");
+                    }
+                });
+            }
+        }
+    }, [seaMineStage, fromFleetPosition])
 }

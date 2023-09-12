@@ -42,6 +42,7 @@ import { FleetSettleWarning } from "../../components/SeaComp/FleetSettleWarning"
 import { FleetMoveWarning } from "../../components/SeaComp/FleetMoveWarning";
 import { FleetAttackDrawer } from "../../components/SeaComp/FleetAttackDrawer";
 import { UsersInGameDrawer } from "../../components/PlayerComp/UsersInGameDrawer";
+import { SeaMineCaptureDrawer } from "../../components/SeaComp/SeaMineCaptureDrawer";
 
 export const Game = () => {
   const { width, height } = useTerrain();
@@ -96,6 +97,7 @@ export const Game = () => {
       {gameState === 3 && fleetSettleStage && !isPlayerLost && mineInited && <FleetSettleWarning />}
       {gameState === 3 && isFleetMoveStage && !isPlayerLost && mineInited && <FleetMoveWarning />}
       {gameState === 3 && !isPlayerLost && mineInited && <FleetAttackDrawer />}
+      {gameState === 3 && !isPlayerLost && mineInited && <SeaMineCaptureDrawer />}
       {isPlayerLost && <PlayerLostWarning />}
       {gameState === 4 && isPlayerWinner && <PlayerWonAnimation />}
 

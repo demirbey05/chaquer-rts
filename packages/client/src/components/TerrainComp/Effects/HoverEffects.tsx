@@ -126,5 +126,5 @@ export const HoverEffects = (dockPositions: any[], fromFleetPosition: any, isFle
                 });
             }
         }
-    }, [fromArmyPosition, isFleetMoveStage]);
+    }, [fromFleetPosition, isFleetMoveStage]);
 }

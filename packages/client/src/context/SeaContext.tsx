@@ -13,6 +13,12 @@ type SeaContextType = {
     setTargetDockPosition: (value: any) => void;
     dockAttackerArmyPosition: any;
     setDockAttackerArmyPosition: (value: any) => void;
+    seaMineStage: boolean;
+    setSeaMineStage: (value: boolean) => void;
+    seaMineAttackerFleetPosition: any;
+    setSeaMineAttackerFleetPosition: (value: any) => void;
+    targetSeaMinePosition: any;
+    setTargetSeaMinePosition: (value: any) => void;
 };
 
 const SeaContext = createContext<SeaContextType>({
@@ -27,7 +33,13 @@ const SeaContext = createContext<SeaContextType>({
     targetDockPosition: undefined,
     setTargetDockPosition: () => { },
     dockAttackerArmyPosition: undefined,
-    setDockAttackerArmyPosition: () => { }
+    setDockAttackerArmyPosition: () => { },
+    seaMineStage: false,
+    setSeaMineStage: () => { },
+    seaMineAttackerFleetPosition: undefined,
+    setSeaMineAttackerFleetPosition: () => { },
+    targetSeaMinePosition: undefined,
+    setTargetSeaMinePosition: () => { }
 });
 
 const SeaProvider: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode; }) => {
@@ -38,6 +50,10 @@ const SeaProvider: React.FC<{ children: ReactNode }> = ({ children }: { children
     const [dockCaptureStage, setDockCaptureStage] = useState<boolean>(false);
     const [targetDockPosition, setTargetDockPosition] = useState<any>();
     const [dockAttackerArmyPosition, setDockAttackerArmyPosition] = useState<any>();
+
+    const [seaMineStage, setSeaMineStage] = useState<boolean>(false);
+    const [seaMineAttackerFleetPosition, setSeaMineAttackerFleetPosition] = useState<any>();
+    const [targetSeaMinePosition, setTargetSeaMinePosition] = useState<any>();
 
     const results: SeaContextType = {
         dockSettleStage,
@@ -51,7 +67,13 @@ const SeaProvider: React.FC<{ children: ReactNode }> = ({ children }: { children
         targetDockPosition,
         setTargetDockPosition,
         dockAttackerArmyPosition,
-        setDockAttackerArmyPosition
+        setDockAttackerArmyPosition,
+        seaMineStage,
+        setSeaMineStage,
+        seaMineAttackerFleetPosition,
+        setSeaMineAttackerFleetPosition,
+        targetSeaMinePosition,
+        setTargetSeaMinePosition
     };
 
     return (

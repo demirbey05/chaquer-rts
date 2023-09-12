@@ -2,6 +2,7 @@ import { getEnemyFleetConfigByPosition, getMyFleetConfigByPosition } from "../..
 
 export const FleetAttackEvent = (
     setIsFleetMoveStage: (value: boolean) => void,
+    setSeaMineStage: (value: boolean) => void,
     setFromFleetPosition: any,
     setAttackerFleetPosition: any,
     setTargetFleetPosition: any,
@@ -13,6 +14,7 @@ export const FleetAttackEvent = (
     fleetPositions: any
 ) => {
     setIsFleetMoveStage(false);
+    setSeaMineStage(false)
     setFromFleetPosition(undefined);
     setAttackerFleetPosition(fromFleetPositionRef.current);
     setTargetFleetPosition(toFleetPositionRef.current);

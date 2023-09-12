@@ -2,6 +2,8 @@ import { findIDFromPosition } from "../../../utils/helperFunctions/CustomFunctio
 
 export const FleetMoveEvent = async (
     setIsFleetMoveStage: (value: boolean) => void,
+    setSeaMineStage: (value: boolean) => void,
+    setIsFleetAttackStage: (value: boolean) => void,
     fromFleetPositionRef: any,
     toFleetPositionRef: any,
     isFleetMoveStage: boolean,
@@ -14,6 +16,9 @@ export const FleetMoveEvent = async (
     setErrorTitle: any,
     setShowError: any
 ) => {
+    setSeaMineStage(false)
+    setIsFleetAttackStage(false)
+
     const _fleetID = findIDFromPosition(
         fromFleetPositionRef.current,
         components.Position

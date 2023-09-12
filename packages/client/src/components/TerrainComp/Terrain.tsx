@@ -54,6 +54,7 @@ import { isMyFleet } from "../../utils/helperFunctions/SeaFunctions/isMyFleet";
 import { FleetMoveEvent } from "./Events/FleetMoveEvent";
 import { FleetAttackEvent } from "./Events/FleetAttackEvent";
 import { isEnemyFleet } from "../../utils/helperFunctions/SeaFunctions/isEnemyFleet";
+import { SeaMineCaptureEvent } from "./Events/SeaMineCaptureEvent";
 
 export type DataProp = {
   width: number;
@@ -111,7 +112,11 @@ export const Terrain = (props: DataProp) => {
     setDockCaptureStage,
     setTargetDockPosition,
     setDockAttackerArmyPosition,
-    dockCaptureStage } = useSea();
+    dockCaptureStage,
+    setSeaMineAttackerFleetPosition,
+    setSeaMineStage,
+    seaMineStage,
+    setTargetSeaMinePosition } = useSea();
 
   const { fleetSettleStage,
     setFleetSettleStage,
@@ -192,19 +197,25 @@ export const Terrain = (props: DataProp) => {
       setFromFleetPosition({ x: getDataAtrX(e), y: getDataAtrY(e) });
       setIsFleetMoveStage(true);
       setIsFleetAttackStage(true)
+      setSeaMineStage(true)
     } else if (fromFleetPosition && isUserClickedManhattanPosition(fromFleetPosition, getDataAtrX(e), getDataAtrY(e))) {
       toFleetPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
       fromFleetPositionRef.current = { x: fromFleetPosition.x.toString(), y: fromFleetPosition.y.toString() };
 
       if (canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y]) && isEnemyFleet({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, myFleetPositions, fleetPositions)) {
-        FleetAttackEvent(setIsFleetMoveStage, setFromFleetPosition, setAttackerFleetPosition, setTargetFleetPosition, fromFleetPositionRef, toFleetPositionRef, setMyFleetConfig, setEnemyFleetConfig, myFleetPositions, fleetPositions);
+        FleetAttackEvent(setIsFleetMoveStage, setSeaMineStage, setFromFleetPosition, setAttackerFleetPosition, setTargetFleetPosition, fromFleetPositionRef, toFleetPositionRef, setMyFleetConfig, setEnemyFleetConfig, myFleetPositions, fleetPositions);
+      }
+      if (isUserClickedMine(toFleetPositionRef.current.x, toFleetPositionRef.current.y, resources)) {
+        SeaMineCaptureEvent(setIsFleetMoveStage, setFleetSettleStage, setIsFleetAttackStage, setFromFleetPosition, setSeaMineAttackerFleetPosition, fromFleetPositionRef, setTargetSeaMinePosition, toFleetPositionRef, setMyFleetConfig, myFleetPositions)
       }
       else if (canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y])) { //Buraya toFleetPosition ın, kendi fleetine ait olup olmadgını check etmek lazım
-        await FleetMoveEvent(setIsFleetMoveStage, fromFleetPositionRef, toFleetPositionRef, isFleetMoveStage, fromFleetPosition, setFromFleetPosition, components, movingFleetId, systemCalls, setErrorMessage, setErrorTitle, setShowError);
+        await FleetMoveEvent(setIsFleetMoveStage, setSeaMineStage, setIsFleetAttackStage, fromFleetPositionRef, toFleetPositionRef, isFleetMoveStage, fromFleetPosition, setFromFleetPosition, components, movingFleetId, systemCalls, setErrorMessage, setErrorTitle, setShowError);
       }
     }
     else {
       setIsFleetMoveStage(false)
+      setSeaMineStage(false)
+      setIsFleetAttackStage(false)
       setFromFleetPosition(undefined);
       toFleetPositionRef.current = { x: -1, y: -1 };
       fromFleetPositionRef.current = { x: "-1", y: "-1" };
@@ -224,13 +235,12 @@ export const Terrain = (props: DataProp) => {
       fromArmyPositionRef.current = { x: fromArmyPosition.x, y: fromArmyPosition.y, };
 
       if (isEnemyArmy(toArmyPositionRef.current, armyPositions, myArmyPosition)) {
-        console.log("Buraya geldi")
         ArmyAttackEvent(setIsArmyMoveStage, setIsMineStage, setDockSettleStage, setDockCaptureStage, setFromArmyPosition, setAttackFromArmyPositionToArmy, setAttackToArmyPositionToArmy, fromArmyPositionRef, toArmyPositionRef, setMyArmyConfig, setEnemyArmyConfig, myArmyPosition, armyPositions);
       }
       else if (isEnemyCastle(toArmyPositionRef.current, myCastlePosition, castlePositions)) {
         CastleAttackEvent(setIsArmyMoveStage, setIsMineStage, setDockSettleStage, setDockCaptureStage, setFromArmyPosition, setAttackFromArmyPositionToCastle, setAttackToArmyPositionToCastle, fromArmyPositionRef, toArmyPositionRef, setMyArmyConfig, myArmyPosition)
       }
-      else if (isUserClickedMine(toArmyPositionRef.current.x, toArmyPositionRef.current.y, resources)) {
+      else if (isUserClickedMine(toArmyPositionRef.current.x, toArmyPositionRef.current.y, resources) && canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y])) {
         MineCaptureEvent(setIsArmyMoveStage, setIsAttackStage, setDockSettleStage, setFromArmyPosition, setAttackerArmyPosition, fromArmyPositionRef, setTargetMinePosition, toArmyPositionRef, setMyArmyConfig, myArmyPosition);
       }
       else if (isEnemyDock(toArmyPositionRef.current, dockPositions, myDockPositions)) {
@@ -256,7 +266,7 @@ export const Terrain = (props: DataProp) => {
   };
 
   CastleEffects(myCastlePosition, setIsCastleSettled, castlePositions, isCastleSettled);
-  ResourceEffects(myResourcePositions, resources, isMineStage, fromArmyPosition);
+  ResourceEffects(fromFleetPosition, seaMineStage, myResourcePositions, resources, isMineStage, fromArmyPosition);
   ArmyEffects(castlePositions, isArmySettleStage, armyPositions, myArmyPosition, setNumberOfArmy, myArmyPosition.length, resources);
   AttackEffects(myFleetPositions, fleetPositions, fromFleetPosition, isFleetAttackStage, myCastlePosition, castlePositions, armyPositions, myArmyPosition, isAttackStage, fromArmyPosition);
   HoverEffects(dockPositions, fromFleetPosition, isFleetMoveStage, armyPositions, resources, numberOfArmy, isArmySettleStage, props.isBorder, castlePositions, myCastlePosition, values, fromArmyPosition, isArmyMoveStage);
