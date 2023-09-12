@@ -92,40 +92,16 @@ contract AttackCaptureSystem is System {
     }
   }
 
-  function takeOwnershipOfMines(
-    address user,
-    MineType mineType,
-    uint256 gameID
-  ) internal {
-    bytes32[] memory castleOwnerMines = LibQueries.getMines(IStore(_world()), user, gameID, mineType);
-    for (uint i = 0; i < castleOwnerMines.length; i++) {
-      ResourceOwnable.setOwner(castleOwnerMines[i], address(0));
-      ColorOwnable.setColorIndex(castleOwnerMines[i], 0);
-    }
-  }
-
-  function takeOwnershipOfDocks(
-    address user,
-    uint256 gameID,
-    address getter
-  ) internal {
-    bytes32[] memory castleOwnerDocks = LibQueries.getDocks(IStore(_world()), user, gameID);
-    for (uint i = 0; i < castleOwnerDocks.length; i++) {
-      DockOwnable.setOwner(castleOwnerDocks[i], address(0));
-      ColorOwnable.setColorIndex(castleOwnerDocks[i], 0);
-    }
-  }
-
   function removeUser(address castleOwner, uint256 gameID) internal {
     bytes32[] memory castleOwnerArmies = LibQueries.getOwnedArmyIDs(IStore(_world()), castleOwner, gameID);
 
     for (uint i = 0; i < castleOwnerArmies.length; i++) {
       LibUtils.deleteArmy(castleOwnerArmies[i]);
     }
-    takeOwnershipOfMines(castleOwner, MineType.Food, gameID);
-    takeOwnershipOfMines(castleOwner, MineType.Wood, gameID);
-    takeOwnershipOfMines(castleOwner, MineType.Gold, gameID);
-    takeOwnershipOfDocks(castleOwner, gameID, castleOwner);
+    LibUtils.takeOwnershipOfMines(IStore(_world()), castleOwner, MineType.Food, gameID);
+    LibUtils.takeOwnershipOfMines(IStore(_world()), castleOwner, MineType.Wood, gameID);
+    LibUtils.takeOwnershipOfMines(IStore(_world()), castleOwner, MineType.Gold, gameID);
+    LibUtils.takeOwnershipOfDocks(IStore(_world()), castleOwner, gameID, castleOwner);
     NumberOfUsers.set(gameID, NumberOfUsers.get(gameID) - 1);
     Players.set(gameID, castleOwner, false);
     AddressToUsername.deleteRecord(castleOwner, gameID);
@@ -171,31 +147,9 @@ contract AttackCaptureSystem is System {
       if (!LibQueries.queryAddressHasCastle(IStore(_world()), castleOwner, gameID)) {
         removeUser(castleOwner, gameID);
       }
-
-      ClashResult.emitEphemeral(
-        keccak256(abi.encodePacked(block.timestamp, armyID, castleID, gameID)),
-        armyOwner,
-        castleOwner,
-        false,
-        ClashType.Castle
-      );
-    } else if (result == 0) {
-      ClashResult.emitEphemeral(
-        keccak256(abi.encodePacked(block.timestamp, armyID, castleID, gameID)),
-        armyOwner,
-        castleOwner,
-        true,
-        ClashType.Castle
-      );
-    } else {
-      ClashResult.emitEphemeral(
-        keccak256(abi.encodePacked(block.timestamp, armyID, castleID, gameID)),
-        castleOwner,
-        armyOwner,
-        false,
-        ClashType.Castle
-      );
     }
+
+    LibUtils.emitClashTableEvent(uint8(result), armyID, castleID, gameID, armyOwner, castleOwner, ClashType.Castle);
   }
 
   function attackFleet(

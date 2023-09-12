@@ -105,15 +105,4 @@ contract EconomySystem is System {
 
     collectResource(gameID);
   }
-
-  // Functions for test purposes
-  // @dev They should not be used in production!!.
-
-  /*function economyIncreaseResource(address user, uint256 gameID) public {
-    ResourceOwn.set(user, gameID, ResourceOwnData(100000, 100000, 100000));
-  }
-
-  function economyIncreaseCredit(address user, uint256 gameID) public {
-    CreditOwn.set(gameID, user, 100000 * 1e18);
-  }*/
 }

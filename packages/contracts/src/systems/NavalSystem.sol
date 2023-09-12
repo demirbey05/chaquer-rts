@@ -155,7 +155,7 @@ contract NavalSystem is System {
     ) {
       revert FleetSettle__TooManyFleet();
     }
-    bytes32 entityID = keccak256(abi.encodePacked(x, y, "Fleet", ownerCandidate, fleet.gameID));
+    bytes32 entityID = keccak256(abi.encodePacked(x, y, "Fleet", ownerCandidate, fleet.gameID, block.timestamp));
     Position.set(entityID, x, y, fleet.gameID);
     FleetConfig.set(entityID, fleet);
     FleetOwnable.set(entityID, ownerCandidate, fleet.gameID);

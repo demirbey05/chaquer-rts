@@ -89,7 +89,7 @@ contract MapSystem is System {
       revert CastleSettle__NoCastleRight();
     }
 
-    bytes32 entityID = keccak256(abi.encodePacked(x, y, "Castle", ownerCandidate, gameID));
+    bytes32 entityID = keccak256(abi.encodePacked(x, y, "Castle", ownerCandidate, gameID, block.timestamp));
 
     Position.set(entityID, x, y, gameID);
     CastleOwnable.set(entityID, ownerCandidate, gameID);
@@ -186,7 +186,7 @@ contract MapSystem is System {
     // Economy System Integration
     handleEconomyCheck(IWorld(_world()), ownerCandidate, config);
 
-    bytes32 entityID = keccak256(abi.encodePacked(x, y, "Army", ownerCandidate, config.gameID));
+    bytes32 entityID = keccak256(abi.encodePacked(x, y, "Army", ownerCandidate, config.gameID, block.timestamp));
 
     Position.set(entityID, x, y, config.gameID);
     ArmyOwnable.set(entityID, ownerCandidate, config.gameID);

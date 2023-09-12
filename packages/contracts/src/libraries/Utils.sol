@@ -233,4 +233,30 @@ library LibUtils {
     }
     emitClashTableEvent(result, attackerID, mineID, gameID, attackerOwner, mineOwner, ClashType.Mine);
   }
+
+  function takeOwnershipOfMines(
+    IStore world,
+    address user,
+    MineType mineType,
+    uint256 gameID
+  ) internal {
+    bytes32[] memory castleOwnerMines = LibQueries.getMines(world, user, gameID, mineType);
+    for (uint i = 0; i < castleOwnerMines.length; i++) {
+      ResourceOwnable.setOwner(castleOwnerMines[i], address(0));
+      ColorOwnable.setColorIndex(castleOwnerMines[i], 0);
+    }
+  }
+
+  function takeOwnershipOfDocks(
+    IStore world,
+    address user,
+    uint256 gameID,
+    address getter
+  ) internal {
+    bytes32[] memory castleOwnerDocks = LibQueries.getDocks(world, user, gameID);
+    for (uint i = 0; i < castleOwnerDocks.length; i++) {
+      DockOwnable.setOwner(castleOwnerDocks[i], address(0));
+      ColorOwnable.setColorIndex(castleOwnerDocks[i], 0);
+    }
+  }
 }
