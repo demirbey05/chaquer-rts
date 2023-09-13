@@ -241,10 +241,10 @@ export const Terrain = (props: DataProp) => {
         CastleAttackEvent(setIsArmyMoveStage, setIsMineStage, setDockSettleStage, setDockCaptureStage, setFromArmyPosition, setAttackFromArmyPositionToCastle, setAttackToArmyPositionToCastle, fromArmyPositionRef, toArmyPositionRef, setMyArmyConfig, myArmyPosition)
       }
       else if (isUserClickedMine(toArmyPositionRef.current.x, toArmyPositionRef.current.y, resources) && canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y])) {
-        MineCaptureEvent(setIsArmyMoveStage, setIsAttackStage, setDockSettleStage, setFromArmyPosition, setAttackerArmyPosition, fromArmyPositionRef, setTargetMinePosition, toArmyPositionRef, setMyArmyConfig, myArmyPosition);
+        MineCaptureEvent(setIsArmyMoveStage, setIsAttackStage, setDockSettleStage, setDockCaptureStage, setFromArmyPosition, setAttackerArmyPosition, fromArmyPositionRef, setTargetMinePosition, toArmyPositionRef, setMyArmyConfig, myArmyPosition);
       }
       else if (isEnemyDock(toArmyPositionRef.current, dockPositions, myDockPositions)) {
-        DockCaptureEvent(setIsArmyMoveStage, setIsAttackStage, setDockSettleStage, setFromArmyPosition, setDockAttackerArmyPosition, fromArmyPositionRef, setTargetDockPosition, toArmyPositionRef, setMyArmyConfig, myArmyPosition)
+        DockCaptureEvent(setIsArmyMoveStage, setIsAttackStage, setDockSettleStage, setIsMineStage, setFromArmyPosition, setDockAttackerArmyPosition, fromArmyPositionRef, setTargetDockPosition, toArmyPositionRef, setMyArmyConfig, myArmyPosition)
       }
       else if (isPositionNextToSea(toArmyPositionRef.current.x, toArmyPositionRef.current.y, values) && isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition)) {
         DockSettleEvent(setIsMineStage, setIsAttackStage, setIsArmyMoveStage, setDockCaptureStage, setFromArmyPosition, setArmyPositionToSettleDock, fromArmyPositionRef, setDockPosition, toArmyPositionRef);
@@ -266,10 +266,10 @@ export const Terrain = (props: DataProp) => {
   };
 
   CastleEffects(myCastlePosition, setIsCastleSettled, castlePositions, isCastleSettled);
-  ResourceEffects(fromFleetPosition, seaMineStage, myResourcePositions, resources, isMineStage, fromArmyPosition);
-  ArmyEffects(castlePositions, isArmySettleStage, armyPositions, myArmyPosition, setNumberOfArmy, myArmyPosition.length, resources);
-  AttackEffects(myFleetPositions, fleetPositions, fromFleetPosition, isFleetAttackStage, myCastlePosition, castlePositions, armyPositions, myArmyPosition, isAttackStage, fromArmyPosition);
-  HoverEffects(dockPositions, fromFleetPosition, isFleetMoveStage, armyPositions, resources, numberOfArmy, isArmySettleStage, props.isBorder, castlePositions, myCastlePosition, values, fromArmyPosition, isArmyMoveStage);
+  ResourceEffects(values, fromFleetPosition, seaMineStage, myResourcePositions, resources, isMineStage, fromArmyPosition);
+  ArmyEffects(dockPositions, castlePositions, isArmySettleStage, armyPositions, myArmyPosition, setNumberOfArmy, myArmyPosition.length, resources);
+  AttackEffects(myResourcePositions, myFleetPositions, fleetPositions, fromFleetPosition, isFleetAttackStage, myCastlePosition, castlePositions, armyPositions, myArmyPosition, isAttackStage, fromArmyPosition);
+  HoverEffects(myFleetPositions, myDockPositions, myResourcePositions, myArmyPosition, dockPositions, fromFleetPosition, isFleetMoveStage, armyPositions, resources, numberOfArmy, isArmySettleStage, props.isBorder, castlePositions, myCastlePosition, values, fromArmyPosition, isArmyMoveStage);
   DockEffects(castlePositions, resources, myArmyPosition, armyPositions, dockPositions, myDockPositions, values, dockSettleStage, dockCaptureStage, rows, columns, fromArmyPosition);
   FleetEffects(myFleetPositions, fleetPositions, fleetSettleStage, myDockPositions, props.isBorder, values);
 

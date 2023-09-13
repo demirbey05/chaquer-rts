@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { colorPath } from "../../../utils/constants/constants";
 
-export const ArmyEffects = (castlePositions: any[], isArmySettleStage: boolean | undefined, armyPositions: any[], myArmyPosition: any[], setNumberOfArmy: any, myArmyNumber: any, resources: any[]) => {
+export const ArmyEffects = (dockPositions: any[], castlePositions: any[], isArmySettleStage: boolean | undefined, armyPositions: any[], myArmyPosition: any[], setNumberOfArmy: any, myArmyNumber: any, resources: any[]) => {
     //Makes castle, army and resource positions unClickable to not cause bug during army settlement
     useEffect(() => {
         if (castlePositions && isArmySettleStage) {
@@ -24,7 +24,14 @@ export const ArmyEffects = (castlePositions: any[], isArmySettleStage: boolean |
                 document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-target", "");
             });
         }
-    }, [isArmySettleStage, castlePositions, armyPositions, resources]);
+
+        if (dockPositions && isArmySettleStage) {
+            dockPositions.map((data) => {
+                document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.setAttribute("data-bs-toggle", "");
+                document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.setAttribute("data-bs-target", "");
+            });
+        }
+    }, [isArmySettleStage, castlePositions, armyPositions, resources, dockPositions]);
 
     // Deploy army emojis to position. Add border for user's army.
     useEffect(() => {

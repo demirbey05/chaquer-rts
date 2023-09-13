@@ -1,9 +1,10 @@
 import { useEffect } from "react"
 import { colorPath } from "../../../utils/constants/constants";
+import { canCastleBeSettle } from "../../../utils/helperFunctions/CastleFunctions/canCastleBeSettle";
 import { isManhattanPosition } from "../../../utils/helperFunctions/CustomFunctions/isManhattanPosition";
 import { isMyResource } from "../../../utils/helperFunctions/ResourceFuntions/isMyResource";
 
-export const ResourceEffects = (fromFleetPosition: any, seaMineStage: boolean, myResourcePositions: any[], resources: any[], isMineStage: boolean | undefined, fromArmyPosition: { x: any, y: any } | undefined) => {
+export const ResourceEffects = (values: number[][], fromFleetPosition: any, seaMineStage: boolean, myResourcePositions: any[], resources: any[], isMineStage: boolean | undefined, fromArmyPosition: { x: any, y: any } | undefined) => {
     // Deploy resource emojis
     useEffect(() => {
         if (myResourcePositions) {
@@ -56,9 +57,11 @@ export const ResourceEffects = (fromFleetPosition: any, seaMineStage: boolean, m
             resources.map((data: any) => {
                 isManhattanPosition(data.positions, fromArmyPosition.x, fromArmyPosition.y) &&
                     !isMyResource(data.positions.x, data.positions.y, myResourcePositions) &&
+                    canCastleBeSettle(values[data.positions.x][data.positions.y]) &&
                     document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
                 isManhattanPosition(data.positions, fromArmyPosition.x, fromArmyPosition.y) &&
                     !isMyResource(data.positions.x, data.positions.y, myResourcePositions) &&
+                    canCastleBeSettle(values[data.positions.x][data.positions.y]) &&
                     document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-target", "#mineCaptureDrawer");
             });
         }

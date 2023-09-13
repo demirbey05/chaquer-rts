@@ -9,8 +9,12 @@ import { canFleetBeSettled } from '../../../utils/helperFunctions/SeaFunctions/c
 import { isMyCastle } from '../../../utils/helperFunctions/CastleFunctions/isMyCastle';
 import { isDockPosition } from '../../../utils/helperFunctions/SeaFunctions/isDockPosition';
 import { isEnemyCastle } from '../../../utils/helperFunctions/CastleFunctions/isEnemyCastle';
+import { isMyArmy } from '../../../utils/helperFunctions/ArmyFunctions/isMyArmy';
+import { isMyResource } from '../../../utils/helperFunctions/ResourceFuntions/isMyResource';
+import { isMyDock } from '../../../utils/helperFunctions/SeaFunctions/isMyDock';
+import { isMyFleet } from '../../../utils/helperFunctions/SeaFunctions/isMyFleet';
 
-export const HoverEffects = (dockPositions: any[], fromFleetPosition: any, isFleetMoveStage: boolean, armyPositions: any[], resources: any[], numberOfArmy: any, isArmySettleStage: boolean | undefined, isBorder: boolean, castlePositions: any[], myCastlePosition: any[], values: number[][], fromArmyPosition: { x: any, y: any } | undefined, isArmyMoveStage: boolean | undefined) => {
+export const HoverEffects = (myFleetPositions: any[] | undefined, myDockPositions: any[], myResourcePositions: any[], myArmyPosition: any[], dockPositions: any[], fromFleetPosition: any, isFleetMoveStage: boolean, armyPositions: any[], resources: any[], numberOfArmy: any, isArmySettleStage: boolean | undefined, isBorder: boolean, castlePositions: any[], myCastlePosition: any[], values: number[][], fromArmyPosition: { x: any, y: any } | undefined, isArmyMoveStage: boolean | undefined) => {
     //Blue hover effect when user moves an army
     useEffect(() => {
         if (fromArmyPosition && isArmyMoveStage && myCastlePosition) {
@@ -21,6 +25,9 @@ export const HoverEffects = (dockPositions: any[], fromFleetPosition: any, isFle
                 if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
                     canCastleBeSettle(values[data.x][data.y]) &&
                         !isMyCastle(myCastlePosition, data.x, data.y) &&
+                        !isMyArmy({ x: data.x, y: data.y }, myArmyPosition) &&
+                        !isMyResource(data.x, data.y, myResourcePositions) &&
+                        !isMyDock(data.x, data.y, myDockPositions) &&
                         !isBorder &&
                         document.getElementById(`${data.y},${data.x}`)?.classList.add("blueTileEffect");
 
@@ -107,6 +114,8 @@ export const HoverEffects = (dockPositions: any[], fromFleetPosition: any, isFle
             }).map((data) => {
                 if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
                     canFleetBeSettled(values[data.x][data.y]) &&
+                        !isMyFleet({ x: data.x, y: data.y }, myFleetPositions) &&
+                        !isMyResource(data.x, data.y, myResourcePositions) &&
                         !isBorder &&
                         document.getElementById(`${data.y},${data.x}`)?.classList.add("yellowTileEffect");
                 }
