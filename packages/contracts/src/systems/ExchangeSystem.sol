@@ -66,7 +66,7 @@ contract ExchangeSystem is System {
         revert EconomySystem__InsufficientSupply();
       }
       ResourceOwn.setNumOfFood(owner, gameID, resources.numOfFood + amount);
-      CreditOwn.set(gameID, owner, CreditOwn.get(gameID, owner) - cost);
+      CreditOwn.set(gameID, owner, balance - cost);
       ResourcesSold.setFoodSold(gameID, ResourcesSold.getFoodSold(gameID) - amount);
     } else if (mineType == MineType.Wood) {
       uint256 price = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Wood, block.number - startBlock);
@@ -78,7 +78,7 @@ contract ExchangeSystem is System {
         revert EconomySystem__InsufficientSupply();
       }
       ResourceOwn.setNumOfWood(owner, gameID, resources.numOfWood + amount);
-      CreditOwn.set(gameID, owner, CreditOwn.get(gameID, owner) - cost);
+      CreditOwn.set(gameID, owner, balance - cost);
       ResourcesSold.setWoodSold(gameID, ResourcesSold.getWoodSold(gameID) - amount);
     } else if (mineType == MineType.Gold) {
       uint256 price = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Gold, block.number - startBlock);
@@ -90,7 +90,7 @@ contract ExchangeSystem is System {
         revert EconomySystem__InsufficientSupply();
       }
       ResourceOwn.setNumOfGold(owner, gameID, resources.numOfGold + amount);
-      CreditOwn.set(gameID, owner, CreditOwn.get(gameID, owner) - cost);
+      CreditOwn.set(gameID, owner, balance - cost);
       ResourcesSold.setGoldSold(gameID, ResourcesSold.getGoldSold(gameID) - amount);
     }
   }

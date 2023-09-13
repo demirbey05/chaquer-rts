@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 import { ArmyConfigData, ArmyConfig, ArmyOwnable, CastleOwnable, Position } from "../codegen/Tables.sol";
 import { BattleResult, BattleScore, RemainingData } from "./Types.sol";
-import { findRemainings, calculateScoreSingleRemaining, calculateScoreDoubleRemaining, calculateArmyScore } from "./Utils.sol";
+import { findRemainings, calculateScoreSingleRemaining, calculateScoreDoubleRemaining, calculateArmyScore, LibUtils } from "./Utils.sol";
 
 library LibAttack {
   function firstBattle(ArmyConfigData memory armyOne, ArmyConfigData memory armyTwo)
@@ -50,9 +50,7 @@ library LibAttack {
         if (defenderArmies[i] == bytes32(0)) {
           continue;
         }
-        ArmyConfig.deleteRecord(defenderArmies[i]);
-        Position.deleteRecord(defenderArmies[i]);
-        ArmyOwnable.deleteRecord(defenderArmies[i]);
+        LibUtils.deleteArmy(defenderArmies[i]);
         isFighted = true;
       }
 
@@ -65,17 +63,13 @@ library LibAttack {
           ArmyConfigData memory newConfig = ArmyConfigData(newSwordsman, newArcher, newCavalry, attackerArmy.gameID);
           ArmyConfig.set(attackerArmyID, newConfig);
         } else {
-          ArmyConfig.deleteRecord(attackerArmyID);
-          Position.deleteRecord(attackerArmyID);
-          ArmyOwnable.deleteRecord(attackerArmyID);
+          LibUtils.deleteArmy(attackerArmyID);
         }
       }
 
       return 1;
     } else if (battleScore.scoreArmyOne < battleScore.scoreArmyTwo) {
-      ArmyOwnable.deleteRecord(attackerArmyID);
-      ArmyConfig.deleteRecord(attackerArmyID);
-      Position.deleteRecord(attackerArmyID);
+      LibUtils.deleteArmy(attackerArmyID);
       ArmyConfigData memory currentArmy;
       for (uint i = 0; i < defenderArmies.length; i++) {
         currentArmy = ArmyConfig.get(defenderArmies[i]);
@@ -89,13 +83,9 @@ library LibAttack {
       }
       return 2;
     } else {
-      ArmyOwnable.deleteRecord(attackerArmyID);
-      ArmyConfig.deleteRecord(attackerArmyID);
-      Position.deleteRecord(attackerArmyID);
+      LibUtils.deleteArmy(attackerArmyID);
       for (uint i = 0; i < defenderArmies.length; i++) {
-        ArmyOwnable.deleteRecord(defenderArmies[i]);
-        ArmyConfig.deleteRecord(defenderArmies[i]);
-        Position.deleteRecord(defenderArmies[i]);
+        LibUtils.deleteArmy(defenderArmies[i]);
       }
       return 0;
     }
