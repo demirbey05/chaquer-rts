@@ -1,5 +1,4 @@
 import castleSettlementSS from '../../images/tuttorial/castle_settlement_ss.jpg'
-import playerSeedSS from '../../images/tuttorial/player_seed_ss.jpg';
 import initResourceSS from '../../images/tuttorial/init_resource_ss.jpg';
 import gameSS from '../../images/tuttorial/game_ss.jpg';
 import marketSS from '../../images/tuttorial/market_ss.jpg';
@@ -11,16 +10,13 @@ import armyAttackSS from '../../images/tuttorial/army_attack_ss.jpg';
 import castleCaptureSS from '../../images/tuttorial/castle_capture_ss.jpg';
 import warResultSS from '../../images/tuttorial/war_result_ss.jpg';
 
-export const GameTuttorial = () => {
+export const GameTutorial = () => {
     const tuttorial1Description = "When you arrived to game page, you need first settle your castle position." +
         " Castle position is important for your attack and defence strategies." +
         " By using your castle position, you will be able to deploy your armies." +
         " To settle your castle, choose your position and click the tile." +
         " Then confirm your castle settlement." +
         " Also do not forget, you cannot deploy castle in the mountain and the sea areas."
-
-    const tuttorial2Description = "In player seed stage, we want players to enter number between 1-100." +
-        " With seed numbers, we improve your game experience by randomizing resource position.";
 
     const tuttorial3Description = "When every player enters the player seed, you pass to resource initalize stage." +
         " One of the player in the game must click to Resource Initalize button to deploy resource positions." +
@@ -73,37 +69,36 @@ export const GameTuttorial = () => {
 
     return (
         <>
-            <TuttorialModal id={1} title={"Castle Settlement"} description={tuttorial1Description} imageSource={castleSettlementSS} />
-            <TuttorialModal id={2} title={"Player Seed"} description={tuttorial2Description} imageSource={playerSeedSS} />
-            <TuttorialModal id={3} title={"Init Resources"} description={tuttorial3Description} imageSource={initResourceSS} />
-            <TuttorialModal id={4} title={"Game Page"} description={tuttorial4Description} imageSource={gameSS} />
-            <TuttorialModal id={5} title={"Market"} description={tuttorial5Description} imageSource={marketSS} />
-            <TuttorialModal id={6} title={"Army Settlement"} description={tuttorial6Description} imageSource={armySettleSS} />
-            <TuttorialModal id={7} title={"Army Settlement - 2"} description={tuttorial7Description} imageSource={armySettleModalSS} />
-            <TuttorialModal id={8} title={"Army Move"} description={tuttorial8Description} imageSource={armyMoveSS} />
-            <TuttorialModal id={9} title={"Army Info"} description={tuttorial9Description} imageSource={armyInfoSS} />
-            <TuttorialModal id={10} title={"Army Attack"} description={tuttorial10Description} imageSource={armyAttackSS} />
-            <TuttorialModal id={11} title={"Castle and Resource Capture"} description={tuttorial11Description} imageSource={castleCaptureSS} />
-            <TuttorialModal id={12} title={"War Result"} description={tuttorial12Description} imageSource={warResultSS} />
+            <TutorialModal id={1} title={"Castle Settlement"} description={tuttorial1Description} imageSource={castleSettlementSS} />
+            <TutorialModal id={2} title={"Init Resources"} description={tuttorial3Description} imageSource={initResourceSS} />
+            <TutorialModal id={3} title={"Game Page"} description={tuttorial4Description} imageSource={gameSS} />
+            <TutorialModal id={4} title={"Market"} description={tuttorial5Description} imageSource={marketSS} />
+            <TutorialModal id={5} title={"Army Settlement"} description={tuttorial6Description} imageSource={armySettleSS} />
+            <TutorialModal id={6} title={"Army Settlement - 2"} description={tuttorial7Description} imageSource={armySettleModalSS} />
+            <TutorialModal id={7} title={"Army Move"} description={tuttorial8Description} imageSource={armyMoveSS} />
+            <TutorialModal id={8} title={"Army Info"} description={tuttorial9Description} imageSource={armyInfoSS} />
+            <TutorialModal id={9} title={"Army Attack"} description={tuttorial10Description} imageSource={armyAttackSS} />
+            <TutorialModal id={10} title={"Castle and Resource Capture"} description={tuttorial11Description} imageSource={castleCaptureSS} />
+            <TutorialModal id={11} title={"War Result"} description={tuttorial12Description} imageSource={warResultSS} />
         </>
     )
 }
 
-interface TuttorialModalPropTypes {
+interface TutorialModalPropTypes {
     id: number,
     title: string,
     description: string,
     imageSource: string
 }
 
-const TuttorialModal = (props: TuttorialModalPropTypes) => {
+const TutorialModal = (props: TutorialModalPropTypes) => {
     return (
         <>
-            <div className="modal fade" id={`tuttorialModal${props.id}`} aria-hidden="true" aria-labelledby={`tuttorialModal${props.id}Label`} tabIndex={-1}>
+            <div className="modal fade" id={`tutorialModal${props.id}`} aria-hidden="true" aria-labelledby={`tutorialModal${props.id}Label`} tabIndex={-1}>
                 <div className="modal-dialog modal-dialog-centered modal-xl">
                     <div className="modal-content bg-dark text-white">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id={`tuttorialModal${props.id}Label`}>Game Tuttorial - {props.title}</h1>
+                            <h1 className="modal-title fs-5" id={`tutorialModal${props.id}Label`}>Game Tutorial - {props.title}</h1>
                         </div>
                         <div className="modal-body">
                             <div className="container">
@@ -118,8 +113,8 @@ const TuttorialModal = (props: TuttorialModalPropTypes) => {
                             </div>
                         </div>
                         <div className="modal-footer">
-                            {props.id !== 1 && <button className="btn btn-primary w-25" data-bs-target={`#tuttorialModal${props.id - 1}`} data-bs-toggle="modal">Previous Page</button>}
-                            <button className="btn btn-primary w-25" data-bs-dismiss={props.id === 12 && "modal"} data-bs-target={props.id !== 12 && `#tuttorialModal${props.id + 1}`} data-bs-toggle={props.id !== 12 && "modal"}>{props.id !== 12 ? "Next Page" : "End Tuttorial"}</button>
+                            {props.id !== 1 && <button className="btn btn-primary w-25" data-bs-target={`#tutorialModal${props.id - 1}`} data-bs-toggle="modal">Previous Page</button>}
+                            <button className="btn btn-primary w-25" data-bs-dismiss={props.id === 12 && "modal"} data-bs-target={props.id !== 12 && `#tutorialModal${props.id + 1}`} data-bs-toggle={props.id !== 12 && "modal"}>{props.id !== 12 ? "Next Page" : "End Tutorial"}</button>
                         </div>
                     </div>
                 </div>

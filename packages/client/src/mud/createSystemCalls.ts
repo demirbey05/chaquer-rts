@@ -332,6 +332,25 @@ export function createSystemCalls(
     }
   };
 
+  const buyResource = async (
+    gameID: number,
+    amount: number,
+    mineType: number
+  ) => {
+    try {
+      const tx = await worldContract.write.buyResource([
+        BigInt(gameID),
+        BigInt(amount),
+        mineType,
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
   return {
     initMapDataSystem,
     settleCastle,
@@ -352,5 +371,6 @@ export function createSystemCalls(
     settleFleet,
     moveFleet,
     attackFleet,
+    buyResource,
   };
 }

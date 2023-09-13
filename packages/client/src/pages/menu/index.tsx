@@ -6,7 +6,7 @@ import { Terrain } from "../../components/TerrainComp/Terrain";
 import { TerrainSpinner } from "../../components/TerrainComp/TerrainSpinner";
 import { TerrainTypeInfoModal } from "../../components/TerrainComp/TerrainTypeInfoModal";
 import { UserNameModal } from '../../components/PlayerComp/UserNameModal';
-import { GameTuttorial } from "../../components/TipsComp/GameTuttorial";
+import { GameTutorial } from "../../components/TipsComp/GameTutorial";
 import { generatePerlinValues } from "../../terrain-helper/utils";
 import { useMUD } from "../../context/MUDContext";
 import { useTerrain } from "../../context/TerrainContext.js"
@@ -73,7 +73,7 @@ export const Menu = () => {
           {refresh !== 0 && <StartGameButton gameState={gameState} isLoading={isLoading} handleTerrain={handleTerrain} />}
           <RegenerateButton isLoading={isLoading} refresh={refresh} handleRefresh={handleRefresh} />
           {refresh !== 0 && (
-            <GameTuttorialButton />
+            <GameTutorialButton />
           )}
           {refresh !== 0 && (
             <div className="text-center mt-2 mb-2">
@@ -83,7 +83,7 @@ export const Menu = () => {
         </div>
       </div>
       <UserNameModal />
-      <GameTuttorial />
+      <GameTutorial />
     </div >
   );
 }
@@ -170,18 +170,18 @@ const RegenerateButton = (props: RegenerateButtonPropTypes) => {
   )
 }
 
-const GameTuttorialButton = () => {
+const GameTutorialButton = () => {
   return (
     <div className="text-center mt-2 mb-2">
       <Button
         data-bs-toggle="modal"
-        data-bs-target="#tuttorialModal1"
+        data-bs-target="#tutorialModal1"
         colorScheme="whiteAlpha"
         textColor="dark"
         p="8"
         width="200px"
       >
-        Game Tuttorial
+        Game Tutorial
       </Button>
     </div>
   )
