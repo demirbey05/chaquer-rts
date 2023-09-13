@@ -78,6 +78,8 @@ error MineCapture__NonMatchedGameID();
 
 error EconomySystem__DifferenceIsLess();
 error EconomySystem__InsufficientSource();
+error EconomySystem__InsufficientCredit();
+error EconomySystem__InsufficientSupply();
 
 //Game System Errors
 

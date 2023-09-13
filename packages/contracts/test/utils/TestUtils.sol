@@ -389,4 +389,16 @@ library TestUtils {
     vm.stopPrank();
     return dockID;
   }
+
+  function buyResource(
+    IWorld world,
+    address user,
+    uint256 gameID,
+    uint256 amount,
+    MineType mineType
+  ) internal {
+    vm.startPrank(user);
+    world.buyResource(gameID, amount, mineType);
+    vm.stopPrank();
+  }
 }

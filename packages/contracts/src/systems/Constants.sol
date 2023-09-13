@@ -17,3 +17,4 @@ uint256 constant armyMoveFoodCost = 30;
 uint256 constant armyMoveGoldCost = 30;
 uint256 constant fleetMoveGoldCost = 50;
 uint256 constant fleetMoveFoodCost = 50;
+uint256 constant initialMarketSupply = 1000;

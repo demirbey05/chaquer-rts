@@ -7,6 +7,7 @@ import { IBaseWorld } from "@latticexyz/world/src/interfaces/IBaseWorld.sol";
 
 import { IAttackCaptureSystem } from "./IAttackCaptureSystem.sol";
 import { IEconomySystem } from "./IEconomySystem.sol";
+import { IExchangeSystem } from "./IExchangeSystem.sol";
 import { IIdentitySystem } from "./IIdentitySystem.sol";
 import { IMapSystem } from "./IMapSystem.sol";
 import { IMineCaptureSystem } from "./IMineCaptureSystem.sol";
@@ -22,6 +23,7 @@ interface IWorld is
   IBaseWorld,
   IAttackCaptureSystem,
   IEconomySystem,
+  IExchangeSystem,
   IIdentitySystem,
   IMapSystem,
   IMineCaptureSystem,
