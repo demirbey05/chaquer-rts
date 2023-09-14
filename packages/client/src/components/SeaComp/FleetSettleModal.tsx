@@ -93,10 +93,10 @@ export const FleetSettleModal = () => {
             else {
                 setIsDisabled(false);
                 setEnoughCredit(true);
-                setEnoughCredit(true);
+                setEnoughWood(true);
             }
         }
-    }, [smallShipCount, mediumShipCount, largeShipCount, myCredit]);
+    }, [smallShipCount, mediumShipCount, largeShipCount, myCredit, myResources]);
 
 
     const handleClick = async () => {

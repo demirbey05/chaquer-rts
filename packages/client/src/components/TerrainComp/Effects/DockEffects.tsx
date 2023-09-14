@@ -1,13 +1,12 @@
 import { useEffect } from "react"
 import { isPositionNextToSea } from "../../../utils/helperFunctions/SeaFunctions/isPositionNextToSea";
-import { isMyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isMyArmy";
 import { isResourcePosition } from "../../../utils/helperFunctions/ResourceFuntions/isResourcePosition";
 import { isCastlePosition } from "../../../utils/helperFunctions/CastleFunctions/isCastlePosition";
 import { isMyDock } from "../../../utils/helperFunctions/SeaFunctions/isMyDock";
 import { isManhattanPosition } from "../../../utils/helperFunctions/CustomFunctions/isManhattanPosition";
 import { colorPath } from "../../../utils/constants/constants";
 import { isArmyPosition } from "../../../utils/helperFunctions/ArmyFunctions/isArmyPosition";
-import { isEnemyDock } from "../../../utils/helperFunctions/SeaFunctions/isEnemyDock";
+import { getNumberOfSoldierInArmy } from "../../../utils/helperFunctions/ArmyFunctions/getNumberOfSoliderInArmy";
 
 export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosition: any[], armyPositions: any[], dockPositions: any[], myDockPositions: any[] | undefined, values: number[][], dockSettleStage: boolean, dockCaptureStage: boolean, rows: number[], columns: number[], fromArmyPosition: any) => {
     /* Deploy dock emojis */
@@ -49,7 +48,7 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
             rows.forEach((row) => {
                 columns.forEach((column) => {
                     const element = document.getElementById(`${column},${row}`);
-                    if (element && isPositionNextToSea(row, column, values) && isManhattanPosition({ x: row, y: column }, fromArmyPosition.x, fromArmyPosition.y)) {
+                    if (element && isPositionNextToSea(row, column, values) && isManhattanPosition({ x: row, y: column }, fromArmyPosition.x, fromArmyPosition.y) && getNumberOfSoldierInArmy(fromArmyPosition, myArmyPosition) >= 20) {
                         const position = { x: row, y: column };
                         const isPositionOccupied = isArmyPosition(position.x, position.y, armyPositions) ||
                             isResourcePosition(position.x, position.y, resources) ||

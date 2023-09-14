@@ -23,6 +23,7 @@ import { useMyDockPositions } from "../../hooks/SeaHooks/useMyDockPositions";
 import { useFleetPositions } from "../../hooks/SeaHooks/useFleetPositions";
 import { useMyFleetPositions } from "../../hooks/SeaHooks/useMyFleetPositions";
 import { Coord } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { getNumberOfSoldierInArmy } from "../../utils/helperFunctions/ArmyFunctions/getNumberOfSoliderInArmy";
 import { getTerrainAsset } from '../../utils/helperFunctions/CustomFunctions/getTerrainAsset';
 import { isMyCastle } from '../../utils/helperFunctions/CastleFunctions/isMyCastle';
 import { isUserClickedManhattanPosition } from '../../utils/helperFunctions/CustomFunctions/isUserClickedManhattanPosition';
@@ -168,7 +169,7 @@ export const Terrain = (props: DataProp) => {
     }
 
     // Toggle orange tiles for fleet settlement
-    if (!isFleetMoveStage && isMyDock(Number(getDataAtrX(e)), Number(getDataAtrY(e)), myDockPositions)) {
+    if (!isArmyMoveStage && !isFleetMoveStage && isMyDock(Number(getDataAtrX(e)), Number(getDataAtrY(e)), myDockPositions)) {
       if (fleetSettleStage) {
         setFleetSettleStage(false);
       }
@@ -246,10 +247,10 @@ export const Terrain = (props: DataProp) => {
       else if (isEnemyDock(toArmyPositionRef.current, dockPositions, myDockPositions)) {
         DockCaptureEvent(setIsArmyMoveStage, setIsAttackStage, setDockSettleStage, setIsMineStage, setFromArmyPosition, setDockAttackerArmyPosition, fromArmyPositionRef, setTargetDockPosition, toArmyPositionRef, setMyArmyConfig, myArmyPosition)
       }
-      else if (isPositionNextToSea(toArmyPositionRef.current.x, toArmyPositionRef.current.y, values) && isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition)) {
+      else if (isPositionNextToSea(toArmyPositionRef.current.x, toArmyPositionRef.current.y, values) && isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition) && getNumberOfSoldierInArmy(fromArmyPositionRef.current, myArmyPosition) >= 20) {
         DockSettleEvent(setIsMineStage, setIsAttackStage, setIsArmyMoveStage, setDockCaptureStage, setFromArmyPosition, setArmyPositionToSettleDock, fromArmyPositionRef, setDockPosition, toArmyPositionRef);
       }
-      else if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y]) && !isMyCastle(myCastlePosition, toArmyPositionRef.current.x, toArmyPositionRef.current.y) && !isMyDock(parseInt(fromArmyPositionRef.current.x), parseInt(fromArmyPositionRef.current.y), myDockPositions)) {
+      else if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y]) && !isMyCastle(myCastlePosition, toArmyPositionRef.current.x, toArmyPositionRef.current.y) && !isMyDock(Number(toArmyPositionRef.current.x), Number(toArmyPositionRef.current.y), myDockPositions)) {
         await ArmyMoveEvent(setIsAttackStage, setIsMineStage, setDockSettleStage, setDockCaptureStage, fromArmyPositionRef, setIsArmyMoveStage, toArmyPositionRef, isArmyMoveStage, fromArmyPosition, setFromArmyPosition, components, movingArmyId, systemCalls, setErrorMessage, setErrorTitle, setShowError);
       }
     }
