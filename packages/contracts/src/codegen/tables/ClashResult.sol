@@ -14,6 +14,7 @@ import { Bytes } from "@latticexyz/store/src/Bytes.sol";
 import { Memory } from "@latticexyz/store/src/Memory.sol";
 import { SliceLib } from "@latticexyz/store/src/Slice.sol";
 import { EncodeArray } from "@latticexyz/store/src/tightcoder/EncodeArray.sol";
+import { FieldLayout, FieldLayoutLib } from "@latticexyz/store/src/FieldLayout.sol";
 import { Schema, SchemaLib } from "@latticexyz/store/src/Schema.sol";
 import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCounter.sol";
 
@@ -31,6 +32,17 @@ struct ClashResultData {
 }
 
 library ClashResult {
+  /** Get the table values' field layout */
+  function getFieldLayout() internal pure returns (FieldLayout) {
+    uint256[] memory _fieldLayout = new uint256[](4);
+    _fieldLayout[0] = 20;
+    _fieldLayout[1] = 20;
+    _fieldLayout[2] = 1;
+    _fieldLayout[3] = 1;
+
+    return FieldLayoutLib.encode(_fieldLayout, 0);
+  }
+
   /** Get the table's key schema */
   function getKeySchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](1);
@@ -65,14 +77,21 @@ library ClashResult {
     fieldNames[3] = "clashType";
   }
 
-  /** Register the table's key schema, value schema, key names and value names */
+  /** Register the table with its config */
   function register() internal {
-    StoreSwitch.registerTable(_tableId, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
+    StoreSwitch.registerTable(
+      _tableId,
+      getFieldLayout(),
+      getKeySchema(),
+      getValueSchema(),
+      getKeyNames(),
+      getFieldNames()
+    );
   }
 
-  /** Register the table's key schema, value schema, key names and value names (using the specified store) */
+  /** Register the table with its config (using the specified store) */
   function register(IStore _store) internal {
-    _store.registerTable(_tableId, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
+    _store.registerTable(_tableId, getFieldLayout(), getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /** Emit the ephemeral event using individual values */
@@ -82,7 +101,7 @@ library ClashResult {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreSwitch.emitEphemeralRecord(_tableId, _keyTuple, _data, getValueSchema());
+    StoreSwitch.emitEphemeralRecord(_tableId, _keyTuple, _data, getFieldLayout());
   }
 
   /** Emit the ephemeral event using individual values (using the specified store) */
@@ -99,7 +118,7 @@ library ClashResult {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    _store.emitEphemeralRecord(_tableId, _keyTuple, _data, getValueSchema());
+    _store.emitEphemeralRecord(_tableId, _keyTuple, _data, getFieldLayout());
   }
 
   /** Emit the ephemeral event using the data struct */
@@ -112,7 +131,7 @@ library ClashResult {
     emitEphemeral(_store, key, _table.winner, _table.loser, _table.isDraw, _table.clashType);
   }
 
-  /** Tightly pack full data using this table's schema */
+  /** Tightly pack full data using this table's field layout */
   function encode(
     address winner,
     address loser,
@@ -122,7 +141,7 @@ library ClashResult {
     return abi.encodePacked(winner, loser, isDraw, clashType);
   }
 
-  /** Encode keys as a bytes32 array using this table's schema */
+  /** Encode keys as a bytes32 array using this table's field layout */
   function encodeKeyTuple(bytes32 key) internal pure returns (bytes32[] memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;

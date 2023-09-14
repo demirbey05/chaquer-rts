@@ -14,6 +14,7 @@ import { Bytes } from "@latticexyz/store/src/Bytes.sol";
 import { Memory } from "@latticexyz/store/src/Memory.sol";
 import { SliceLib } from "@latticexyz/store/src/Slice.sol";
 import { EncodeArray } from "@latticexyz/store/src/tightcoder/EncodeArray.sol";
+import { FieldLayout, FieldLayoutLib } from "@latticexyz/store/src/FieldLayout.sol";
 import { Schema, SchemaLib } from "@latticexyz/store/src/Schema.sol";
 import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCounter.sol";
 
@@ -26,6 +27,14 @@ struct AddressToUsernameData {
 }
 
 library AddressToUsername {
+  /** Get the table values' field layout */
+  function getFieldLayout() internal pure returns (FieldLayout) {
+    uint256[] memory _fieldLayout = new uint256[](1);
+    _fieldLayout[0] = 32;
+
+    return FieldLayoutLib.encode(_fieldLayout, 1);
+  }
+
   /** Get the table's key schema */
   function getKeySchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](2);
@@ -58,14 +67,21 @@ library AddressToUsername {
     fieldNames[1] = "userName";
   }
 
-  /** Register the table's key schema, value schema, key names and value names */
+  /** Register the table with its config */
   function register() internal {
-    StoreSwitch.registerTable(_tableId, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
+    StoreSwitch.registerTable(
+      _tableId,
+      getFieldLayout(),
+      getKeySchema(),
+      getValueSchema(),
+      getKeyNames(),
+      getFieldNames()
+    );
   }
 
-  /** Register the table's key schema, value schema, key names and value names (using the specified store) */
+  /** Register the table with its config (using the specified store) */
   function register(IStore _store) internal {
-    _store.registerTable(_tableId, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
+    _store.registerTable(_tableId, getFieldLayout(), getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /** Get colorIndex */
@@ -74,7 +90,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0, getValueSchema());
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0, getFieldLayout());
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -88,7 +104,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0, getValueSchema());
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0, getFieldLayout());
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -98,7 +114,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((colorIndex)), getValueSchema());
+    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((colorIndex)), getFieldLayout());
   }
 
   /** Set colorIndex (using the specified store) */
@@ -107,7 +123,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((colorIndex)), getValueSchema());
+    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((colorIndex)), getFieldLayout());
   }
 
   /** Get userName */
@@ -116,7 +132,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1, getValueSchema());
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1, getFieldLayout());
     return (string(_blob));
   }
 
@@ -130,7 +146,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1, getValueSchema());
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1, getFieldLayout());
     return (string(_blob));
   }
 
@@ -140,7 +156,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 1, bytes((userName)), getValueSchema());
+    StoreSwitch.setField(_tableId, _keyTuple, 1, bytes((userName)), getFieldLayout());
   }
 
   /** Set userName (using the specified store) */
@@ -149,7 +165,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    _store.setField(_tableId, _keyTuple, 1, bytes((userName)), getValueSchema());
+    _store.setField(_tableId, _keyTuple, 1, bytes((userName)), getFieldLayout());
   }
 
   /** Get the length of userName */
@@ -158,7 +174,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 1, getValueSchema());
+    uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 1, getFieldLayout());
     unchecked {
       return _byteLength / 1;
     }
@@ -170,7 +186,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 1, getValueSchema());
+    uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 1, getFieldLayout());
     unchecked {
       return _byteLength / 1;
     }
@@ -190,7 +206,7 @@ library AddressToUsername {
         _tableId,
         _keyTuple,
         1,
-        getValueSchema(),
+        getFieldLayout(),
         _index * 1,
         (_index + 1) * 1
       );
@@ -213,7 +229,7 @@ library AddressToUsername {
     _keyTuple[1] = bytes32(uint256(gameId));
 
     unchecked {
-      bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 1, getValueSchema(), _index * 1, (_index + 1) * 1);
+      bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 1, getFieldLayout(), _index * 1, (_index + 1) * 1);
       return (string(_blob));
     }
   }
@@ -224,7 +240,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    StoreSwitch.pushToField(_tableId, _keyTuple, 1, bytes((_slice)), getValueSchema());
+    StoreSwitch.pushToField(_tableId, _keyTuple, 1, bytes((_slice)), getFieldLayout());
   }
 
   /** Push a slice to userName (using the specified store) */
@@ -233,7 +249,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    _store.pushToField(_tableId, _keyTuple, 1, bytes((_slice)), getValueSchema());
+    _store.pushToField(_tableId, _keyTuple, 1, bytes((_slice)), getFieldLayout());
   }
 
   /** Pop a slice from userName */
@@ -242,7 +258,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    StoreSwitch.popFromField(_tableId, _keyTuple, 1, 1, getValueSchema());
+    StoreSwitch.popFromField(_tableId, _keyTuple, 1, 1, getFieldLayout());
   }
 
   /** Pop a slice from userName (using the specified store) */
@@ -251,7 +267,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    _store.popFromField(_tableId, _keyTuple, 1, 1, getValueSchema());
+    _store.popFromField(_tableId, _keyTuple, 1, 1, getFieldLayout());
   }
 
   /**
@@ -264,7 +280,7 @@ library AddressToUsername {
     _keyTuple[1] = bytes32(uint256(gameId));
 
     unchecked {
-      StoreSwitch.updateInField(_tableId, _keyTuple, 1, _index * 1, bytes((_slice)), getValueSchema());
+      StoreSwitch.updateInField(_tableId, _keyTuple, 1, _index * 1, bytes((_slice)), getFieldLayout());
     }
   }
 
@@ -284,7 +300,7 @@ library AddressToUsername {
     _keyTuple[1] = bytes32(uint256(gameId));
 
     unchecked {
-      _store.updateInField(_tableId, _keyTuple, 1, _index * 1, bytes((_slice)), getValueSchema());
+      _store.updateInField(_tableId, _keyTuple, 1, _index * 1, bytes((_slice)), getFieldLayout());
     }
   }
 
@@ -294,7 +310,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    bytes memory _blob = StoreSwitch.getRecord(_tableId, _keyTuple, getValueSchema());
+    bytes memory _blob = StoreSwitch.getRecord(_tableId, _keyTuple, getFieldLayout());
     return decode(_blob);
   }
 
@@ -308,7 +324,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    bytes memory _blob = _store.getRecord(_tableId, _keyTuple, getValueSchema());
+    bytes memory _blob = _store.getRecord(_tableId, _keyTuple, getFieldLayout());
     return decode(_blob);
   }
 
@@ -320,7 +336,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    StoreSwitch.setRecord(_tableId, _keyTuple, _data, getValueSchema());
+    StoreSwitch.setRecord(_tableId, _keyTuple, _data, getFieldLayout());
   }
 
   /** Set the full data using individual values (using the specified store) */
@@ -337,7 +353,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    _store.setRecord(_tableId, _keyTuple, _data, getValueSchema());
+    _store.setRecord(_tableId, _keyTuple, _data, getFieldLayout());
   }
 
   /** Set the full data using the data struct */
@@ -351,7 +367,7 @@ library AddressToUsername {
   }
 
   /**
-   * Decode the tightly packed blob using this table's schema.
+   * Decode the tightly packed blob using this table's field layout.
    * Undefined behaviour for invalid blobs.
    */
   function decode(bytes memory _blob) internal pure returns (AddressToUsernameData memory _table) {
@@ -372,7 +388,7 @@ library AddressToUsername {
     }
   }
 
-  /** Tightly pack full data using this table's schema */
+  /** Tightly pack full data using this table's field layout */
   function encode(uint256 colorIndex, string memory userName) internal pure returns (bytes memory) {
     PackedCounter _encodedLengths;
     // Lengths are effectively checked during copy by 2**40 bytes exceeding gas limits
@@ -383,7 +399,7 @@ library AddressToUsername {
     return abi.encodePacked(colorIndex, _encodedLengths.unwrap(), bytes((userName)));
   }
 
-  /** Encode keys as a bytes32 array using this table's schema */
+  /** Encode keys as a bytes32 array using this table's field layout */
   function encodeKeyTuple(address ownerAddress, uint256 gameId) internal pure returns (bytes32[] memory) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
@@ -398,7 +414,7 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    StoreSwitch.deleteRecord(_tableId, _keyTuple, getValueSchema());
+    StoreSwitch.deleteRecord(_tableId, _keyTuple, getFieldLayout());
   }
 
   /* Delete all data for given keys (using the specified store) */
@@ -407,6 +423,6 @@ library AddressToUsername {
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
     _keyTuple[1] = bytes32(uint256(gameId));
 
-    _store.deleteRecord(_tableId, _keyTuple, getValueSchema());
+    _store.deleteRecord(_tableId, _keyTuple, getFieldLayout());
   }
 }

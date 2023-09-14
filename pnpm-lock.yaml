@@ -234,6 +234,9 @@ importers:
       '@ethersproject/providers':
         specifier: ^5.7.2
         version: 5.7.2
+      '@latticexyz/abi-ts':
+        specifier: 2.0.0-main-55377ffe
+        version: 2.0.0-main-55377ffe
       '@latticexyz/cli':
         specifier: 2.0.0-main-c049c23f
         version: 2.0.0-main-c049c23f(google-protobuf@3.21.2)
@@ -3671,6 +3674,16 @@ packages:
       '@jridgewell/resolve-uri': 3.1.0
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
+
+  /@latticexyz/abi-ts@2.0.0-main-55377ffe:
+    resolution: {integrity: sha512-8KnwfJSd3AuGpMyu3SUst3P/vVV5hss2XVQqkrbhLdr77LZ4Hnic9bBqkhh2MOhaVyzS7vZApyTKGDmtx5TnCA==}
+    hasBin: true
+    dependencies:
+      chalk: 5.3.0
+      execa: 7.1.1
+      glob: 8.1.0
+      yargs: 17.7.2
+    dev: false
 
   /@latticexyz/abi-ts@2.0.0-main-c049c23f:
     resolution: {integrity: sha512-wgSq+FvDoy3q98EwxuA0GkoKF5ZCjiLOSKXFJKHq9/A6tI7R3q1F8Ihbs5v/5XmqwbtM2C+p73Gge7zLVFJYyw==}

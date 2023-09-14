@@ -14,6 +14,7 @@ import { Bytes } from "@latticexyz/store/src/Bytes.sol";
 import { Memory } from "@latticexyz/store/src/Memory.sol";
 import { SliceLib } from "@latticexyz/store/src/Slice.sol";
 import { EncodeArray } from "@latticexyz/store/src/tightcoder/EncodeArray.sol";
+import { FieldLayout, FieldLayoutLib } from "@latticexyz/store/src/FieldLayout.sol";
 import { Schema, SchemaLib } from "@latticexyz/store/src/Schema.sol";
 import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCounter.sol";
 
@@ -21,6 +22,15 @@ bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16(""), bytes16("MapCo
 bytes32 constant MapConfigTableId = _tableId;
 
 library MapConfig {
+  /** Get the table values' field layout */
+  function getFieldLayout() internal pure returns (FieldLayout) {
+    uint256[] memory _fieldLayout = new uint256[](2);
+    _fieldLayout[0] = 4;
+    _fieldLayout[1] = 4;
+
+    return FieldLayoutLib.encode(_fieldLayout, 1);
+  }
+
   /** Get the table's key schema */
   function getKeySchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](1);
@@ -53,14 +63,21 @@ library MapConfig {
     fieldNames[2] = "terrain";
   }
 
-  /** Register the table's key schema, value schema, key names and value names */
+  /** Register the table with its config */
   function register() internal {
-    StoreSwitch.registerTable(_tableId, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
+    StoreSwitch.registerTable(
+      _tableId,
+      getFieldLayout(),
+      getKeySchema(),
+      getValueSchema(),
+      getKeyNames(),
+      getFieldNames()
+    );
   }
 
-  /** Register the table's key schema, value schema, key names and value names (using the specified store) */
+  /** Register the table with its config (using the specified store) */
   function register(IStore _store) internal {
-    _store.registerTable(_tableId, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
+    _store.registerTable(_tableId, getFieldLayout(), getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /** Get width */
@@ -68,7 +85,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0, getValueSchema());
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0, getFieldLayout());
     return (uint32(Bytes.slice4(_blob, 0)));
   }
 
@@ -77,7 +94,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0, getValueSchema());
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0, getFieldLayout());
     return (uint32(Bytes.slice4(_blob, 0)));
   }
 
@@ -86,7 +103,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((width)), getValueSchema());
+    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((width)), getFieldLayout());
   }
 
   /** Set width (using the specified store) */
@@ -94,7 +111,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((width)), getValueSchema());
+    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((width)), getFieldLayout());
   }
 
   /** Get height */
@@ -102,7 +119,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1, getValueSchema());
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1, getFieldLayout());
     return (uint32(Bytes.slice4(_blob, 0)));
   }
 
@@ -111,7 +128,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1, getValueSchema());
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1, getFieldLayout());
     return (uint32(Bytes.slice4(_blob, 0)));
   }
 
@@ -120,7 +137,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((height)), getValueSchema());
+    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((height)), getFieldLayout());
   }
 
   /** Set height (using the specified store) */
@@ -128,7 +145,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((height)), getValueSchema());
+    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((height)), getFieldLayout());
   }
 
   /** Get terrain */
@@ -136,7 +153,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2, getValueSchema());
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2, getFieldLayout());
     return (bytes(_blob));
   }
 
@@ -145,7 +162,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 2, getValueSchema());
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 2, getFieldLayout());
     return (bytes(_blob));
   }
 
@@ -154,7 +171,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 2, bytes((terrain)), getValueSchema());
+    StoreSwitch.setField(_tableId, _keyTuple, 2, bytes((terrain)), getFieldLayout());
   }
 
   /** Set terrain (using the specified store) */
@@ -162,7 +179,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    _store.setField(_tableId, _keyTuple, 2, bytes((terrain)), getValueSchema());
+    _store.setField(_tableId, _keyTuple, 2, bytes((terrain)), getFieldLayout());
   }
 
   /** Get the length of terrain */
@@ -170,7 +187,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 2, getValueSchema());
+    uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 2, getFieldLayout());
     unchecked {
       return _byteLength / 1;
     }
@@ -181,7 +198,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 2, getValueSchema());
+    uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 2, getFieldLayout());
     unchecked {
       return _byteLength / 1;
     }
@@ -200,7 +217,7 @@ library MapConfig {
         _tableId,
         _keyTuple,
         2,
-        getValueSchema(),
+        getFieldLayout(),
         _index * 1,
         (_index + 1) * 1
       );
@@ -217,7 +234,7 @@ library MapConfig {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     unchecked {
-      bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 2, getValueSchema(), _index * 1, (_index + 1) * 1);
+      bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 2, getFieldLayout(), _index * 1, (_index + 1) * 1);
       return (bytes(_blob));
     }
   }
@@ -227,7 +244,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreSwitch.pushToField(_tableId, _keyTuple, 2, bytes((_slice)), getValueSchema());
+    StoreSwitch.pushToField(_tableId, _keyTuple, 2, bytes((_slice)), getFieldLayout());
   }
 
   /** Push a slice to terrain (using the specified store) */
@@ -235,7 +252,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    _store.pushToField(_tableId, _keyTuple, 2, bytes((_slice)), getValueSchema());
+    _store.pushToField(_tableId, _keyTuple, 2, bytes((_slice)), getFieldLayout());
   }
 
   /** Pop a slice from terrain */
@@ -243,7 +260,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreSwitch.popFromField(_tableId, _keyTuple, 2, 1, getValueSchema());
+    StoreSwitch.popFromField(_tableId, _keyTuple, 2, 1, getFieldLayout());
   }
 
   /** Pop a slice from terrain (using the specified store) */
@@ -251,7 +268,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    _store.popFromField(_tableId, _keyTuple, 2, 1, getValueSchema());
+    _store.popFromField(_tableId, _keyTuple, 2, 1, getFieldLayout());
   }
 
   /**
@@ -263,7 +280,7 @@ library MapConfig {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     unchecked {
-      StoreSwitch.updateInField(_tableId, _keyTuple, 2, _index * 1, bytes((_slice)), getValueSchema());
+      StoreSwitch.updateInField(_tableId, _keyTuple, 2, _index * 1, bytes((_slice)), getFieldLayout());
     }
   }
 
@@ -276,7 +293,7 @@ library MapConfig {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     unchecked {
-      _store.updateInField(_tableId, _keyTuple, 2, _index * 1, bytes((_slice)), getValueSchema());
+      _store.updateInField(_tableId, _keyTuple, 2, _index * 1, bytes((_slice)), getFieldLayout());
     }
   }
 
@@ -285,7 +302,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes memory _blob = StoreSwitch.getRecord(_tableId, _keyTuple, getValueSchema());
+    bytes memory _blob = StoreSwitch.getRecord(_tableId, _keyTuple, getFieldLayout());
     return decode(_blob);
   }
 
@@ -297,7 +314,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes memory _blob = _store.getRecord(_tableId, _keyTuple, getValueSchema());
+    bytes memory _blob = _store.getRecord(_tableId, _keyTuple, getFieldLayout());
     return decode(_blob);
   }
 
@@ -308,7 +325,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreSwitch.setRecord(_tableId, _keyTuple, _data, getValueSchema());
+    StoreSwitch.setRecord(_tableId, _keyTuple, _data, getFieldLayout());
   }
 
   /** Set the full data using individual values (using the specified store) */
@@ -318,11 +335,11 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    _store.setRecord(_tableId, _keyTuple, _data, getValueSchema());
+    _store.setRecord(_tableId, _keyTuple, _data, getFieldLayout());
   }
 
   /**
-   * Decode the tightly packed blob using this table's schema.
+   * Decode the tightly packed blob using this table's field layout.
    * Undefined behaviour for invalid blobs.
    */
   function decode(bytes memory _blob) internal pure returns (uint32 width, uint32 height, bytes memory terrain) {
@@ -345,7 +362,7 @@ library MapConfig {
     }
   }
 
-  /** Tightly pack full data using this table's schema */
+  /** Tightly pack full data using this table's field layout */
   function encode(uint32 width, uint32 height, bytes memory terrain) internal pure returns (bytes memory) {
     PackedCounter _encodedLengths;
     // Lengths are effectively checked during copy by 2**40 bytes exceeding gas limits
@@ -356,7 +373,7 @@ library MapConfig {
     return abi.encodePacked(width, height, _encodedLengths.unwrap(), bytes((terrain)));
   }
 
-  /** Encode keys as a bytes32 array using this table's schema */
+  /** Encode keys as a bytes32 array using this table's field layout */
   function encodeKeyTuple(uint256 gameID) internal pure returns (bytes32[] memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
@@ -369,7 +386,7 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreSwitch.deleteRecord(_tableId, _keyTuple, getValueSchema());
+    StoreSwitch.deleteRecord(_tableId, _keyTuple, getFieldLayout());
   }
 
   /* Delete all data for given keys (using the specified store) */
@@ -377,6 +394,6 @@ library MapConfig {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    _store.deleteRecord(_tableId, _keyTuple, getValueSchema());
+    _store.deleteRecord(_tableId, _keyTuple, getFieldLayout());
   }
 }
