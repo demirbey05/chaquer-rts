@@ -46,22 +46,6 @@ export default mudConfig({
       },
       dataStruct: false,
     },
-    CastleSiegeResult:{
-      schema:{
-        winner:"address",
-        loser:"address",
-        isDraw:"bool"
-      },
-      ephemeral:true,
-    },
-    BattleResult:{
-      schema:{
-        winner:"address",
-        loser:"address",
-        isDraw:"bool",
-      },
-      ephemeral:true
-    },
     Players:{
       keySchema:{
         gameId:"uint256",
@@ -75,7 +59,16 @@ export default mudConfig({
         gameId:"uint256"
       },
       schema:{
-        seeds:"uint256[]"
+        seeds:"uint256[]",
+      }
+    },
+    SeedInited:{
+      keySchema:{
+        gameId:"uint256",
+        user:"address"
+      },
+      schema:{
+        seedInit:"bool"
       }
     },
     NumberOfUsers:{
@@ -100,7 +93,9 @@ export default mudConfig({
         gameId:"uint256"
       },
       schema:{
-        userName:"string"
+        colorIndex:"uint256",
+        userName:"string",
+        
       }
     },
     ResourceOwnable :{
@@ -118,14 +113,6 @@ export default mudConfig({
         isInited:"bool"
       }
     },
-    MineCaptureResult:{
-      schema:{
-        winner:"address",
-        loser:"address",
-        isDraw:"bool"
-      },
-      ephemeral:true,
-    },
     GameMetaData:{
       keySchema:{
         gameID:"uint256"
@@ -133,7 +120,8 @@ export default mudConfig({
       schema:{
         state:"State",
         startBlock:"uint256",
-        winner:"address"
+        winner:"address",
+        numberOfCastle:"uint256"
       }
     },
     ResourceOwn : {
@@ -205,12 +193,52 @@ export default mudConfig({
         priceArcher:"uint256",
         priceCavalry:"uint256"
       }
+    },
+    DockOwnable: {
+      schema: {
+        owner: "address",
+        gameID: "uint256",
+      },
+      dataStruct: false,
+    },
+    FleetConfig: {
+      schema: {
+        numSmall: "uint32",
+        numMedium: "uint32",
+        numBig: "uint32",
+        gameID: "uint256",
+      },
+      dataStruct: true,
+    },
+    FleetOwnable: {
+      schema: {
+        owner: "address",
+        gameID: "uint256",
+      },
+      dataStruct: false,
+    },
+    ClashResult:{
+      schema:{
+        winner:"address",
+        loser:"address",
+        isDraw:"bool",
+        clashType:"ClashType"
+      },
+      ephemeral:true,
+    },
+    ColorOwnable:{
+      schema:{
+        colorIndex:"uint256",
+        gameID:"uint256"
+      }
     }
   },
   
   enums: {
     MineType: ["Food","Wood","Gold"],
-    State:["Waiting","Started","Completed"]
+    State:["None","Waiting","Seed","Started","Completed"],
+    ClashType:["Castle","Mine","Dock","Battle","NavalWar"],
+    AttackerType:["Army","Fleet"],
   },
   modules: [
     {
@@ -232,6 +260,16 @@ export default mudConfig({
       name: "KeysWithValueModule",
       root: true,
       args: [resolveTableId("ResourceOwnable")],
+    },
+    {
+      name: "KeysWithValueModule",
+      root: true,
+      args: [resolveTableId("DockOwnable")],
+    },
+    {
+      name: "KeysWithValueModule",
+      root: true,
+      args: [resolveTableId("FleetOwnable")],
     },
   ],
 });

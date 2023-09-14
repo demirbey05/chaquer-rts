@@ -6,7 +6,8 @@ export const isMyResource = (
   if (myResourcePositions) {
     return myResourcePositions.some((data: any) => {
       return (
-        data.x.toString() === x.toString() && data.y.toString() === y.toString()
+        data.myResourcePosition.x.toString() === x.toString() &&
+        data.myResourcePosition.y.toString() === y.toString()
       );
     });
   }

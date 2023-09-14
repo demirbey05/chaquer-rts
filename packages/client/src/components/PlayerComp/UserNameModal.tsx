@@ -1,34 +1,75 @@
 import { Link } from 'react-router-dom';
-import { usePlayer } from '../../context/PlayerContext';
 import { useEffect, useState } from 'react';
-import { useMUD } from '../../MUDContext';
+import { Button, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
+import { usePlayer } from '../../context/PlayerContext';
+import { useMUD } from '../../context/MUDContext';
 import { useError } from '../../context/ErrorContext';
+import { usePlayerIsValid } from "../../hooks/IdentityHooks/usePlayerIsValid";
+import { useNumberOfUsers } from "../../hooks/IdentityHooks/useNumberOfUsers";
+import { useGameState } from '../../hooks/useGameState';
+import { limitOfUser } from "../../utils/constants/constants";
 
 export const UserNameModal = () => {
-    const { setUserName, userName, saveUserName } = usePlayer();
-    const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { systemCalls } = useMUD()
+
+    const { userWallet, setUserName, userName } = usePlayer();
+    const { setShowError, setErrorMessage, setErrorTitle } = useError();
+
     const [disable, setDisable] = useState<boolean>(true);
+    const [gameIsFull, setGameIsFull] = useState<string>("");
+
+    const userValid = usePlayerIsValid(1, userWallet);
+    const gameState = useGameState(1);
+    const numberOfUsers = useNumberOfUsers(1);
 
     useEffect(() => {
-        if (localStorage.getItem('username')) {
-            setDisable(false)
+        if (gameState === 3) {
+            if (userValid) {
+                setDisable(false)
+                setGameIsFull("");
+            }
+            else if (userValid === false) {
+                setDisable(false)
+                setGameIsFull("");
+            }
+            else {
+                setDisable(true)
+                setGameIsFull("The game is full. Reached the player limit.")
+            }
         }
-    }, [userName])
-
-    const handleInput = (e: any) => {
-        setUserName(e.target.value)
-        if (e.target.value.length > 2 && e.target.value.length < 32) {
-            setDisable(false)
+        else if (gameState === 2) {
+            if (numberOfUsers === limitOfUser) {
+                if (userValid) {
+                    setDisable(false)
+                    setGameIsFull("");
+                }
+                else {
+                    setDisable(true)
+                    setGameIsFull("The game is full. Reached the player limit.")
+                }
+            }
+        }
+        else if (gameState === 1) {
+            if (userName && userName.length >= 3 && userName.length <= 31) {
+                setDisable(false);
+                setGameIsFull("");
+            }
+            else {
+                setDisable(true)
+            }
         }
         else {
             setDisable(true)
         }
+    }, [gameState, userValid, numberOfUsers, limitOfUser, userName]);
+
+    const handleInput = (e: any) => {
+        setUserName(e.target.value)
     }
+
     const onClick = async () => {
-        if (!localStorage.getItem("username")) {
+        if (!userValid && gameState === 1) {
             const tx = await systemCalls.joinGame(userName!, 1);
-            saveUserName();
             if (tx == null) {
                 setErrorMessage("An error occurred while trying to join to the game.")
                 setErrorTitle("Join Game Error")
@@ -48,25 +89,50 @@ export const UserNameModal = () => {
             aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content bg-dark text-white">
-                    <div className="modal-header justify-center">
-                        <h1 className="modal-title text-2xl" id="userNameModalLabel">Username</h1>
-                    </div>
+                    {
+                        userValid === undefined && gameState !== 3 &&
+                        <div className="modal-header justify-center">
+                            <h1 className="modal-title text-2xl" id="userNameModalLabel">
+                                Username
+                            </h1>
+                        </div>
+                    }
                     <div className="modal-body">
                         {
-                            !localStorage.getItem('username')
-                                ? <input onChange={(e: any) => handleInput(e)} type="text" className="form-control" id="usernameinput" placeholder="Please enter your username" />
-                                : <input defaultValue={userName} type="text" className="form-control" id="usernameinput" readOnly />
+                            userValid === undefined && gameState === 3 &&
+                            <Alert status='warning' color="black">
+                                <AlertIcon />
+                                <AlertTitle>{gameIsFull}</AlertTitle>
+                            </Alert>
+                        }
+                        {
+                            userValid === undefined && gameState !== 3 &&
+                            < input onChange={(e: any) => handleInput(e)}
+                                type="text"
+                                className="form-control dark-input bg-dark text-white"
+                                id="usernameinput"
+                                placeholder="Please enter your username" />
+                        }
+                        {
+                            (((userValid || userValid === false) && gameState !== 0)) &&
+                            <p>It seems you leave the game. Click Join to the Game button to reconnect to the game.</p>
                         }
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-dark border-white" data-bs-dismiss="modal">Close</button>
+                        <Button
+                            colorScheme="red"
+                            border="solid"
+                            textColor="dark"
+                            data-bs-dismiss="modal"
+                        >
+                            Back to Menu
+                        </Button>
                         {
-                            disable ? <JoinToGameButton disable={disable} /> :
-                                (
-                                    <Link to={'/game'}>
-                                        <JoinToGameButton onClick={() => onClick()} disable={disable} />
-                                    </Link>
-                                )
+                            disable ?
+                                <JoinToGameButton disable={disable} /> :
+                                <Link to={'/game'}>
+                                    <JoinToGameButton onClick={() => onClick()} disable={disable} />
+                                </Link>
                         }
                     </div>
                 </div>
@@ -77,12 +143,14 @@ export const UserNameModal = () => {
 
 
 const JoinToGameButton = ({ disable, onClick }: any) => {
-    return <button
-        disabled={disable}
-        onClick={onClick}
-        type="button"
-        className="btn btn-dark border-white"
-        data-bs-dismiss="modal">
+    return <Button
+        colorScheme="whatsapp"
+        border="solid"
+        textColor="dark"
+        data-bs-dismiss="modal"
+        isDisabled={disable}
+        onClick={() => onClick()}
+    >
         Join to the Game
-    </button>
+    </Button>
 }

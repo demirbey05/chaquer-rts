@@ -7,8 +7,6 @@ type CastleContextType = {
     castle: { x: any; y: any };
     setTempCastle: (value: { x: number; y: number }) => void;
     tempCastle: { x: any; y: any };
-    isCastleDeployedBefore: boolean;
-    setIsCastleDeployedBefore: (value: boolean) => void;
 };
 
 const CastleContext = createContext<CastleContextType>({
@@ -17,16 +15,13 @@ const CastleContext = createContext<CastleContextType>({
     setCastle: () => { },
     castle: { x: null, y: null },
     setTempCastle: () => { },
-    tempCastle: { x: null, y: null },
-    isCastleDeployedBefore: false,
-    setIsCastleDeployedBefore: () => { },
+    tempCastle: { x: null, y: null }
 });
 
 const CastleProvider: React.FC<{ children: ReactNode }> = ({ children, }: { children: ReactNode; }) => {
     const [isCastleSettled, setIsCastleSettled] = useState<boolean>();
     const [castle, setCastle] = useState<any>();
     const [tempCastle, setTempCastle] = useState<any>();
-    const [isCastleDeployedBefore, setIsCastleDeployedBefore] = useState<boolean>(false);
 
     const results: CastleContextType = {
         setCastle,
@@ -34,9 +29,7 @@ const CastleProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
         setTempCastle,
         tempCastle,
         setIsCastleSettled,
-        isCastleSettled,
-        isCastleDeployedBefore,
-        setIsCastleDeployedBefore
+        isCastleSettled
     };
 
     return (

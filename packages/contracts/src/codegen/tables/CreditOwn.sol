@@ -14,6 +14,7 @@ import { Bytes } from "@latticexyz/store/src/Bytes.sol";
 import { Memory } from "@latticexyz/store/src/Memory.sol";
 import { SliceLib } from "@latticexyz/store/src/Slice.sol";
 import { EncodeArray } from "@latticexyz/store/src/tightcoder/EncodeArray.sol";
+import { FieldLayout, FieldLayoutLib } from "@latticexyz/store/src/FieldLayout.sol";
 import { Schema, SchemaLib } from "@latticexyz/store/src/Schema.sol";
 import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCounter.sol";
 
@@ -21,14 +22,15 @@ bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16(""), bytes16("Credi
 bytes32 constant CreditOwnTableId = _tableId;
 
 library CreditOwn {
-  /** Get the table's schema */
-  function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](1);
-    _schema[0] = SchemaType.UINT256;
+  /** Get the table values' field layout */
+  function getFieldLayout() internal pure returns (FieldLayout) {
+    uint256[] memory _fieldLayout = new uint256[](1);
+    _fieldLayout[0] = 32;
 
-    return SchemaLib.encode(_schema);
+    return FieldLayoutLib.encode(_fieldLayout, 0);
   }
 
+  /** Get the table's key schema */
   function getKeySchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](2);
     _schema[0] = SchemaType.UINT256;
@@ -37,33 +39,42 @@ library CreditOwn {
     return SchemaLib.encode(_schema);
   }
 
-  /** Get the table's metadata */
-  function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](1);
-    _fieldNames[0] = "amount";
-    return ("CreditOwn", _fieldNames);
+  /** Get the table's value schema */
+  function getValueSchema() internal pure returns (Schema) {
+    SchemaType[] memory _schema = new SchemaType[](1);
+    _schema[0] = SchemaType.UINT256;
+
+    return SchemaLib.encode(_schema);
   }
 
-  /** Register the table's schema */
-  function registerSchema() internal {
-    StoreSwitch.registerSchema(_tableId, getSchema(), getKeySchema());
+  /** Get the table's key names */
+  function getKeyNames() internal pure returns (string[] memory keyNames) {
+    keyNames = new string[](2);
+    keyNames[0] = "gameID";
+    keyNames[1] = "owner";
   }
 
-  /** Register the table's schema (using the specified store) */
-  function registerSchema(IStore _store) internal {
-    _store.registerSchema(_tableId, getSchema(), getKeySchema());
+  /** Get the table's field names */
+  function getFieldNames() internal pure returns (string[] memory fieldNames) {
+    fieldNames = new string[](1);
+    fieldNames[0] = "amount";
   }
 
-  /** Set the table's metadata */
-  function setMetadata() internal {
-    (string memory _tableName, string[] memory _fieldNames) = getMetadata();
-    StoreSwitch.setMetadata(_tableId, _tableName, _fieldNames);
+  /** Register the table with its config */
+  function register() internal {
+    StoreSwitch.registerTable(
+      _tableId,
+      getFieldLayout(),
+      getKeySchema(),
+      getValueSchema(),
+      getKeyNames(),
+      getFieldNames()
+    );
   }
 
-  /** Set the table's metadata (using the specified store) */
-  function setMetadata(IStore _store) internal {
-    (string memory _tableName, string[] memory _fieldNames) = getMetadata();
-    _store.setMetadata(_tableId, _tableName, _fieldNames);
+  /** Register the table with its config (using the specified store) */
+  function register(IStore _store) internal {
+    _store.registerTable(_tableId, getFieldLayout(), getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /** Get amount */
@@ -72,7 +83,7 @@ library CreditOwn {
     _keyTuple[0] = bytes32(uint256(gameID));
     _keyTuple[1] = bytes32(uint256(uint160(owner)));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0, getFieldLayout());
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -82,7 +93,7 @@ library CreditOwn {
     _keyTuple[0] = bytes32(uint256(gameID));
     _keyTuple[1] = bytes32(uint256(uint160(owner)));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0, getFieldLayout());
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -92,7 +103,7 @@ library CreditOwn {
     _keyTuple[0] = bytes32(uint256(gameID));
     _keyTuple[1] = bytes32(uint256(uint160(owner)));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((amount)));
+    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((amount)), getFieldLayout());
   }
 
   /** Set amount (using the specified store) */
@@ -101,19 +112,21 @@ library CreditOwn {
     _keyTuple[0] = bytes32(uint256(gameID));
     _keyTuple[1] = bytes32(uint256(uint160(owner)));
 
-    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((amount)));
+    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((amount)), getFieldLayout());
   }
 
-  /** Tightly pack full data using this table's schema */
-  function encode(uint256 amount) internal view returns (bytes memory) {
+  /** Tightly pack full data using this table's field layout */
+  function encode(uint256 amount) internal pure returns (bytes memory) {
     return abi.encodePacked(amount);
   }
 
-  /** Encode keys as a bytes32 array using this table's schema */
-  function encodeKeyTuple(uint256 gameID, address owner) internal pure returns (bytes32[] memory _keyTuple) {
-    _keyTuple = new bytes32[](2);
+  /** Encode keys as a bytes32 array using this table's field layout */
+  function encodeKeyTuple(uint256 gameID, address owner) internal pure returns (bytes32[] memory) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(gameID));
     _keyTuple[1] = bytes32(uint256(uint160(owner)));
+
+    return _keyTuple;
   }
 
   /* Delete all data for given keys */
@@ -122,7 +135,7 @@ library CreditOwn {
     _keyTuple[0] = bytes32(uint256(gameID));
     _keyTuple[1] = bytes32(uint256(uint160(owner)));
 
-    StoreSwitch.deleteRecord(_tableId, _keyTuple);
+    StoreSwitch.deleteRecord(_tableId, _keyTuple, getFieldLayout());
   }
 
   /* Delete all data for given keys (using the specified store) */
@@ -131,6 +144,6 @@ library CreditOwn {
     _keyTuple[0] = bytes32(uint256(gameID));
     _keyTuple[1] = bytes32(uint256(uint160(owner)));
 
-    _store.deleteRecord(_tableId, _keyTuple);
+    _store.deleteRecord(_tableId, _keyTuple, getFieldLayout());
   }
 }

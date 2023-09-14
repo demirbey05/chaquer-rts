@@ -2,17 +2,16 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
-import { PlayerSeeds, Players, LimitOfGame, GameMetaData, NumberOfUsers, ResourceInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, MineCaptureResult, ArmyConfig, ArmyOwnable } from "../codegen/Tables.sol";
+import { PlayerSeeds, Players, LimitOfGame, GameMetaData, ResourcesSold, NumberOfUsers, ResourceInited, ColorOwnable, SeedInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, ClashResult, ArmyConfig, ArmyOwnable, FleetOwnable } from "../codegen/Tables.sol";
 import { MineType } from "../codegen/Types.sol";
-import { LibRandom, LibQueries, LibAttack, LibUtils, LibMath } from "../libraries/Libraries.sol";
+import { LibRandom, LibQueries, LibAttack, LibUtils, LibMath, LibNaval } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import "./Errors.sol";
-import { State } from "../codegen/Types.sol";
-import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
+import { initialMarketSupply } from "./Constants.sol";
+import { State, ClashType, AttackerType } from "../codegen/Types.sol";
 
-uint256 constant minePerResource = 4;
+uint256 constant minePerResource = 5;
 uint256 constant maxIter = 30;
 
 contract MineInitSystem is System {
@@ -25,7 +24,17 @@ contract MineInitSystem is System {
     if (LibQueries.getOwnedCastleIDs(IStore(_world()), sender, gameID).length == 0) {
       revert MineSystem__NoCastleOfUsers();
     }
+    if (GameMetaData.getState(gameID) != State.Seed) {
+      revert MineSystem__WrongState();
+    }
+    if (SeedInited.get(gameID, sender)) {
+      revert MineSystem__SeedInited();
+    }
     PlayerSeeds.push(gameID, seed);
+    SeedInited.set(gameID, sender, true);
+    if (PlayerSeeds.length(gameID) == LimitOfGame.get(gameID)) {
+      GameMetaData.setState(gameID, State.Started);
+    }
   }
 
   function resourceSystemInit(uint256 gameID) public {
@@ -55,6 +64,7 @@ contract MineInitSystem is System {
     ResourceInited.set(gameID, true);
     GameMetaData.setState(gameID, State.Started);
     GameMetaData.setStartBlock(gameID, block.number);
+    ResourcesSold.set(gameID, initialMarketSupply, initialMarketSupply, initialMarketSupply);
   }
 
   function InitResourceType(
@@ -78,7 +88,7 @@ contract MineInitSystem is System {
       previousHash = LibRandom.generateRandomNumber(previousHash, gameID);
       y = uint32(uint256(previousHash) % height);
 
-      if (MapConfig.getItemTerrain(gameID, x * width + y)[0] != hex"01") {
+      if (MapConfig.getItemTerrain(gameID, x * width + y)[0] == hex"03") {
         continue;
       }
       if (LibQueries.queryPositionEntity(IStore(_world()), x, y, gameID) > 0) {
@@ -87,81 +97,9 @@ contract MineInitSystem is System {
       bytes32 entityID = keccak256(abi.encodePacked(x, y, "Mine", gameID));
       Position.set(entityID, x, y, gameID);
       ResourceOwnable.set(entityID, ResourceOwnableData(mineType, address(0), gameID));
+      ColorOwnable.set(entityID, 0, gameID);
       i++;
     }
     return i;
-  }
-
-  function captureMine(bytes32 armyID, bytes32 mineID) public {
-    address armyOwner = ArmyOwnable.getOwner(armyID);
-    address mineOwner = ResourceOwnable.getOwner(mineID);
-
-    // Some Checks
-    if (armyOwner == mineOwner) {
-      revert MineCapture__FriendFireNotAllowed();
-    }
-    if (armyOwner != msg.sender) {
-      revert MineCapture__NoAuthorization();
-    }
-    (uint32 xArmy, uint32 yArmy, uint256 gameID) = Position.get(armyID);
-    (uint32 xMine, uint32 yMine, uint256 gameIDTwo) = Position.get(mineID);
-
-    uint32 distanceBetween = LibMath.manhattan(xArmy, yArmy, xMine, yMine);
-
-    if (!(distanceBetween <= 3)) {
-      revert MineCapture__TooFarToAttack();
-    }
-    if (gameID != gameIDTwo) {
-      revert MineCapture__NonMatchedGameID();
-    }
-
-    if (mineOwner == address(0)) {
-      ResourceOwnable.setOwner(mineID, armyOwner);
-      return;
-    }
-
-    bytes32[] memory ownerArmiesSurroundCastle = LibUtils.findSurroundingArmies(
-      IStore(_world()),
-      mineID,
-      gameID,
-      EntityType.Mine
-    );
-    uint result = LibAttack.warCaptureCastle(armyID, ownerArmiesSurroundCastle);
-
-    if (result == 1) {
-      ResourceOwnable.setOwner(mineID, armyOwner);
-
-      // Destroy all the army which belongs to castle owner
-
-      for (uint i = 0; i < ownerArmiesSurroundCastle.length; i++) {
-        if (ownerArmiesSurroundCastle[i] == bytes32(0)) {
-          continue;
-        }
-        ArmyOwnable.deleteRecord(ownerArmiesSurroundCastle[i]);
-        ArmyConfig.deleteRecord(ownerArmiesSurroundCastle[i]);
-        Position.deleteRecord(ownerArmiesSurroundCastle[i]);
-      }
-
-      MineCaptureResult.emitEphemeral(
-        keccak256(abi.encodePacked(block.timestamp, armyID, mineID, gameID)),
-        armyOwner,
-        mineOwner,
-        false
-      );
-    } else if (result == 0) {
-      MineCaptureResult.emitEphemeral(
-        keccak256(abi.encodePacked(block.timestamp, armyID, mineID, gameID)),
-        armyOwner,
-        mineOwner,
-        true
-      );
-    } else {
-      MineCaptureResult.emitEphemeral(
-        keccak256(abi.encodePacked(block.timestamp, armyID, mineID, gameID)),
-        mineOwner,
-        armyOwner,
-        false
-      );
-    }
   }
 }

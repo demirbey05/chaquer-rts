@@ -19,5 +19,6 @@ struct RemainingData {
 }
 enum EntityType {
   Castle,
-  Mine
+  Mine,
+  Dock
 }

@@ -1,11 +1,10 @@
-// Assuming the correct path to the CSS file
 import '../../styles/globals.css';
 
 export const ArmySettleWarning = () => {
   return (
     <div className='warning-on-top'>
       <h2>
-        Please settle your army
+        Click orange tiles to settle army
       </h2>
     </div>
   );

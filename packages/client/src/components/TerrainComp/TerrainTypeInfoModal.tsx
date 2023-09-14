@@ -26,7 +26,12 @@ export const TerrainTypeInfoModal = () => {
             <TerrainInfo terrainType={"Land"} backgroundColor={"#547315"} />
           </ModalBody>
           <ModalFooter>
-            <Button onClick={onClose} colorScheme="blackAlpha" mt={-5}>Close</Button>
+            <Button onClick={onClose}
+              textColor="dark"
+              border="solid"
+              colorScheme="red"
+              mt={-5}>Close
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

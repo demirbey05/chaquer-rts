@@ -2,11 +2,12 @@
 
 pragma solidity ^0.8.0;
 
-import { MudV2Test } from "@latticexyz/std-contracts/src/test/MudV2Test.t.sol";
+import { MudTest } from "@latticexyz/store/src/MudTest.sol";
 import { IWorld } from "../../src/codegen/world/IWorld.sol";
+import "forge-std/Test.sol";
 import { TestUtils } from "./TestUtils.sol";
 
-contract NakamoTest is MudV2Test {
+contract NakamoTest is MudTest {
   IWorld public world;
   address payable user1;
   address payable user2;

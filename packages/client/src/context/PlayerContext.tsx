@@ -1,122 +1,80 @@
-import { getBurnerWallet } from "@latticexyz/std-client";
-import { Wallet } from "ethers";
 import { useRef, useState, useEffect, useContext, createContext, ReactNode } from "react";
-import { useCastle } from "./CastleContext";
-import { useCastlePositionByAddress } from "../hooks/useCastlePositionByAddress";
+import { getBurnerPrivateKey } from "@latticexyz/common";
+import { Wallet } from "ethers";
+import { useMUD } from "./MUDContext";
+import { useNumberOfUsers } from "../hooks/IdentityHooks/useNumberOfUsers";
+import { usePlayerIsValid } from "../hooks/IdentityHooks/usePlayerIsValid";
+import { useGameState } from "../hooks/useGameState";
+import { useWinnerAddress } from "../hooks/IdentityHooks/useWinnerAddress";
 
 type PlayerContextType = {
-  userWallet: Wallet | undefined
-  userName: string | undefined;
+  userWallet: string | undefined
+  userName: string | null | undefined;
   setUserName: (value: string) => void;
-  saveUserName: () => void;
-  removeUserName: () => void;
   playerSeed: number | undefined;
   setPlayerSeed: (value: number) => void;
-  playerSeedStage: boolean | undefined;
-  setPlayerSeedStage: (value: boolean) => void;
-  savePlayerSeedStage: () => void;
-  playerWaitingStage: boolean | undefined;
-  setPlayerWaitingStage: (value: boolean) => void;
   isPlayerLost: boolean | undefined;
+  isPlayerWinner: boolean | undefined;
 };
 
 const PlayerContext = createContext<PlayerContextType>({
   userWallet: undefined,
-  userName: undefined,
+  userName: null,
   setUserName: () => { },
-  saveUserName: () => { },
-  removeUserName: () => { },
   playerSeed: undefined,
   setPlayerSeed: () => { },
-  playerSeedStage: true,
-  setPlayerSeedStage: () => { },
-  savePlayerSeedStage: () => { },
-  playerWaitingStage: undefined,
-  setPlayerWaitingStage: () => { },
-  isPlayerLost: false
+  isPlayerLost: false,
+  isPlayerWinner: false,
 });
 
 const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { children: ReactNode; }) => {
-  const { current: userWallet } = useRef(new Wallet(getBurnerWallet().value))
-  const [userName, setUserName] = useState<string>();
+  const { current: userWallet } = useRef(new Wallet(getBurnerPrivateKey()).address)
+  const [userName, setUserName] = useState<string | null | undefined>();
+
   const [isPlayerLost, setIsPlayerLost] = useState<boolean>(false);
+  const [isPlayerWinner, setIsPlayerWinner] = useState<boolean>(false);
 
   const [playerSeed, setPlayerSeed] = useState<number>();
-  const [playerSeedStage, setPlayerSeedStage] = useState<boolean>(true);
 
-  const [playerWaitingStage, setPlayerWaitingStage] = useState<boolean>(true);
+  const { systemCalls } = useMUD();
 
-  const { isCastleDeployedBefore, isCastleSettled } = useCastle();
-  const myCastlePosition = useCastlePositionByAddress(userWallet!.address.toLocaleLowerCase());
-
-  useEffect(() => {
-    if ((myCastlePosition && (myCastlePosition.length === 0) && isCastleDeployedBefore && isCastleSettled)) {
-      setIsPlayerLost(true);
-    }
-  }, [myCastlePosition, isCastleDeployedBefore, isCastleSettled])
+  const numberOfUser = useNumberOfUsers(1);
+  const userValid = usePlayerIsValid(1, userWallet);
+  const gameState = useGameState(1);
+  const winnerAddress = useWinnerAddress(1);
 
   useEffect(() => {
-    if (isPlayerLost) {
-      removeUserName();
-      removePlayerSeedStage();
-      removeMineInitStage();
+    if (!userValid && (gameState === 3 || gameState === 4)) {
+      setIsPlayerLost(true)
     }
-  }, [isPlayerLost])
+  }, [userValid, gameState])
 
   useEffect(() => {
-    if (localStorage.getItem('username')) {
-      setUserName(localStorage.getItem('username'))
-    }
-  }, [userName])
+    const fetchData = async () => {
+      if (userValid && numberOfUser === 1 && (gameState === 3 || gameState === 4)) {
+        if (winnerAddress && (winnerAddress === userWallet)) {
+          setIsPlayerWinner(true);
+        } else {
+          const tx = await systemCalls.claimWinner(1, userWallet);
+          if (tx) {
+            setIsPlayerWinner(true);
+          }
+        }
+      }
+    };
 
-  useEffect(() => {
-    if (localStorage.getItem('playerSeedStage')) {
-      setPlayerSeedStage(false)
-    }
-  }, [playerSeedStage])
+    fetchData();
 
-  const saveUserName = () => {
-    if (userName) {
-      localStorage.setItem('username', userName)
-    }
-  }
-
-  const savePlayerSeedStage = () => {
-    localStorage.setItem('playerSeedStage', "false");
-  }
-
-  const removeUserName = () => {
-    if (localStorage.getItem('username')) {
-      localStorage.removeItem('username')
-    }
-  }
-
-  const removePlayerSeedStage = () => {
-    if (localStorage.getItem('playerSeedStage')) {
-      localStorage.removeItem('playerSeedStage')
-    }
-  }
-
-  const removeMineInitStage = () => {
-    if (localStorage.getItem('mineinit')) {
-      localStorage.removeItem('mineinit')
-    }
-  }
+  }, [userValid, numberOfUser, gameState, winnerAddress]);
 
   const results: PlayerContextType = {
     userWallet,
     userName,
     setUserName,
-    saveUserName,
-    removeUserName,
     playerSeed,
     setPlayerSeed,
-    playerSeedStage,
-    setPlayerSeedStage,
-    savePlayerSeedStage,
-    playerWaitingStage,
-    setPlayerWaitingStage,
-    isPlayerLost
+    isPlayerLost,
+    isPlayerWinner
   };
 
   return (

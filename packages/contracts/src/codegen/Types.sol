@@ -9,7 +9,22 @@ enum MineType {
 }
 
 enum State {
+  None,
   Waiting,
+  Seed,
   Started,
   Completed
+}
+
+enum ClashType {
+  Castle,
+  Mine,
+  Dock,
+  Battle,
+  NavalWar
+}
+
+enum AttackerType {
+  Army,
+  Fleet
 }

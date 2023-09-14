@@ -4,7 +4,7 @@ export const CastleSettleWarning = () => {
   return (
     <div className='warning-on-top'>
       <h2>
-        Please settle your castle
+        Click land tiles to settle your castle
       </h2>
     </div>
   )

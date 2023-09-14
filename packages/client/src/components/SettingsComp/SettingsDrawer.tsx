@@ -70,7 +70,7 @@ export const SettingsDrawer = () => {
     }, [isOpen]);
 
     const settingsDrawerButtonStyle: any = {
-        zIndex: 1,
+        zIndex: 6,
         height: "60px",
         width: "60px",
         position: "absolute",

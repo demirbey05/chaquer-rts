@@ -27,6 +27,7 @@ error ArmySettle__TooFarToSettle();
 error ArmySettle__TooManySoldier();
 error ArmySettle__WrongTerrainType();
 error ArmySettle__UnsufficientBalance();
+error ArmySettle__WrongState();
 
 // Army Move System
 
@@ -34,6 +35,7 @@ error MoveArmy__NoAuthorized();
 error MoveArmy__TooFar();
 error MoveArmy__TileIsNotEmpty();
 error MoveArmy__WrongTerrainType();
+error MoveArmy__UnsufficientResource();
 
 //Attack System Errors
 error AttackSystem__ArmyNotBelongYou();
@@ -55,6 +57,8 @@ error MineSystem__NotAllUsersSubmitSeed();
 error MineSystem__ResourceInitialized();
 error MineSystem__RandomizationError();
 error MineSystem__NoCastleOfUsers();
+error MineSystem__WrongState();
+error MineSystem__SeedInited();
 
 // Identity System Errors
 error IdentitySystem__AlreadyJoined();
@@ -74,9 +78,38 @@ error MineCapture__NonMatchedGameID();
 
 error EconomySystem__DifferenceIsLess();
 error EconomySystem__InsufficientSource();
+error EconomySystem__InsufficientCredit();
+error EconomySystem__InsufficientSupply();
 
 //Game System Errors
 
 error GameSystem__NotPlayer();
 error GameSystem__WrongClaim();
 error GameSystem__WrongState();
+
+// Naval System Errors
+error NavalSystem__UnsufficientBalance();
+error NavalSystem__ArmyIsTooFar();
+error NavalSystem__ArmySizeIsLow();
+error NavalSystem__NotSeaSide();
+error NavalSystem__TileIsNotEmpty();
+error NavalSystem__WrongTile();
+error NavalCapture__FriendFireNotAllowed();
+error NavalCapture__NoAuthorization();
+error NavalCapture__TooFarToAttack();
+error NavalCapture__NonMatchedGameID();
+error FleetSettle__WrongTerrainType();
+error FleetSettle__TileIsNotEmpty();
+error FleetSettle__InsufficientBalance();
+error FleetSettle__TooManyShip();
+error FleetSettle__TooFarFromDock();
+error FleetSettle__TooManyFleet();
+error FleetMove__NoAuthorization();
+error FleetMove__TileIsNotEmpty();
+error FleetMove__TooFar();
+error FleetMove__WrongTerrainType();
+error FleetMove__UnsufficientResource();
+error FleetAttack__FriendFireNotAllowed();
+error FleetAttack__NoAuthorization();
+error FleetAttack__NonMatchedGameID();
+error FleetAttack__TooFar();

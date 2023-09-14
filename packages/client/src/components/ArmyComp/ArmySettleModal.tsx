@@ -1,15 +1,20 @@
 import archerImg from "../../images/archer.png";
 import cavalryImg from "../../images/cavalry.png";
 import swordsmanImg from "../../images/swordsman.png";
-import { useMUD } from "../../MUDContext";
-import { Button, Tooltip } from "@chakra-ui/react";
+import { useMUD } from "../../context/MUDContext";
+import { Button, Tooltip, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useArmy } from "../../context/ArmyContext";
-import { CustomToastMessage } from "../ErrorMonitoringComp/CustomToastMessage";
 import { useError } from "../../context/ErrorContext";
+import { usePlayer } from "../../context/PlayerContext";
+import { useArmyPrices } from '../../hooks/EconomyHooks/useArmyPrices';
+import { useCredit } from "../../hooks/EconomyHooks/useCredit";
+import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 
 export const ArmySettleModal = () => {
-  const { armyPosition, setIsArmySettleStage, setIsArmySettled } = useArmy();
+  const { userWallet } = usePlayer();
+  const { armyPosition, setIsArmySettleStage } = useArmy();
   const { setErrorMessage, setErrorTitle, setShowError } = useError();
   const { systemCalls } = useMUD();
 
@@ -17,124 +22,159 @@ export const ArmySettleModal = () => {
   const [archerCount, setArcherCount] = useState<string>("");
   const [cavalryCount, setCavalryCount] = useState<string>("");
   const [isDisabled, setIsDisabled] = useState(true);
+  const [enoughCredit, setEnoughCredit] = useState(true);
+  const [totalCharge, setTotalCharge] = useState<number>(0);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const armyPrices = useArmyPrices(1);
+  const myCredit = useCredit(1, userWallet);
 
   useEffect(() => {
-    if (
-      (swordsmanCount && swordsmanCount.toString().length === 0) ||
-      (archerCount && archerCount.toString().length === 0) ||
-      (cavalryCount && cavalryCount.toString().length === 0)
-    ) {
+    if (!swordsmanCount || !archerCount || !cavalryCount) {
       setIsDisabled(true);
+      return;
     }
 
-    if (
-      parseInt(swordsmanCount) + parseInt(archerCount) + parseInt(cavalryCount) <= 1500 &&
-      parseInt(swordsmanCount) + parseInt(archerCount) + parseInt(cavalryCount) > 0
-    ) {
-      setIsDisabled(false);
+    const parsedSwordsmanCount = parseInt(swordsmanCount);
+    const parsedArcherCount = parseInt(archerCount);
+    const parsedCavalryCount = parseInt(cavalryCount);
+
+    const totalTroops = parsedSwordsmanCount + parsedArcherCount + parsedCavalryCount;
+
+    const totalCharge =
+      parsedSwordsmanCount * Number(getNumberFromBigInt(armyPrices.priceSwordsman)) +
+      parsedArcherCount * Number(getNumberFromBigInt(armyPrices.priceArcher)) +
+      parsedCavalryCount * Number(getNumberFromBigInt(armyPrices.priceCavalry));
+
+    if (totalTroops <= 0 || totalTroops > 500) {
+      setIsDisabled(true);
+      setTotalCharge(totalCharge);
+    } else if (!armyPrices || !myCredit) {
+      setIsDisabled(true);
+      setEnoughCredit(false);
+      setTotalCharge(totalCharge);
     } else {
-      setIsDisabled(true);
+      if (totalCharge > parseInt(getNumberFromBigInt(myCredit))) {
+        setIsDisabled(true);
+        setEnoughCredit(false);
+        setTotalCharge(totalCharge);
+      } else {
+        setIsDisabled(false);
+        setEnoughCredit(true);
+      }
     }
+  }, [swordsmanCount, archerCount, cavalryCount, armyPrices, myCredit]);
 
-    if (
-      (parseInt(swordsmanCount) > 500 || parseInt(swordsmanCount) < 0) ||
-      (parseInt(archerCount) > 500 || parseInt(archerCount) < 0) ||
-      (parseInt(cavalryCount) > 500 || parseInt(cavalryCount) < 0)
-    ) {
-      setIsDisabled(true);
-    }
-  }, [swordsmanCount, archerCount, cavalryCount]);
 
   const handleClick = async () => {
-    const tx = await systemCalls.settleArmy(
-      armyPosition.x,
-      armyPosition.y,
-      parseInt(swordsmanCount),
-      parseInt(archerCount),
-      parseInt(cavalryCount),
-      1
-    );
-    if (tx) {
-      setIsArmySettled(true);
-      setIsArmySettleStage(false);
+    setIsArmySettleStage(false);
+    setIsLoading(true);
 
-      setSwordsmanCount('');
-      setArcherCount('');
-      setCavalryCount('');
+    try {
+      const tx = await systemCalls.settleArmy(
+        armyPosition.x,
+        armyPosition.y,
+        parseInt(swordsmanCount),
+        parseInt(archerCount),
+        parseInt(cavalryCount),
+        1
+      );
 
-      (document.getElementById('Swordsman') as HTMLInputElement).value = '';
-      (document.getElementById('Cavalry') as HTMLInputElement).value = '';
-      (document.getElementById('Archer') as HTMLInputElement).value = '';
-    }
-    else {
-      setErrorMessage("An error occurred during army settlement!")
-      setErrorTitle("Army Settlement Error")
-      setShowError(true)
+      if (tx) {
+        setSwordsmanCount('');
+        setArcherCount('');
+        setCavalryCount('');
+        (document.getElementById('Swordsman') as HTMLInputElement).value = '';
+        (document.getElementById('Cavalry') as HTMLInputElement).value = '';
+        (document.getElementById('Archer') as HTMLInputElement).value = '';
+      } else {
+        setErrorMessage("You have no enough credit!");
+        setErrorTitle("Army Settlement Error");
+        setShowError(true);
+      }
+    } catch (error) {
+      setErrorMessage("An error occurred during army settlement.");
+      setErrorTitle("Army Settlement Error");
+      setShowError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div
-      className="modal fade"
-      id="armySettleModal"
-      data-bs-backdrop="static"
-      aria-labelledby="armySettleModalLabel"
-      aria-hidden="true"
-    >
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header justify-center">
-            <Tooltip label="Please determine the number of warriors that will hold in
-                  the army. You can deploy maximum 1500 army in the total and 500 for each type." placement="top-start" bg="blue.400" fontSize="md">
-              <h1 className="modal-title text-2xl" id="armySettleModalLabel">
-                Army Settlement
-              </h1>
-            </Tooltip>
-          </div>
-          <div className="modal-body">
-            <div className="container-fluid">
-              <div className="row mt-2">
-                <ArmySettleInputBody imageSource={swordsmanImg}
-                  soldierName={"Swordsman"}
-                  setSoliderCount={setSwordsmanCount}
-                  imageHeight={"100px"}
-                  imageWidth={"75px"} />
-                <ArmySettleInputBody imageSource={archerImg}
-                  soldierName={"Archer"}
-                  setSoliderCount={setArcherCount}
-                  imageHeight={"100px"}
-                  imageWidth={"85px"} />
-                <ArmySettleInputBody imageSource={cavalryImg}
-                  soldierName={"Cavalry"}
-                  setSoliderCount={setCavalryCount}
-                  imageHeight={"100px"}
-                  imageWidth={"125px"} />
+    <>
+      {isLoading && <EventProgressBar text="Army is moving to the map..." />}
+      <div
+        className="modal fade"
+        id="armySettleModal"
+        data-bs-backdrop="static"
+        aria-labelledby="armySettleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content bg-dark text-white">
+            <div className="modal-header justify-center">
+              <Tooltip label="Please determine the number of warriors that will hold in
+                  the army. You can deploy maximum 500 soldiers in an army." placement="top-start" bg="blue.400" fontSize="md">
+                <h1 className="modal-title text-2xl" id="armySettleModalLabel">
+                  Army Settlement
+                </h1>
+              </Tooltip>
+            </div>
+            <div className="modal-body">
+              <div className="container-fluid">
+                {
+                  !enoughCredit &&
+                  <Alert status='warning' color={"black"}>
+                    <AlertIcon />
+                    <AlertTitle>You have no enough credit, sell some resources! Total Charge: {totalCharge} 💰</AlertTitle>
+                  </Alert>
+                }
+                <div className="row mt-2">
+                  <ArmySettleInputBody imageSource={swordsmanImg}
+                    soldierName={"Swordsman"}
+                    setSoliderCount={setSwordsmanCount}
+                    imageHeight={"100px"}
+                    imageWidth={"75px"} />
+                  <ArmySettleInputBody imageSource={archerImg}
+                    soldierName={"Archer"}
+                    setSoliderCount={setArcherCount}
+                    imageHeight={"100px"}
+                    imageWidth={"85px"} />
+                  <ArmySettleInputBody imageSource={cavalryImg}
+                    soldierName={"Cavalry"}
+                    setSoliderCount={setCavalryCount}
+                    imageHeight={"100px"}
+                    imageWidth={"125px"} />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="modal-footer">
-            <Button
-              colorScheme="whatsapp"
-              border="solid"
-              textColor="dark"
-              data-bs-dismiss="modal"
-              isDisabled={isDisabled}
-              onClick={() => handleClick()}
-            >
-              Settle Army
-            </Button>
-            <Button
-              colorScheme="red"
-              border="solid"
-              textColor="dark"
-              data-bs-dismiss="modal"
-            >
-              Back to Map
-            </Button>
+            <div className="modal-footer">
+              <Button
+                colorScheme="whatsapp"
+                border="solid"
+                textColor="dark"
+                data-bs-dismiss="modal"
+                isDisabled={isDisabled}
+                onClick={() => handleClick()}
+              >
+                Settle Army
+              </Button>
+              <Button
+                colorScheme="red"
+                border="solid"
+                textColor="dark"
+                data-bs-dismiss="modal"
+              >
+                Back to Map
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
+
   );
 }
 

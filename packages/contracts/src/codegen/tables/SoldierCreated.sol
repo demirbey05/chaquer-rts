@@ -14,6 +14,7 @@ import { Bytes } from "@latticexyz/store/src/Bytes.sol";
 import { Memory } from "@latticexyz/store/src/Memory.sol";
 import { SliceLib } from "@latticexyz/store/src/Slice.sol";
 import { EncodeArray } from "@latticexyz/store/src/tightcoder/EncodeArray.sol";
+import { FieldLayout, FieldLayoutLib } from "@latticexyz/store/src/FieldLayout.sol";
 import { Schema, SchemaLib } from "@latticexyz/store/src/Schema.sol";
 import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCounter.sol";
 
@@ -21,8 +22,26 @@ bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16(""), bytes16("Soldi
 bytes32 constant SoldierCreatedTableId = _tableId;
 
 library SoldierCreated {
-  /** Get the table's schema */
-  function getSchema() internal pure returns (Schema) {
+  /** Get the table values' field layout */
+  function getFieldLayout() internal pure returns (FieldLayout) {
+    uint256[] memory _fieldLayout = new uint256[](3);
+    _fieldLayout[0] = 32;
+    _fieldLayout[1] = 32;
+    _fieldLayout[2] = 32;
+
+    return FieldLayoutLib.encode(_fieldLayout, 0);
+  }
+
+  /** Get the table's key schema */
+  function getKeySchema() internal pure returns (Schema) {
+    SchemaType[] memory _schema = new SchemaType[](1);
+    _schema[0] = SchemaType.UINT256;
+
+    return SchemaLib.encode(_schema);
+  }
+
+  /** Get the table's value schema */
+  function getValueSchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](3);
     _schema[0] = SchemaType.UINT256;
     _schema[1] = SchemaType.UINT256;
@@ -31,42 +50,35 @@ library SoldierCreated {
     return SchemaLib.encode(_schema);
   }
 
-  function getKeySchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](1);
-    _schema[0] = SchemaType.UINT256;
-
-    return SchemaLib.encode(_schema);
+  /** Get the table's key names */
+  function getKeyNames() internal pure returns (string[] memory keyNames) {
+    keyNames = new string[](1);
+    keyNames[0] = "gameID";
   }
 
-  /** Get the table's metadata */
-  function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](3);
-    _fieldNames[0] = "numOfSwordsman";
-    _fieldNames[1] = "numOfArcher";
-    _fieldNames[2] = "numOfCavalry";
-    return ("SoldierCreated", _fieldNames);
+  /** Get the table's field names */
+  function getFieldNames() internal pure returns (string[] memory fieldNames) {
+    fieldNames = new string[](3);
+    fieldNames[0] = "numOfSwordsman";
+    fieldNames[1] = "numOfArcher";
+    fieldNames[2] = "numOfCavalry";
   }
 
-  /** Register the table's schema */
-  function registerSchema() internal {
-    StoreSwitch.registerSchema(_tableId, getSchema(), getKeySchema());
+  /** Register the table with its config */
+  function register() internal {
+    StoreSwitch.registerTable(
+      _tableId,
+      getFieldLayout(),
+      getKeySchema(),
+      getValueSchema(),
+      getKeyNames(),
+      getFieldNames()
+    );
   }
 
-  /** Register the table's schema (using the specified store) */
-  function registerSchema(IStore _store) internal {
-    _store.registerSchema(_tableId, getSchema(), getKeySchema());
-  }
-
-  /** Set the table's metadata */
-  function setMetadata() internal {
-    (string memory _tableName, string[] memory _fieldNames) = getMetadata();
-    StoreSwitch.setMetadata(_tableId, _tableName, _fieldNames);
-  }
-
-  /** Set the table's metadata (using the specified store) */
-  function setMetadata(IStore _store) internal {
-    (string memory _tableName, string[] memory _fieldNames) = getMetadata();
-    _store.setMetadata(_tableId, _tableName, _fieldNames);
+  /** Register the table with its config (using the specified store) */
+  function register(IStore _store) internal {
+    _store.registerTable(_tableId, getFieldLayout(), getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /** Get numOfSwordsman */
@@ -74,7 +86,7 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0, getFieldLayout());
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -83,7 +95,7 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0, getFieldLayout());
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -92,7 +104,7 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((numOfSwordsman)));
+    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((numOfSwordsman)), getFieldLayout());
   }
 
   /** Set numOfSwordsman (using the specified store) */
@@ -100,7 +112,7 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((numOfSwordsman)));
+    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((numOfSwordsman)), getFieldLayout());
   }
 
   /** Get numOfArcher */
@@ -108,7 +120,7 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1, getFieldLayout());
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -117,7 +129,7 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1, getFieldLayout());
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -126,7 +138,7 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((numOfArcher)));
+    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((numOfArcher)), getFieldLayout());
   }
 
   /** Set numOfArcher (using the specified store) */
@@ -134,7 +146,7 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((numOfArcher)));
+    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((numOfArcher)), getFieldLayout());
   }
 
   /** Get numOfCavalry */
@@ -142,7 +154,7 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2, getFieldLayout());
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -151,7 +163,7 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 2, getFieldLayout());
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -160,7 +172,7 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 2, abi.encodePacked((numOfCavalry)));
+    StoreSwitch.setField(_tableId, _keyTuple, 2, abi.encodePacked((numOfCavalry)), getFieldLayout());
   }
 
   /** Set numOfCavalry (using the specified store) */
@@ -168,7 +180,7 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    _store.setField(_tableId, _keyTuple, 2, abi.encodePacked((numOfCavalry)));
+    _store.setField(_tableId, _keyTuple, 2, abi.encodePacked((numOfCavalry)), getFieldLayout());
   }
 
   /** Get the full data */
@@ -178,7 +190,7 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes memory _blob = StoreSwitch.getRecord(_tableId, _keyTuple, getSchema());
+    bytes memory _blob = StoreSwitch.getRecord(_tableId, _keyTuple, getFieldLayout());
     return decode(_blob);
   }
 
@@ -190,7 +202,7 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes memory _blob = _store.getRecord(_tableId, _keyTuple, getSchema());
+    bytes memory _blob = _store.getRecord(_tableId, _keyTuple, getFieldLayout());
     return decode(_blob);
   }
 
@@ -201,7 +213,7 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreSwitch.setRecord(_tableId, _keyTuple, _data);
+    StoreSwitch.setRecord(_tableId, _keyTuple, _data, getFieldLayout());
   }
 
   /** Set the full data using individual values (using the specified store) */
@@ -217,10 +229,10 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    _store.setRecord(_tableId, _keyTuple, _data);
+    _store.setRecord(_tableId, _keyTuple, _data, getFieldLayout());
   }
 
-  /** Decode the tightly packed blob using this table's schema */
+  /** Decode the tightly packed blob using this table's field layout */
   function decode(
     bytes memory _blob
   ) internal pure returns (uint256 numOfSwordsman, uint256 numOfArcher, uint256 numOfCavalry) {
@@ -231,19 +243,21 @@ library SoldierCreated {
     numOfCavalry = (uint256(Bytes.slice32(_blob, 64)));
   }
 
-  /** Tightly pack full data using this table's schema */
+  /** Tightly pack full data using this table's field layout */
   function encode(
     uint256 numOfSwordsman,
     uint256 numOfArcher,
     uint256 numOfCavalry
-  ) internal view returns (bytes memory) {
+  ) internal pure returns (bytes memory) {
     return abi.encodePacked(numOfSwordsman, numOfArcher, numOfCavalry);
   }
 
-  /** Encode keys as a bytes32 array using this table's schema */
-  function encodeKeyTuple(uint256 gameID) internal pure returns (bytes32[] memory _keyTuple) {
-    _keyTuple = new bytes32[](1);
+  /** Encode keys as a bytes32 array using this table's field layout */
+  function encodeKeyTuple(uint256 gameID) internal pure returns (bytes32[] memory) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
+
+    return _keyTuple;
   }
 
   /* Delete all data for given keys */
@@ -251,7 +265,7 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreSwitch.deleteRecord(_tableId, _keyTuple);
+    StoreSwitch.deleteRecord(_tableId, _keyTuple, getFieldLayout());
   }
 
   /* Delete all data for given keys (using the specified store) */
@@ -259,6 +273,6 @@ library SoldierCreated {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameID));
 
-    _store.deleteRecord(_tableId, _keyTuple);
+    _store.deleteRecord(_tableId, _keyTuple, getFieldLayout());
   }
 }

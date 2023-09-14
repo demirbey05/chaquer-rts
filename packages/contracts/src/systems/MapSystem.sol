@@ -3,14 +3,14 @@ pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { wadMul, toWadUnsafe } from "solmate/src/utils/SignedWadMath.sol";
-import { MapConfig, Position, PositionTableId, CastleOwnable, NumberOfUsers, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame, Players, CreditOwn, GameMetaData, SoldierCreated } from "../codegen/Tables.sol";
+import { MapConfig, Position, ResourceOwn, ResourceOwnData, ColorOwnable, AddressToUsername, CastleOwnable, NumberOfUsers, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame, Players, CreditOwn, GameMetaData, SoldierCreated } from "../codegen/Tables.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { LibMath } from "../libraries/LibMath.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
 import { State } from "../codegen/Types.sol";
-
+import { maxArmyNum, armyMoveFoodCost, armyMoveGoldCost } from "./Constants.sol";
 import "./Errors.sol";
 
 contract MapSystem is System {
@@ -63,6 +63,7 @@ contract MapSystem is System {
     uint32 width = MapConfig.getWidth(gameID);
     uint32 height = MapConfig.getHeight(gameID);
     uint256 terrainLength = MapConfig.lengthTerrain(gameID);
+    uint256 numOfCastle = GameMetaData.getNumberOfCastle(gameID);
 
     if ((terrainLength < 100) || (terrainLength > 3600)) {
       revert CastleSettle__MapIsNotReady();
@@ -74,7 +75,6 @@ contract MapSystem is System {
     if (!(x < height && y < width && x >= 0 && y >= 0)) {
       revert CastleSettle__CoordinatesOutOfBound();
     }
-
     // If there is any entity in that position
     if (LibQueries.queryPositionEntity(IStore(_world()), x, y, gameID) > 0) {
       revert CastleSettle__TileIsNotEmpty();
@@ -89,10 +89,16 @@ contract MapSystem is System {
       revert CastleSettle__NoCastleRight();
     }
 
-    bytes32 entityID = keccak256(abi.encodePacked(x, y, "Castle", ownerCandidate, gameID));
+    bytes32 entityID = keccak256(abi.encodePacked(x, y, "Castle", ownerCandidate, gameID, block.timestamp));
 
     Position.set(entityID, x, y, gameID);
     CastleOwnable.set(entityID, ownerCandidate, gameID);
+    GameMetaData.setNumberOfCastle(gameID, numOfCastle + 1);
+    ColorOwnable.set(entityID, AddressToUsername.getColorIndex(ownerCandidate, gameID), gameID);
+
+    if (numOfCastle == LimitOfGame.get(gameID) - 1) {
+      GameMetaData.setState(gameID, State.Seed);
+    }
 
     return entityID;
   }
@@ -151,13 +157,16 @@ contract MapSystem is System {
       revert ArmySettle__TileIsNotEmpty();
     }
     // You can have three army
-    if (LibQueries.queryGetArmyNumber(IStore(_world()), ownerCandidate, config.gameID) >= 3) {
+    if (LibQueries.queryGetArmyNumber(IStore(_world()), ownerCandidate, config.gameID) >= maxArmyNum) {
       revert ArmySettle__NoArmyRight();
     }
     if (!LibQueries.queryAddressHasCastle(IStore(_world()), ownerCandidate, config.gameID)) {
       revert ArmySettle__NoCastle();
     }
-
+    if (GameMetaData.getState(config.gameID) != State.Started) {
+      revert ArmySettle__WrongState();
+    }
+    //@dev can be optimized by getting castleID as an argument !!!!!!!
     bytes32[] memory castleIds = LibQueries.getOwnedCastleIDs(IStore(_world()), ownerCandidate, config.gameID);
     uint256 castleClose = 0;
     for (uint i = 0; i < castleIds.length; i++) {
@@ -177,11 +186,12 @@ contract MapSystem is System {
     // Economy System Integration
     handleEconomyCheck(IWorld(_world()), ownerCandidate, config);
 
-    bytes32 entityID = keccak256(abi.encodePacked(x, y, "Army", ownerCandidate, config.gameID));
+    bytes32 entityID = keccak256(abi.encodePacked(x, y, "Army", ownerCandidate, config.gameID, block.timestamp));
 
     Position.set(entityID, x, y, config.gameID);
     ArmyOwnable.set(entityID, ownerCandidate, config.gameID);
     ArmyConfig.set(entityID, config.numSwordsman, config.numArcher, config.numCavalry, config.gameID);
+    ColorOwnable.set(entityID, AddressToUsername.getColorIndex(ownerCandidate, config.gameID), config.gameID);
 
     return entityID;
   }
@@ -196,6 +206,10 @@ contract MapSystem is System {
     uint32 width = MapConfig.getWidth(IStore(_world()), gameID);
     (address armyOwner, uint256 gameIDArmy) = ArmyOwnable.get(armyID);
     (uint32 xArmy, uint32 yArmy, ) = Position.get(armyID);
+    ResourceOwnData memory resourcesOfUser = ResourceOwn.get(ownerCandidate, gameID);
+    if (resourcesOfUser.numOfFood < armyMoveFoodCost || resourcesOfUser.numOfGold < armyMoveGoldCost) {
+      revert MoveArmy__UnsufficientResource();
+    }
 
     if ((armyOwner != ownerCandidate) || (gameIDArmy != gameID)) {
       revert MoveArmy__NoAuthorized();
@@ -210,6 +224,8 @@ contract MapSystem is System {
       revert MoveArmy__TileIsNotEmpty();
     }
     Position.set(armyID, x, y, gameID);
+    ResourceOwn.setNumOfFood(ownerCandidate, gameID, resourcesOfUser.numOfFood - armyMoveFoodCost);
+    ResourceOwn.setNumOfGold(ownerCandidate, gameID, resourcesOfUser.numOfGold - armyMoveGoldCost);
   }
 
   function claimWinner(address winnerCandidate, uint256 gameID) public {

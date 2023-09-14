@@ -5,8 +5,8 @@ export const getEnemyArmyConfigByPosition = (
   if (armyPositions) {
     const armyConfig = armyPositions.find((data: any) => {
       return (
-        position.x.toString() === data.position.x.toString() &&
-        position.y.toString() === data.position.y.toString()
+        position.x.toString() === data.armyPosition.x.toString() &&
+        position.y.toString() === data.armyPosition.y.toString()
       );
     });
     return armyConfig;
@@ -20,8 +20,8 @@ export const getMyArmyConfigByPosition = (
   if (myArmyPosition) {
     const armyConfig = myArmyPosition.find((data: any) => {
       return (
-        position.x.toString() === data.position.x.toString() &&
-        position.y.toString() === data.position.y.toString()
+        position.x.toString() === data.myArmyPosition.x.toString() &&
+        position.y.toString() === data.myArmyPosition.y.toString()
       );
     });
     return armyConfig;

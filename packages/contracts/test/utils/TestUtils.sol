@@ -6,7 +6,7 @@ import { ArmyOwnable, ArmyConfigData, Position } from "../../src/codegen/Tables.
 import { Vm } from "forge-std/Vm.sol";
 import { hasKey } from "@latticexyz/world/src/modules/keysintable/hasKey.sol";
 import { LibMath, LibQueries } from "../../src/libraries/Libraries.sol";
-import { MineType } from "../../src/codegen/Types.sol";
+import { MineType, AttackerType } from "../../src/codegen/Types.sol";
 
 address constant HEVM_ADDRESS = address(uint160(uint256(keccak256("hevm cheat code"))));
 
@@ -204,7 +204,7 @@ library TestUtils {
     uint32 safeMarginY
   ) internal {
     for (uint32 i = 0; i < users.length; i++) {
-      TestUtils.settleCastle(world, safeMarginX + 2 * i, safeMarginY + 2 * i, gameID, users[i]);
+      TestUtils.settleCastle(world, safeMarginX + 1 * i, safeMarginY + 1 * i, gameID, users[i]);
     }
   }
 
@@ -309,10 +309,11 @@ library TestUtils {
     IWorld world,
     bytes32 armyID,
     bytes32 mineID,
-    address user
+    address user,
+    AttackerType attackerType
   ) internal {
     vm.startPrank(user);
-    world.captureMine(armyID, mineID);
+    world.captureMine(armyID, mineID, attackerType);
     vm.stopPrank();
   }
 
@@ -328,10 +329,10 @@ library TestUtils {
     bytes32 closestMine = findClosestMine(world, xCoord, yCoord, mines);
     (uint32 xMine, uint32 yMine, ) = Position.get(world, closestMine);
     moveArmyToLocation(world, armyID, xMine, yMine, user, gameID);
-    captureMine(world, armyID, closestMine, user);
+    captureMine(world, armyID, closestMine, user, AttackerType.Army);
   }
 
-  function collectResource(
+  /*function collectResource(
     IWorld world,
     address user,
     uint256 gameID
@@ -339,7 +340,7 @@ library TestUtils {
     vm.startPrank(user);
     world.collectResource(gameID);
     vm.stopPrank();
-  }
+  }*/
 
   function sellResource(
     IWorld world,
@@ -356,8 +357,48 @@ library TestUtils {
   function cheatCredit(
     IWorld world,
     address user,
-    uint256 gameID
+    uint256 gameID,
+    uint256 amount
   ) internal {
-    world.economyIncreaseCredit(user, gameID);
+    vm.startPrank(0xa45448cea0B6258807380390D61125be4ac6566B);
+    world.economyIncreaseCredit(user, gameID, amount);
+    vm.stopPrank();
+  }
+
+  function cheatResource(
+    IWorld world,
+    address user,
+    uint256 gameID,
+    uint256 amount
+  ) internal {
+    vm.startPrank(0xa45448cea0B6258807380390D61125be4ac6566B);
+    world.economyIncreaseResource(user, gameID, amount);
+    vm.stopPrank();
+  }
+
+  function buildDockWrapper(
+    IWorld world,
+    address user,
+    bytes32 armyID,
+    uint32 x,
+    uint32 y,
+    uint256 gameID
+  ) internal returns (bytes32) {
+    vm.startPrank(user);
+    bytes32 dockID = world.buildDock(x, y, armyID, gameID);
+    vm.stopPrank();
+    return dockID;
+  }
+
+  function buyResource(
+    IWorld world,
+    address user,
+    uint256 gameID,
+    uint256 amount,
+    MineType mineType
+  ) internal {
+    vm.startPrank(user);
+    world.buyResource(gameID, amount, mineType);
+    vm.stopPrank();
   }
 }

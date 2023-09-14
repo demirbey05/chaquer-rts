@@ -14,6 +14,7 @@ import { Bytes } from "@latticexyz/store/src/Bytes.sol";
 import { Memory } from "@latticexyz/store/src/Memory.sol";
 import { SliceLib } from "@latticexyz/store/src/Slice.sol";
 import { EncodeArray } from "@latticexyz/store/src/tightcoder/EncodeArray.sol";
+import { FieldLayout, FieldLayoutLib } from "@latticexyz/store/src/FieldLayout.sol";
 import { Schema, SchemaLib } from "@latticexyz/store/src/Schema.sol";
 import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCounter.sol";
 
@@ -21,14 +22,14 @@ bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16(""), bytes16("Playe
 bytes32 constant PlayerSeedsTableId = _tableId;
 
 library PlayerSeeds {
-  /** Get the table's schema */
-  function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](1);
-    _schema[0] = SchemaType.UINT256_ARRAY;
+  /** Get the table values' field layout */
+  function getFieldLayout() internal pure returns (FieldLayout) {
+    uint256[] memory _fieldLayout = new uint256[](0);
 
-    return SchemaLib.encode(_schema);
+    return FieldLayoutLib.encode(_fieldLayout, 1);
   }
 
+  /** Get the table's key schema */
   function getKeySchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](1);
     _schema[0] = SchemaType.UINT256;
@@ -36,33 +37,41 @@ library PlayerSeeds {
     return SchemaLib.encode(_schema);
   }
 
-  /** Get the table's metadata */
-  function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](1);
-    _fieldNames[0] = "seeds";
-    return ("PlayerSeeds", _fieldNames);
+  /** Get the table's value schema */
+  function getValueSchema() internal pure returns (Schema) {
+    SchemaType[] memory _schema = new SchemaType[](1);
+    _schema[0] = SchemaType.UINT256_ARRAY;
+
+    return SchemaLib.encode(_schema);
   }
 
-  /** Register the table's schema */
-  function registerSchema() internal {
-    StoreSwitch.registerSchema(_tableId, getSchema(), getKeySchema());
+  /** Get the table's key names */
+  function getKeyNames() internal pure returns (string[] memory keyNames) {
+    keyNames = new string[](1);
+    keyNames[0] = "gameId";
   }
 
-  /** Register the table's schema (using the specified store) */
-  function registerSchema(IStore _store) internal {
-    _store.registerSchema(_tableId, getSchema(), getKeySchema());
+  /** Get the table's field names */
+  function getFieldNames() internal pure returns (string[] memory fieldNames) {
+    fieldNames = new string[](1);
+    fieldNames[0] = "seeds";
   }
 
-  /** Set the table's metadata */
-  function setMetadata() internal {
-    (string memory _tableName, string[] memory _fieldNames) = getMetadata();
-    StoreSwitch.setMetadata(_tableId, _tableName, _fieldNames);
+  /** Register the table with its config */
+  function register() internal {
+    StoreSwitch.registerTable(
+      _tableId,
+      getFieldLayout(),
+      getKeySchema(),
+      getValueSchema(),
+      getKeyNames(),
+      getFieldNames()
+    );
   }
 
-  /** Set the table's metadata (using the specified store) */
-  function setMetadata(IStore _store) internal {
-    (string memory _tableName, string[] memory _fieldNames) = getMetadata();
-    _store.setMetadata(_tableId, _tableName, _fieldNames);
+  /** Register the table with its config (using the specified store) */
+  function register(IStore _store) internal {
+    _store.registerTable(_tableId, getFieldLayout(), getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /** Get seeds */
@@ -70,7 +79,7 @@ library PlayerSeeds {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0, getFieldLayout());
     return (SliceLib.getSubslice(_blob, 0, _blob.length).decodeArray_uint256());
   }
 
@@ -79,7 +88,7 @@ library PlayerSeeds {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0, getFieldLayout());
     return (SliceLib.getSubslice(_blob, 0, _blob.length).decodeArray_uint256());
   }
 
@@ -88,7 +97,7 @@ library PlayerSeeds {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 0, EncodeArray.encode((seeds)));
+    StoreSwitch.setField(_tableId, _keyTuple, 0, EncodeArray.encode((seeds)), getFieldLayout());
   }
 
   /** Set seeds (using the specified store) */
@@ -96,7 +105,7 @@ library PlayerSeeds {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
-    _store.setField(_tableId, _keyTuple, 0, EncodeArray.encode((seeds)));
+    _store.setField(_tableId, _keyTuple, 0, EncodeArray.encode((seeds)), getFieldLayout());
   }
 
   /** Get the length of seeds */
@@ -104,8 +113,10 @@ library PlayerSeeds {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
-    uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 0, getSchema());
-    return _byteLength / 32;
+    uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 0, getFieldLayout());
+    unchecked {
+      return _byteLength / 32;
+    }
   }
 
   /** Get the length of seeds (using the specified store) */
@@ -113,26 +124,52 @@ library PlayerSeeds {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
-    uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 0, getSchema());
-    return _byteLength / 32;
+    uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 0, getFieldLayout());
+    unchecked {
+      return _byteLength / 32;
+    }
   }
 
-  /** Get an item of seeds (unchecked, returns invalid data if index overflows) */
+  /**
+   * Get an item of seeds
+   * (unchecked, returns invalid data if index overflows)
+   */
   function getItem(uint256 gameId, uint256 _index) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
-    bytes memory _blob = StoreSwitch.getFieldSlice(_tableId, _keyTuple, 0, getSchema(), _index * 32, (_index + 1) * 32);
-    return (uint256(Bytes.slice32(_blob, 0)));
+    unchecked {
+      bytes memory _blob = StoreSwitch.getFieldSlice(
+        _tableId,
+        _keyTuple,
+        0,
+        getFieldLayout(),
+        _index * 32,
+        (_index + 1) * 32
+      );
+      return (uint256(Bytes.slice32(_blob, 0)));
+    }
   }
 
-  /** Get an item of seeds (using the specified store) (unchecked, returns invalid data if index overflows) */
+  /**
+   * Get an item of seeds (using the specified store)
+   * (unchecked, returns invalid data if index overflows)
+   */
   function getItem(IStore _store, uint256 gameId, uint256 _index) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
-    bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 0, getSchema(), _index * 32, (_index + 1) * 32);
-    return (uint256(Bytes.slice32(_blob, 0)));
+    unchecked {
+      bytes memory _blob = _store.getFieldSlice(
+        _tableId,
+        _keyTuple,
+        0,
+        getFieldLayout(),
+        _index * 32,
+        (_index + 1) * 32
+      );
+      return (uint256(Bytes.slice32(_blob, 0)));
+    }
   }
 
   /** Push an element to seeds */
@@ -140,7 +177,7 @@ library PlayerSeeds {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
-    StoreSwitch.pushToField(_tableId, _keyTuple, 0, abi.encodePacked((_element)));
+    StoreSwitch.pushToField(_tableId, _keyTuple, 0, abi.encodePacked((_element)), getFieldLayout());
   }
 
   /** Push an element to seeds (using the specified store) */
@@ -148,7 +185,7 @@ library PlayerSeeds {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
-    _store.pushToField(_tableId, _keyTuple, 0, abi.encodePacked((_element)));
+    _store.pushToField(_tableId, _keyTuple, 0, abi.encodePacked((_element)), getFieldLayout());
   }
 
   /** Pop an element from seeds */
@@ -156,7 +193,7 @@ library PlayerSeeds {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
-    StoreSwitch.popFromField(_tableId, _keyTuple, 0, 32);
+    StoreSwitch.popFromField(_tableId, _keyTuple, 0, 32, getFieldLayout());
   }
 
   /** Pop an element from seeds (using the specified store) */
@@ -164,38 +201,52 @@ library PlayerSeeds {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
-    _store.popFromField(_tableId, _keyTuple, 0, 32);
+    _store.popFromField(_tableId, _keyTuple, 0, 32, getFieldLayout());
   }
 
-  /** Update an element of seeds at `_index` */
+  /**
+   * Update an element of seeds at `_index`
+   * (checked only to prevent modifying other tables; can corrupt own data if index overflows)
+   */
   function update(uint256 gameId, uint256 _index, uint256 _element) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
-    StoreSwitch.updateInField(_tableId, _keyTuple, 0, _index * 32, abi.encodePacked((_element)));
+    unchecked {
+      StoreSwitch.updateInField(_tableId, _keyTuple, 0, _index * 32, abi.encodePacked((_element)), getFieldLayout());
+    }
   }
 
-  /** Update an element of seeds (using the specified store) at `_index` */
+  /**
+   * Update an element of seeds (using the specified store) at `_index`
+   * (checked only to prevent modifying other tables; can corrupt own data if index overflows)
+   */
   function update(IStore _store, uint256 gameId, uint256 _index, uint256 _element) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
-    _store.updateInField(_tableId, _keyTuple, 0, _index * 32, abi.encodePacked((_element)));
+    unchecked {
+      _store.updateInField(_tableId, _keyTuple, 0, _index * 32, abi.encodePacked((_element)), getFieldLayout());
+    }
   }
 
-  /** Tightly pack full data using this table's schema */
-  function encode(uint256[] memory seeds) internal view returns (bytes memory) {
-    uint40[] memory _counters = new uint40[](1);
-    _counters[0] = uint40(seeds.length * 32);
-    PackedCounter _encodedLengths = PackedCounterLib.pack(_counters);
+  /** Tightly pack full data using this table's field layout */
+  function encode(uint256[] memory seeds) internal pure returns (bytes memory) {
+    PackedCounter _encodedLengths;
+    // Lengths are effectively checked during copy by 2**40 bytes exceeding gas limits
+    unchecked {
+      _encodedLengths = PackedCounterLib.pack(seeds.length * 32);
+    }
 
     return abi.encodePacked(_encodedLengths.unwrap(), EncodeArray.encode((seeds)));
   }
 
-  /** Encode keys as a bytes32 array using this table's schema */
-  function encodeKeyTuple(uint256 gameId) internal pure returns (bytes32[] memory _keyTuple) {
-    _keyTuple = new bytes32[](1);
+  /** Encode keys as a bytes32 array using this table's field layout */
+  function encodeKeyTuple(uint256 gameId) internal pure returns (bytes32[] memory) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
+
+    return _keyTuple;
   }
 
   /* Delete all data for given keys */
@@ -203,7 +254,7 @@ library PlayerSeeds {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
-    StoreSwitch.deleteRecord(_tableId, _keyTuple);
+    StoreSwitch.deleteRecord(_tableId, _keyTuple, getFieldLayout());
   }
 
   /* Delete all data for given keys (using the specified store) */
@@ -211,6 +262,6 @@ library PlayerSeeds {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32(uint256(gameId));
 
-    _store.deleteRecord(_tableId, _keyTuple);
+    _store.deleteRecord(_tableId, _keyTuple, getFieldLayout());
   }
 }

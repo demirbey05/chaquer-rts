@@ -4,7 +4,7 @@ import cavalryImg from "../../images/cavalry.png";
 import swordsmanImg from "../../images/swordsman.png";
 import { MdLocationPin } from 'react-icons/md'
 import { Button } from "@chakra-ui/react";
-import { useMyArmy } from "../../hooks/useMyArmy";
+import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
 import { usePlayer } from "../../context/PlayerContext";
 
 // Scroll to div by id as middle of the screen
@@ -25,7 +25,7 @@ export const ArmyInfoDrawer = () => {
     const { userWallet } = usePlayer()
     const [isOpen, setIsOpen] = useState(false);
 
-    const myArmyPosition: any = useMyArmy(userWallet!.address.toLocaleLowerCase())[0];
+    const myArmyPosition = useMyArmy(userWallet);
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen);
@@ -87,17 +87,17 @@ export const ArmyInfoDrawer = () => {
                                 <div className="row mt-2">
                                     <ArmyInfoModalCard imageSource={swordsmanImg}
                                         soldierName={"Swordsman"}
-                                        soliderCount={army.armyConfig.numSwordsman}
+                                        soliderCount={army.myArmyConfig.numSwordsman}
                                         imageHeight={"75px"}
                                         imageWidth={"65px"} />
                                     <ArmyInfoModalCard imageSource={archerImg}
                                         soldierName={"Archer"}
-                                        soliderCount={army.armyConfig.numArcher}
+                                        soliderCount={army.myArmyConfig.numArcher}
                                         imageHeight={"75px"}
                                         imageWidth={"65px"} />
                                     <ArmyInfoModalCard imageSource={cavalryImg}
                                         soldierName={"Cavalry"}
-                                        soliderCount={army.armyConfig.numCavalry}
+                                        soliderCount={army.myArmyConfig.numCavalry}
                                         imageHeight={"75px"}
                                         imageWidth={"100px"} />
                                 </div>
@@ -106,7 +106,7 @@ export const ArmyInfoDrawer = () => {
                                         colorScheme="linkedin"
                                         className="w-50"
                                         onClick={() => {
-                                            handleClick(`${army.position.y},${army.position.x}`);
+                                            handleClick(`${army.myArmyPosition.y},${army.myArmyPosition.x}`);
                                             setIsOpen(false)
                                         }}
                                     >

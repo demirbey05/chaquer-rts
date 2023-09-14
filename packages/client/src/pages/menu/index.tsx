@@ -1,16 +1,18 @@
 import map from "../../../map.json";
 import chaquerImg from '../../images/chaquer_bg.jpg';
+import { ethers } from "ethers";
+import { Button } from "@chakra-ui/react";
 import { Terrain } from "../../components/TerrainComp/Terrain";
-import { generatePerlinValues } from "../../terrain-helper/utils";
 import { TerrainSpinner } from "../../components/TerrainComp/TerrainSpinner";
 import { TerrainTypeInfoModal } from "../../components/TerrainComp/TerrainTypeInfoModal";
-import { Button } from "@chakra-ui/react";
-import { useTerrain } from "../../context/TerrainContext.js"
 import { UserNameModal } from '../../components/PlayerComp/UserNameModal';
-import { useMUD } from "../../MUDContext";
+import { GameTutorial } from "../../components/TipsComp/GameTutorial";
+import { generatePerlinValues } from "../../terrain-helper/utils";
+import { useMUD } from "../../context/MUDContext";
+import { useTerrain } from "../../context/TerrainContext.js"
 import { flatten2D } from "../../utils/terrainArray";
-import { ethers } from "ethers";
 import { limitOfUser } from "../../utils/constants/constants";
+import { useGameState } from "../../hooks/useGameState";
 
 export const Menu = () => {
   const {
@@ -27,6 +29,8 @@ export const Menu = () => {
 
   const { systemCalls } = useMUD();
 
+  const gameState = useGameState(1);
+
   const handleRefresh = (event: any) => {
     setIsLoading(true);
     event.preventDefault();
@@ -38,9 +42,11 @@ export const Menu = () => {
 
   const handleTerrain = async () => {
     saveTerrain();
-    const data: string = ethers.utils.hexlify(flatten2D(map));
-    await systemCalls.initMapDataSystem(1, width, height, data);
-    await systemCalls.InitNumberOfGamer(1, limitOfUser);
+    if (!gameState) {
+      const data: string = ethers.utils.hexlify(flatten2D(map));
+      await systemCalls.initMapDataSystem(1, width, height, data);
+      await systemCalls.InitNumberOfGamer(1, limitOfUser);
+    }
   };
 
   const terrainStyles = [8, 14];
@@ -61,11 +67,14 @@ export const Menu = () => {
           </>)
         }
         <div className="col">
-          <h2 className="text-center text-white text-6xl border-top border-bottom font-bold">
+          <h2 className="text-center text-white text-6xl border-top border-bottom font-bold p-2">
             Chaquer
           </h2>
-          {refresh !== 0 && <StartGameButton isLoading={isLoading} handleTerrain={handleTerrain} />}
+          {refresh !== 0 && <StartGameButton gameState={gameState} isLoading={isLoading} handleTerrain={handleTerrain} />}
           <RegenerateButton isLoading={isLoading} refresh={refresh} handleRefresh={handleRefresh} />
+          {refresh !== 0 && (
+            <GameTutorialButton />
+          )}
           {refresh !== 0 && (
             <div className="text-center mt-2 mb-2">
               <TerrainTypeInfoModal />
@@ -74,6 +83,7 @@ export const Menu = () => {
         </div>
       </div>
       <UserNameModal />
+      <GameTutorial />
     </div >
   );
 }
@@ -112,7 +122,8 @@ const TerrainMap = (props: TerrainMapPropStyles) => {
 
 interface StartGameButtonPropTypes {
   isLoading: boolean,
-  handleTerrain: any
+  handleTerrain: any,
+  gameState: any
 }
 
 const StartGameButton = (props: StartGameButtonPropTypes) => {
@@ -126,7 +137,7 @@ const StartGameButton = (props: StartGameButtonPropTypes) => {
         p="8"
         mt="16"
         width="200px"
-        isDisabled={props.isLoading}
+        isDisabled={props.isLoading && props.gameState}
         onClick={props.handleTerrain}
       >
         Start the Game
@@ -154,6 +165,23 @@ const RegenerateButton = (props: RegenerateButtonPropTypes) => {
         marginTop={props.refresh === 0 ? "300px" : "0"}
       >
         {props.refresh === 0 ? "Enter the Game" : "Regenerate the Terrain"}
+      </Button>
+    </div>
+  )
+}
+
+const GameTutorialButton = () => {
+  return (
+    <div className="text-center mt-2 mb-2">
+      <Button
+        data-bs-toggle="modal"
+        data-bs-target="#tutorialModal1"
+        colorScheme="whiteAlpha"
+        textColor="dark"
+        p="8"
+        width="200px"
+      >
+        Game Tutorial
       </Button>
     </div>
   )

@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useContext, createContext, ReactNode } from "react";
+import { useState, useEffect, useContext, createContext, ReactNode } from "react";
 import { CustomToastMessage } from "../components/ErrorMonitoringComp/CustomToastMessage";
 
 type ErrorContextType = {

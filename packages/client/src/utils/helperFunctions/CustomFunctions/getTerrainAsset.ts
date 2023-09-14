@@ -1,6 +1,6 @@
-import landImg from "../images/land.png";
-import mountainImg from "../images/mountain.png";
-import seaImg from "../images/sea.png";
+import landImg from "../../../images/land.png";
+import mountainImg from "../../../images/mountain.png";
+import seaImg from "../../../images/sea.png";
 
 export function getTerrainAsset(terrainValue: any) {
   switch (terrainValue) {

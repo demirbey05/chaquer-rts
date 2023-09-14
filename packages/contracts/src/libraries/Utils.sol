@@ -3,7 +3,8 @@
 pragma solidity ^0.8.0;
 import { BattleResult, RemainingData, EntityType } from "./Types.sol";
 import "./Libraries.sol";
-import { CastleOwnable, Position, ResourceOwnable } from "../codegen/Tables.sol";
+import { AttackerType, ClashType } from "../codegen/Types.sol";
+import { CastleOwnable, Position, ResourceOwnable, DockOwnable, ArmyConfig, ArmyOwnable, ClashResult, ColorOwnable, AddressToUsername } from "../codegen/Tables.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 
 error ErrorInCalculatingBattleScores();
@@ -98,6 +99,8 @@ library LibUtils {
       owner = CastleOwnable.getOwner(entityID);
     } else if (entityType == EntityType.Mine) {
       owner = ResourceOwnable.getOwner(entityID);
+    } else if (entityType == EntityType.Dock) {
+      owner = DockOwnable.getOwner(entityID);
     }
 
     bytes32[] memory allArmies = LibQueries.getOwnedArmyIDs(world, owner, gameID);
@@ -112,5 +115,148 @@ library LibUtils {
       }
     }
     return ownerArmiesSurroundCastle;
+  }
+
+  function deleteArmy(bytes32 armyID) internal {
+    ArmyOwnable.deleteRecord(armyID);
+    ArmyConfig.deleteRecord(armyID);
+    Position.deleteRecord(armyID);
+    ColorOwnable.deleteRecord(armyID);
+  }
+
+  function findSurroundingAttackerEntities(
+    IStore world,
+    bytes32 entityID,
+    uint256 gameID,
+    EntityType entityType,
+    AttackerType attackerType
+  ) internal view returns (bytes32[] memory) {
+    address owner = address(0);
+    if (entityType == EntityType.Castle) {
+      owner = CastleOwnable.getOwner(entityID);
+    } else if (entityType == EntityType.Mine) {
+      owner = ResourceOwnable.getOwner(entityID);
+    } else if (entityType == EntityType.Dock) {
+      owner = DockOwnable.getOwner(entityID);
+    }
+
+    bytes32[] memory allEntities = (attackerType == AttackerType.Army)
+      ? LibQueries.getOwnedArmyIDs(world, owner, gameID)
+      : LibQueries.getOwnedFleetIDs(world, owner, gameID);
+    bytes32[] memory attackersSurroundingEntity = new bytes32[](allEntities.length);
+    (uint32 xEntity, uint32 yEntity, ) = Position.get(entityID);
+    uint current = 0;
+    for (uint i = 0; i < allEntities.length; i++) {
+      (uint32 xAttacker, uint32 yAttacker, ) = Position.get(allEntities[i]);
+      if (LibMath.manhattan(xEntity, yEntity, xAttacker, yAttacker) <= 3) {
+        attackersSurroundingEntity[current] = allEntities[i];
+        current++;
+      }
+    }
+    return attackersSurroundingEntity;
+  }
+
+  function emitClashTableEvent(
+    uint8 result,
+    bytes32 attackerID,
+    bytes32 mineID,
+    uint256 gameID,
+    address attackerOwner,
+    address mineOwner,
+    ClashType clashType
+  ) internal {
+    if (result == 0) {
+      ClashResult.emitEphemeral(
+        keccak256(abi.encodePacked(block.timestamp, attackerID, mineID, gameID)),
+        attackerOwner,
+        mineOwner,
+        true,
+        clashType
+      );
+    } else if (result == 1) {
+      ClashResult.emitEphemeral(
+        keccak256(abi.encodePacked(block.timestamp, attackerID, mineID, gameID)),
+        attackerOwner,
+        mineOwner,
+        false,
+        clashType
+      );
+    } else if (result == 2) {
+      ClashResult.emitEphemeral(
+        keccak256(abi.encodePacked(block.timestamp, attackerID, mineID, gameID)),
+        mineOwner,
+        attackerOwner,
+        false,
+        clashType
+      );
+    }
+  }
+
+  function handleArmyAttack(
+    bytes32 attackerID,
+    bytes32 mineID,
+    address attackerOwner,
+    address mineOwner,
+    bytes32[] memory ownerEntitiesSurrondMine,
+    uint256 gameID
+  ) internal {
+    uint result = LibAttack.warCaptureCastle(attackerID, ownerEntitiesSurrondMine);
+
+    if (result == 1) {
+      ResourceOwnable.setOwner(mineID, attackerOwner);
+      ColorOwnable.setColorIndex(mineID, AddressToUsername.getColorIndex(attackerOwner, gameID));
+
+      // Destroy all the army which belongs to castle owner
+
+      for (uint i = 0; i < ownerEntitiesSurrondMine.length; i++) {
+        if (ownerEntitiesSurrondMine[i] == bytes32(0)) {
+          continue;
+        }
+        LibUtils.deleteArmy(ownerEntitiesSurrondMine[i]);
+      }
+    }
+    emitClashTableEvent(uint8(result), attackerID, mineID, gameID, attackerOwner, mineOwner, ClashType.Mine);
+  }
+
+  function handleFleetAttack(
+    bytes32 attackerID,
+    bytes32 mineID,
+    address attackerOwner,
+    address mineOwner,
+    bytes32[] memory ownerEntitiesSurrondMine,
+    uint256 gameID
+  ) internal {
+    uint8 result = LibNaval.fightFleetToFleetGroup(attackerID, ownerEntitiesSurrondMine, gameID);
+    if (result == 1) {
+      ResourceOwnable.setOwner(mineID, attackerOwner);
+      ColorOwnable.setColorIndex(mineID, AddressToUsername.getColorIndex(attackerOwner, gameID));
+    }
+    emitClashTableEvent(result, attackerID, mineID, gameID, attackerOwner, mineOwner, ClashType.Mine);
+  }
+
+  function takeOwnershipOfMines(
+    IStore world,
+    address user,
+    MineType mineType,
+    uint256 gameID
+  ) internal {
+    bytes32[] memory castleOwnerMines = LibQueries.getMines(world, user, gameID, mineType);
+    for (uint i = 0; i < castleOwnerMines.length; i++) {
+      ResourceOwnable.setOwner(castleOwnerMines[i], address(0));
+      ColorOwnable.setColorIndex(castleOwnerMines[i], 0);
+    }
+  }
+
+  function takeOwnershipOfDocks(
+    IStore world,
+    address user,
+    uint256 gameID,
+    address getter
+  ) internal {
+    bytes32[] memory castleOwnerDocks = LibQueries.getDocks(world, user, gameID);
+    for (uint i = 0; i < castleOwnerDocks.length; i++) {
+      DockOwnable.setOwner(castleOwnerDocks[i], address(0));
+      ColorOwnable.setColorIndex(castleOwnerDocks[i], 0);
+    }
   }
 }

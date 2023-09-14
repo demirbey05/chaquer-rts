@@ -1,12 +1,17 @@
 import { Route, Redirect } from 'react-router-dom'
 import { usePlayer } from '../context/PlayerContext';
+import { useNumberOfUsers } from '../hooks/IdentityHooks/useNumberOfUsers';
+import { usePlayerIsValid } from '../hooks/IdentityHooks/usePlayerIsValid';
+import { limitOfUser } from '../utils/constants/constants';
 
 export const ProtectedRoutes = ({ component: Component, ...rest }: any) => {
-    const { userName } = usePlayer();
+    const { userWallet } = usePlayer();
+    const userValid = usePlayerIsValid(1, userWallet);
+    const numberOfPlayers = useNumberOfUsers(1);
     return (
         <Route {...rest} render={(props) => {
 
-            if (userName) {
+            if (!(!userValid && numberOfPlayers === limitOfUser)) {
                 return <Component {...props}></Component>;
             }
 

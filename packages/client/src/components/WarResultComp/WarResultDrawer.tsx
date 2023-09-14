@@ -1,21 +1,26 @@
 import "../../styles/globals.css";
+import warResultIcon from '../../images/warResult.png';
+import shipEmoji from '../../images/ship_emoji.png';
+import { Button } from "@chakra-ui/react";
 import { useState } from "react";
 import { usePlayer } from '../../context/PlayerContext';
 import { useWarResult } from '../../hooks/useWarResult';
-import warResultIcon from '../../images/warResult.png';
-import { Button } from "@chakra-ui/react";
+import { useMyUsername } from "../../hooks/IdentityHooks/useMyUsername";
 
 
 export const WarResultDrawer = () => {
     const [isOpen, setIsOpen] = useState(true);
-    const warResults = useWarResult(5);
+
     const { userWallet } = usePlayer();
+
+    const warResults = useWarResult(4);
+    const username = useMyUsername(1, userWallet)
 
     const toggleOffcanvas = () => {
         setIsOpen(!isOpen);
     };
 
-    const drawerButtonStyles: any = {
+    const warResultDrawerButtonStyles: any = {
         zIndex: 1,
         height: "60px",
         width: "60px",
@@ -29,20 +34,31 @@ export const WarResultDrawer = () => {
 
     return (
         <div>
-            <Button colorScheme="yellow" style={drawerButtonStyles} onClick={toggleOffcanvas}>
+            <Button colorScheme="yellow" style={warResultDrawerButtonStyles} onClick={toggleOffcanvas}>
                 <img src={warResultIcon} width={"30px"} height={"30px"}></img>
             </Button>
             <div id="warResultDrawer" className={`my-war-result-drawer ${isOpen ? "open" : ""}`}>
                 <h4 className="text-center text-white p-2 mb-2 border-bottom">War Results</h4>
-                <div >
-                    {warResults && warResults.data.map((data, key) => {
-                        if (data.type === "army") {
-                            return <WarResult text={"⚔️"} data={data} userWallet={userWallet} key={key} />
-                        }
-                        else {
-                            return <WarResult text={"⚔️🏰"} data={data} userWallet={userWallet} key={key} />
-                        }
-                    })}
+                <div>
+                    {
+                        warResults && warResults.map((data, key) => {
+                            if (data.clashType === 3) {
+                                return <WarResult username={username} text={"⚔️"} data={data} userWallet={userWallet} key={key} />
+                            }
+                            else if (data.clashType === 1) {
+                                return <WarResult username={username} text={"⚔️💰"} data={data} userWallet={userWallet} key={key} />
+                            }
+                            else if (data.clashType === 2) {
+                                return <WarResult username={username} text={"⚔️⚓"} data={data} userWallet={userWallet} key={key} />
+                            }
+                            else if (data.clashType === 0) {
+                                return <WarResult username={username} text={"⚔️🏰"} data={data} userWallet={userWallet} key={key} />
+                            }
+                            else {
+                                return <WarResult username={username} text={"⚔️🌊"} data={data} userWallet={userWallet} key={key} />
+                            }
+                        })
+                    }
                 </div>
             </div>
         </div>
@@ -53,18 +69,63 @@ interface WarResultPropTypes {
     text: string,
     data: any,
     userWallet: any,
-    key: any
+    username: string
 }
 
 const WarResult = (props: WarResultPropTypes) => {
-    if (props.data.data?.isDraw === true) {
-        return <p className='text-white mb-3' key={props.key}><span className='bg-primary p-2'>You</span> {props.text} <span className='bg-primary p-2'>Enemy</span> (Draw)</p>
+    if (props.data.isDraw === true) {
+        return <Result text={props.text}
+            data={props.data}
+            userWallet={props.userWallet}
+            username={props.username}
+            resultText={"Draw"}
+            myBgColor={"bg-primary"}
+            enemyBgColor={"bg-primary"} />
     }
-    else if (props.data.data?.winner === props.userWallet?.address.toLocaleLowerCase()) {
-        return <p className='text-white mb-3' key={props.key}><span className='bg-success p-2'>You</span> {props.text} <span className='bg-danger p-2'>Enemy</span> (Win)</p>
+    else if (props.data.winner === props.userWallet) {
+        return <Result text={props.text}
+            data={props.data}
+            userWallet={props.userWallet}
+            username={props.username}
+            resultText={"Win"}
+            myBgColor={"bg-success"}
+            enemyBgColor={"bg-danger"} />
     }
-    else if (props.data.data?.loser === props.userWallet?.address.toLocaleLowerCase()) {
-        return <p className='text-white mb-3' key={props.key}><span className='bg-danger p-2'>You</span> {props.text} <span className='bg-success p-2'>Enemy</span> (Lose)</p>
+    else if (props.data.loser === props.userWallet) {
+        return <Result text={props.text}
+            data={props.data}
+            userWallet={props.userWallet}
+            username={props.username}
+            resultText={"Lose"}
+            myBgColor={"bg-danger"}
+            enemyBgColor={"bg-success"} />
     }
     return null;
+}
+
+interface ResultPropTypes {
+    text: string,
+    data: any,
+    userWallet: any,
+    username: string,
+    resultText: string,
+    myBgColor: string,
+    enemyBgColor: string
+}
+
+const Result = (props: ResultPropTypes) => {
+    return <p className='text-white mb-3'>
+        <span className={`${props.myBgColor} p-2`}>
+            {props.username && props.username.length < 9 ? props.username : "You"}
+        </span>
+        <span className="me-2 ms-2">
+            {props.text}
+        </span>
+        <span className={`${props.enemyBgColor} p-2`}>
+            Enemy
+        </span>
+        <span className="ms-2">
+            ({props.resultText})
+        </span>
+    </p>
 }
