@@ -2,9 +2,13 @@ import { useState, useEffect } from "react";
 import { Button, Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { BuyResources } from "./BuyResources";
 import { SellResources } from "./SellResources";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 
 export const MarketDrawer = () => {
     const [isOpen, setIsOpen] = useState(false);
+
+    const [isLoadingSell, setIsLoadingSell] = useState<boolean>(false);
+    const [isLoadingBuy, setIsLoadingBuy] = useState<boolean>(false);
 
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
@@ -79,15 +83,17 @@ export const MarketDrawer = () => {
                         </TabList>
                         <TabPanels>
                             <TabPanel>
-                                <SellResources />
+                                <SellResources setIsLoading={setIsLoadingSell} />
                             </TabPanel>
                             <TabPanel>
-                                <BuyResources />
+                                <BuyResources setIsLoading={setIsLoadingBuy} />
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
                 </div>
             </div>
+            {isLoadingSell && <EventProgressBar text={"Selling resources..."} />}
+            {isLoadingBuy && <EventProgressBar text={"Buying resources..."} />}
         </>
     )
 }

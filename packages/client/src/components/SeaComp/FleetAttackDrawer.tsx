@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { Button } from "@chakra-ui/react";
 import { useMUD } from "../../context/MUDContext";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { useError } from "../../context/ErrorContext";
 import { useFleet } from "../../context/FleetContext";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 
 export const FleetAttackDrawer = () => {
     const { components, systemCalls } = useMUD();
@@ -14,6 +16,7 @@ export const FleetAttackDrawer = () => {
         setIsFleetAttackStage,
         attackerFleetPosition,
         targetFleetPosition } = useFleet();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleAttackLater = () => {
         setIsFleetAttackStage(false);
@@ -36,15 +39,17 @@ export const FleetAttackDrawer = () => {
             setErrorMessage("An error occurred while trying to attack to fleet.")
             setErrorTitle("Fleet Attack Error")
             setShowError(true)
+            setIsLoading(false)
             return
         }
-
+        setIsLoading(true)
         const tx = await systemCalls.attackFleet(attackFromArmyId[0] as string, attackToArmyId[0] as string, 1)
 
         if (tx == null) {
             setErrorMessage("An error occurred while trying to attack to fleet.")
             setErrorTitle("Fleet Attack Error")
             setShowError(true)
+            setIsLoading(false)
             return
         }
 
@@ -54,6 +59,7 @@ export const FleetAttackDrawer = () => {
         setIsFleetAttackStage(false);
         setMyFleetConfig(undefined);
         setEnemyFleetConfig(undefined);
+        setIsLoading(false)
     };
 
     const fleetAttackOffCanvasDivStyles: any = {
@@ -67,56 +73,59 @@ export const FleetAttackDrawer = () => {
     }
 
     return (
-        <div
-            className="offcanvas offcanvas-bottom rounded-4 font-bold text-white"
-            data-bs-keyboard="false"
-            data-bs-backdrop="false"
-            style={fleetAttackOffCanvasDivStyles}
-            tabIndex={-1}
-            id="fleetAttackDrawer"
-            aria-labelledby="fleetAttackDrawerLabel"
-        >
-            <FleetAttackModalHeader headerText={"War - Fleet Information"} />
-            <div className="offcanvas-body small">
-                <div className="row">
-                    <FleetAttackModalCard
-                        numSmall={myFleetConfig && myFleetConfig.myFleetConfig.numSmall}
-                        numMedium={myFleetConfig && myFleetConfig.myFleetConfig.numMedium}
-                        numBig={myFleetConfig && myFleetConfig.myFleetConfig.numBig}
-                        title={"My Fleet"}
-                        titleBg={"success"} />
-                    <FleetAttackModalCard
-                        numSmall={enemyFleetConfig && enemyFleetConfig.fleetConfig.numSmall}
-                        numMedium={enemyFleetConfig && enemyFleetConfig.fleetConfig.numMedium}
-                        numBig={enemyFleetConfig && enemyFleetConfig.fleetConfig.numBig}
-                        title={"Enemy Fleet"}
-                        titleBg={"danger"} />
+        <>
+            {isLoading && <EventProgressBar text="Ships are fighting..." />}
+            <div
+                className="offcanvas offcanvas-bottom rounded-4 font-bold text-white"
+                data-bs-keyboard="false"
+                data-bs-backdrop="false"
+                style={fleetAttackOffCanvasDivStyles}
+                tabIndex={-1}
+                id="fleetAttackDrawer"
+                aria-labelledby="fleetAttackDrawerLabel"
+            >
+                <FleetAttackModalHeader headerText={"War - Fleet Information"} />
+                <div className="offcanvas-body small">
+                    <div className="row">
+                        <FleetAttackModalCard
+                            numSmall={myFleetConfig && myFleetConfig.myFleetConfig.numSmall}
+                            numMedium={myFleetConfig && myFleetConfig.myFleetConfig.numMedium}
+                            numBig={myFleetConfig && myFleetConfig.myFleetConfig.numBig}
+                            title={"My Fleet"}
+                            titleBg={"success"} />
+                        <FleetAttackModalCard
+                            numSmall={enemyFleetConfig && enemyFleetConfig.fleetConfig.numSmall}
+                            numMedium={enemyFleetConfig && enemyFleetConfig.fleetConfig.numMedium}
+                            numBig={enemyFleetConfig && enemyFleetConfig.fleetConfig.numBig}
+                            title={"Enemy Fleet"}
+                            titleBg={"danger"} />
+                    </div>
+                </div>
+                <div className="d-flex justify-content-center">
+                    <div className="flex-column align-items-center">
+                        <Button
+                            colorScheme="whatsapp"
+                            border="solid"
+                            textColor="dark"
+                            data-bs-dismiss="offcanvas"
+                            onClick={handleAttack}
+                            className="mr-2"
+                        >
+                            Attack to the Enemy
+                        </Button>
+                        <Button
+                            colorScheme="red"
+                            border="solid"
+                            textColor="dark"
+                            data-bs-dismiss="offcanvas"
+                            onClick={handleAttackLater}
+                            className="ml-2">
+                            Wait and Attack Later
+                        </Button>
+                    </div>
                 </div>
             </div>
-            <div className="d-flex justify-content-center">
-                <div className="flex-column align-items-center">
-                    <Button
-                        colorScheme="whatsapp"
-                        border="solid"
-                        textColor="dark"
-                        data-bs-dismiss="offcanvas"
-                        onClick={handleAttack}
-                        className="mr-2"
-                    >
-                        Attack to the Enemy
-                    </Button>
-                    <Button
-                        colorScheme="red"
-                        border="solid"
-                        textColor="dark"
-                        data-bs-dismiss="offcanvas"
-                        onClick={handleAttackLater}
-                        className="ml-2">
-                        Wait and Attack Later
-                    </Button>
-                </div>
-            </div>
-        </div>
+        </>
     );
 }
 

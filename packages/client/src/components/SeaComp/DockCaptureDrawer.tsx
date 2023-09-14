@@ -6,6 +6,7 @@ import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctio
 import { useEffect, useState } from "react";
 import { useError } from "../../context/ErrorContext";
 import { useSea } from "../../context/SeaContext";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 
 export const DockCaptureDrawer = () => {
     const { components, systemCalls } = useMUD();
@@ -15,6 +16,7 @@ export const DockCaptureDrawer = () => {
         myArmyConfig } = useAttack();
     const { targetDockPosition, dockAttackerArmyPosition, setDockCaptureStage } = useSea();
     const [dockArmy, setDockArmy] = useState<any>();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleAttackLater = () => {
         setDockCaptureStage(false);
@@ -49,19 +51,23 @@ export const DockCaptureDrawer = () => {
             setErrorMessage("An error occurred while trying to capture the dock.")
             setErrorTitle("Dock Capture Error")
             setShowError(true)
+            setIsLoading(false)
             return
         }
+        setIsLoading(true)
         const tx = await systemCalls.captureDock(attackFromArmyId[0], attackToDockID[0])
         if (tx == null) {
             setErrorMessage("An error occurred while trying to capture the dock.")
             setErrorTitle("Dock Capture Error")
             setShowError(true)
+            setIsLoading(false)
             return
         }
 
         setDockCaptureStage(false);
         setMyArmyConfig(undefined);
         setEnemyArmyConfig(undefined);
+        setIsLoading(false)
     };
 
     const dockCaptureOffCanvasDivStyle: any = {
@@ -75,53 +81,56 @@ export const DockCaptureDrawer = () => {
     }
 
     return (
-        <div
-            className="offcanvas offcanvas-bottom rounded-4 font-bold text-white"
-            data-bs-keyboard="false"
-            data-bs-backdrop="false"
-            style={dockCaptureOffCanvasDivStyle}
-            tabIndex={-1}
-            id="dockCaptureDrawer"
-            aria-labelledby="dockCaptureDrawerLabel"
-        >
-            <DockAttackDrawerHeader />
-            <div className="offcanvas-body small">
-                <div className="row">
-                    <DockDrawerArmyCard title={"My Army"} titleBg={"success"}
-                        numSwordsman={myArmyConfig && myArmyConfig.myArmyConfig.numSwordsman}
-                        numArcher={myArmyConfig && myArmyConfig.myArmyConfig.numArcher}
-                        numCavalry={myArmyConfig && myArmyConfig.myArmyConfig.numCavalry} />
-                    <DockDrawerArmyCard title={"Enemy Army"} titleBg={"danger"}
-                        numSwordsman={dockArmy && dockArmy.numSwordsman}
-                        numArcher={dockArmy && dockArmy.numArcher}
-                        numCavalry={dockArmy && dockArmy.numCavalry} />
+        <>
+            {isLoading && <EventProgressBar text="Armies are capturing the dock..." />}
+            <div
+                className="offcanvas offcanvas-bottom rounded-4 font-bold text-white"
+                data-bs-keyboard="false"
+                data-bs-backdrop="false"
+                style={dockCaptureOffCanvasDivStyle}
+                tabIndex={-1}
+                id="dockCaptureDrawer"
+                aria-labelledby="dockCaptureDrawerLabel"
+            >
+                <DockAttackDrawerHeader />
+                <div className="offcanvas-body small">
+                    <div className="row">
+                        <DockDrawerArmyCard title={"My Army"} titleBg={"success"}
+                            numSwordsman={myArmyConfig && myArmyConfig.myArmyConfig.numSwordsman}
+                            numArcher={myArmyConfig && myArmyConfig.myArmyConfig.numArcher}
+                            numCavalry={myArmyConfig && myArmyConfig.myArmyConfig.numCavalry} />
+                        <DockDrawerArmyCard title={"Enemy Army"} titleBg={"danger"}
+                            numSwordsman={dockArmy && dockArmy.numSwordsman}
+                            numArcher={dockArmy && dockArmy.numArcher}
+                            numCavalry={dockArmy && dockArmy.numCavalry} />
+                    </div>
+                </div>
+                <div className="d-flex justify-content-center">
+                    <div className="flex-column align-items-center">
+                        <Button
+                            colorScheme="whatsapp"
+                            border="solid"
+                            textColor="dark"
+                            data-bs-dismiss="offcanvas"
+                            onClick={handleAttack}
+                            className="mr-2"
+                        >
+                            Capture Dock
+                        </Button>
+                        <Button
+                            colorScheme="red"
+                            border="solid"
+                            textColor="dark"
+                            data-bs-dismiss="offcanvas"
+                            onClick={handleAttackLater}
+                            className="ml-2"
+                        >
+                            Wait and Capture Later
+                        </Button>
+                    </div>
                 </div>
             </div>
-            <div className="d-flex justify-content-center">
-                <div className="flex-column align-items-center">
-                    <Button
-                        colorScheme="whatsapp"
-                        border="solid"
-                        textColor="dark"
-                        data-bs-dismiss="offcanvas"
-                        onClick={handleAttack}
-                        className="mr-2"
-                    >
-                        Capture Dock
-                    </Button>
-                    <Button
-                        colorScheme="red"
-                        border="solid"
-                        textColor="dark"
-                        data-bs-dismiss="offcanvas"
-                        onClick={handleAttackLater}
-                        className="ml-2"
-                    >
-                        Wait and Capture Later
-                    </Button>
-                </div>
-            </div>
-        </div>
+        </>
     );
 }
 

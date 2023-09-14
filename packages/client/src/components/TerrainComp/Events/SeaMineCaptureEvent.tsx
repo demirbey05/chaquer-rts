@@ -10,7 +10,7 @@ export const SeaMineCaptureEvent = (
     setTargetSeaMinePosition: any,
     toFleetPositionRef: any,
     setMyFleetConfig: any,
-    myFleetPosition: any[]
+    myFleetPosition: any[] | undefined
 ) => {
     setIsFleetMoveStage(false)
     setFleetSettleStage(false)

@@ -10,7 +10,7 @@ export const FleetAttackEvent = (
     toFleetPositionRef: any,
     setMyFleetConfig: any,
     setEnemyFleetConfig: any,
-    myFleetPositions: any[],
+    myFleetPositions: any[] | undefined,
     fleetPositions: any
 ) => {
     setIsFleetMoveStage(false);

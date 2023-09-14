@@ -16,12 +16,13 @@ export const ArmyMoveEvent = async (
     systemCalls: any,
     setErrorMessage: any,
     setErrorTitle: any,
-    setShowError: any
+    setShowError: any,
+    setIsLoading: (value: boolean) => void
 ) => {
-    setIsAttackStage(false)
-    setIsMineStage(false)
+    setIsAttackStage(false);
+    setIsMineStage(false);
     setDockSettleStage(false);
-    setDockCaptureStage(false)
+    setDockCaptureStage(false);
 
     const movingArmyIdMap = findIDFromPosition(
         fromArmyPositionRef.current,
@@ -35,24 +36,37 @@ export const ArmyMoveEvent = async (
     setIsArmyMoveStage(false);
 
     if (toArmyPositionRef.current && isArmyMoveStage) {
-        const tx = await systemCalls.moveArmy(
-            movingArmyId.current,
-            toArmyPositionRef.current.x,
-            toArmyPositionRef.current.y,
-            1
-        )
-        if (tx == null) {
-            setErrorMessage("An error occurred while trying to move army.")
-            setErrorTitle("Army Move Error")
-            setShowError(true)
-            return
+        setIsLoading(true);
+
+        try {
+            const tx = await systemCalls.moveArmy(
+                movingArmyId.current,
+                toArmyPositionRef.current.x,
+                toArmyPositionRef.current.y,
+                1
+            );
+
+            if (tx == null) {
+                setErrorMessage("An error occurred while trying to move army.");
+                setErrorTitle("Army Move Error");
+                setShowError(true);
+                setIsLoading(false)
+                return;
+            }
+
+            document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
+            document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
+
+            setFromArmyPosition(undefined);
+            toArmyPositionRef.current = { x: -1, y: -1 };
+            fromArmyPositionRef.current = { x: "-1", y: "-1" };
+        } catch (error) {
+            setErrorMessage("An error occurred while trying to move army.");
+            setErrorTitle("Army Move Error");
+            setShowError(true);
+            setIsLoading(false)
+        } finally {
+            setIsLoading(false);
         }
-
-        document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
-        document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
-
-        setFromArmyPosition(undefined);
-        toArmyPositionRef.current = { x: -1, y: -1 };
-        fromArmyPositionRef.current = { x: "-1", y: "-1" };
     }
-}
+};

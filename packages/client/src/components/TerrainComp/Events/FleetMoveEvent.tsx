@@ -14,7 +14,8 @@ export const FleetMoveEvent = async (
     systemCalls: any,
     setErrorMessage: any,
     setErrorTitle: any,
-    setShowError: any
+    setShowError: any,
+    setIsLoading: (value: boolean) => void
 ) => {
     setSeaMineStage(false)
     setIsFleetAttackStage(false)
@@ -31,6 +32,7 @@ export const FleetMoveEvent = async (
     setIsFleetMoveStage(false);
 
     if (toFleetPositionRef.current && isFleetMoveStage) {
+        setIsLoading(true)
         const tx = await systemCalls.moveFleet(
             movingFleetID.current,
             toFleetPositionRef.current.x,
@@ -40,6 +42,7 @@ export const FleetMoveEvent = async (
             setErrorMessage("An error occurred while trying to move the fleet.")
             setErrorTitle("Fleet Move Error")
             setShowError(true)
+            setIsLoading(false)
             return
         }
 
@@ -49,5 +52,6 @@ export const FleetMoveEvent = async (
         setFromFleetPosition(undefined);
         toFleetPositionRef.current = { x: -1, y: -1 };
         fromFleetPositionRef.current = { x: "-1", y: "-1" };
+        setIsLoading(false)
     }
 }

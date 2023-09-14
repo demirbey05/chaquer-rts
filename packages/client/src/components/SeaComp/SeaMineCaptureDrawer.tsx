@@ -8,6 +8,7 @@ import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/
 import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
 import { getResourceTypeByPosition } from "../../utils/helperFunctions/ResourceFuntions/getResourceTypeByPosition";
 import { useResources } from "../../hooks/ResourceHooks/useResources";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 
 export const SeaMineCaptureDrawer = () => {
     const { components, systemCalls } = useMUD();
@@ -17,6 +18,7 @@ export const SeaMineCaptureDrawer = () => {
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
 
     const [mineFleet, setMineFleet] = useState<any>();
+    const [isLoading, setIsLoading] = useState<any>(false);
     const resources = useResources();
 
     const handleCaptureLater = () => {
@@ -52,19 +54,23 @@ export const SeaMineCaptureDrawer = () => {
             setErrorMessage("An error occurred while trying to capture a sea mine.")
             setErrorTitle("Sea Mine Capture Error")
             setShowError(true)
+            setIsLoading(false)
             return
         }
+        setIsLoading(true)
         const tx = await systemCalls.captureMine(attackFromFleetId[0], attackToMineId[0], 1)
         if (tx == null) {
             setErrorMessage("An error occurred while trying to capture a sea mine.")
             setErrorTitle("Sea Mine Capture Error")
             setShowError(true)
+            setIsLoading(false)
             return
         }
 
         setSeaMineStage(false);
         setMyFleetConfig(undefined);
         setEnemyFleetConfig(undefined);
+        setIsLoading(false)
     };
 
     const seaMineCaptureCanvasStyles = {
@@ -78,53 +84,56 @@ export const SeaMineCaptureDrawer = () => {
     }
 
     return (
-        <div
-            className="offcanvas offcanvas-bottom rounded-4 font-bold text-white"
-            data-bs-keyboard="false"
-            data-bs-backdrop="false"
-            style={seaMineCaptureCanvasStyles}
-            tabIndex={-1}
-            id="seaMineCaptureDrawer"
-            aria-labelledby="seaMineCaptureDrawerLabel"
-        >
-            <MineCaptureModalHeader resourceType={getResourceTypeByPosition(resources, targetSeaMinePosition)} />
-            <div className="offcanvas-body small">
-                <div className="row">
-                    <SeaMineAttackFleetCard title={"My Fleet"} titleBg={"success"}
-                        numSmall={myFleetConfig && myFleetConfig.myFleetConfig.numSmall}
-                        numMedium={myFleetConfig && myFleetConfig.myFleetConfig.numMedium}
-                        numBig={myFleetConfig && myFleetConfig.myFleetConfig.numBig} />
-                    <SeaMineAttackFleetCard title={"Enemy Fleet"} titleBg={"danger"}
-                        numSmall={mineFleet && mineFleet.numSwordsman}
-                        numMedium={mineFleet && mineFleet.numArcher}
-                        numBig={mineFleet && mineFleet.numCavalry} />
+        <>
+            {isLoading && <EventProgressBar text={"Fleet is capturing the resources..."} />}
+            <div
+                className="offcanvas offcanvas-bottom rounded-4 font-bold text-white"
+                data-bs-keyboard="false"
+                data-bs-backdrop="false"
+                style={seaMineCaptureCanvasStyles}
+                tabIndex={-1}
+                id="seaMineCaptureDrawer"
+                aria-labelledby="seaMineCaptureDrawerLabel"
+            >
+                <MineCaptureModalHeader resourceType={getResourceTypeByPosition(resources, targetSeaMinePosition)} />
+                <div className="offcanvas-body small">
+                    <div className="row">
+                        <SeaMineAttackFleetCard title={"My Fleet"} titleBg={"success"}
+                            numSmall={myFleetConfig && myFleetConfig.myFleetConfig.numSmall}
+                            numMedium={myFleetConfig && myFleetConfig.myFleetConfig.numMedium}
+                            numBig={myFleetConfig && myFleetConfig.myFleetConfig.numBig} />
+                        <SeaMineAttackFleetCard title={"Enemy Fleet"} titleBg={"danger"}
+                            numSmall={mineFleet && mineFleet.numSwordsman}
+                            numMedium={mineFleet && mineFleet.numArcher}
+                            numBig={mineFleet && mineFleet.numCavalry} />
+                    </div>
+                </div>
+                <div className="d-flex justify-content-center">
+                    <div className="flex-column align-items-center">
+                        <Button
+                            colorScheme="whatsapp"
+                            border="solid"
+                            textColor="dark"
+                            data-bs-dismiss="offcanvas"
+                            onClick={handleCapture}
+                            className="mr-2"
+                        >
+                            Capture the Mine
+                        </Button>
+                        <Button
+                            colorScheme="red"
+                            border="solid"
+                            textColor="dark"
+                            data-bs-dismiss="offcanvas"
+                            onClick={handleCaptureLater}
+                            className="ml-2"
+                        >
+                            Wait and Capture Later
+                        </Button>
+                    </div>
                 </div>
             </div>
-            <div className="d-flex justify-content-center">
-                <div className="flex-column align-items-center">
-                    <Button
-                        colorScheme="whatsapp"
-                        border="solid"
-                        textColor="dark"
-                        data-bs-dismiss="offcanvas"
-                        onClick={handleCapture}
-                        className="mr-2"
-                    >
-                        Capture the Mine
-                    </Button>
-                    <Button
-                        colorScheme="red"
-                        border="solid"
-                        textColor="dark"
-                        data-bs-dismiss="offcanvas"
-                        onClick={handleCaptureLater}
-                        className="ml-2"
-                    >
-                        Wait and Capture Later
-                    </Button>
-                </div>
-            </div>
-        </div>
+        </>
     );
 }
 

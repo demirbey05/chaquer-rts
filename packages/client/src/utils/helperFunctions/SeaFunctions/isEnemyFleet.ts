@@ -2,8 +2,8 @@ import { stringifyWrapper } from "../../stringifyWrapper";
 
 export const isEnemyFleet = (
   position: any,
-  myFleetPositions: any[],
-  fleetPositions: any[]
+  myFleetPositions: any[] | undefined,
+  fleetPositions: any[] | undefined
 ) => {
   if (myFleetPositions && fleetPositions) {
     const filteredArray = fleetPositions.filter((element: any) =>

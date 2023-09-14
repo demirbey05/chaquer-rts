@@ -5,6 +5,7 @@ import { useAttack } from "../../context/AttackContext";
 import { useError } from "../../context/ErrorContext";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 
 export const CastleAttackDrawer = () => {
   const { components, systemCalls } = useMUD();
@@ -16,6 +17,7 @@ export const CastleAttackDrawer = () => {
     attackFromArmyPositionToCastle,
     setIsAttackStage } = useAttack();
   const [castleArmy, setCastleArmy] = useState<any>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleAttackLater = () => {
     setIsAttackStage(false);
@@ -50,19 +52,25 @@ export const CastleAttackDrawer = () => {
       setErrorMessage("An error occurred while trying to attack to castle.")
       setErrorTitle("Castle Attack Error")
       setShowError(true)
+      setIsLoading(false)
       return
     }
+    setIsLoading(true)
+
     const tx = await systemCalls.castleCapture(attackFromArmyId[0], attackToCastleId[0])
+
     if (tx == null) {
       setErrorMessage("An error occurred while trying to attack to castle.")
       setErrorTitle("Castle Attack Error")
       setShowError(true)
+      setIsLoading(false)
       return
     }
 
     setIsAttackStage(false);
     setMyArmyConfig(undefined);
     setEnemyArmyConfig(undefined);
+    setIsLoading(false)
   };
 
   const castleAttackOffCanvasDivStyle: any = {
@@ -76,53 +84,56 @@ export const CastleAttackDrawer = () => {
   }
 
   return (
-    <div
-      className="offcanvas offcanvas-bottom rounded-4 font-bold text-white"
-      data-bs-keyboard="false"
-      data-bs-backdrop="false"
-      style={castleAttackOffCanvasDivStyle}
-      tabIndex={-1}
-      id="castleAttackDrawer"
-      aria-labelledby="castleAttackDrawerLabel"
-    >
-      <CastleAttackModalHeader />
-      <div className="offcanvas-body small">
-        <div className="row">
-          <CastleAttackModalArmyCard title={"My Army"} titleBg={"success"}
-            numSwordsman={myArmyConfig && myArmyConfig.myArmyConfig.numSwordsman}
-            numArcher={myArmyConfig && myArmyConfig.myArmyConfig.numArcher}
-            numCavalry={myArmyConfig && myArmyConfig.myArmyConfig.numCavalry} />
-          <CastleAttackModalArmyCard title={"Enemy Army"} titleBg={"danger"}
-            numSwordsman={castleArmy && castleArmy.numSwordsman}
-            numArcher={castleArmy && castleArmy.numArcher}
-            numCavalry={castleArmy && castleArmy.numCavalry} />
+    <>
+      {isLoading && <EventProgressBar text="Soliders are trying to capture the castle..." />}
+      <div
+        className="offcanvas offcanvas-bottom rounded-4 font-bold text-white"
+        data-bs-keyboard="false"
+        data-bs-backdrop="false"
+        style={castleAttackOffCanvasDivStyle}
+        tabIndex={-1}
+        id="castleAttackDrawer"
+        aria-labelledby="castleAttackDrawerLabel"
+      >
+        <CastleAttackModalHeader />
+        <div className="offcanvas-body small">
+          <div className="row">
+            <CastleAttackModalArmyCard title={"My Army"} titleBg={"success"}
+              numSwordsman={myArmyConfig && myArmyConfig.myArmyConfig.numSwordsman}
+              numArcher={myArmyConfig && myArmyConfig.myArmyConfig.numArcher}
+              numCavalry={myArmyConfig && myArmyConfig.myArmyConfig.numCavalry} />
+            <CastleAttackModalArmyCard title={"Enemy Army"} titleBg={"danger"}
+              numSwordsman={castleArmy && castleArmy.numSwordsman}
+              numArcher={castleArmy && castleArmy.numArcher}
+              numCavalry={castleArmy && castleArmy.numCavalry} />
+          </div>
+        </div>
+        <div className="d-flex justify-content-center">
+          <div className="flex-column align-items-center">
+            <Button
+              colorScheme="whatsapp"
+              border="solid"
+              textColor="dark"
+              data-bs-dismiss="offcanvas"
+              onClick={handleAttack}
+              className="mr-2"
+            >
+              Attack to Castle
+            </Button>
+            <Button
+              colorScheme="red"
+              border="solid"
+              textColor="dark"
+              data-bs-dismiss="offcanvas"
+              onClick={handleAttackLater}
+              className="ml-2"
+            >
+              Wait and Attack Later
+            </Button>
+          </div>
         </div>
       </div>
-      <div className="d-flex justify-content-center">
-        <div className="flex-column align-items-center">
-          <Button
-            colorScheme="whatsapp"
-            border="solid"
-            textColor="dark"
-            data-bs-dismiss="offcanvas"
-            onClick={handleAttack}
-            className="mr-2"
-          >
-            Attack to Castle
-          </Button>
-          <Button
-            colorScheme="red"
-            border="solid"
-            textColor="dark"
-            data-bs-dismiss="offcanvas"
-            onClick={handleAttackLater}
-            className="ml-2"
-          >
-            Wait and Attack Later
-          </Button>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }
 

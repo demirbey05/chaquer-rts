@@ -11,6 +11,7 @@ import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { useNumberOfResource } from "../../hooks/ResourceHooks/useNumberOfResource";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 
 export const FleetSettleModal = () => {
     const { userWallet } = usePlayer();
@@ -27,6 +28,7 @@ export const FleetSettleModal = () => {
     const [enoughWood, setEnoughWood] = useState(true);
     const [totalCreditCharge, setTotalCreditCharge] = useState<number>(0);
     const [totalWoodCharge, setTotalWoodCharge] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState(false);
     const dockID = useRef<string>("0");
 
     const fleetPrices = {
@@ -110,7 +112,7 @@ export const FleetSettleModal = () => {
         }
 
         setFleetSettleStage(false);
-
+        setIsLoading(true)
         const tx = await systemCalls.settleFleet(
             fleetPosition.x,
             fleetPosition.y,
@@ -134,84 +136,88 @@ export const FleetSettleModal = () => {
             setErrorTitle("Fleet Settlement Error")
             setShowError(true)
         }
+        setIsLoading(false)
     };
 
     return (
-        <div
-            className="modal fade"
-            id="fleetSettleModal"
-            data-bs-backdrop="static"
-            aria-labelledby="fleetSettleModalLabel"
-            aria-hidden="true"
-        >
-            <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content bg-dark text-white">
-                    <div className="modal-header justify-center">
-                        <Tooltip label="Please determine the number of war ships that will hold in
+        <>
+            {isLoading && <EventProgressBar text={"Fleet is moving towards water..."} />}
+            <div
+                className="modal fade"
+                id="fleetSettleModal"
+                data-bs-backdrop="static"
+                aria-labelledby="fleetSettleModalLabel"
+                aria-hidden="true"
+            >
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content bg-dark text-white">
+                        <div className="modal-header justify-center">
+                            <Tooltip label="Please determine the number of war ships that will hold in
                   the fleet. You can deploy maximum 300 ships in a fleet." placement="top-start" bg="blue.400" fontSize="md">
-                            <h1 className="modal-title text-2xl" id="fleetSettleModalLabel">
-                                Fleet Settlement
-                            </h1>
-                        </Tooltip>
-                    </div>
-                    <div className="modal-body">
-                        <div className="container-fluid">
-                            {
-                                !enoughCredit &&
-                                <Alert status='warning' color={"black"}>
-                                    <AlertIcon />
-                                    <AlertTitle>You have no enough credit, sell some resources! Total Credit Charge: {totalCreditCharge} 💰</AlertTitle>
-                                </Alert>
-                            }
-                            {
-                                !enoughWood &&
-                                <Alert status='warning' color={"black"}>
-                                    <AlertIcon />
-                                    <AlertTitle>You have no enough wood, capture some wood resource! Total Wood Charge: {totalWoodCharge} 💰</AlertTitle>
-                                </Alert>
-                            }
-                            <div className="row mt-2">
-                                <FleetSettleInputBody imageSource={smallShipImg}
-                                    soldierName={"Baron's Dagger"}
-                                    setSoliderCount={setSmallShipCount}
-                                    imageHeight={"100px"}
-                                    imageWidth={"100px"} />
-                                <FleetSettleInputBody imageSource={mediumShipImg}
-                                    soldierName={"Knight's Galley"}
-                                    setSoliderCount={setMediumShipCount}
-                                    imageHeight={"100px"}
-                                    imageWidth={"100px"} />
-                                <FleetSettleInputBody imageSource={largeShipImg}
-                                    soldierName={"King's Leviathan"}
-                                    setSoliderCount={setLargeShipCount}
-                                    imageHeight={"100px"}
-                                    imageWidth={"100px"} />
+                                <h1 className="modal-title text-2xl" id="fleetSettleModalLabel">
+                                    Fleet Settlement
+                                </h1>
+                            </Tooltip>
+                        </div>
+                        <div className="modal-body">
+                            <div className="container-fluid">
+                                {
+                                    !enoughCredit &&
+                                    <Alert status='warning' color={"black"}>
+                                        <AlertIcon />
+                                        <AlertTitle>You have no enough credit, sell some resources! Total Credit Charge: {totalCreditCharge} 💰</AlertTitle>
+                                    </Alert>
+                                }
+                                {
+                                    !enoughWood &&
+                                    <Alert status='warning' color={"black"}>
+                                        <AlertIcon />
+                                        <AlertTitle>You have no enough wood, capture some wood resource! Total Wood Charge: {totalWoodCharge} 💰</AlertTitle>
+                                    </Alert>
+                                }
+                                <div className="row mt-2">
+                                    <FleetSettleInputBody imageSource={smallShipImg}
+                                        soldierName={"Baron's Dagger"}
+                                        setSoliderCount={setSmallShipCount}
+                                        imageHeight={"100px"}
+                                        imageWidth={"100px"} />
+                                    <FleetSettleInputBody imageSource={mediumShipImg}
+                                        soldierName={"Knight's Galley"}
+                                        setSoliderCount={setMediumShipCount}
+                                        imageHeight={"100px"}
+                                        imageWidth={"100px"} />
+                                    <FleetSettleInputBody imageSource={largeShipImg}
+                                        soldierName={"King's Leviathan"}
+                                        setSoliderCount={setLargeShipCount}
+                                        imageHeight={"100px"}
+                                        imageWidth={"100px"} />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="modal-footer">
-                        <Button
-                            colorScheme="whatsapp"
-                            border="solid"
-                            textColor="dark"
-                            data-bs-dismiss="modal"
-                            isDisabled={isDisabled}
-                            onClick={() => handleClick()}
-                        >
-                            Settle Fleet
-                        </Button>
-                        <Button
-                            colorScheme="red"
-                            border="solid"
-                            textColor="dark"
-                            data-bs-dismiss="modal"
-                        >
-                            Back to Map
-                        </Button>
+                        <div className="modal-footer">
+                            <Button
+                                colorScheme="whatsapp"
+                                border="solid"
+                                textColor="dark"
+                                data-bs-dismiss="modal"
+                                isDisabled={isDisabled}
+                                onClick={() => handleClick()}
+                            >
+                                Settle Fleet
+                            </Button>
+                            <Button
+                                colorScheme="red"
+                                border="solid"
+                                textColor="dark"
+                                data-bs-dismiss="modal"
+                            >
+                                Back to Map
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 

@@ -8,7 +8,11 @@ import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { usePlayer } from "../../context/PlayerContext";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 
-export const BuyResources = () => {
+interface BuyResourcesPropTypes {
+    setIsLoading: (value: boolean) => void
+}
+
+export const BuyResources = (props: BuyResourcesPropTypes) => {
     const { systemCalls } = useMUD();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { userWallet } = usePlayer();
@@ -145,6 +149,7 @@ export const BuyResources = () => {
 
     const handleFoodBuy = async () => {
         if (numFood.length > 0) {
+            props.setIsLoading(true)
             const tx = await systemCalls.buyResource(1, parseInt(numFood), 0);
             if (tx) {
                 setNumFood('');
@@ -156,10 +161,12 @@ export const BuyResources = () => {
                 setShowError(true);
             }
         }
+        props.setIsLoading(false)
     }
 
     const handleWoodBuy = async () => {
         if (numWood.length > 0) {
+            props.setIsLoading(true)
             const tx = await systemCalls.buyResource(1, parseInt(numWood), 1);
             if (tx) {
                 setNumWood('');
@@ -171,10 +178,12 @@ export const BuyResources = () => {
                 setShowError(true);
             }
         }
+        props.setIsLoading(false)
     }
 
     const handleGoldBuy = async () => {
         if (numGold.length > 0) {
+            props.setIsLoading(true)
             const tx = await systemCalls.buyResource(1, parseInt(numGold), 2);
             if (tx) {
                 setNumGold('');
@@ -186,10 +195,12 @@ export const BuyResources = () => {
                 setShowError(true);
             }
         }
+        props.setIsLoading(false)
     }
 
     const handle30ResourceBuy = async ({ resourceType }: any) => {
         if (resourceType !== undefined) {
+            props.setIsLoading(true)
             const tx = await systemCalls.buyResource(1, 30, resourceType);
             if (tx === null) {
                 setErrorMessage("You have enough credit.")
@@ -197,10 +208,12 @@ export const BuyResources = () => {
                 setShowError(true);
             }
         }
+        props.setIsLoading(false)
     }
 
     const handle100ResourceBuy = async ({ resourceType }: any) => {
         if (resourceType !== undefined) {
+            props.setIsLoading(true)
             const tx = await systemCalls.buyResource(1, 100, resourceType);
             if (tx === null) {
                 setErrorMessage("You have enough credit.")
@@ -208,10 +221,12 @@ export const BuyResources = () => {
                 setShowError(true);
             }
         }
+        props.setIsLoading(false)
     }
 
     const handle500ResourceBuy = async ({ resourceType }: any) => {
         if (resourceType !== undefined) {
+            props.setIsLoading(true)
             const tx = await systemCalls.buyResource(1, 500, resourceType);
             if (tx === null) {
                 setErrorMessage("You have enough credit.")
@@ -219,6 +234,7 @@ export const BuyResources = () => {
                 setShowError(true);
             }
         }
+        props.setIsLoading(false)
     }
 
     return (

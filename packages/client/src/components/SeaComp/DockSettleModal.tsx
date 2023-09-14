@@ -11,11 +11,14 @@ import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { useNumberOfResource } from "../../hooks/ResourceHooks/useNumberOfResource";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { useArmy } from "../../context/ArmyContext";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 
 export const DockSettleModal = () => {
     const { systemCalls, components } = useMUD();
     const movingArmyId = useRef<Entity>("0" as Entity);
     const [isDisabled, setIsDisabled] = useState<boolean>(true);
+    const [isLoadingDock, setIsLoadingDock] = useState<boolean>(false);
+    const [isLoadingMove, setIsLoadingMove] = useState<boolean>(false);
 
     const { armyPositionToSettleDock, dockPosition, setDockPosition, setArmyPositionToSettleDock, setDockSettleStage } = useSea();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
@@ -55,7 +58,7 @@ export const DockSettleModal = () => {
         }
 
         setIsArmyMoveStage(false)
-
+        setIsLoadingDock(true)
         const tx = await systemCalls.buildDock(
             dockPosition.x,
             dockPosition.y,
@@ -67,12 +70,14 @@ export const DockSettleModal = () => {
             setErrorMessage("An error occurred while trying to settle dock.")
             setErrorTitle("Dock Settle Error")
             setShowError(true)
+            setIsLoadingDock(false)
             return
         }
         else {
             setDockSettleStage(false);
             setDockPosition(undefined);
         }
+        setIsLoadingDock(false)
     };
 
     const handleMove = async () => {
@@ -86,6 +91,7 @@ export const DockSettleModal = () => {
         }
 
         if (dockPosition) {
+            setIsLoadingMove(true)
             const tx = await systemCalls.moveArmy(
                 movingArmyId.current,
                 dockPosition.x,
@@ -96,6 +102,7 @@ export const DockSettleModal = () => {
                 setErrorMessage("An error occurred while trying to move army.")
                 setErrorTitle("Army Move Error")
                 setShowError(true)
+                setIsLoadingMove(false)
                 return
             }
 
@@ -106,11 +113,14 @@ export const DockSettleModal = () => {
             setIsArmyMoveStage(false)
             setArmyPositionToSettleDock(undefined);
             setDockPosition(undefined);
+            setIsLoadingMove(false)
         };
     }
 
     return (
         <>
+            {isLoadingDock && <EventProgressBar text="Dock is being placed..." />}
+            {isLoadingMove && <EventProgressBar text="Soliders are moving to the new position..." />}
             <div
                 className="modal fade"
                 id="dockSettleModal"

@@ -14,7 +14,7 @@ import { isMyResource } from '../../../utils/helperFunctions/ResourceFuntions/is
 import { isMyDock } from '../../../utils/helperFunctions/SeaFunctions/isMyDock';
 import { isMyFleet } from '../../../utils/helperFunctions/SeaFunctions/isMyFleet';
 
-export const HoverEffects = (myFleetPositions: any[] | undefined, myDockPositions: any[], myResourcePositions: any[], myArmyPosition: any[], dockPositions: any[], fromFleetPosition: any, isFleetMoveStage: boolean, armyPositions: any[], resources: any[], numberOfArmy: any, isArmySettleStage: boolean | undefined, isBorder: boolean, castlePositions: any[], myCastlePosition: any[], values: number[][], fromArmyPosition: { x: any, y: any } | undefined, isArmyMoveStage: boolean | undefined) => {
+export const HoverEffects = (myFleetPositions: any[] | undefined, myDockPositions: any[] | undefined, myResourcePositions: any[], myArmyPosition: any[], dockPositions: any[], fromFleetPosition: any, isFleetMoveStage: boolean, armyPositions: any[], resources: any[], numberOfArmy: any, isArmySettleStage: boolean | undefined, isBorder: boolean, castlePositions: any[], myCastlePosition: any[], values: number[][], fromArmyPosition: { x: any, y: any } | undefined, isArmyMoveStage: boolean | undefined) => {
     //Blue hover effect when user moves an army
     useEffect(() => {
         if (fromArmyPosition && isArmyMoveStage && myCastlePosition) {

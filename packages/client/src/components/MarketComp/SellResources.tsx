@@ -5,7 +5,11 @@ import { usePlayer } from '../../context/PlayerContext';
 import { useError } from "../../context/ErrorContext";
 import { useNumberOfResource } from '../../hooks/ResourceHooks/useNumberOfResource';
 
-export const SellResources = () => {
+interface SellResourcesPropTypes {
+    setIsLoading: (value: boolean) => void
+}
+
+export const SellResources = (props: SellResourcesPropTypes) => {
     const { systemCalls } = useMUD();
     const { userWallet } = usePlayer();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
@@ -138,52 +142,57 @@ export const SellResources = () => {
     }, [numGold, numberOfResource]);
 
     const handleFoodSell = async () => {
+        props.setIsLoading(true);
         if (numFood.length > 0) {
             const tx = await systemCalls.sellResource(1, parseInt(numFood), 0);
             if (tx) {
                 setNumFood('');
                 (document.getElementById('Food') as HTMLInputElement).value = '';
-            }
-            else {
-                setErrorMessage("You have no enough wood!")
+            } else {
+                setErrorMessage("You have no enough wood!");
                 setErrorTitle("Food Selling Error");
                 setShowError(true);
             }
         }
+        props.setIsLoading(false);
     }
 
     const handleWoodSell = async () => {
+        props.setIsLoading(true);
         if (numWood.length > 0) {
             const tx = await systemCalls.sellResource(1, parseInt(numWood), 1);
             if (tx) {
                 setNumWood('');
                 (document.getElementById('Wood') as HTMLInputElement).value = '';
-            }
-            else {
-                setErrorMessage("You have no enough wood!")
+            } else {
+                setErrorMessage("You have no enough wood!");
                 setErrorTitle("Wood Selling Error");
                 setShowError(true);
             }
         }
+        props.setIsLoading(false);
     }
 
     const handleGoldSell = async () => {
+        props.setIsLoading(true);
         if (numGold.length > 0) {
             const tx = await systemCalls.sellResource(1, parseInt(numGold), 2);
             if (tx) {
                 setNumGold('');
                 (document.getElementById('Gold') as HTMLInputElement).value = '';
-            }
-            else {
-                setErrorMessage("You have no enough gold!")
+            } else {
+                setErrorMessage("You have no enough gold!");
                 setErrorTitle("Gold Selling Error");
                 setShowError(true);
             }
         }
+        props.setIsLoading(false);
     }
+
 
     const handle30ResourceSell = async ({ resourceType }: any) => {
         if (resourceType !== undefined) {
+            props.setIsLoading(true)
             const tx = await systemCalls.sellResource(1, 30, resourceType);
             if (tx === null) {
                 setErrorMessage("You have no 30 resources.")
@@ -191,10 +200,12 @@ export const SellResources = () => {
                 setShowError(true);
             }
         }
+        props.setIsLoading(false)
     }
 
     const handle100ResourceSell = async ({ resourceType }: any) => {
         if (resourceType !== undefined) {
+            props.setIsLoading(true)
             const tx = await systemCalls.sellResource(1, 100, resourceType);
             if (tx === null) {
                 setErrorMessage("You have no 100 resources.")
@@ -202,10 +213,12 @@ export const SellResources = () => {
                 setShowError(true);
             }
         }
+        props.setIsLoading(false)
     }
 
     const handle500ResourceSell = async ({ resourceType }: any) => {
         if (resourceType !== undefined) {
+            props.setIsLoading(true)
             const tx = await systemCalls.sellResource(1, 500, resourceType);
             if (tx === null) {
                 setErrorMessage("You have no 500 resources.")
@@ -213,6 +226,7 @@ export const SellResources = () => {
                 setShowError(true);
             }
         }
+        props.setIsLoading(false)
     }
 
     return (

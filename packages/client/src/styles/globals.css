@@ -490,3 +490,12 @@ input::-webkit-inner-spin-button {
     border-radius: 50%;
     display: inline-block;
 }
+
+.event-progress-bar {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 200px auto;
+}

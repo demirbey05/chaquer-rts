@@ -1,7 +1,7 @@
 import "../../styles/globals.css";
 import MapImg from '../../images/map.png';
 import { TerrainType } from "../../terrain-helper/types";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Entity } from "@latticexyz/recs";
 import { useCastle } from "../../context/CastleContext";
 import { useAttack } from "../../context/AttackContext";
@@ -56,6 +56,7 @@ import { FleetMoveEvent } from "./Events/FleetMoveEvent";
 import { FleetAttackEvent } from "./Events/FleetAttackEvent";
 import { isEnemyFleet } from "../../utils/helperFunctions/SeaFunctions/isEnemyFleet";
 import { SeaMineCaptureEvent } from "./Events/SeaMineCaptureEvent";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 
 export type DataProp = {
   width: number;
@@ -145,6 +146,8 @@ export const Terrain = (props: DataProp) => {
   const movingFleetId = useRef<string>("0");
   const toFleetPositionRef = useRef<{ x: number, y: number }>({ x: -1, y: -1 });
   const fromFleetPositionRef = useRef<Coord | undefined>({ x: "-1", y: "-1" });
+  const [isLoadingArmy, setIsLoadingArmy] = useState<boolean>(false);
+  const [isLoadingFleet, setIsLoadingFleet] = useState<boolean>(false);
 
   const castlePositions = useCastlePositions();
   const myCastlePosition = useMyCastlePositions(userWallet);
@@ -210,7 +213,7 @@ export const Terrain = (props: DataProp) => {
         SeaMineCaptureEvent(setIsFleetMoveStage, setFleetSettleStage, setIsFleetAttackStage, setFromFleetPosition, setSeaMineAttackerFleetPosition, fromFleetPositionRef, setTargetSeaMinePosition, toFleetPositionRef, setMyFleetConfig, myFleetPositions)
       }
       else if (canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y])) { //Buraya toFleetPosition ın, kendi fleetine ait olup olmadgını check etmek lazım
-        await FleetMoveEvent(setIsFleetMoveStage, setSeaMineStage, setIsFleetAttackStage, fromFleetPositionRef, toFleetPositionRef, isFleetMoveStage, fromFleetPosition, setFromFleetPosition, components, movingFleetId, systemCalls, setErrorMessage, setErrorTitle, setShowError);
+        await FleetMoveEvent(setIsFleetMoveStage, setSeaMineStage, setIsFleetAttackStage, fromFleetPositionRef, toFleetPositionRef, isFleetMoveStage, fromFleetPosition, setFromFleetPosition, components, movingFleetId, systemCalls, setErrorMessage, setErrorTitle, setShowError, setIsLoadingFleet);
       }
     }
     else {
@@ -251,7 +254,7 @@ export const Terrain = (props: DataProp) => {
         DockSettleEvent(setIsMineStage, setIsAttackStage, setIsArmyMoveStage, setDockCaptureStage, setFromArmyPosition, setArmyPositionToSettleDock, fromArmyPositionRef, setDockPosition, toArmyPositionRef);
       }
       else if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y]) && !isMyCastle(myCastlePosition, toArmyPositionRef.current.x, toArmyPositionRef.current.y) && !isMyDock(Number(toArmyPositionRef.current.x), Number(toArmyPositionRef.current.y), myDockPositions)) {
-        await ArmyMoveEvent(setIsAttackStage, setIsMineStage, setDockSettleStage, setDockCaptureStage, fromArmyPositionRef, setIsArmyMoveStage, toArmyPositionRef, isArmyMoveStage, fromArmyPosition, setFromArmyPosition, components, movingArmyId, systemCalls, setErrorMessage, setErrorTitle, setShowError);
+        await ArmyMoveEvent(setIsAttackStage, setIsMineStage, setDockSettleStage, setDockCaptureStage, fromArmyPositionRef, setIsArmyMoveStage, toArmyPositionRef, isArmyMoveStage, fromArmyPosition, setFromArmyPosition, components, movingArmyId, systemCalls, setErrorMessage, setErrorTitle, setShowError, setIsLoadingArmy);
       }
     }
     else {
@@ -275,61 +278,66 @@ export const Terrain = (props: DataProp) => {
   FleetEffects(myFleetPositions, fleetPositions, fleetSettleStage, myDockPositions, props.isBorder, values);
 
   return (
-    <div className={`inline-grid ${props.isBorder && "border-4 border-black"}`}
-      style={{
-        transform: `scale(${props.zoomLevel})`,
-        transition: "transform 0.2s ease-in-out",
-        zIndex: "1",
-        backgroundImage: `url(${MapImg})`, // Remove the 4 next line to remove AI generated terrain
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        boxShadow: "20px 20px rgba(0, 0, 0, 0.5)",
-      }} >
-      {
-        rows.map((row) => {
-          return columns.map((column) => {
-            return (
-              <span
-                key={`${column},${row}`}
-                id={`${column},${row}`}
-                data-row={`${row}`}
-                data-column={`${column}`}
-                style={{
-                  gridColumn: column + 1,
-                  gridRow: row + 1,
-                  width: `${props.pixelStyles[1]}px`,
-                  height: `${props.pixelStyles[1]}px`,
-                  //backgroundImage: `${getTerrainAsset(values[row][column])}`, // remove the next 2 line for AI generated map
-                  //backgroundSize: "cover",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  fontSize: `${props.isBorder ? "7px" : "20px"}`,
-                  border: "0.5px solid rgba(0, 0, 0, 0.1)"
-                }}
-                onClick={(e) => {
-                  handleClick(e);
-                }}
-                className={`
+    <>
+      <div className={`inline-grid ${props.isBorder && "border-4 border-black"}`}
+        style={{
+          transform: `scale(${props.zoomLevel})`,
+          transition: "transform 0.2s ease-in-out",
+          zIndex: "1",
+          backgroundImage: `url(${MapImg})`, // Remove the 4 next line to remove AI generated terrain
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          boxShadow: "20px 20px rgba(0, 0, 0, 0.5)",
+        }} >
+        {
+          rows.map((row) => {
+            return columns.map((column) => {
+              return (
+                <span
+                  key={`${column},${row}`}
+                  id={`${column},${row}`}
+                  data-row={`${row}`}
+                  data-column={`${column}`}
+                  style={{
+                    gridColumn: column + 1,
+                    gridRow: row + 1,
+                    width: `${props.pixelStyles[1]}px`,
+                    height: `${props.pixelStyles[1]}px`,
+                    //backgroundImage: `${getTerrainAsset(values[row][column])}`, // remove the next 2 line for AI generated map
+                    //backgroundSize: "cover",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: `${props.isBorder ? "7px" : "20px"}`,
+                    border: "0.5px solid rgba(0, 0, 0, 0.1)"
+                  }}
+                  onClick={(e) => {
+                    handleClick(e);
+                  }}
+                  className={`
                 ${!props.isBorder &&
-                  isValidTerrainType(values[row][column]) &&
-                  "hoverTileEffect"
-                  }`}
-                data-bs-toggle={`${canCastleBeSettle(values[row][column]) &&
-                  !isCastleSettled &&
-                  !props.isBorder
-                  ? "modal" : ""
-                  }`}
-                data-bs-target={`${canCastleBeSettle(values[row][column]) &&
-                  !isCastleSettled &&
-                  !props.isBorder
-                  ? "#castleSettleModal" : ""
-                  }`}
-              ></span>
-            );
-          });
-        })
-      }
-    </div >
+                    isValidTerrainType(values[row][column]) &&
+                    "hoverTileEffect"
+                    }`}
+                  data-bs-toggle={`${canCastleBeSettle(values[row][column]) &&
+                    !isCastleSettled &&
+                    !props.isBorder
+                    ? "modal" : ""
+                    }`}
+                  data-bs-target={`${canCastleBeSettle(values[row][column]) &&
+                    !isCastleSettled &&
+                    !props.isBorder
+                    ? "#castleSettleModal" : ""
+                    }`}
+                ></span>
+              );
+            });
+          })
+        }
+      </div >
+      {isLoadingArmy && <EventProgressBar text={"Soldiers are passing to new position..."} />}
+      {isLoadingFleet && <EventProgressBar text={"Ships are passing to new position..."} />}
+    </>
+
   );
 }
