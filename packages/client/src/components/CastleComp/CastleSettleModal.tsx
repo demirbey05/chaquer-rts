@@ -29,11 +29,13 @@ export const CastleSettleModal = () => {
         setErrorMessage("An error occurred during castle settlement.");
         setErrorTitle("Castle Settlement Error");
         setShowError(true);
+        setIsLoading(false);
       }
     } catch (error) {
       setErrorMessage("An error occurred during castle settlement.");
       setErrorTitle("Castle Settlement Error");
       setShowError(true);
+      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }

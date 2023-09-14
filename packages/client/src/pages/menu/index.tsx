@@ -67,7 +67,7 @@ export const Menu = () => {
           </>)
         }
         <div className="col">
-          <h2 className="text-center text-white text-6xl border-top border-bottom font-bold">
+          <h2 className="text-center text-white text-6xl border-top border-bottom font-bold p-2">
             Chaquer
           </h2>
           {refresh !== 0 && <StartGameButton gameState={gameState} isLoading={isLoading} handleTerrain={handleTerrain} />}

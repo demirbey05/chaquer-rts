@@ -1,20 +1,16 @@
-import { useState } from 'react';
 import { Progress, Tooltip } from '@chakra-ui/react'
 import { useMUD } from '../../context/MUDContext';
 import { useError } from '../../context/ErrorContext';
 import { useIsMineInitialized } from '../../hooks/ResourceHooks/useIsMineInitialized';
-import { EventProgressBar } from '../ProgressComp/EventProgressBar';
 
 export const MineInitStage = () => {
     const { systemCalls } = useMUD();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
-    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const isMineInited = useIsMineInitialized(1)
 
     const InitResources = async () => {
         if (!isMineInited) {
-            setIsLoading(true)
             const tx = await systemCalls.resourceSystemInit(1);
             if (tx == null) {
                 setErrorMessage("An error occurred while initializing the mines.")
@@ -23,7 +19,6 @@ export const MineInitStage = () => {
                 return
             }
         }
-        setIsLoading(false)
     }
 
     return (
@@ -40,9 +35,6 @@ export const MineInitStage = () => {
                         </Tooltip>
                         <Progress size='sm' colorScheme={"whatsapp"} isIndeterminate />
                     </>
-                }
-                {
-                    isLoading && <EventProgressBar text="Resources are being deployed..." />
                 }
             </div>
         </div >

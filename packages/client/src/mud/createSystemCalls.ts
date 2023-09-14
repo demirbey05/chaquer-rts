@@ -69,11 +69,6 @@ export function createSystemCalls(
     y: number,
     gameID: number
   ) => {
-    const positionId = uuid();
-    Position.addOverride(positionId, {
-      entity: armyID as Entity,
-      value: { x, y },
-    });
     try {
       const tx = await worldContract.write.armyMove([
         armyID,
@@ -86,8 +81,6 @@ export function createSystemCalls(
     } catch (e) {
       console.log(e);
       return null;
-    } finally {
-      Position.removeOverride(positionId);
     }
   };
 
@@ -296,11 +289,6 @@ export function createSystemCalls(
   };
 
   const moveFleet = async (fleetID: string, x: number, y: number) => {
-    const positionId = uuid();
-    Position.addOverride(positionId, {
-      entity: fleetID as Entity,
-      value: { x, y },
-    });
     try {
       const tx = await worldContract.write.moveFleet([fleetID, x, y]);
       await waitForTransaction(tx);
@@ -308,8 +296,6 @@ export function createSystemCalls(
     } catch (e) {
       console.log(e);
       return null;
-    } finally {
-      Position.removeOverride(positionId);
     }
   };
 

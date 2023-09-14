@@ -43,7 +43,6 @@ import { FleetMoveWarning } from "../../components/SeaComp/FleetMoveWarning";
 import { FleetAttackDrawer } from "../../components/SeaComp/FleetAttackDrawer";
 import { UsersInGameDrawer } from "../../components/PlayerComp/UsersInGameDrawer";
 import { SeaMineCaptureDrawer } from "../../components/SeaComp/SeaMineCaptureDrawer";
-import { EventProgressBar } from "../../components/ProgressComp/EventProgressBar";
 
 export const Game = () => {
   const { width, height } = useTerrain();

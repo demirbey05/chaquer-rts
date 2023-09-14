@@ -3,12 +3,15 @@ import { Button, Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/reac
 import { BuyResources } from "./BuyResources";
 import { SellResources } from "./SellResources";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
+import { useResourcesInStoke } from "../../hooks/ResourceHooks/useResourcesInStoke";
 
 export const MarketDrawer = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const [isLoadingSell, setIsLoadingSell] = useState<boolean>(false);
     const [isLoadingBuy, setIsLoadingBuy] = useState<boolean>(false);
+
+    const resourcesInStock = useResourcesInStoke(1);
 
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
@@ -90,6 +93,33 @@ export const MarketDrawer = () => {
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
+                    <h2 className="text-center border-top border-bottom p-2">Stocks</h2>
+                    <div className="d-flex align-items-center justify-content-center mt-2">
+                        <div className="col align-items-center ms-4">
+                            <div className="row justify-content-center w-100">
+                                🌽
+                            </div>
+                            <div className="row justify-content-center text-center w-100 border-1 mt-2">
+                                {resourcesInStock && Number(resourcesInStock.foodSold)}
+                            </div>
+                        </div>
+                        <div className="col align-items-center ms-4">
+                            <div className="row justify-content-center w-100">
+                                🪓
+                            </div>
+                            <div className="row justify-content-center text-center w-100 border-1 mt-2">
+                                {resourcesInStock && Number(resourcesInStock.woodSold)}
+                            </div>
+                        </div>
+                        <div className="col align-items-center ms-4">
+                            <div className="row justify-content-center w-100">
+                                ⛏️
+                            </div>
+                            <div className="row justify-content-center text-center w-100 border-1 mt-2">
+                                {resourcesInStock && Number(resourcesInStock.goldSold)}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             {isLoadingSell && <EventProgressBar text={"Selling resources..."} />}

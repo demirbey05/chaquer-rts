@@ -431,7 +431,7 @@ input::-webkit-inner-spin-button {
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
     z-index: 2;
-    height: 475px;
+    height: 600px;
     width: 400px;
     padding: 10px;
     margin-top: 90px;
@@ -497,5 +497,5 @@ input::-webkit-inner-spin-button {
     left: 0;
     right: 0;
     bottom: 0;
-    margin: 200px auto;
+    margin: 185px auto;
 }

@@ -122,10 +122,10 @@ const PriceListItem = (props: PriceListItemPropTypes) => {
         {
             !props.isFleetPrices ?
                 <span className="me-2">
-                    {props.price ? getNumberFromBigInt(props.price).slice(0, 12) : "0.00"} 💰
+                    {props.price && getNumberFromBigInt(props.price).slice(0, 12)} 💰
                 </span> :
                 <span className="me-2">
-                    {props.price ? props.price : "0.00"}
+                    {props.price && props.price}
                 </span>
         }
     </p>
