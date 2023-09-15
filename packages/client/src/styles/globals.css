@@ -192,7 +192,7 @@ input::-webkit-inner-spin-button {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     /* Adjust the transparency as needed */
-    z-index: 10;
+    z-index: 5;
     opacity: 1;
     visibility: visible;
     transition: opacity 0.3s ease-in-out;
@@ -374,10 +374,11 @@ input::-webkit-inner-spin-button {
 /* Settings Drawer styles */
 .settings-drawer {
     background-color: rgba(0, 0, 0, 0.8);
+    overflow-x: hidden;
     color: white;
-    z-index: 6;
+    z-index: 7;
     height: 250px;
-    width: 400px;
+    width: 350px;
     padding: 10px;
     margin-top: 90px;
     position: fixed;
@@ -396,7 +397,7 @@ input::-webkit-inner-spin-button {
     overflow-y: auto;
     overflow-x: hidden;
     color: white;
-    z-index: 2;
+    z-index: 7;
     height: 600px;
     width: 400px;
     padding: 10px;
@@ -429,7 +430,7 @@ input::-webkit-inner-spin-button {
 .market-drawer {
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
-    z-index: 2;
+    z-index: 7;
     height: 600px;
     width: 400px;
     padding: 10px;
@@ -448,16 +449,31 @@ input::-webkit-inner-spin-button {
 .players-in-game-drawer {
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
-    z-index: 2;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 7;
     height: 200px;
     width: 250px;
     padding: 10px;
     margin-top: 90px;
-    border-radius: 25px;
     position: fixed;
     top: 0;
     left: -400px;
     transition: left 0.3s ease;
+}
+
+.players-in-game-drawer::-webkit-scrollbar {
+    width: 10px;
+}
+
+.players-in-game-drawer::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+.players-in-game-drawer::-webkit-scrollbar-thumb {
+    background: rgb(106, 106, 106);
+    border-radius: 10px;
 }
 
 .players-in-game-drawer.open {

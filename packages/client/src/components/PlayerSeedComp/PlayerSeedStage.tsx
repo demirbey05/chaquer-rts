@@ -4,17 +4,21 @@ import { useEffect } from 'react'
 import { useMUD } from '../../context/MUDContext';
 import { useError } from '../../context/ErrorContext';
 import { useGameState } from "../../hooks/useGameState";
+import { useSeedInited } from "../../hooks/IdentityHooks/useSeedInited";
+import { usePlayer } from "../../context/PlayerContext";
 
 export const PlayerSeedStage = () => {
     const { systemCalls } = useMUD()
+    const { userWallet } = usePlayer();
 
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
 
     const gameState = useGameState(1);
+    const seedEntered = useSeedInited(1, userWallet);
 
     useEffect(() => {
         const sendSeed = async () => {
-            if (gameState === 2) {
+            if (gameState === 2 && !seedEntered) {
                 var buf = new Uint8Array(1);
                 crypto.getRandomValues(buf);
 
@@ -23,14 +27,17 @@ export const PlayerSeedStage = () => {
                     setErrorMessage("An error occurred while trying to enter player seed.");
                     setErrorTitle("Player Seed Error");
                     setShowError(true);
-                    return;
                 }
             }
         };
 
         sendSeed();
-    }, [gameState]);
 
+        const intervalId = setInterval(sendSeed, 10000);
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [gameState, seedEntered]);
 
     return (
         <div id="overlay" className="waiting-for-players-fade-overlay">
