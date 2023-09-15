@@ -200,19 +200,17 @@ input::-webkit-inner-spin-button {
 
 .waiting-for-players-message-container {
     position: absolute;
+    width: 50%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
 .waiting-for-players-info-message {
-    display: block;
-    margin-bottom: 10px;
-    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 5px;
-    font-size: 20px;
-    text-align: center;
     color: white;
 }
 

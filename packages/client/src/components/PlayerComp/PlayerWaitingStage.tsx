@@ -14,7 +14,7 @@ export const PlayerWaitingStage = () => {
                 {
                     (gameState && gameState === 1) &&
                     <>
-                        <span className="waiting-for-players-info-message d-flex align-items-center">
+                        <span className="waiting-for-players-info-message">
                             Waiting for the other players...
                             <CircularProgress className='ms-4' value={(Number(numberOfUser) / Number(limitOfUser)) * 100} color='green.400' thickness='12px'>
                                 <CircularProgressLabel>({numberOfUser}/{limitOfUser})</CircularProgressLabel>

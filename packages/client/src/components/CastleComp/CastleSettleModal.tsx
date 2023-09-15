@@ -1,9 +1,11 @@
 import { useMUD } from "../../context/MUDContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@chakra-ui/react";
 import { useCastle } from "../../context/CastleContext";
 import { useError } from "../../context/ErrorContext";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
+import { usePlayerIsValid } from "../../hooks/IdentityHooks/usePlayerIsValid";
+import { usePlayer } from "../../context/PlayerContext";
 
 export const CastleSettleModal = () => {
   const {
@@ -13,11 +15,22 @@ export const CastleSettleModal = () => {
     setIsCastleSettled
   } = useCastle();
   const { setShowError, setErrorMessage, setErrorTitle } = useError();
+  const { userWallet } = usePlayer();
   const { systemCalls } = useMUD();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingJoin, setIsLoadingJoin] = useState<boolean>(false);
+
+  const userValid = usePlayerIsValid(1, userWallet);
+
+  useEffect(() => {
+    if (!(userValid && userValid === true)) {
+      setIsLoadingJoin(true)
+    }
+    else {
+      setIsLoadingJoin(false)
+    }
+  }, [userValid])
 
   const handleClick = async () => {
-    setIsLoading(true);
     setIsCastleSettled(true);
     try {
       const tx = !isCastleSettled &&
@@ -29,15 +42,11 @@ export const CastleSettleModal = () => {
         setErrorMessage("An error occurred during castle settlement.");
         setErrorTitle("Castle Settlement Error");
         setShowError(true);
-        setIsLoading(false);
       }
     } catch (error) {
       setErrorMessage("An error occurred during castle settlement.");
       setErrorTitle("Castle Settlement Error");
       setShowError(true);
-      setIsLoading(false);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -66,6 +75,7 @@ export const CastleSettleModal = () => {
                 border="solid"
                 textColor="dark"
                 data-bs-dismiss="modal"
+                isDisabled={!(userValid && userValid === true)}
                 onClick={() => handleClick()}
               >
                 Settle Castle
@@ -82,7 +92,7 @@ export const CastleSettleModal = () => {
           </div>
         </div>
       </div>
-      {isLoading && <EventProgressBar text="Castle is being placed..." />}
+      {isLoadingJoin && <EventProgressBar text="Joining to the game..." />}
     </>
   );
 };
