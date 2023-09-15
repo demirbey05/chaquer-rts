@@ -150,10 +150,6 @@ input::-webkit-inner-spin-button {
 }
 
 /* Army position show effect*/
-#myArmy {
-    border: 1px solid black;
-}
-
 .animate-border {
     animation: borderAnimation 1.5s infinite alternate;
 }
@@ -169,6 +165,102 @@ input::-webkit-inner-spin-button {
 
     100% {
         border-width: 1px;
+    }
+}
+
+/* Army move position show effect*/
+.animate-border-army-move {
+    animation: borderAnimation-army-move 1s infinite alternate;
+}
+
+@keyframes borderAnimation-army-move {
+    0% {
+        border-width: 5px;
+        border-color: rgba(50, 50, 170, 0.5);
+    }
+
+    25% {
+        border-width: 10px;
+        border-color: rgba(50, 50, 170, 0.5);
+    }
+
+    50% {
+        border-width: 15px;
+        border-color: rgba(50, 50, 170, 0.5);
+    }
+
+    75% {
+        border-width: 10px;
+        border-color: rgba(50, 50, 170, 0.5);
+    }
+
+    100% {
+        border-width: 0px;
+        border-color: rgba(50, 50, 170, 0.5);
+    }
+}
+
+/* Fleet move position show effect*/
+.animate-border-fleet-move {
+    animation: borderAnimation-fleet-move 1s infinite alternate;
+}
+
+@keyframes borderAnimation-fleet-move {
+    0% {
+        border-width: 5px;
+        border-color: rgba(250, 250, 5, 0.5);
+    }
+
+    25% {
+        border-width: 10px;
+        border-color: rgba(250, 250, 5, 0.5);
+    }
+
+    50% {
+        border-width: 15px;
+        border-color: rgba(250, 250, 5, 0.5);
+    }
+
+    75% {
+        border-width: 10px;
+        border-color: rgba(250, 250, 5, 0.5);
+    }
+
+    100% {
+        border-width: 0px;
+        border-color: rgba(250, 250, 5, 0.5);
+    }
+}
+
+/* Army-Fleet settle position show effect*/
+.animate-border-settle {
+    animation: borderAnimation-settle 1s infinite alternate;
+}
+
+@keyframes borderAnimation-settle {
+    0% {
+        border-width: 5px;
+        border-color: rgba(250, 130, 4, 0.5);
+    }
+
+    25% {
+        border-width: 10px;
+        border-color: rgba(250, 130, 4, 0.5);
+    }
+
+    50% {
+        border-width: 15px;
+        border-color: rgba(250, 130, 4, 0.5);
+    }
+
+    75% {
+        border-width: 10px;
+        border-color: rgba(250, 130, 4, 0.5);
+    }
+
+    100% {
+        border-width: 0px;
+        border-color: rgba(250, 130, 4, 0.5);
     }
 }
 

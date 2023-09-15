@@ -70,6 +70,8 @@ export const ArmySettleModal = () => {
   const handleClick = async () => {
     setIsArmySettleStage(false);
     setIsLoading(true);
+    var targetDiv = document.getElementById(`${armyPosition.y},${armyPosition.x}`);
+    targetDiv?.classList.add("animate-border-settle");
 
     try {
       const tx = await systemCalls.settleArmy(
@@ -99,6 +101,7 @@ export const ArmySettleModal = () => {
       setShowError(true);
     } finally {
       setIsLoading(false);
+      targetDiv?.classList.remove("animate-border-settle");
     }
   };
 

@@ -113,6 +113,9 @@ export const FleetSettleModal = () => {
 
         setFleetSettleStage(false);
         setIsLoading(true)
+        var targetDiv = document.getElementById(`${fleetPosition.y},${fleetPosition.x}`);
+        targetDiv?.classList.add("animate-border-settle");
+
         const tx = await systemCalls.settleFleet(
             fleetPosition.x,
             fleetPosition.y,
@@ -137,6 +140,7 @@ export const FleetSettleModal = () => {
             setShowError(true)
         }
         setIsLoading(false)
+        targetDiv?.classList.remove("animate-border-settle");
     };
 
     return (

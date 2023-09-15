@@ -59,6 +59,9 @@ export const DockSettleModal = () => {
 
         setIsArmyMoveStage(false)
         setIsLoadingDock(true)
+        var targetDiv = document.getElementById(`${dockPosition.y},${dockPosition.x}`);
+        targetDiv?.classList.add("animate-border-army-move");
+
         const tx = await systemCalls.buildDock(
             dockPosition.x,
             dockPosition.y,
@@ -71,13 +74,13 @@ export const DockSettleModal = () => {
             setErrorTitle("Dock Settle Error")
             setShowError(true)
             setIsLoadingDock(false)
-            return
         }
         else {
             setDockSettleStage(false);
             setDockPosition(undefined);
         }
         setIsLoadingDock(false)
+        targetDiv?.classList.remove("animate-border-army-move");
     };
 
     const handleMove = async () => {
@@ -92,6 +95,8 @@ export const DockSettleModal = () => {
 
         if (dockPosition) {
             setIsLoadingMove(true)
+            var targetDiv = document.getElementById(`${dockPosition.y},${dockPosition.x}`);
+            targetDiv?.classList.add("animate-border-army-move");
             const tx = await systemCalls.moveArmy(
                 movingArmyId.current,
                 dockPosition.x,
@@ -103,12 +108,12 @@ export const DockSettleModal = () => {
                 setErrorTitle("Army Move Error")
                 setShowError(true)
                 setIsLoadingMove(false)
-                return
             }
 
             document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.innerHTML = "";
             document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
 
+            targetDiv?.classList.remove("animate-border-army-move");
             setDockSettleStage(false);
             setIsArmyMoveStage(false)
             setArmyPositionToSettleDock(undefined);

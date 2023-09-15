@@ -37,6 +37,8 @@ export const ArmyMoveEvent = async (
 
     if (toArmyPositionRef.current && isArmyMoveStage) {
         setIsLoading(true);
+        var targetDiv = document.getElementById(`${toArmyPositionRef.current.y},${toArmyPositionRef.current.x}`);
+        targetDiv?.classList.add("animate-border-army-move");
 
         try {
             const tx = await systemCalls.moveArmy(
@@ -51,7 +53,6 @@ export const ArmyMoveEvent = async (
                 setErrorTitle("Army Move Error");
                 setShowError(true);
                 setIsLoading(false)
-                return;
             }
 
             document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
@@ -67,6 +68,7 @@ export const ArmyMoveEvent = async (
             setIsLoading(false)
         } finally {
             setIsLoading(false);
+            targetDiv?.classList.remove("animate-border-army-move");
         }
     }
 };

@@ -33,6 +33,9 @@ export const FleetMoveEvent = async (
 
     if (toFleetPositionRef.current && isFleetMoveStage) {
         setIsLoading(true)
+        var targetDiv = document.getElementById(`${toFleetPositionRef.current.y},${toFleetPositionRef.current.x}`);
+        targetDiv?.classList.add("animate-border-fleet-move");
+
         const tx = await systemCalls.moveFleet(
             movingFleetID.current,
             toFleetPositionRef.current.x,
@@ -43,11 +46,12 @@ export const FleetMoveEvent = async (
             setErrorTitle("Fleet Move Error")
             setShowError(true)
             setIsLoading(false)
-            return
+            targetDiv?.classList.remove("animate-border-fleet-move");
         }
 
         document.getElementById(`${fromFleetPosition.y},${fromFleetPosition.x}`)!.innerHTML = "";
         document.getElementById(`${fromFleetPosition.y},${fromFleetPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
+        targetDiv?.classList.remove("animate-border-fleet-move");
 
         setFromFleetPosition(undefined);
         toFleetPositionRef.current = { x: -1, y: -1 };
