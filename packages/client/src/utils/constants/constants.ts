@@ -1,4 +1,4 @@
-export const limitOfUser = 3;
+export const limitOfUser = import.meta.env.NUMBER_OF_USERS||3;
 
 export const colorPath = [
   "#E74C3C",
