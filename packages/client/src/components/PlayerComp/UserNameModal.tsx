@@ -50,7 +50,11 @@ export const UserNameModal = () => {
             }
         }
         else if (gameState === 1) {
-            if (userName && userName.length >= 3 && userName.length <= 31) {
+            if (userValid) {
+                setDisable(false)
+                setGameIsFull("");
+            }
+            else if (userName && userName.length >= 3 && userName.length <= 31) {
                 setDisable(false);
                 setGameIsFull("");
             }
