@@ -23,7 +23,21 @@ export const UserNameModal = () => {
     const numberOfUsers = useNumberOfUsers(1);
 
     useEffect(() => {
-        if (gameState === 3) {
+        if (gameState === 4) {
+            if (userValid) {
+                setDisable(false)
+                setGameIsFull("");
+            }
+            else if (userValid === false) {
+                setDisable(false)
+                setGameIsFull("");
+            }
+            else {
+                setDisable(true)
+                setGameIsFull("The game is full. Reached the player limit.")
+            }
+        }
+        else if (gameState === 3) {
             if (userValid) {
                 setDisable(false)
                 setGameIsFull("");
