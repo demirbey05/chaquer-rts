@@ -1,12 +1,9 @@
 import "../../styles/globals.css";
 import warResultIcon from '../../images/warResult.png';
-import shipEmoji from '../../images/ship_emoji.png';
-import { Button } from "@chakra-ui/react";
 import { useState } from "react";
 import { usePlayer } from '../../context/PlayerContext';
 import { useWarResult } from '../../hooks/useWarResult';
 import { useMyUsername } from "../../hooks/IdentityHooks/useMyUsername";
-
 
 export const WarResultDrawer = () => {
     const [isOpen, setIsOpen] = useState(true);
@@ -20,23 +17,11 @@ export const WarResultDrawer = () => {
         setIsOpen(!isOpen);
     };
 
-    const warResultDrawerButtonStyles: any = {
-        zIndex: 1,
-        height: "60px",
-        width: "60px",
-        position: "absolute",
-        right: 0,
-        top: 0,
-        bottom: 0,
-        marginTop: "25px",
-        fontSize: "30px"
-    }
-
     return (
         <div>
-            <Button colorScheme="yellow" style={warResultDrawerButtonStyles} onClick={toggleOffcanvas}>
+            <button className="war-result-button" onClick={toggleOffcanvas}>
                 <img src={warResultIcon} width={"30px"} height={"30px"}></img>
-            </Button>
+            </button>
             <div id="warResultDrawer" className={`my-war-result-drawer ${isOpen ? "open" : ""}`}>
                 <h4 className="text-center text-white p-2 mb-2 border-bottom">War Results</h4>
                 <div>

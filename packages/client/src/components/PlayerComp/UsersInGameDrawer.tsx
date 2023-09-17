@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { Button } from "@chakra-ui/react";
 import { FaUsers } from 'react-icons/fa'
 import { useUsernameWithColors } from '../../hooks/IdentityHooks/useUsernamesWithColors';
 import { colorPath } from '../../utils/constants/constants';
@@ -28,23 +27,11 @@ export const UsersInGameDrawer = () => {
         };
     }, [isOpen]);
 
-    const settingsDrawerButtonStyle: any = {
-        zIndex: 6,
-        height: "60px",
-        width: "60px",
-        position: "absolute",
-        left: 0,
-        top: 0,
-        bottom: 0,
-        marginTop: "220px",
-        fontSize: "30px"
-    }
-
     return (
         <>
-            <Button colorScheme="yellow" style={settingsDrawerButtonStyle} onClick={toggleDrawer}>
+            <button className='players-list-button' onClick={toggleDrawer}>
                 <FaUsers />
-            </Button>
+            </button>
             <div id="players-in-game-drawer" className={`players-in-game-drawer ${isOpen ? "open" : ""}`}>
                 <UserInGameDrawerHeader toggleDrawer={toggleDrawer} />
                 <div className='ms-2'>
