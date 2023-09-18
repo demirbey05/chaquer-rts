@@ -273,6 +273,7 @@ library LibUtils {
     for (uint i = 0; i < ownedCastles.length; i++) {
       CastleOwnable.deleteRecord(ownedCastles[i]);
       ColorOwnable.deleteRecord(ownedCastles[i]);
+      GameMetaData.setNumberOfCastle(gameID, GameMetaData.getNumberOfCastle(gameID) - 1);
     }
     AddressToUsername.deleteRecord(player, gameID);
   }
@@ -280,7 +281,7 @@ library LibUtils {
   function handleEconomyCheck(
     IWorld world,
     address owner,
-    ArmyConfigData calldata config
+    ArmyConfigData memory config
   ) internal {
     uint256 startBlock = GameMetaData.getStartBlock(config.gameID);
     uint256 ownerBalance = CreditOwn.get(config.gameID, owner);
