@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { BuyResources } from "./BuyResources";
 import { SellResources } from "./SellResources";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
@@ -56,23 +56,11 @@ export const MarketDrawer = () => {
         };
     }, [isOpen]);
 
-    const marketDrawerButtonStyles: any = {
-        zIndex: 1,
-        height: "60px",
-        width: "60px",
-        position: "absolute",
-        left: 0,
-        top: 0,
-        bottom: 0,
-        marginTop: "155px",
-        fontSize: "30px"
-    }
-
     return (
         <>
-            <Button colorScheme="yellow" style={marketDrawerButtonStyles} onClick={toggleDrawer}>
+            <button className="market-button" onClick={toggleDrawer}>
                 🛒
-            </Button>
+            </button>
             <div id="market-drawer" className={`market-drawer ${isOpen ? "open" : ""}`}>
                 <div className="d-flex justify-between border-bottom mb-2 p-2">
                     <h5 className="font-extrabold">Market</h5>

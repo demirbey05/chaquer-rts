@@ -607,3 +607,92 @@ input::-webkit-inner-spin-button {
     margin: 140px auto;
     width: fit-content;
 }
+
+/* Drawer button styles */
+
+.price-list-button {
+    background-color: #ECC94B;
+    z-index: 1;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-top: 305px;
+    font-size: 30px;
+    border-radius: 10px;
+}
+
+.settings-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ECC94B;
+    z-index: 6;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-top: 25px;
+    font-size: 30px;
+    border-radius: 10px;
+}
+
+.army-info-button {
+    background-color: #ECC94B;
+    z-index: 1;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-top: 90px;
+    font-size: 30px;
+    border-radius: 10px;
+}
+
+.market-button {
+    background-color: #ECC94B;
+    z-index: 1;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-top: 155px;
+    font-size: 30px;
+    border-radius: 10px;
+}
+
+.players-list-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ECC94B;
+    z-index: 6;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-top: 220px;
+    font-size: 30px;
+    border-radius: 10px;
+}
+
+.war-result-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ECC94B;
+    z-index: 1;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-top: 25px;
+    font-size: 30px;
+    border-radius: 10px;
+}

@@ -1,3 +1,4 @@
+import "../../styles/globals.css"
 import soundTrack from '../../sounds/chaquerSoundTrack.mp3'
 import { useState, useEffect, useRef } from 'react'
 import { Button } from "@chakra-ui/react";
@@ -69,23 +70,11 @@ export const SettingsDrawer = () => {
         };
     }, [isOpen]);
 
-    const settingsDrawerButtonStyle: any = {
-        zIndex: 6,
-        height: "60px",
-        width: "60px",
-        position: "absolute",
-        left: 0,
-        top: 0,
-        bottom: 0,
-        marginTop: "25px",
-        fontSize: "30px"
-    }
-
     return (
         <>
-            <Button colorScheme="yellow" style={settingsDrawerButtonStyle} onClick={toggleDrawer}>
+            <button className="settings-button" onClick={toggleDrawer}>
                 <SettingsIcon />
-            </Button>
+            </button>
             <div id="settings-drawer" className={`settings-drawer ${isOpen ? "open" : ""}`}>
                 <AudioControlCompHeader toggleDrawer={toggleDrawer} />
                 <div className='ms-2'>

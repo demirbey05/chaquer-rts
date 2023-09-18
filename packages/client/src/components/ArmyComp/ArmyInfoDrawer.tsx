@@ -1,3 +1,4 @@
+import '../../styles/globals.css'
 import React, { useState, useEffect } from "react";
 import archerImg from "../../images/archer.png";
 import cavalryImg from "../../images/cavalry.png";
@@ -58,23 +59,11 @@ export const ArmyInfoDrawer = () => {
         }, 1500);
     };
 
-    const armyInfoModalButtonStyles: any = {
-        zIndex: 1,
-        height: "60px",
-        width: "60px",
-        position: "absolute",
-        left: 0,
-        top: 0,
-        bottom: 0,
-        marginTop: "90px",
-        fontSize: "30px"
-    }
-
     return (
         <>
-            <Button colorScheme="yellow" style={armyInfoModalButtonStyles} onClick={toggleDrawer}>
+            <button className="army-info-button" onClick={toggleDrawer}>
                 ⚔️
-            </Button>
+            </button>
             <div id="army-info-drawer" className={`army-info-drawer ${isOpen ? "open" : ""}`}>
                 <div className="d-flex justify-between border-bottom mb-2 p-2">
                     <h5 className="font-extrabold">My Army Details</h5>

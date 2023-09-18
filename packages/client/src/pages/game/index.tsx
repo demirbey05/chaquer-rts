@@ -27,7 +27,7 @@ import { PlayerWaitingStage } from "../../components/PlayerComp/PlayerWaitingSta
 import { PlayerSeedStage } from '../../components/PlayerSeedComp/PlayerSeedStage';
 import { SettingsDrawer } from "../../components/SettingsComp/SettingsDrawer";
 import { MineCaptureDrawer } from "../../components/MineComp/MineCaptureDrawer";
-import { MineProgressBar } from '../../components/ProgressComp/MineProgressBar';
+import { MineProgressBar } from '../../components/ProgressComp/MineProgressBar/MineProgressBar';
 import { MineInitStage } from '../../components/MineComp/MineInitStage';
 import { WarResultDrawer } from "../../components/WarResultComp/WarResultDrawer";
 import { CreditProgressBar } from '../../components/ProgressComp/CreditProgressBar';
