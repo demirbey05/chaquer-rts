@@ -1,5 +1,13 @@
 import "tailwindcss/tailwind.css";
 import "react-toastify/dist/ReactToastify.css";
+import './styles/globals.css'
+import './styles/drawers.css'
+import './styles/buttons.css'
+import './styles/progressBars.css'
+import './styles/hoverEffects.css'
+import './styles/warnings.css';
+import './styles/modals.css';
+import './styles/animations.css';
 import ReactDOM from "react-dom/client";
 import mudConfig from "contracts/mud.config";
 import { App } from "./App";

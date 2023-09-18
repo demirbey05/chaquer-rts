@@ -1,0 +1,151 @@
+/* War Result Drawer styles*/
+.my-war-result-drawer {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    z-index: 2;
+    height: 200px;
+    width: 300px;
+    margin-top: 95px;
+    margin-right: 5px;
+    border-top: 2px solid rgb(241, 241, 241);
+    border-bottom: 2px solid rgb(241, 241, 241);
+    overflow: hidden;
+    text-align: center;
+    border-radius: 25px;
+    position: fixed;
+    top: 0;
+    right: -305px;
+    transition: right 0.3s ease;
+}
+
+.my-war-result-drawer.open {
+    right: 0;
+}
+
+/* Prices Drawer styles */
+.prices-drawer {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    z-index: 2;
+    height: 425px;
+    width: 300px;
+    margin-top: 375px;
+    margin-right: 5px;
+    position: fixed;
+    top: 0;
+    right: -305px;
+    transition: right 0.3s ease;
+}
+
+.prices-drawer.open {
+    right: 0;
+}
+
+/* Settings Drawer styles */
+.settings-drawer {
+    background-color: rgba(0, 0, 0, 0.8);
+    overflow-x: hidden;
+    color: white;
+    z-index: 7;
+    height: 250px;
+    width: 350px;
+    padding: 10px;
+    margin-top: 90px;
+    position: fixed;
+    top: 0;
+    left: -400px;
+    transition: left 0.3s ease;
+}
+
+.settings-drawer.open {
+    left: 0;
+}
+
+/* Army Info Drawer styles */
+.army-info-drawer {
+    background-color: rgba(0, 0, 0, 0.8);
+    overflow-y: auto;
+    overflow-x: hidden;
+    color: white;
+    z-index: 7;
+    height: 600px;
+    width: 400px;
+    padding: 10px;
+    margin-top: 90px;
+    position: fixed;
+    top: 0;
+    left: -400px;
+    transition: left 0.3s ease;
+}
+
+.army-info-drawer::-webkit-scrollbar {
+    width: 10px;
+}
+
+.army-info-drawer::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+.army-info-drawer::-webkit-scrollbar-thumb {
+    background: rgb(106, 106, 106);
+    border-radius: 10px;
+}
+
+.army-info-drawer.open {
+    left: 0;
+}
+
+/* Market Drawer styles */
+.market-drawer {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    z-index: 7;
+    height: 600px;
+    width: 400px;
+    padding: 10px;
+    margin-top: 90px;
+    position: fixed;
+    top: 0;
+    left: -400px;
+    transition: left 0.3s ease;
+}
+
+.market-drawer.open {
+    left: 0;
+}
+
+/* Players in the game Drawer styles */
+.players-in-game-drawer {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 7;
+    height: 200px;
+    width: 250px;
+    padding: 10px;
+    margin-top: 90px;
+    position: fixed;
+    top: 0;
+    left: -400px;
+    transition: left 0.3s ease;
+}
+
+.players-in-game-drawer::-webkit-scrollbar {
+    width: 10px;
+}
+
+.players-in-game-drawer::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+.players-in-game-drawer::-webkit-scrollbar-thumb {
+    background: rgb(106, 106, 106);
+    border-radius: 10px;
+}
+
+.players-in-game-drawer.open {
+    left: 0;
+}

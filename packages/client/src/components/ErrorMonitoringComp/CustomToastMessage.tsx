@@ -4,12 +4,10 @@ interface CustomToastMessagePropTypes {
 }
 
 export const CustomToastMessage = (props: CustomToastMessagePropTypes) => {
-    return <div className="toast bg-danger bottom-2 end-2 absolute text-white" style={{ display: "block", zIndex: "10" }} role="alert" aria-live="assertive" aria-atomic="true">
-        <div className="toast-header bg-danger text-white font-extrabold">
-            <strong className="me-auto">{props.title}</strong>
+    return (
+        <div className="my-warning-alert">
+            <div className="my-warning-title">{props.title}</div>
+            <div className="my-warning-message">{props.message}</div>
         </div>
-        <div className="toast-body">
-            {props.message}
-        </div>
-    </div>
+    )
 };

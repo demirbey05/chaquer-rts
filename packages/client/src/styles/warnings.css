@@ -1,0 +1,59 @@
+/* Warning alert styles */
+.my-warning-alert {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 1;
+    background-color: #ff9900;
+    border: 2px solid #ff9900;
+    padding: 10px;
+    border-radius: 5px;
+    width: 300px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.my-warning-title {
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    border-bottom: 1px solid white;
+}
+
+.my-warning-message {
+    color: white;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+/* Warning Styles on top*/
+.warning-on-top {
+    position: absolute;
+    z-index: 1;
+    color: white;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin: 125px auto;
+    width: 600px;
+    text-align: center;
+    font-size: 30px;
+    border-bottom: 2px solid white;
+    border-top: 2px solid white;
+}
+
+/* Warning Styles on bottom*/
+.warning-on-bottom {
+    position: absolute;
+    z-index: 1;
+    color: white;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 75px auto;
+    width: 600px;
+    text-align: center;
+    font-size: 30px;
+    border-bottom: 2px solid white;
+    border-top: 2px solid white;
+}

@@ -1,10 +1,8 @@
-import map from "../../../map.json";
 import chaquerImg from '../../images/chaquer_bg.jpg';
 import { ethers } from "ethers";
 import { Button } from "@chakra-ui/react";
 import { Terrain } from "../../components/TerrainComp/Terrain";
 import { TerrainSpinner } from "../../components/TerrainComp/TerrainSpinner";
-import { TerrainTypeInfoModal } from "../../components/TerrainComp/TerrainTypeInfoModal";
 import { UserNameModal } from '../../components/PlayerComp/UserNameModal';
 import { GameTutorial } from "../../components/TipsComp/GameTutorial";
 import { generatePerlinValues } from "../../terrain-helper/utils";
@@ -50,7 +48,6 @@ export const Menu = () => {
   };
 
   const terrainStyles = [8, 14];
-  const values = map;
 
   const menuBackgroundStyles: any = {
     backgroundImage: `url(${chaquerImg})`,
@@ -63,7 +60,7 @@ export const Menu = () => {
       <div className="container d-flex align-items-center h-screen">
         {isLoading === true ? <Spinner /> :
           (<>
-            {refresh === 0 ? null : <TerrainMap width={width} height={height} values={values} terrainStyles={terrainStyles} />}
+            {refresh === 0 ? null : <TerrainMap terrainStyles={terrainStyles} />}
           </>)
         }
         <div className="col">
@@ -75,11 +72,6 @@ export const Menu = () => {
           {refresh !== 0 && (
             <GameTutorialButton />
           )}
-          {refresh !== 0 && (
-            <div className="text-center mt-2 mb-2">
-              <TerrainTypeInfoModal />
-            </div>
-          )}
         </div>
       </div>
       <UserNameModal />
@@ -90,18 +82,13 @@ export const Menu = () => {
 
 const Spinner = () => {
   return (
-    <>
-      <div className="col-8 align-items-center justify-content-center">
-        <TerrainSpinner />
-      </div>
-    </>
+    <div className="col-8 align-items-center justify-content-center">
+      <TerrainSpinner />
+    </div>
   )
 }
 
 interface TerrainMapPropStyles {
-  width: number,
-  height: number,
-  values: number[][],
   terrainStyles: number[]
 }
 
@@ -109,9 +96,6 @@ const TerrainMap = (props: TerrainMapPropStyles) => {
   return (
     <div className="col-8 align-items-center justify-content-center">
       <Terrain
-        width={props.width}
-        height={props.height}
-        values={props.values}
         pixelStyles={props.terrainStyles}
         isBorder={true}
         zoomLevel={1}
@@ -160,7 +144,7 @@ const RegenerateButton = (props: RegenerateButtonPropTypes) => {
         p="8"
         textColor="dark"
         width="200px"
-        isDisabled={props.isLoading}
+        isDisabled={props.isLoading || true}
         onClick={props.handleRefresh}
         marginTop={props.refresh === 0 ? "300px" : "0"}
       >

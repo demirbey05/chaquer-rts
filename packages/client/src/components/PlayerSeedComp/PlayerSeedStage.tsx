@@ -1,4 +1,3 @@
-import "../../styles/globals.css";
 import { Progress } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useMUD } from '../../context/MUDContext';

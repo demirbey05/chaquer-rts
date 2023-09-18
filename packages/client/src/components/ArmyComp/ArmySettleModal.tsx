@@ -31,7 +31,7 @@ export const ArmySettleModal = () => {
   const myCredit = useCredit(1, userWallet);
 
   useEffect(() => {
-    if (!swordsmanCount || !archerCount || !cavalryCount) {
+    if (swordsmanCount.length === 0 && archerCount.length === 0 && cavalryCount.length === 0) {
       setIsDisabled(true);
       return;
     }
@@ -73,13 +73,25 @@ export const ArmySettleModal = () => {
     var targetDiv = document.getElementById(`${armyPosition.y},${armyPosition.x}`);
     targetDiv?.classList.add("animate-border-settle");
 
+    if ((document.getElementById('Swordsman') as HTMLInputElement).value === "") {
+      setSwordsmanCount("0");
+    }
+
+    if ((document.getElementById('Cavalry') as HTMLInputElement).value === "") {
+      setCavalryCount("0");
+    }
+
+    if ((document.getElementById('Archer') as HTMLInputElement).value === "") {
+      setArcherCount("0");
+    }
+
     try {
       const tx = await systemCalls.settleArmy(
         armyPosition.x,
         armyPosition.y,
-        parseInt(swordsmanCount),
-        parseInt(archerCount),
-        parseInt(cavalryCount),
+        Number(swordsmanCount),
+        Number(archerCount),
+        Number(cavalryCount),
         1
       );
 

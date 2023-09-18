@@ -1,14 +1,13 @@
-export const limitOfUser = import.meta.env.NUMBER_OF_USERS||3;
+export const limitOfUser = import.meta.env.NUMBER_OF_USERS || 3;
 
 export const colorPath = [
-  "#E74C3C",
-  "#27AE60",
-  "#FFA500",
-  "#3498DB",
-  "#F39C12",
-  "#9B59B6",
-  "#2ECC71",
-  "E67E22",
-  "#34495E",
-  "#1ABC9C",
+  "#F21E13", // kırmızı
+  "#35F213", // yeşil
+  "#132BF2", // koyu mavi
+  "#FFA500", // turuncu
+  "#F2EF13", // sarı
+  "#48a0db", // açık mavi
+  "#9B59B6", // mor
+  "#34495E", // siyah
+  "#EF13F2", // pembe
 ];

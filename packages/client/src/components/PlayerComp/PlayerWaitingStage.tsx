@@ -1,8 +1,8 @@
-import '../../styles/globals.css';
 import { Progress, CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
 import { useNumberOfUsers } from '../../hooks/IdentityHooks/useNumberOfUsers';
 import { limitOfUser } from '../../utils/constants/constants';
 import { useGameState } from '../../hooks/useGameState';
+import { GameTips } from '../TipsComp/GameTips';
 
 export const PlayerWaitingStage = () => {
     const numberOfUser = useNumberOfUsers(1);
@@ -23,6 +23,7 @@ export const PlayerWaitingStage = () => {
                         <Progress size='sm' colorScheme={"whatsapp"} isIndeterminate />
                     </>
                 }
+                <GameTips />
             </div>
         </div>
     )

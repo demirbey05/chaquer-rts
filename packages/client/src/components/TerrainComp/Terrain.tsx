@@ -1,5 +1,5 @@
-import "../../styles/globals.css";
 import MapImg from '../../images/map.png';
+import map from "../../../map.json";
 import { TerrainType } from "../../terrain-helper/types";
 import { useRef, useState } from "react";
 import { Entity } from "@latticexyz/recs";
@@ -10,6 +10,7 @@ import { useArmy } from "../../context/ArmyContext";
 import { useMine } from "../../context/MineContext";
 import { useSea } from "../../context/SeaContext";
 import { useFleet } from "../../context/FleetContext";
+import { useTerrain } from "../../context/TerrainContext";
 import { useError } from "../../context/ErrorContext";
 import { useMUD } from "../../context/MUDContext";
 import { useCastlePositions } from "../../hooks/CastleHooks/useCastlePositions";
@@ -59,23 +60,18 @@ import { SeaMineCaptureEvent } from "./Events/SeaMineCaptureEvent";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 
 export type DataProp = {
-  width: number;
-  height: number;
-  values: Array<Array<TerrainType>>;
   pixelStyles: Array<any>;
   isBorder: boolean;
   zoomLevel: number;
 };
 
 export const Terrain = (props: DataProp) => {
-  const width = props.width;
-  const height = props.height;
-  const values = props.values;
+  const { components, systemCalls } = useMUD();
+  const { width, height } = useTerrain();
+
+  const values: Array<Array<TerrainType>> = map;
   const rows = Array.from({ length: height }, (v, i) => i);
   const columns = Array.from({ length: width }, (v, i) => i);
-
-  const { components,
-    systemCalls } = useMUD();
 
   const { setAttackFromArmyPositionToArmy,
     setAttackToArmyPositionToArmy,
