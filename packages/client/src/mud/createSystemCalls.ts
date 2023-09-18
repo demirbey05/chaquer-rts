@@ -337,11 +337,9 @@ export function createSystemCalls(
     }
   };
 
-  const exitGame = async (gameID: number) => {
+  const exitGame = (gameID: number) => {
     try {
-      const tx = await worldContract.write.exitGame([BigInt(gameID)]);
-      await waitForTransaction(tx);
-      return tx;
+      worldContract.write.exitGame([BigInt(gameID)]);
     } catch (e) {
       console.log(e);
       return null;

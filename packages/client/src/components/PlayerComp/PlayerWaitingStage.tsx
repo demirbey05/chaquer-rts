@@ -12,12 +12,10 @@ export const PlayerWaitingStage = () => {
     const gameState = useGameState(1);
 
     useEffect(() => {
-        const handleBeforeUnload = async (event: BeforeUnloadEvent) => {
-            if (gameState === 1 || gameState === 2) {
-                event.preventDefault();
-                await systemCalls.exitGame(1)
-                return (event.returnValue = 'If you leave the page, you will leave the game.');
-            }
+        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+            systemCalls.exitGame(1)
+            event.preventDefault();
+            event.returnValue = 'If you leave the page, you will leave the game.';
         }
 
         window.addEventListener('beforeunload', handleBeforeUnload)
