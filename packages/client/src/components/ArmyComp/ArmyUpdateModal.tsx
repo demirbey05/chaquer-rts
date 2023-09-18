@@ -55,6 +55,13 @@ export const ArmyUpdateModal = () => {
     }, [armyConfig])
 
     useEffect(() => {
+        if (armyConfig) {
+            if (Number(swordsmanCount) + Number(archerCount) + Number(cavalryCount) < armyConfig.numSwordsman + armyConfig.numCavalry + armyConfig.numArcher) {
+                setIsDisabled(true);
+                return;
+            }
+        }
+
         if (swordsmanCount.length === 0 && archerCount.length === 0 && cavalryCount.length === 0) {
             setIsDisabled(true);
             return;
@@ -88,7 +95,7 @@ export const ArmyUpdateModal = () => {
                 setEnoughCredit(true);
             }
         }
-    }, [swordsmanCount, archerCount, cavalryCount, armyPrices, myCredit]);
+    }, [swordsmanCount, archerCount, cavalryCount, armyPrices, myCredit, armyConfig]);
 
 
     const handleClick = async () => {
