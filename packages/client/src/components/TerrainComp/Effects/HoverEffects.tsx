@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { getManhattanPositions } from '../../../utils/helperFunctions/CustomFunctions/getManhattanPositions';
 import { canCastleBeSettle } from '../../../utils/helperFunctions/CastleFunctions/canCastleBeSettle';
-import { isCastlePosition } from '../../../utils/helperFunctions/CastleFunctions/isCastlePosition';
 import { isResourcePosition } from '../../../utils/helperFunctions/ResourceFuntions/isResourcePosition';
 import { isArmyPosition } from '../../../utils/helperFunctions/ArmyFunctions/isArmyPosition';
 import { armySettlePositions } from '../../../utils/helperFunctions/ArmyFunctions/armySettlePositions';
@@ -57,7 +56,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined, myDockPosition
                 });
             }
         }
-    }, [fromArmyPosition, isArmyMoveStage, myCastlePosition]);
+    }, [fromArmyPosition, isArmyMoveStage, myCastlePosition, myArmyPosition, myResourcePositions, myDockPositions]);
 
     //Orange hover effect and data-bs assign when user deploys an army
     useEffect(() => {
@@ -103,7 +102,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined, myDockPosition
                 );
             });
         }
-    }, [isArmySettleStage, myCastlePosition]);
+    }, [isArmySettleStage, myCastlePosition, resources, myCastlePosition, castlePositions, armyPositions, dockPositions]);
 
     //Yellow hover effect when user moves a fleet
     useEffect(() => {
@@ -137,5 +136,5 @@ export const HoverEffects = (myFleetPositions: any[] | undefined, myDockPosition
                 });
             }
         }
-    }, [fromFleetPosition, isFleetMoveStage]);
+    }, [fromFleetPosition, isFleetMoveStage, myFleetPositions, myResourcePositions]);
 }

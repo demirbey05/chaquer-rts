@@ -11,6 +11,10 @@ type ArmyContextType = {
     setFromArmyPosition: (value: { x: any; y: any } | undefined) => void;
     isArmyMoveStage: boolean;
     setIsArmyMoveStage: (value: boolean) => void;
+    isArmyUpdateStage: boolean;
+    setIsArmyUpdateStage: (value: boolean) => void;
+    armyPositionUpdate: any;
+    setArmyPositionUpdate: (value: any) => void;
 };
 
 const ArmyContext = createContext<ArmyContextType>({
@@ -24,6 +28,10 @@ const ArmyContext = createContext<ArmyContextType>({
     setFromArmyPosition: () => { },
     isArmyMoveStage: false,
     setIsArmyMoveStage: () => { },
+    isArmyUpdateStage: false,
+    setIsArmyUpdateStage: () => { },
+    armyPositionUpdate: undefined,
+    setArmyPositionUpdate: () => { }
 });
 
 const ArmyProvider: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode; }) => {
@@ -33,6 +41,9 @@ const ArmyProvider: React.FC<{ children: ReactNode }> = ({ children }: { childre
 
     const [fromArmyPosition, setFromArmyPosition] = useState<any>();
     const [isArmyMoveStage, setIsArmyMoveStage] = useState<any>();
+
+    const [isArmyUpdateStage, setIsArmyUpdateStage] = useState<boolean>(false);
+    const [armyPositionUpdate, setArmyPositionUpdate] = useState<any>();
 
     const results: ArmyContextType = {
         isArmySettleStage,
@@ -45,6 +56,10 @@ const ArmyProvider: React.FC<{ children: ReactNode }> = ({ children }: { childre
         setFromArmyPosition,
         isArmyMoveStage,
         setIsArmyMoveStage,
+        isArmyUpdateStage,
+        setIsArmyUpdateStage,
+        armyPositionUpdate,
+        setArmyPositionUpdate
     };
 
     return (

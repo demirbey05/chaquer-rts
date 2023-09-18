@@ -90,13 +90,17 @@ export const Terrain = (props: DataProp) => {
     setArmyPosition,
     setNumberOfArmy,
     numberOfArmy,
-    setIsArmySettleStage } = useArmy();
+    setIsArmySettleStage,
+    setIsArmyUpdateStage,
+    isArmyUpdateStage,
+    setArmyPositionUpdate } = useArmy();
 
   const { userWallet } = usePlayer();
 
   const { isCastleSettled,
     setIsCastleSettled,
-    setTempCastle } = useCastle();
+    setTempCastle,
+    setCastlePosition } = useCastle();
 
   const { isMineStage,
     setIsMineStage,
@@ -161,10 +165,17 @@ export const Terrain = (props: DataProp) => {
     if (!isArmyMoveStage && isMyCastle(myCastlePosition, getDataAtrX(e), getDataAtrY(e))) {
       if (isArmySettleStage) {
         setIsArmySettleStage(false);
+        setIsArmyUpdateStage(false);
       }
       else if (!isArmySettleStage && numberOfArmy < 5) {
+        setCastlePosition({ x: getDataAtrX(e), y: getDataAtrY(e) })
         setIsArmySettleStage(true);
+        setIsArmyUpdateStage(true);
       }
+    }
+
+    if (isArmyUpdateStage && isMyArmy({ x: parseInt(getDataAtrX(e)), y: parseInt(getDataAtrY(e)) }, myArmyPosition)) {
+      setArmyPositionUpdate({ x: getDataAtrX(e), y: getDataAtrY(e) })
     }
 
     // Toggle orange tiles for fleet settlement
@@ -267,7 +278,7 @@ export const Terrain = (props: DataProp) => {
 
   CastleEffects(myCastlePosition, setIsCastleSettled, castlePositions, isCastleSettled);
   ResourceEffects(values, fromFleetPosition, seaMineStage, myResourcePositions, resources, isMineStage, fromArmyPosition);
-  ArmyEffects(dockPositions, castlePositions, isArmySettleStage, armyPositions, myArmyPosition, setNumberOfArmy, myArmyPosition.length, resources);
+  ArmyEffects(isArmyUpdateStage, values, props.isBorder, myCastlePosition, dockPositions, castlePositions, isArmySettleStage, armyPositions, myArmyPosition, setNumberOfArmy, myArmyPosition.length, resources);
   AttackEffects(myResourcePositions, myFleetPositions, fleetPositions, fromFleetPosition, isFleetAttackStage, myCastlePosition, castlePositions, armyPositions, myArmyPosition, isAttackStage, fromArmyPosition);
   HoverEffects(myFleetPositions, myDockPositions, myResourcePositions, myArmyPosition, dockPositions, fromFleetPosition, isFleetMoveStage, armyPositions, resources, numberOfArmy, isArmySettleStage, props.isBorder, castlePositions, myCastlePosition, values, fromArmyPosition, isArmyMoveStage);
   DockEffects(castlePositions, resources, myArmyPosition, armyPositions, dockPositions, myDockPositions, values, dockSettleStage, dockCaptureStage, rows, columns, fromArmyPosition);

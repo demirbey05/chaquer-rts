@@ -42,6 +42,7 @@ import { FleetMoveWarning } from "../../components/SeaComp/FleetMoveWarning";
 import { FleetAttackDrawer } from "../../components/SeaComp/FleetAttackDrawer";
 import { UsersInGameDrawer } from "../../components/PlayerComp/UsersInGameDrawer";
 import { SeaMineCaptureDrawer } from "../../components/SeaComp/SeaMineCaptureDrawer";
+import { ArmyUpdateModal } from "../../components/ArmyComp/ArmyUpdateModal";
 
 export const Game = () => {
   const { isCastleSettled } = useCastle();
@@ -85,6 +86,7 @@ export const Game = () => {
       {gameState === 3 && !isPlayerLost && mineInited && <ShortCutTips />}
       {gameState === 3 && !isPlayerLost && mineInited && <WarResultDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmySettleModal />}
+      {gameState === 3 && !isPlayerLost && mineInited && <ArmyUpdateModal />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmyAttackDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <CastleAttackDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <MineCaptureDrawer />}

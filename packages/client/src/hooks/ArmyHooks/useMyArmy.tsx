@@ -11,7 +11,8 @@ export function useMyArmy(address: any) {
   ]);
 
   const [myArmy, setMyArmy] = useState<any[]>([]);
-  const value = useObservableValue(components.Position.update$);
+  const valuePos = useObservableValue(components.Position.update$);
+  const valueCfg = useObservableValue(components.ArmyConfig.update$);
 
   useEffect(() => {
     const army = armyEntities.map((entityIndex) => {
@@ -22,7 +23,7 @@ export function useMyArmy(address: any) {
     });
 
     setMyArmy(army)
-  }, [armyEntities, value]);
+  }, [armyEntities, valuePos, valueCfg]);
 
   return myArmy;
 }

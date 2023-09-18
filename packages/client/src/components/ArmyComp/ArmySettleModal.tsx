@@ -11,12 +11,15 @@ import { useArmyPrices } from '../../hooks/EconomyHooks/useArmyPrices';
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
+import { useCastle } from "../../context/CastleContext";
+import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 
 export const ArmySettleModal = () => {
   const { userWallet } = usePlayer();
   const { armyPosition, setIsArmySettleStage } = useArmy();
   const { setErrorMessage, setErrorTitle, setShowError } = useError();
-  const { systemCalls } = useMUD();
+  const { systemCalls, components } = useMUD();
+  const { castlePosition } = useCastle();
 
   const [swordsmanCount, setSwordsmanCount] = useState<string>("");
   const [archerCount, setArcherCount] = useState<string>("");
@@ -73,6 +76,19 @@ export const ArmySettleModal = () => {
     var targetDiv = document.getElementById(`${armyPosition.y},${armyPosition.x}`);
     targetDiv?.classList.add("animate-border-settle");
 
+    const castleID = [...findIDFromPosition(
+      castlePosition,
+      components.Position,
+    )];
+
+    if (castleID.length != 1) {
+      setErrorMessage("An error occurred while trying to settle an army.")
+      setErrorTitle("Army Settle Error")
+      setShowError(true)
+      setIsLoading(false)
+      return
+    }
+
     if ((document.getElementById('Swordsman') as HTMLInputElement).value === "") {
       setSwordsmanCount("0");
     }
@@ -92,7 +108,8 @@ export const ArmySettleModal = () => {
         Number(swordsmanCount),
         Number(archerCount),
         Number(cavalryCount),
-        1
+        1,
+        castleID.toString()
       );
 
       if (tx) {

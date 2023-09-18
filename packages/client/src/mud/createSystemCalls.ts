@@ -1,7 +1,5 @@
-import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
-import { Entity } from "@latticexyz/recs";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -47,13 +45,15 @@ export function createSystemCalls(
     numSwordsman: number,
     numArcher: number,
     numCavalry: number,
-    gameID: number
+    gameID: number,
+    castleID: string
   ) => {
     try {
       const tx = await worldContract.write.settleArmy([
         x,
         y,
         { numSwordsman, numArcher, numCavalry, gameID },
+        castleID,
       ]);
       await waitForTransaction(tx);
       return tx;
@@ -346,6 +346,33 @@ export function createSystemCalls(
     }
   };
 
+  const updateArmy = async (
+    armyID: string,
+    numSwordsman: number,
+    numArcher: number,
+    numCavalry: number,
+    castleID: string,
+    gameID: number
+  ) => {
+    try {
+      const tx = await worldContract.write.updateArmy([
+        armyID,
+        {
+          numSwordsman,
+          numArcher,
+          numCavalry,
+          gameID: BigInt(gameID),
+        },
+        castleID,
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
   return {
     initMapDataSystem,
     settleCastle,
@@ -368,5 +395,6 @@ export function createSystemCalls(
     attackFleet,
     buyResource,
     exitGame,
+    updateArmy,
   };
 }
