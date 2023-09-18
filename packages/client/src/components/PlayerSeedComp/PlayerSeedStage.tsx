@@ -1,4 +1,3 @@
-import "../../styles/globals.css";
 import { Progress } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useMUD } from '../../context/MUDContext';
@@ -15,6 +14,21 @@ export const PlayerSeedStage = () => {
 
     const gameState = useGameState(1);
     const seedEntered = useSeedInited(1, userWallet);
+
+    useEffect(() => {
+        const handleBeforeUnload = async (event: BeforeUnloadEvent) => {
+            if (gameState === 1 || gameState === 2) {
+                event.preventDefault();
+                await systemCalls.exitGame(1)
+                return (event.returnValue = 'If you leave the page, you will leave the game.');
+            }
+        }
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
+        return (() => {
+            window.removeEventListener('beforeunload', handleBeforeUnload)
+        })
+    }, [])
 
     useEffect(() => {
         const sendSeed = async () => {

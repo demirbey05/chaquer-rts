@@ -1,4 +1,3 @@
-import '../../styles/globals.css'
 import { Tooltip } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useMUD } from "../../context/MUDContext";

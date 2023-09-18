@@ -1,5 +1,3 @@
-import '../../styles/globals.css';
-
 export const ArmyMoveWarning = () => {
     return (
         <div className="warning-on-bottom">

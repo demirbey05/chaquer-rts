@@ -104,7 +104,7 @@ export const DockSettleModal = () => {
                 1
             )
             if (tx == null) {
-                setErrorMessage("An error occurred while trying to move army.")
+                setErrorMessage("You need 30 food + 30 gold to move your army.")
                 setErrorTitle("Army Move Error")
                 setShowError(true)
                 setIsLoadingMove(false)

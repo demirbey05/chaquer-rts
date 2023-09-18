@@ -1,4 +1,3 @@
-import '../../styles/globals.css'
 import React, { useState, useEffect } from "react";
 import archerImg from "../../images/archer.png";
 import cavalryImg from "../../images/cavalry.png";

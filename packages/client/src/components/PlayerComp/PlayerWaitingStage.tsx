@@ -1,12 +1,30 @@
-import '../../styles/globals.css';
+import { useState, useEffect } from 'react';
 import { Progress, CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
 import { useNumberOfUsers } from '../../hooks/IdentityHooks/useNumberOfUsers';
 import { limitOfUser } from '../../utils/constants/constants';
 import { useGameState } from '../../hooks/useGameState';
+import { GameTips } from '../TipsComp/GameTips';
+import { useMUD } from '../../context/MUDContext';
 
 export const PlayerWaitingStage = () => {
+    const { systemCalls } = useMUD();
     const numberOfUser = useNumberOfUsers(1);
     const gameState = useGameState(1);
+
+    useEffect(() => {
+        const handleBeforeUnload = async (event: BeforeUnloadEvent) => {
+            if (gameState === 1 || gameState === 2) {
+                event.preventDefault();
+                await systemCalls.exitGame(1)
+                return (event.returnValue = 'If you leave the page, you will leave the game.');
+            }
+        }
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
+        return (() => {
+            window.removeEventListener('beforeunload', handleBeforeUnload)
+        })
+    }, [])
 
     return (
         <div id="overlay" className="waiting-for-players-fade-overlay">
@@ -23,6 +41,7 @@ export const PlayerWaitingStage = () => {
                         <Progress size='sm' colorScheme={"whatsapp"} isIndeterminate />
                     </>
                 }
+                <GameTips />
             </div>
         </div>
     )

@@ -1,4 +1,3 @@
-import "../../../styles/globals.css"
 import { FoodCount } from "../MineProgressBar/FoodCount";
 import { WoodCount } from "../MineProgressBar/WoodCount";
 import { GoldCount } from '../MineProgressBar/GoldCount';

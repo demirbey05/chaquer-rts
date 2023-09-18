@@ -267,7 +267,7 @@ library LibUtils {
     address player,
     uint256 gameID
   ) internal {
-    Players.set(gameID, player, false);
+    Players.deleteRecord(gameID, player);
     NumberOfUsers.set(gameID, NumberOfUsers.get(gameID) - 1);
     bytes32[] memory ownedCastles = LibQueries.getOwnedCastleIDs(world, player, gameID);
     for (uint i = 0; i < ownedCastles.length; i++) {

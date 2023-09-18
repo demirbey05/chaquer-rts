@@ -49,20 +49,21 @@ export const ArmyMoveEvent = async (
             );
 
             if (tx == null) {
-                setErrorMessage("An error occurred while trying to move army.");
+                setErrorMessage("You need 30 food + 30 gold to move your army.");
                 setErrorTitle("Army Move Error");
                 setShowError(true);
                 setIsLoading(false)
             }
-
-            document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
-            document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
+            else {
+                document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
+                document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
+            }
 
             setFromArmyPosition(undefined);
             toArmyPositionRef.current = { x: -1, y: -1 };
             fromArmyPositionRef.current = { x: "-1", y: "-1" };
         } catch (error) {
-            setErrorMessage("An error occurred while trying to move army.");
+            setErrorMessage("You need 30 food + 30 gold to move your army.");
             setErrorTitle("Army Move Error");
             setShowError(true);
             setIsLoading(false)

@@ -1,5 +1,4 @@
 import { Progress, ProgressLabel } from '@chakra-ui/react'
-
 interface EventProgressBarPropTypes {
     text: string
 }

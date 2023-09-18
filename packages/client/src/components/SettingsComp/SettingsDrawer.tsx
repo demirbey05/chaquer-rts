@@ -1,4 +1,3 @@
-import "../../styles/globals.css"
 import soundTrack from '../../sounds/chaquerSoundTrack.mp3'
 import { useState, useEffect, useRef } from 'react'
 import { Button } from "@chakra-ui/react";

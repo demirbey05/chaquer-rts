@@ -1,5 +1,3 @@
-import '../../styles/globals.css';
-
 export const ArmySettleWarning = () => {
   return (
     <div className='warning-on-top'>

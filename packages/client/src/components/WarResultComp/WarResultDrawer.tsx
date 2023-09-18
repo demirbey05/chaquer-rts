@@ -1,4 +1,3 @@
-import "../../styles/globals.css";
 import warResultIcon from '../../images/warResult.png';
 import { useState } from "react";
 import { usePlayer } from '../../context/PlayerContext';

@@ -1,4 +1,3 @@
-import '../../styles/globals.css';
 import winnerAnimation from '../../images/gifs/winner_animation.gif';
 
 export const PlayerWonAnimation = () => {

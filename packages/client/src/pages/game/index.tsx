@@ -1,8 +1,7 @@
-import map from "../../../map.json";
+import "../../styles/globals.css"
+import gameBgImg from '../../images/gameBackground.jpg'
 import ScrollContainer from "react-indiana-drag-scroll";
-import gameBgImg from '../../images/gameBackground.jpg';
-import { useState } from "react";
-import { useTerrain } from "../../context/TerrainContext";
+import React, { useState } from "react";
 import { useCastle } from "../../context/CastleContext";
 import { useArmy } from "../../context/ArmyContext";
 import { usePlayer } from "../../context/PlayerContext";
@@ -13,7 +12,7 @@ import { useIsMineInitialized } from "../../hooks/ResourceHooks/useIsMineInitial
 import { limitOfUser } from "../../utils/constants/constants";
 import { Terrain } from "../../components/TerrainComp/Terrain";
 import { ArmyInfoDrawer } from "../../components/ArmyComp/ArmyInfoDrawer";
-import { ArmyProgressBar } from "../../components/ProgressComp/ArmyProgressBar";
+import { ArmyProgressBar } from "../../components/ProgressComp/ArmyProgressBar/ArmyProgressBar";
 import { ArmyMoveWarning } from "../../components/ArmyComp/ArmyMoveWarning";
 import { ArmySettleModal } from "../../components/ArmyComp/ArmySettleModal";
 import { ArmyAttackDrawer } from "../../components/ArmyComp/ArmyAttackDrawer";
@@ -30,7 +29,7 @@ import { MineCaptureDrawer } from "../../components/MineComp/MineCaptureDrawer";
 import { MineProgressBar } from '../../components/ProgressComp/MineProgressBar/MineProgressBar';
 import { MineInitStage } from '../../components/MineComp/MineInitStage';
 import { WarResultDrawer } from "../../components/WarResultComp/WarResultDrawer";
-import { CreditProgressBar } from '../../components/ProgressComp/CreditProgressBar';
+import { CreditProgressBar } from '../../components/ProgressComp/CreditProgressBar/CreditProgressBar';
 import { MarketDrawer } from "../../components/MarketComp/MarketDrawer";
 import { PriceListDrawer } from "../../components/PriceComp/PriceListDrawer";
 import { ShortCutTips } from "../../components/TipsComp/ShortCutTips";
@@ -45,7 +44,6 @@ import { UsersInGameDrawer } from "../../components/PlayerComp/UsersInGameDrawer
 import { SeaMineCaptureDrawer } from "../../components/SeaComp/SeaMineCaptureDrawer";
 
 export const Game = () => {
-  const { width, height } = useTerrain();
   const { isCastleSettled } = useCastle();
   const { isArmySettleStage, isArmyMoveStage } = useArmy();
   const { isPlayerLost, isPlayerWinner } = usePlayer();
@@ -56,9 +54,8 @@ export const Game = () => {
   const playerSeedCount = useCountOfPlayerSeed(1);
   const mineInited = useIsMineInitialized(1);
 
-  const values = map;
   const terrainStyles = [0, 40];
-  const scrollContainerStyles = {
+  const terrainContainer = {
     zIndex: "0",
     height: "100vh",
     minWidth: "100vh",
@@ -102,9 +99,11 @@ export const Game = () => {
       {gameState === 4 && isPlayerWinner && <PlayerWonAnimation />}
 
       {<ZoomHandler zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />}
-      <ScrollContainer className="scrollable-container" style={scrollContainerStyles}>
-        <Terrain width={width} height={height} values={values} pixelStyles={terrainStyles} isBorder={false} zoomLevel={zoomLevel} />
+      <ScrollContainer className="scrollable-container" style={terrainContainer}>
+        <Terrain pixelStyles={terrainStyles} isBorder={false} zoomLevel={zoomLevel} />
       </ScrollContainer>
     </>
   );
 }
+
+export const MemoGame = React.memo(Game);

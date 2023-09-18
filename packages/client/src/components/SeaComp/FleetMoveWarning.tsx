@@ -1,5 +1,3 @@
-import '../../styles/globals.css';
-
 export const FleetMoveWarning = () => {
     return (
         <div className="warning-on-bottom">
