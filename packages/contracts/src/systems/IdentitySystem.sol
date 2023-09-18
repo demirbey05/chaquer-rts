@@ -6,6 +6,7 @@ import { Players, NumberOfUsers, AddressToUsername, LimitOfGame, MapConfig, Game
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { LibMath } from "../libraries/LibMath.sol";
+import { LibUtils } from "../libraries/Utils.sol";
 import "./Errors.sol";
 import { State } from "../codegen/Types.sol";
 
@@ -38,5 +39,21 @@ contract IdentitySystem is System {
     AddressToUsername.set(sender, gameID, currentNumOfUser + 1, userName);
     Players.set(gameID, sender, true);
     NumberOfUsers.set(gameID, currentNumOfUser + 1);
+  }
+
+  function exitGame(uint256 gameID) public {
+    address sender = _msgSender();
+    if (!Players.get(gameID, sender)) {
+      revert IdentitySystem__NotJoined();
+    }
+    State state = GameMetaData.getState(gameID);
+    if (state == State.Waiting) {
+      LibUtils.deletePlayer(IStore(_world()), sender, gameID);
+    }
+    if (state == State.Seed) {
+      LibUtils.deletePlayer(IStore(_world()), sender, gameID);
+      GameMetaData.setState(gameID, State.Waiting);
+    }
+    return;
   }
 }

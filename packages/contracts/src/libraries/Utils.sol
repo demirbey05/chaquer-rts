@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import { BattleResult, RemainingData, EntityType } from "./Types.sol";
 import "./Libraries.sol";
 import { AttackerType, ClashType } from "../codegen/Types.sol";
-import { CastleOwnable, Position, ResourceOwnable, DockOwnable, ArmyConfig, ArmyOwnable, ClashResult, ColorOwnable, AddressToUsername } from "../codegen/Tables.sol";
+import { CastleOwnable, Position, ResourceOwnable, DockOwnable, ArmyConfig, ArmyOwnable, ClashResult, ColorOwnable, AddressToUsername, Players, NumberOfUsers } from "../codegen/Tables.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 
 error ErrorInCalculatingBattleScores();
@@ -258,5 +258,20 @@ library LibUtils {
       DockOwnable.setOwner(castleOwnerDocks[i], address(0));
       ColorOwnable.setColorIndex(castleOwnerDocks[i], 0);
     }
+  }
+
+  function deletePlayer(
+    IStore world,
+    address player,
+    uint256 gameID
+  ) internal {
+    Players.set(gameID, player, false);
+    NumberOfUsers.set(gameID, NumberOfUsers.get(gameID) - 1);
+    bytes32[] memory ownedCastles = LibQueries.getOwnedCastleIDs(world, player, gameID);
+    for (uint i = 0; i < ownedCastles.length; i++) {
+      CastleOwnable.deleteRecord(ownedCastles[i]);
+      ColorOwnable.deleteRecord(ownedCastles[i]);
+    }
+    AddressToUsername.deleteRecord(player, gameID);
   }
 }

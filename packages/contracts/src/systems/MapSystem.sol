@@ -110,9 +110,9 @@ contract MapSystem is System {
   ) internal {
     uint256 startBlock = GameMetaData.getStartBlock(config.gameID);
     uint256 ownerBalance = CreditOwn.get(config.gameID, owner);
-    uint256 swordsmanPrice = LibVRGDA.getArmyPrice(IWorld(_world()), config.gameID, 0, block.number - startBlock);
-    uint256 archerPrice = LibVRGDA.getArmyPrice(IWorld(_world()), config.gameID, 1, block.number - startBlock);
-    uint256 cavalryPrice = LibVRGDA.getArmyPrice(IWorld(_world()), config.gameID, 2, block.number - startBlock);
+    uint256 swordsmanPrice = LibVRGDA.getArmyPrice(world, config.gameID, 0, block.number - startBlock);
+    uint256 archerPrice = LibVRGDA.getArmyPrice(world, config.gameID, 1, block.number - startBlock);
+    uint256 cavalryPrice = LibVRGDA.getArmyPrice(world, config.gameID, 2, block.number - startBlock);
 
     uint256 costSwordsman = swordsmanPrice * config.numSwordsman;
     uint256 costArcher = archerPrice * config.numArcher;
@@ -138,7 +138,8 @@ contract MapSystem is System {
   function settleArmy(
     uint32 x,
     uint32 y,
-    ArmyConfigData calldata config
+    ArmyConfigData calldata config,
+    bytes32 castleID
   ) public returns (bytes32) {
     // Get control parameters
 
@@ -160,26 +161,19 @@ contract MapSystem is System {
     if (LibQueries.queryGetArmyNumber(IStore(_world()), ownerCandidate, config.gameID) >= maxArmyNum) {
       revert ArmySettle__NoArmyRight();
     }
-    if (!LibQueries.queryAddressHasCastle(IStore(_world()), ownerCandidate, config.gameID)) {
+    if (CastleOwnable.getOwner(castleID) != ownerCandidate) {
       revert ArmySettle__NoCastle();
     }
     if (GameMetaData.getState(config.gameID) != State.Started) {
       revert ArmySettle__WrongState();
     }
-    //@dev can be optimized by getting castleID as an argument !!!!!!!
-    bytes32[] memory castleIds = LibQueries.getOwnedCastleIDs(IStore(_world()), ownerCandidate, config.gameID);
-    uint256 castleClose = 0;
-    for (uint i = 0; i < castleIds.length; i++) {
-      (uint32 x_castle, uint32 y_castle, ) = Position.get(castleIds[i]);
+    {
+      (uint32 x_castle, uint32 y_castle, ) = Position.get(castleID);
       uint32 distanceBetween = LibMath.manhattan(x_castle, y_castle, x, y);
-      if (distanceBetween <= 3) {
-        castleClose = 1;
+      if (distanceBetween > 3) {
+        revert ArmySettle__TooFarToSettle();
       }
     }
-    if (castleClose == 0) {
-      revert ArmySettle__TooFarToSettle();
-    }
-
     if (config.numArcher + config.numCavalry + config.numSwordsman > 500) {
       revert ArmySettle__TooManySoldier();
     }

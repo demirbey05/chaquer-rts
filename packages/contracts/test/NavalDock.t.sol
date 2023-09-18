@@ -54,7 +54,8 @@ contract NavalDockTest is NakamoTest {
     assertEq(ResourceOwn.getNumOfWood(world, users[9], 1), 100000);
 
     // user1 has 18 18 castle
-    bytes32 armyID = TestUtils.settleArmy(world, 19, 18, 15, 15, 15, users[9], 1);
+    bytes32 castleID = TestUtils.getCastleID(world, users[9], 1)[0];
+    bytes32 armyID = TestUtils.settleArmy(world, 19, 18, 15, 15, 15, users[9], 1, castleID);
     bytes32 dockID = TestUtils.buildDockWrapper(world, users[9], armyID, 19, 19, 1);
     assertEq(CreditOwn.get(world, 1, users[9]), 100000 * 1e18 - (baseCostDock * 1e18) - 45 * 1e18);
     assertEq(ResourceOwn.getNumOfWood(world, users[9], 1), 100000 - baseWoodCostDock);
@@ -74,7 +75,8 @@ contract NavalDockTest is NakamoTest {
     assertEq(ResourceOwn.getNumOfWood(world, users[9], 1), 100000);
 
     // user1 has 18 18 castle
-    bytes32 armyID = TestUtils.settleArmy(world, 19, 18, 15, 15, 15, users[9], 1);
+    bytes32 castleID = TestUtils.getCastleID(world, users[9], 1)[0];
+    bytes32 armyID = TestUtils.settleArmy(world, 19, 18, 15, 15, 15, users[9], 1, castleID);
     bytes32 dockIDOne = TestUtils.buildDockWrapper(world, users[9], armyID, 19, 19, 1);
     bytes32 dockIDTwo = TestUtils.buildDockWrapper(world, users[9], armyID, 19, 20, 1);
     assertEq(
@@ -100,7 +102,8 @@ contract NavalDockTest is NakamoTest {
     TestUtils.cheatCredit(world, users[9], 1, 50);
     assertEq(CreditOwn.get(world, 1, users[9]), 50 * 1e18);
     assertEq(ResourceOwn.getNumOfWood(world, users[9], 1), 100000);
-    bytes32 armyID = TestUtils.settleArmy(world, 19, 18, 15, 15, 15, users[9], 1);
+    bytes32 castleID = TestUtils.getCastleID(world, users[9], 1)[0];
+    bytes32 armyID = TestUtils.settleArmy(world, 19, 18, 15, 15, 15, users[9], 1, castleID);
     vm.expectRevert(NavalSystem__UnsufficientBalance.selector);
     bytes32 dockIDOne = TestUtils.buildDockWrapper(world, users[9], armyID, 19, 20, 1);
   }
@@ -109,7 +112,8 @@ contract NavalDockTest is NakamoTest {
     TestUtils.cheatCredit(world, users[9], 1, 100000);
     assertEq(CreditOwn.get(world, 1, users[9]), 100000 * 1e18);
     assertEq(ResourceOwn.getNumOfWood(world, users[9], 1), 0);
-    bytes32 armyID = TestUtils.settleArmy(world, 19, 18, 15, 15, 15, users[9], 1);
+    bytes32 castleID = TestUtils.getCastleID(world, users[9], 1)[0];
+    bytes32 armyID = TestUtils.settleArmy(world, 19, 18, 15, 15, 15, users[9], 1, castleID);
     vm.expectRevert(NavalSystem__UnsufficientBalance.selector);
     bytes32 dockIDOne = TestUtils.buildDockWrapper(world, users[9], armyID, 19, 20, 1);
   }
@@ -117,7 +121,8 @@ contract NavalDockTest is NakamoTest {
   function testArmyIsFarAway() public {
     TestUtils.cheatCredit(world, users[9], 1, 100000);
     TestUtils.cheatResource(world, users[9], 1, 100000);
-    bytes32 armyID = TestUtils.settleArmy(world, 16, 18, 15, 15, 15, users[9], 1);
+    bytes32 castleID = TestUtils.getCastleID(world, users[9], 1)[0];
+    bytes32 armyID = TestUtils.settleArmy(world, 16, 18, 15, 15, 15, users[9], 1, castleID);
     vm.expectRevert(NavalSystem__ArmyIsTooFar.selector);
     bytes32 dockIDOne = TestUtils.buildDockWrapper(world, users[9], armyID, 19, 20, 1);
   }
@@ -125,7 +130,8 @@ contract NavalDockTest is NakamoTest {
   function testArmySizeIsLow() public {
     TestUtils.cheatCredit(world, users[9], 1, 100000);
     TestUtils.cheatResource(world, users[9], 1, 100000);
-    bytes32 armyID = TestUtils.settleArmy(world, 19, 18, 4, 5, 5, users[9], 1);
+    bytes32 castleID = TestUtils.getCastleID(world, users[9], 1)[0];
+    bytes32 armyID = TestUtils.settleArmy(world, 19, 18, 4, 5, 5, users[9], 1, castleID);
     vm.expectRevert(NavalSystem__ArmySizeIsLow.selector);
     bytes32 dockIDOne = TestUtils.buildDockWrapper(world, users[9], armyID, 19, 20, 1);
   }
@@ -133,7 +139,8 @@ contract NavalDockTest is NakamoTest {
   function testNotSeaSide() public {
     TestUtils.cheatCredit(world, users[9], 1, 100000);
     TestUtils.cheatResource(world, users[9], 1, 100000);
-    bytes32 armyID = TestUtils.settleArmy(world, 16, 18, 15, 15, 15, users[9], 1);
+    bytes32 castleID = TestUtils.getCastleID(world, users[9], 1)[0];
+    bytes32 armyID = TestUtils.settleArmy(world, 16, 18, 15, 15, 15, users[9], 1, castleID);
     vm.expectRevert(NavalSystem__NotSeaSide.selector);
     bytes32 dockIDOne = TestUtils.buildDockWrapper(world, users[9], armyID, 17, 18, 1);
   }
@@ -143,7 +150,8 @@ contract NavalDockTest is NakamoTest {
     TestUtils.cheatResource(world, users[9], 1, 100000);
 
     // user1 has 18 18 castle
-    bytes32 armyID = TestUtils.settleArmy(world, 19, 18, 15, 15, 15, users[9], 1);
+    bytes32 castleID = TestUtils.getCastleID(world, users[9], 1)[0];
+    bytes32 armyID = TestUtils.settleArmy(world, 19, 18, 15, 15, 15, users[9], 1, castleID);
     bytes32 dockIDOne = TestUtils.buildDockWrapper(world, users[9], armyID, 19, 20, 1);
     vm.expectRevert(NavalSystem__TileIsNotEmpty.selector);
     bytes32 dockIDTwo = TestUtils.buildDockWrapper(world, users[9], armyID, 19, 20, 1);
@@ -154,7 +162,8 @@ contract NavalDockTest is NakamoTest {
     TestUtils.cheatResource(world, users[9], 1, 100000);
 
     // user1 has 18 18 castle
-    bytes32 armyID = TestUtils.settleArmy(world, 19, 18, 15, 15, 15, users[9], 1);
+    bytes32 castleID = TestUtils.getCastleID(world, users[9], 1)[0];
+    bytes32 armyID = TestUtils.settleArmy(world, 19, 18, 15, 15, 15, users[9], 1, castleID);
     vm.expectRevert(NavalSystem__WrongTile.selector);
     bytes32 dockIDOne = TestUtils.buildDockWrapper(world, users[9], armyID, 20, 18, 1);
   }

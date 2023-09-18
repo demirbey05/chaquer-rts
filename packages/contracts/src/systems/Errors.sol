@@ -66,6 +66,7 @@ error IdentitySystem__GameIsFull();
 error IdentitySystem__InvalidUserName();
 error IdentitySystem__GameDoesNotExist();
 error IdentitySystem__WrongState();
+error IdentitySystem__NotJoined();
 
 // MineCapture System Errors
 
@@ -113,3 +114,8 @@ error FleetAttack__FriendFireNotAllowed();
 error FleetAttack__NoAuthorization();
 error FleetAttack__NonMatchedGameID();
 error FleetAttack__TooFar();
+
+// Army Update Errors
+
+error ArmyUpdateSystem__NotArmyOwner();
+error ArmyUpdate__TooFar();

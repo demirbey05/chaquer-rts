@@ -41,6 +41,14 @@ library TestUtils {
     return entityID;
   }
 
+  function getCastleID(
+    IWorld world,
+    address owner,
+    uint256 gameID
+  ) internal returns (bytes32[] memory) {
+    return LibQueries.getOwnedCastleIDs(world, owner, gameID);
+  }
+
   function settleArmy(
     IWorld world,
     uint32 x,
@@ -49,10 +57,11 @@ library TestUtils {
     uint32 numArcher,
     uint32 numCavalry,
     address user,
-    uint256 gameID
+    uint256 gameID,
+    bytes32 castleID
   ) internal returns (bytes32) {
     vm.startPrank(user);
-    bytes32 entityID = world.settleArmy(x, y, ArmyConfigData(numSwordsman, numArcher, numCavalry, gameID));
+    bytes32 entityID = world.settleArmy(x, y, ArmyConfigData(numSwordsman, numArcher, numCavalry, gameID), castleID);
     vm.stopPrank();
     return entityID;
   }
