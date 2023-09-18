@@ -4,10 +4,6 @@
     "blockNumber": 25122560
   },
   "31337": {
-<<<<<<< HEAD
-    "address": "0x8c996D1362420c45513F22a3E28dc784beb0bE3f"
-=======
-    "address": "0xd831912d86BE956A131cfe14E90C86c717407489"
->>>>>>> main
+    "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
   }
 }

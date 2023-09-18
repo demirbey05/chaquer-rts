@@ -337,6 +337,17 @@ export function createSystemCalls(
     }
   };
 
+  const exitGame = async (gameID: number) => {
+    try {
+      const tx = await worldContract.write.exitGame([BigInt(gameID)]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
   return {
     initMapDataSystem,
     settleCastle,
@@ -358,5 +369,6 @@ export function createSystemCalls(
     moveFleet,
     attackFleet,
     buyResource,
+    exitGame,
   };
 }

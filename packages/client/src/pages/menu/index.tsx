@@ -1,3 +1,4 @@
+import map from '../../../map.json';
 import chaquerImg from '../../images/chaquer_bg.jpg';
 import { ethers } from "ethers";
 import { Button } from "@chakra-ui/react";
@@ -144,7 +145,7 @@ const RegenerateButton = (props: RegenerateButtonPropTypes) => {
         p="8"
         textColor="dark"
         width="200px"
-        isDisabled={props.isLoading || true}
+        isDisabled={props.isLoading}
         onClick={props.handleRefresh}
         marginTop={props.refresh === 0 ? "300px" : "0"}
       >

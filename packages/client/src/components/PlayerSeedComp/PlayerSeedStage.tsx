@@ -16,6 +16,21 @@ export const PlayerSeedStage = () => {
     const seedEntered = useSeedInited(1, userWallet);
 
     useEffect(() => {
+        const handleBeforeUnload = async (event: BeforeUnloadEvent) => {
+            if (gameState === 1 || gameState === 2) {
+                event.preventDefault();
+                await systemCalls.exitGame(1)
+                return (event.returnValue = 'If you leave the page, you will leave the game.');
+            }
+        }
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
+        return (() => {
+            window.removeEventListener('beforeunload', handleBeforeUnload)
+        })
+    }, [])
+
+    useEffect(() => {
         const sendSeed = async () => {
             if (gameState === 2 && !seedEntered) {
                 var buf = new Uint8Array(1);
