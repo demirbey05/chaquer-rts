@@ -88,6 +88,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean, values: number[][], isBo
                             ) {
                                 const element = document.getElementById(`${data.y},${data.x}`)!;
                                 if (element) {
+                                    element.classList.add("orangeTileEffect");
                                     element.setAttribute("data-bs-toggle", "modal");
                                     element.setAttribute("data-bs-target", "#armyUpdateModal");
                                 }
@@ -102,6 +103,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean, values: number[][], isBo
                     (data) => {
                         if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
                             if (armySettlePositions(data.x, data.y, myCastlePosition)) {
+                                document.getElementById(`${data.y},${data.x}`)?.classList.remove("orangeTileEffect");
                                 document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-toggle", "");
                                 document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-target", "");
                             }

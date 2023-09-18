@@ -16,7 +16,7 @@ import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/
 
 export const ArmySettleModal = () => {
   const { userWallet } = usePlayer();
-  const { armyPosition, setIsArmySettleStage } = useArmy();
+  const { armyPosition, setIsArmySettleStage, setIsArmyUpdateStage } = useArmy();
   const { setErrorMessage, setErrorTitle, setShowError } = useError();
   const { systemCalls, components } = useMUD();
   const { castlePosition } = useCastle();
@@ -72,6 +72,7 @@ export const ArmySettleModal = () => {
 
   const handleClick = async () => {
     setIsArmySettleStage(false);
+    setIsArmyUpdateStage(false)
     setIsLoading(true);
     var targetDiv = document.getElementById(`${armyPosition.y},${armyPosition.x}`);
     targetDiv?.classList.add("animate-border-settle");
