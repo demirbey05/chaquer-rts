@@ -121,7 +121,8 @@ export default mudConfig({
         state:"State",
         startBlock:"uint256",
         winner:"address",
-        numberOfCastle:"uint256"
+        numberOfCastle:"uint256",
+        colorCursor:"uint256"
       }
     },
     ResourceOwn : {

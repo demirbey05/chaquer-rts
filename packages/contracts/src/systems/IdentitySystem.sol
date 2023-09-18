@@ -35,9 +35,14 @@ contract IdentitySystem is System {
     if (bytes(userName).length > 32) {
       revert IdentitySystem__InvalidUserName();
     }
+    {
+      uint256 colorCursor = GameMetaData.getColorCursor(gameID);
+      AddressToUsername.set(sender, gameID, colorCursor + 1, userName);
+      GameMetaData.setColorCursor(gameID, colorCursor + 1);
+    }
 
-    AddressToUsername.set(sender, gameID, currentNumOfUser + 1, userName);
     Players.set(gameID, sender, true);
+
     NumberOfUsers.set(gameID, currentNumOfUser + 1);
   }
 
