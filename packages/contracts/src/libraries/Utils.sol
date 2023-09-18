@@ -274,6 +274,7 @@ library LibUtils {
       CastleOwnable.deleteRecord(ownedCastles[i]);
       ColorOwnable.deleteRecord(ownedCastles[i]);
       GameMetaData.setNumberOfCastle(gameID, GameMetaData.getNumberOfCastle(gameID) - 1);
+      Position.deleteRecord(gameID);
     }
     AddressToUsername.deleteRecord(player, gameID);
   }
