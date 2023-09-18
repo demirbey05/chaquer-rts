@@ -119,3 +119,5 @@ error FleetAttack__TooFar();
 
 error ArmyUpdateSystem__NotArmyOwner();
 error ArmyUpdate__TooFar();
+error ArmyUpdate__InvalidUserSize();
+error ArmyUpdate__WrongGameID();

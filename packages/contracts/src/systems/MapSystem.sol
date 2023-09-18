@@ -9,6 +9,7 @@ import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { LibMath } from "../libraries/LibMath.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
+import { LibUtils } from "../libraries/Utils.sol";
 import { State } from "../codegen/Types.sol";
 import { maxArmyNum, armyMoveFoodCost, armyMoveGoldCost } from "./Constants.sol";
 import "./Errors.sol";
@@ -103,38 +104,6 @@ contract MapSystem is System {
     return entityID;
   }
 
-  function handleEconomyCheck(
-    IWorld world,
-    address owner,
-    ArmyConfigData calldata config
-  ) internal {
-    uint256 startBlock = GameMetaData.getStartBlock(config.gameID);
-    uint256 ownerBalance = CreditOwn.get(config.gameID, owner);
-    uint256 swordsmanPrice = LibVRGDA.getArmyPrice(world, config.gameID, 0, block.number - startBlock);
-    uint256 archerPrice = LibVRGDA.getArmyPrice(world, config.gameID, 1, block.number - startBlock);
-    uint256 cavalryPrice = LibVRGDA.getArmyPrice(world, config.gameID, 2, block.number - startBlock);
-
-    uint256 costSwordsman = swordsmanPrice * config.numSwordsman;
-    uint256 costArcher = archerPrice * config.numArcher;
-    uint256 costCavalry = cavalryPrice * config.numCavalry;
-
-    if (costSwordsman + costArcher + costCavalry > ownerBalance) {
-      revert ArmySettle__UnsufficientBalance();
-    }
-
-    CreditOwn.set(
-      config.gameID,
-      owner,
-      CreditOwn.get(config.gameID, owner) - (costSwordsman + costArcher + costCavalry)
-    );
-    SoldierCreated.set(
-      config.gameID,
-      SoldierCreated.getNumOfSwordsman(config.gameID) + config.numSwordsman,
-      SoldierCreated.getNumOfArcher(config.gameID) + config.numArcher,
-      SoldierCreated.getNumOfCavalry(config.gameID) + config.numCavalry
-    );
-  }
-
   function settleArmy(
     uint32 x,
     uint32 y,
@@ -178,7 +147,7 @@ contract MapSystem is System {
       revert ArmySettle__TooManySoldier();
     }
     // Economy System Integration
-    handleEconomyCheck(IWorld(_world()), ownerCandidate, config);
+    LibUtils.handleEconomyCheck(IWorld(_world()), ownerCandidate, config);
 
     bytes32 entityID = keccak256(abi.encodePacked(x, y, "Army", ownerCandidate, config.gameID, block.timestamp));
 

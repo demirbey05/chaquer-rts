@@ -3,10 +3,12 @@
 pragma solidity ^0.8.0;
 import { BattleResult, RemainingData, EntityType } from "./Types.sol";
 import "./Libraries.sol";
+import "../systems/Errors.sol";
+import { LibVRGDA } from "../libraries/LibVRGDA.sol";
 import { AttackerType, ClashType } from "../codegen/Types.sol";
-import { CastleOwnable, Position, ResourceOwnable, DockOwnable, ArmyConfig, ArmyOwnable, ClashResult, ColorOwnable, AddressToUsername, Players, NumberOfUsers } from "../codegen/Tables.sol";
+import { CastleOwnable, CreditOwn, Position, ResourceOwnable, SoldierCreated, DockOwnable, ArmyConfig, ArmyConfigData, ArmyOwnable, ClashResult, ColorOwnable, AddressToUsername, Players, NumberOfUsers, GameMetaData } from "../codegen/Tables.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
-
+import { IWorld } from "../codegen/world/IWorld.sol";
 error ErrorInCalculatingBattleScores();
 
 function findRemainings(BattleResult memory result) pure returns (RemainingData memory remainings) {
@@ -273,5 +275,37 @@ library LibUtils {
       ColorOwnable.deleteRecord(ownedCastles[i]);
     }
     AddressToUsername.deleteRecord(player, gameID);
+  }
+
+  function handleEconomyCheck(
+    IWorld world,
+    address owner,
+    ArmyConfigData calldata config
+  ) internal {
+    uint256 startBlock = GameMetaData.getStartBlock(config.gameID);
+    uint256 ownerBalance = CreditOwn.get(config.gameID, owner);
+    uint256 swordsmanPrice = LibVRGDA.getArmyPrice(world, config.gameID, 0, block.number - startBlock);
+    uint256 archerPrice = LibVRGDA.getArmyPrice(world, config.gameID, 1, block.number - startBlock);
+    uint256 cavalryPrice = LibVRGDA.getArmyPrice(world, config.gameID, 2, block.number - startBlock);
+
+    uint256 costSwordsman = swordsmanPrice * config.numSwordsman;
+    uint256 costArcher = archerPrice * config.numArcher;
+    uint256 costCavalry = cavalryPrice * config.numCavalry;
+
+    if (costSwordsman + costArcher + costCavalry > ownerBalance) {
+      revert ArmySettle__UnsufficientBalance();
+    }
+
+    CreditOwn.set(
+      config.gameID,
+      owner,
+      CreditOwn.get(config.gameID, owner) - (costSwordsman + costArcher + costCavalry)
+    );
+    SoldierCreated.set(
+      config.gameID,
+      SoldierCreated.getNumOfSwordsman(config.gameID) + config.numSwordsman,
+      SoldierCreated.getNumOfArcher(config.gameID) + config.numArcher,
+      SoldierCreated.getNumOfCavalry(config.gameID) + config.numCavalry
+    );
   }
 }
