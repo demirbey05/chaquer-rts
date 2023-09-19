@@ -34,6 +34,18 @@ export const ArmySettleModal = () => {
   const myCredit = useCredit(1, userWallet);
 
   useEffect(() => {
+    if (Number.isNaN(parseInt(swordsmanCount))) {
+      setSwordsmanCount("0")
+    }
+
+    if (Number.isNaN(parseInt(archerCount))) {
+      setArcherCount("0")
+    }
+
+    if (Number.isNaN(parseInt(cavalryCount))) {
+      setCavalryCount("0")
+    }
+
     if (swordsmanCount.length === 0 && archerCount.length === 0 && cavalryCount.length === 0) {
       setIsDisabled(true);
       return;
@@ -45,26 +57,28 @@ export const ArmySettleModal = () => {
 
     const totalTroops = parsedSwordsmanCount + parsedArcherCount + parsedCavalryCount;
 
-    const totalCharge =
-      parsedSwordsmanCount * Number(getNumberFromBigInt(armyPrices.priceSwordsman)) +
-      parsedArcherCount * Number(getNumberFromBigInt(armyPrices.priceArcher)) +
-      parsedCavalryCount * Number(getNumberFromBigInt(armyPrices.priceCavalry));
+    if (armyPrices) {
+      const totalCharge =
+        parsedSwordsmanCount * Number(getNumberFromBigInt(armyPrices.priceSwordsman)) +
+        parsedArcherCount * Number(getNumberFromBigInt(armyPrices.priceArcher)) +
+        parsedCavalryCount * Number(getNumberFromBigInt(armyPrices.priceCavalry));
 
-    if (totalTroops <= 0 || totalTroops > 500) {
-      setIsDisabled(true);
-      setTotalCharge(totalCharge);
-    } else if (!armyPrices || !myCredit) {
-      setIsDisabled(true);
-      setEnoughCredit(false);
-      setTotalCharge(totalCharge);
-    } else {
-      if (totalCharge > parseInt(getNumberFromBigInt(myCredit))) {
+      if (totalTroops <= 0 || totalTroops > 500) {
+        setIsDisabled(true);
+        setTotalCharge(totalCharge);
+      } else if (!armyPrices || !myCredit) {
         setIsDisabled(true);
         setEnoughCredit(false);
         setTotalCharge(totalCharge);
       } else {
-        setIsDisabled(false);
-        setEnoughCredit(true);
+        if (totalCharge > parseInt(getNumberFromBigInt(myCredit))) {
+          setIsDisabled(true);
+          setEnoughCredit(false);
+          setTotalCharge(totalCharge);
+        } else {
+          setIsDisabled(false);
+          setEnoughCredit(true);
+        }
       }
     }
   }, [swordsmanCount, archerCount, cavalryCount, armyPrices, myCredit]);

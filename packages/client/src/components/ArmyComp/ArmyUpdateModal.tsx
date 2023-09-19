@@ -39,7 +39,7 @@ export const ArmyUpdateModal = () => {
     const myArmyPositions = useMyArmy(userWallet);
 
     useEffect(() => {
-        if (armyPositionUpdate) {
+        if (armyPositionUpdate && myArmyPositions) {
             setArmyConfig(getMyArmyConfigByPosition({ x: armyPositionUpdate.x, y: armyPositionUpdate.y }, myArmyPositions).myArmyConfig)
         }
     }, [armyPositionUpdate, myArmyPositions])
