@@ -11,8 +11,13 @@ import "./Errors.sol";
 import { initialMarketSupply } from "./Constants.sol";
 import { State, ClashType, AttackerType } from "../codegen/Types.sol";
 
-uint256 constant minePerResource = 5;
+uint256 constant minePerResource = 1;
 uint256 constant maxIter = 30;
+
+struct OffsetPack {
+  uint32 xOffset;
+  uint32 yOffset;
+}
 
 contract MineInitSystem is System {
   function commitSeed(uint256 gameID, uint256 seed) public {
@@ -53,13 +58,15 @@ contract MineInitSystem is System {
     if (ResourceInited.get(gameID)) {
       revert MineSystem__ResourceInitialized();
     }
-    uint256 numOfFoodMine = InitResourceType(MineType.Food, gameID, width, height);
-    uint256 numOfWoodMine = InitResourceType(MineType.Wood, gameID, width, height);
-    uint256 numOfGoldMine = InitResourceType(MineType.Gold, gameID, width, height);
-    if (
-      numOfFoodMine < minePerResource - 2 || numOfWoodMine < minePerResource - 2 || numOfGoldMine < minePerResource - 2
-    ) {
-      revert MineSystem__RandomizationError();
+    for (uint i = 0; i < 4; i++) {
+      OffsetPack memory offset = OffsetPack({
+        xOffset: (uint32(i / 2) * height) / 2, // 0, 0, 1, 1
+        yOffset: (uint32(i % 2) * width) / 2 // 0, 1, 0, 1
+      });
+      uint[3] memory res = initAllMines(gameID, width, height, offset);
+      if (res[0] < minePerResource || res[1] < minePerResource || res[2] < minePerResource) {
+        revert MineSystem__RandomizationError();
+      }
     }
     ResourceInited.set(gameID, true);
     GameMetaData.setState(gameID, State.Started);
@@ -67,11 +74,23 @@ contract MineInitSystem is System {
     ResourcesSold.set(gameID, initialMarketSupply, initialMarketSupply, initialMarketSupply);
   }
 
+  function initAllMines(
+    uint256 gameID,
+    uint32 width,
+    uint32 height,
+    OffsetPack memory offset
+  ) internal returns (uint[3] memory res) {
+    res[0] = InitResourceType(MineType.Food, gameID, width / 2, height / 2, offset);
+    res[1] = InitResourceType(MineType.Wood, gameID, width / 2, height / 2, offset);
+    res[2] = InitResourceType(MineType.Gold, gameID, width / 2, height / 2, offset);
+  }
+
   function InitResourceType(
     MineType mineType,
     uint256 gameID,
     uint256 width,
-    uint256 height
+    uint256 height,
+    OffsetPack memory offset
   ) internal returns (uint256) {
     bytes32 previousHash = bytes32(0);
     uint256 i = 0;
@@ -84,9 +103,9 @@ contract MineInitSystem is System {
       }
       numIter++;
       previousHash = LibRandom.generateRandomNumber(previousHash, gameID);
-      x = uint32(uint256(previousHash) % width);
+      x = uint32((uint256(previousHash) % width) + offset.xOffset);
       previousHash = LibRandom.generateRandomNumber(previousHash, gameID);
-      y = uint32(uint256(previousHash) % height);
+      y = uint32((uint256(previousHash) % height) + offset.yOffset);
 
       if (MapConfig.getItemTerrain(gameID, x * width + y)[0] == hex"03") {
         continue;

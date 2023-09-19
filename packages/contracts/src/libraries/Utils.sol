@@ -277,6 +277,7 @@ library LibUtils {
       Position.deleteRecord(ownedCastles[i]);
     }
     AddressToUsername.deleteRecord(player, gameID);
+    CreditOwn.deleteRecord(gameID, player);
   }
 
   function handleEconomyCheck(
