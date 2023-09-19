@@ -17,6 +17,7 @@ uint256 constant maxIter = 30;
 struct OffsetPack {
   uint32 xOffset;
   uint32 yOffset;
+  uint32 dropFactor;
 }
 
 contract MineInitSystem is System {
@@ -60,8 +61,9 @@ contract MineInitSystem is System {
     }
     for (uint i = 0; i < 4; i++) {
       OffsetPack memory offset = OffsetPack({
-        xOffset: (uint32(i / 2) * height) / 2, // 0, 0, 1, 1
-        yOffset: (uint32(i % 2) * width) / 2 // 0, 1, 0, 1
+        xOffset: (uint32(i / 2) * height) / 2,
+        yOffset: (uint32(i % 2) * width) / 2,
+        dropFactor: 2
       });
       uint[3] memory res = initAllMines(gameID, width, height, offset);
       if (res[0] < minePerResource || res[1] < minePerResource || res[2] < minePerResource) {
@@ -107,7 +109,7 @@ contract MineInitSystem is System {
       previousHash = LibRandom.generateRandomNumber(previousHash, gameID);
       y = uint32((uint256(previousHash) % height) + offset.yOffset);
 
-      if (MapConfig.getItemTerrain(gameID, x * width + y)[0] == hex"03") {
+      if (MapConfig.getItemTerrain(gameID, x * width * offset.dropFactor + y)[0] == hex"03") {
         continue;
       }
       if (LibQueries.queryPositionEntity(IStore(_world()), x, y, gameID) > 0) {
