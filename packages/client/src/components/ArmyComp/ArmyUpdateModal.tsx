@@ -30,7 +30,7 @@ export const ArmyUpdateModal = () => {
     const [enoughCredit, setEnoughCredit] = useState(true);
     const [lessThanPrevArmySize, setLessThenPrevArmySize] = useState<boolean>(true)
     const [totalCharge, setTotalCharge] = useState<number>(0);
-    const [armyConfig, setArmyConfig] = useState<any>();
+    const [armyConfig, setArmyConfig] = useState<any>({ numSwordsman: 0, numArcher: 0, numCavalry: 0 });
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -90,26 +90,28 @@ export const ArmyUpdateModal = () => {
 
         const totalTroops = parsedSwordsmanCount + parsedArcherCount + parsedCavalryCount;
 
-        const totalCharge =
-            (parsedSwordsmanCount - armyConfig.numSwordsman) * Number(getNumberFromBigInt(armyPrices.priceSwordsman)) +
-            (parsedArcherCount - armyConfig.numArcher) * Number(getNumberFromBigInt(armyPrices.priceArcher)) +
-            (parsedCavalryCount - armyConfig.numCavalry) * Number(getNumberFromBigInt(armyPrices.priceCavalry));
+        if (armyPrices) {
+            const totalCharge =
+                (parsedSwordsmanCount - armyConfig.numSwordsman) * Number(getNumberFromBigInt(armyPrices.priceSwordsman)) +
+                (parsedArcherCount - armyConfig.numArcher) * Number(getNumberFromBigInt(armyPrices.priceArcher)) +
+                (parsedCavalryCount - armyConfig.numCavalry) * Number(getNumberFromBigInt(armyPrices.priceCavalry));
 
-        if (totalTroops <= 0 || totalTroops > 500) {
-            setIsDisabled(true);
-            setTotalCharge(totalCharge);
-        } else if (!armyPrices || !myCredit) {
-            setIsDisabled(true);
-            setEnoughCredit(false);
-            setTotalCharge(totalCharge);
-        } else {
-            if (totalCharge > parseInt(getNumberFromBigInt(myCredit))) {
+            if (totalTroops <= 0 || totalTroops > 500) {
+                setIsDisabled(true);
+                setTotalCharge(totalCharge);
+            } else if (!armyPrices || !myCredit) {
                 setIsDisabled(true);
                 setEnoughCredit(false);
                 setTotalCharge(totalCharge);
             } else {
-                setIsDisabled(false);
-                setEnoughCredit(true);
+                if (totalCharge > parseInt(getNumberFromBigInt(myCredit))) {
+                    setIsDisabled(true);
+                    setEnoughCredit(false);
+                    setTotalCharge(totalCharge);
+                } else {
+                    setIsDisabled(false);
+                    setEnoughCredit(true);
+                }
             }
         }
     }, [swordsmanCount, archerCount, cavalryCount, armyPrices, myCredit, armyConfig]);

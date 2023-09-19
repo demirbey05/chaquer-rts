@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Progress, CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
 import { useNumberOfUsers } from '../../hooks/IdentityHooks/useNumberOfUsers';
 import { limitOfUser } from '../../utils/constants/constants';
