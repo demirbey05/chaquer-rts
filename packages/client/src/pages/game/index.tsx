@@ -107,5 +107,3 @@ export const Game = () => {
     </>
   );
 }
-
-export const MemoGame = React.memo(Game);

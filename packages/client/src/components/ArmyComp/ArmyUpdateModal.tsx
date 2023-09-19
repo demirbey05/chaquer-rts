@@ -1,26 +1,26 @@
 import archerImg from "../../images/archer.png";
 import cavalryImg from "../../images/cavalry.png";
 import swordsmanImg from "../../images/swordsman.png";
-import { useMUD } from "../../context/MUDContext";
-import { Button, Tooltip, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import { Button, Tooltip, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
 import { useArmy } from "../../context/ArmyContext";
 import { useError } from "../../context/ErrorContext";
 import { usePlayer } from "../../context/PlayerContext";
+import { useMUD } from "../../context/MUDContext";
+import { useCastle } from "../../context/CastleContext";
 import { useArmyPrices } from '../../hooks/EconomyHooks/useArmyPrices';
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
-import { useCastle } from "../../context/CastleContext";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { getMyArmyConfigByPosition } from "../../utils/helperFunctions/ArmyFunctions/getArmyConfigByPosition";
 import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
 
 export const ArmyUpdateModal = () => {
+    const { systemCalls, components } = useMUD();
     const { userWallet } = usePlayer();
     const { setIsArmyUpdateStage, armyPositionUpdate, setIsArmySettleStage, setArmyPositionUpdate } = useArmy();
     const { setErrorMessage, setErrorTitle, setShowError } = useError();
-    const { systemCalls, components } = useMUD();
     const { castlePosition, setCastlePosition } = useCastle();
 
     const [swordsmanCount, setSwordsmanCount] = useState<string>("");
@@ -28,6 +28,7 @@ export const ArmyUpdateModal = () => {
     const [cavalryCount, setCavalryCount] = useState<string>("");
     const [isDisabled, setIsDisabled] = useState(true);
     const [enoughCredit, setEnoughCredit] = useState(true);
+    const [lessThanPrevArmySize, setLessThenPrevArmySize] = useState<boolean>(true)
     const [totalCharge, setTotalCharge] = useState<number>(0);
     const [armyConfig, setArmyConfig] = useState<any>();
 
@@ -55,10 +56,26 @@ export const ArmyUpdateModal = () => {
     }, [armyConfig])
 
     useEffect(() => {
+        if (Number.isNaN(parseInt(swordsmanCount))) {
+            setSwordsmanCount("0")
+        }
+
+        if (Number.isNaN(parseInt(archerCount))) {
+            setArcherCount("0")
+        }
+
+        if (Number.isNaN(parseInt(cavalryCount))) {
+            setCavalryCount("0")
+        }
+
         if (armyConfig) {
             if (Number(swordsmanCount) + Number(archerCount) + Number(cavalryCount) < armyConfig.numSwordsman + armyConfig.numCavalry + armyConfig.numArcher) {
                 setIsDisabled(true);
+                setLessThenPrevArmySize(false)
                 return;
+            } else {
+                setIsDisabled(false);
+                setLessThenPrevArmySize(true)
             }
         }
 
@@ -74,9 +91,9 @@ export const ArmyUpdateModal = () => {
         const totalTroops = parsedSwordsmanCount + parsedArcherCount + parsedCavalryCount;
 
         const totalCharge =
-            parsedSwordsmanCount * Number(getNumberFromBigInt(armyPrices.priceSwordsman)) +
-            parsedArcherCount * Number(getNumberFromBigInt(armyPrices.priceArcher)) +
-            parsedCavalryCount * Number(getNumberFromBigInt(armyPrices.priceCavalry));
+            (parsedSwordsmanCount - armyConfig.numSwordsman) * Number(getNumberFromBigInt(armyPrices.priceSwordsman)) +
+            (parsedArcherCount - armyConfig.numArcher) * Number(getNumberFromBigInt(armyPrices.priceArcher)) +
+            (parsedCavalryCount - armyConfig.numCavalry) * Number(getNumberFromBigInt(armyPrices.priceCavalry));
 
         if (totalTroops <= 0 || totalTroops > 500) {
             setIsDisabled(true);
@@ -97,6 +114,9 @@ export const ArmyUpdateModal = () => {
         }
     }, [swordsmanCount, archerCount, cavalryCount, armyPrices, myCredit, armyConfig]);
 
+    const handleBackMap = () => {
+        setArmyConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 })
+    }
 
     const handleClick = async () => {
         setIsArmyUpdateStage(false);
@@ -192,6 +212,13 @@ export const ArmyUpdateModal = () => {
                                         <AlertTitle>You have no enough credit, sell some resources! Total Charge: {totalCharge} 💰</AlertTitle>
                                     </Alert>
                                 }
+                                {
+                                    !lessThanPrevArmySize &&
+                                    <Alert status='warning' color={"black"}>
+                                        <AlertIcon />
+                                        <AlertTitle>Soldier number in the army must be bigger or equal to previous soldier number.</AlertTitle>
+                                    </Alert>
+                                }
                                 <div className="row mt-2">
                                     <ArmySettleInputBody imageSource={swordsmanImg}
                                         soldierName={"Swordsman"}
@@ -227,6 +254,7 @@ export const ArmyUpdateModal = () => {
                                 border="solid"
                                 textColor="dark"
                                 data-bs-dismiss="modal"
+                                onClick={() => handleBackMap()}
                             >
                                 Back to Map
                             </Button>
