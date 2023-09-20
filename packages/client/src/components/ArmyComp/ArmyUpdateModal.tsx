@@ -1,8 +1,9 @@
-import archerImg from "../../images/archer.png";
-import cavalryImg from "../../images/cavalry.png";
-import swordsmanImg from "../../images/swordsman.png";
+import archerImg from "../../images/armyAssets/archer.png"
+import cavalryImg from "../../images/armyAssets/cavalry.png";
+import swordsmanImg from "../../images/armyAssets/swordsman.png";
 import { useState, useEffect } from "react";
-import { Button, Tooltip, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
+import { Button, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useArmy } from "../../context/ArmyContext";
 import { useError } from "../../context/ErrorContext";
 import { usePlayer } from "../../context/PlayerContext";
@@ -10,11 +11,10 @@ import { useMUD } from "../../context/MUDContext";
 import { useCastle } from "../../context/CastleContext";
 import { useArmyPrices } from '../../hooks/EconomyHooks/useArmyPrices';
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
+import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
-import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { getMyArmyConfigByPosition } from "../../utils/helperFunctions/ArmyFunctions/getArmyConfigByPosition";
-import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
 
 export const ArmyUpdateModal = () => {
     const { systemCalls, components } = useMUD();
@@ -26,10 +26,12 @@ export const ArmyUpdateModal = () => {
     const [swordsmanCount, setSwordsmanCount] = useState<string>("");
     const [archerCount, setArcherCount] = useState<string>("");
     const [cavalryCount, setCavalryCount] = useState<string>("");
+
     const [isDisabled, setIsDisabled] = useState(true);
     const [enoughCredit, setEnoughCredit] = useState(true);
     const [lessThanPrevArmySize, setLessThenPrevArmySize] = useState<boolean>(true)
     const [totalCharge, setTotalCharge] = useState<number>(0);
+
     const [armyConfig, setArmyConfig] = useState<any>({ numSwordsman: 0, numArcher: 0, numCavalry: 0 });
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -124,6 +126,7 @@ export const ArmyUpdateModal = () => {
         setIsArmyUpdateStage(false);
         setIsArmySettleStage(false)
         setIsLoading(true);
+
         var targetDiv = document.getElementById(`${armyPositionUpdate.y},${armyPositionUpdate.x}`);
         targetDiv?.classList.add("animate-border-settle");
 
@@ -142,7 +145,6 @@ export const ArmyUpdateModal = () => {
             setErrorTitle("Army Update Error")
             setShowError(true)
             setIsLoading(false)
-            return
         }
 
         if ((document.getElementById('SwordsmanUpdate') as HTMLInputElement).value === "") {
@@ -198,12 +200,9 @@ export const ArmyUpdateModal = () => {
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content bg-dark text-white">
                         <div className="modal-header justify-center">
-                            <Tooltip label="Please determine the number of warriors that will hold in
-                  the army. You can deploy maximum 500 soldiers in an army. You cannot decrease the number of soldiers." placement="top-start" bg="blue.400" fontSize="md">
-                                <h1 className="modal-title text-2xl" id="armyUpdateModalLabel">
-                                    Army Update
-                                </h1>
-                            </Tooltip>
+                            <h1 className="modal-title text-2xl" id="armyUpdateModalLabel">
+                                Army Update
+                            </h1>
                         </div>
                         <div className="modal-body">
                             <div className="container-fluid">

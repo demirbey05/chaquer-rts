@@ -1,12 +1,12 @@
+import { useEffect, useState } from "react";
 import { Button } from "@chakra-ui/react";
-import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
+import { useError } from "../../context/ErrorContext";
+import { useSea } from "../../context/SeaContext";
 import { useMUD } from "../../context/MUDContext";
 import { useAttack } from "../../context/AttackContext";
 import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
-import { useEffect, useState } from "react";
-import { useError } from "../../context/ErrorContext";
-import { useSea } from "../../context/SeaContext";
-import { EventProgressBar } from "../ProgressComp/EventProgressBar";
+import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 
 export const DockCaptureDrawer = () => {
     const { components, systemCalls } = useMUD();
@@ -15,6 +15,7 @@ export const DockCaptureDrawer = () => {
         setEnemyArmyConfig,
         myArmyConfig } = useAttack();
     const { targetDockPosition, dockAttackerArmyPosition, setDockCaptureStage } = useSea();
+
     const [dockArmy, setDockArmy] = useState<any>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -47,21 +48,20 @@ export const DockCaptureDrawer = () => {
         )];
 
         findCastleCloseArmies(attackToDockID[0], components.Position, components.DockOwnable, components.ArmyOwnable, components.ArmyConfig)
+
         if (attackFromArmyId.length != 1 || attackToDockID.length != 1) {
             setErrorMessage("An error occurred while trying to capture the dock.")
             setErrorTitle("Dock Capture Error")
             setShowError(true)
-            setIsLoading(false)
-            return
         }
+
         setIsLoading(true)
         const tx = await systemCalls.captureDock(attackFromArmyId[0], attackToDockID[0])
+
         if (tx == null) {
             setErrorMessage("An error occurred while trying to capture the dock.")
             setErrorTitle("Dock Capture Error")
             setShowError(true)
-            setIsLoading(false)
-            return
         }
 
         setDockCaptureStage(false);
@@ -70,25 +70,13 @@ export const DockCaptureDrawer = () => {
         setIsLoading(false)
     };
 
-    const dockCaptureOffCanvasDivStyle: any = {
-        width: "500px",
-        left: "0",
-        right: "0",
-        margin: "auto",
-        bottom: "25px",
-        padding: "10px",
-        backgroundColor: "rgb(148, 163, 184, 0.5)"
-    }
-
     return (
         <>
             {isLoading && <EventProgressBar text="Armies are capturing the dock..." />}
             <div
-                className="offcanvas offcanvas-bottom rounded-4 font-bold text-white"
+                className="offcanvas offcanvas-bottom attack-drawer"
                 data-bs-keyboard="false"
                 data-bs-backdrop="false"
-                style={dockCaptureOffCanvasDivStyle}
-                tabIndex={-1}
                 id="dockCaptureDrawer"
                 aria-labelledby="dockCaptureDrawerLabel"
             >
@@ -105,29 +93,25 @@ export const DockCaptureDrawer = () => {
                             numCavalry={dockArmy && dockArmy.numCavalry} />
                     </div>
                 </div>
-                <div className="d-flex justify-content-center">
-                    <div className="flex-column align-items-center">
-                        <Button
-                            colorScheme="whatsapp"
-                            border="solid"
-                            textColor="dark"
-                            data-bs-dismiss="offcanvas"
-                            onClick={handleAttack}
-                            className="mr-2"
-                        >
-                            Capture Dock
-                        </Button>
-                        <Button
-                            colorScheme="red"
-                            border="solid"
-                            textColor="dark"
-                            data-bs-dismiss="offcanvas"
-                            onClick={handleAttackLater}
-                            className="ml-2"
-                        >
-                            Wait and Capture Later
-                        </Button>
-                    </div>
+                <div className="d-flex justify-content-evenly">
+                    <Button
+                        colorScheme="whatsapp"
+                        border="solid"
+                        textColor="dark"
+                        data-bs-dismiss="offcanvas"
+                        onClick={handleAttack}
+                    >
+                        Capture the Dock
+                    </Button>
+                    <Button
+                        colorScheme="red"
+                        border="solid"
+                        textColor="dark"
+                        data-bs-dismiss="offcanvas"
+                        onClick={handleAttackLater}
+                    >
+                        Wait and Capture Later
+                    </Button>
                 </div>
             </div>
         </>
@@ -144,39 +128,33 @@ interface DockDrawerArmyCardPropTypes {
 
 const DockDrawerArmyCard = (props: DockDrawerArmyCardPropTypes) => {
     return (
-        <>
-            <div className="col-6" style={{ overflow: "hidden" }}>
-                <h1 className={`text-center text-white p-2 bg-${props.titleBg}`}>
-                    {props.title}
-                </h1>
-                <DockDrawerArmyCardRow soliderNum={props.numSwordsman} soliderName={"Swordsman"} />
-                <DockDrawerArmyCardRow soliderNum={props.numArcher} soliderName={"Archer"} />
-                <DockDrawerArmyCardRow soliderNum={props.numCavalry} soliderName={"Cavalry"} />
-            </div>
-        </>
+        <div className="col-6" style={{ overflow: "hidden" }}>
+            <h1 className={`text-center p-2 bg-${props.titleBg}`}>
+                {props.title}
+            </h1>
+            <DockDrawerArmyCardRow soldierNum={props.numSwordsman} soldierName={"Swordsman"} />
+            <DockDrawerArmyCardRow soldierNum={props.numArcher} soldierName={"Archer"} />
+            <DockDrawerArmyCardRow soldierNum={props.numCavalry} soldierName={"Cavalry"} />
+        </div>
     )
 }
 
-interface DockDrawerArmyCardRowPropTypes {
-    soliderNum: number,
-    soliderName: string
-}
-
-const DockDrawerArmyCardRow = (props: DockDrawerArmyCardRowPropTypes) => {
+const DockDrawerArmyCardRow = ({ soldierName, soldierNum }: {
+    soldierNum: number,
+    soldierName: string
+}) => {
     return (
-        <div className="row">
-            <div className="row text-center mt-2">
-                <p>
-                    {props.soliderName && props.soliderName}: {props.soliderNum && props.soliderNum}
-                </p>
-            </div>
+        <div className="row text-center mt-2">
+            <p>
+                {soldierName && soldierName}: {soldierNum && soldierNum}
+            </p>
         </div>
     )
 }
 
 const DockAttackDrawerHeader = () => {
     return (
-        <h5 className="offcanvas-title text-center text-white" id="dockCaptureDrawerLabel">
+        <h5 className="offcanvas-title text-center" id="dockCaptureDrawerLabel">
             Dock Capture | War - Army Information
         </h5>
     )

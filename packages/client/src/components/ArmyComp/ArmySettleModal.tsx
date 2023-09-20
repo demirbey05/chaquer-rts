@@ -1,29 +1,30 @@
-import archerImg from "../../images/archer.png";
-import cavalryImg from "../../images/cavalry.png";
-import swordsmanImg from "../../images/swordsman.png";
+import archerImg from "../../images/armyAssets/archer.png";
+import cavalryImg from "../../images/armyAssets/cavalry.png";
+import swordsmanImg from "../../images/armyAssets/swordsman.png";
 import { useMUD } from "../../context/MUDContext";
-import { Button, Tooltip, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
+import { Button, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useArmy } from "../../context/ArmyContext";
 import { useError } from "../../context/ErrorContext";
 import { usePlayer } from "../../context/PlayerContext";
+import { useCastle } from "../../context/CastleContext";
 import { useArmyPrices } from '../../hooks/EconomyHooks/useArmyPrices';
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
-import { EventProgressBar } from "../ProgressComp/EventProgressBar";
-import { useCastle } from "../../context/CastleContext";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 
 export const ArmySettleModal = () => {
+  const { systemCalls, components } = useMUD();
   const { userWallet } = usePlayer();
   const { armyPosition, setIsArmySettleStage, setIsArmyUpdateStage } = useArmy();
   const { setErrorMessage, setErrorTitle, setShowError } = useError();
-  const { systemCalls, components } = useMUD();
   const { castlePosition } = useCastle();
 
   const [swordsmanCount, setSwordsmanCount] = useState<string>("");
   const [archerCount, setArcherCount] = useState<string>("");
   const [cavalryCount, setCavalryCount] = useState<string>("");
+
   const [isDisabled, setIsDisabled] = useState(true);
   const [enoughCredit, setEnoughCredit] = useState(true);
   const [totalCharge, setTotalCharge] = useState<number>(0);
@@ -88,6 +89,7 @@ export const ArmySettleModal = () => {
     setIsArmySettleStage(false);
     setIsArmyUpdateStage(false)
     setIsLoading(true);
+
     var targetDiv = document.getElementById(`${armyPosition.y},${armyPosition.x}`);
     targetDiv?.classList.add("animate-border-settle");
 
@@ -101,7 +103,6 @@ export const ArmySettleModal = () => {
       setErrorTitle("Army Settle Error")
       setShowError(true)
       setIsLoading(false)
-      return
     }
 
     if ((document.getElementById('Swordsman') as HTMLInputElement).value === "") {
@@ -162,12 +163,9 @@ export const ArmySettleModal = () => {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content bg-dark text-white">
             <div className="modal-header justify-center">
-              <Tooltip label="Please determine the number of warriors that will hold in
-                  the army. You can deploy maximum 500 soldiers in an army." placement="top-start" bg="blue.400" fontSize="md">
-                <h1 className="modal-title text-2xl" id="armySettleModalLabel">
-                  Army Settlement
-                </h1>
-              </Tooltip>
+              <h1 className="modal-title text-2xl" id="armySettleModalLabel">
+                Army Settlement
+              </h1>
             </div>
             <div className="modal-body">
               <div className="container-fluid">

@@ -1,8 +1,9 @@
-import smallShipImg from "../../images/small_ship.png";
-import mediumShipImg from "../../images/medium_ship.png";
-import largeShipImg from "../../images/large_ship.png";
+import smallShipImg from "../../images/shipAssets/small_ship.png";
+import mediumShipImg from "../../images/shipAssets/medium_ship.png";
+import largeShipImg from "../../images/shipAssets/large_ship.png";
 import { useState, useEffect, useRef } from "react";
-import { Button, Tooltip, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
+import { Button, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useMUD } from "../../context/MUDContext";
 import { usePlayer } from "../../context/PlayerContext";
 import { useError } from "../../context/ErrorContext";
@@ -11,13 +12,12 @@ import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { useNumberOfResource } from "../../hooks/ResourceHooks/useNumberOfResource";
-import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 
 export const FleetSettleModal = () => {
+    const { systemCalls, components } = useMUD();
     const { userWallet } = usePlayer();
     const { fleetPosition, setFleetSettleStage, dockPositionForFleetSettlement } = useFleet();
     const { setErrorMessage, setErrorTitle, setShowError } = useError();
-    const { systemCalls, components } = useMUD();
 
     const [smallShipCount, setSmallShipCount] = useState<string>("");
     const [mediumShipCount, setMediumShipCount] = useState<string>("");
@@ -139,6 +139,7 @@ export const FleetSettleModal = () => {
             setErrorTitle("Fleet Settlement Error")
             setShowError(true)
         }
+
         setIsLoading(false)
         targetDiv?.classList.remove("animate-border-settle");
     };
@@ -156,12 +157,9 @@ export const FleetSettleModal = () => {
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content bg-dark text-white">
                         <div className="modal-header justify-center">
-                            <Tooltip label="Please determine the number of war ships that will hold in
-                  the fleet. You can deploy maximum 300 ships in a fleet." placement="top-start" bg="blue.400" fontSize="md">
-                                <h1 className="modal-title text-2xl" id="fleetSettleModalLabel">
-                                    Fleet Settlement
-                                </h1>
-                            </Tooltip>
+                            <h1 className="modal-title text-2xl" id="fleetSettleModalLabel">
+                                Fleet Settlement
+                            </h1>
                         </div>
                         <div className="modal-body">
                             <div className="container-fluid">

@@ -3,7 +3,7 @@ import { FaUsers } from 'react-icons/fa'
 import { useUsernameWithColors } from '../../hooks/IdentityHooks/useUsernamesWithColors';
 import { colorPath } from '../../utils/constants/constants';
 
-export const UsersInGameDrawer = () => {
+export const PlayerListDrawer = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const users = useUsernameWithColors();
@@ -48,33 +48,27 @@ export const UsersInGameDrawer = () => {
     );
 }
 
-interface UserInGameDrawerHeaderPropTypes {
-    toggleDrawer: () => void
-}
-
-const UserInGameDrawerHeader = (props: UserInGameDrawerHeaderPropTypes) => {
+const UserInGameDrawerHeader = ({ toggleDrawer }: { toggleDrawer: () => void }) => {
     return (
         <div className='d-flex justify-between border-bottom mb-2 p-2'>
             <h5 className="font-extrabold">Players</h5>
-            <button type="button" onClick={props.toggleDrawer}>&#10008;</button>
+            <button type="button" onClick={toggleDrawer}>&#10008;</button>
         </div>
     )
 }
 
-interface UserInfoRowPropTypes {
+const UserInfoRow = ({ username, color }: {
     username: string,
     color: string
-}
-
-const UserInfoRow = (props: UserInfoRowPropTypes) => {
+}) => {
     return (
         <div className='row mt-2'>
             <div className='col-8 text-lg'>
-                {props.username}
+                {username}
             </div>
             <div className='col-4'>
                 <span className='player-color-circle'
-                    style={{ backgroundColor: `${props.color}` }}>
+                    style={{ backgroundColor: `${color}` }}>
                 </span>
             </div>
         </div>

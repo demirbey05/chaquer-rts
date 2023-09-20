@@ -1,7 +1,7 @@
 import "../../styles/globals.css"
-import gameBgImg from '../../images/gameBackground.jpg'
+import gameBgImg from '../../images/backgrounds/gameBackground.jpg'
 import ScrollContainer from "react-indiana-drag-scroll";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useCastle } from "../../context/CastleContext";
 import { useArmy } from "../../context/ArmyContext";
 import { usePlayer } from "../../context/PlayerContext";
@@ -23,7 +23,7 @@ import { CastleAttackDrawer } from "../../components/CastleComp/CastleAttackDraw
 import { PlayerLostWarning } from "../../components/PlayerComp/PlayerLostWarning";
 import { PlayerWonAnimation } from "../../components/PlayerComp/PlayerWonAnimation";
 import { PlayerWaitingStage } from "../../components/PlayerComp/PlayerWaitingStage";
-import { PlayerSeedStage } from '../../components/PlayerSeedComp/PlayerSeedStage';
+import { PlayerSeedStage } from '../../components/PlayerComp/PlayerSeedStage';
 import { SettingsDrawer } from "../../components/SettingsComp/SettingsDrawer";
 import { MineCaptureDrawer } from "../../components/MineComp/MineCaptureDrawer";
 import { MineProgressBar } from '../../components/ProgressComp/MineProgressBar/MineProgressBar';
@@ -40,7 +40,7 @@ import { FleetSettleModal } from "../../components/SeaComp/FleetSettleModal";
 import { FleetSettleWarning } from "../../components/SeaComp/FleetSettleWarning";
 import { FleetMoveWarning } from "../../components/SeaComp/FleetMoveWarning";
 import { FleetAttackDrawer } from "../../components/SeaComp/FleetAttackDrawer";
-import { UsersInGameDrawer } from "../../components/PlayerComp/UsersInGameDrawer";
+import { PlayerListDrawer } from "../../components/PlayerComp/PlayerListDrawer";
 import { SeaMineCaptureDrawer } from "../../components/SeaComp/SeaMineCaptureDrawer";
 import { ArmyUpdateModal } from "../../components/ArmyComp/ArmyUpdateModal";
 
@@ -76,7 +76,7 @@ export const Game = () => {
       {gameState === 3 && isArmySettleStage && !isPlayerLost && mineInited && <ArmySettleWarning />}
       {gameState === 3 && isArmyMoveStage && !isPlayerLost && mineInited && <ArmyMoveWarning />}
       <SettingsDrawer />
-      <UsersInGameDrawer />
+      <PlayerListDrawer />
       {gameState === 3 && !isPlayerLost && mineInited && <ArmyProgressBar />}
       {gameState === 3 && !isPlayerLost && mineInited && <MineProgressBar />}
       {gameState === 3 && !isPlayerLost && mineInited && <CreditProgressBar />}

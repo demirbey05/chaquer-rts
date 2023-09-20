@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "@chakra-ui/react";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useError } from "../../context/ErrorContext";
 import { useSea } from "../../context/SeaContext";
 import { useFleet } from "../../context/FleetContext";
@@ -8,17 +9,16 @@ import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/
 import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
 import { getResourceTypeByPosition } from "../../utils/helperFunctions/ResourceFuntions/getResourceTypeByPosition";
 import { useResources } from "../../hooks/ResourceHooks/useResources";
-import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 
 export const SeaMineCaptureDrawer = () => {
     const { components, systemCalls } = useMUD();
-
     const { targetSeaMinePosition, setSeaMineStage, seaMineAttackerFleetPosition } = useSea();
     const { setMyFleetConfig, setEnemyFleetConfig, myFleetConfig } = useFleet();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
 
     const [mineFleet, setMineFleet] = useState<any>();
     const [isLoading, setIsLoading] = useState<any>(false);
+
     const resources = useResources();
 
     const handleCaptureLater = () => {
@@ -50,21 +50,20 @@ export const SeaMineCaptureDrawer = () => {
         )];
 
         findCastleCloseArmies(attackToMineId[0], components.Position, components.ResourceOwnable, components.FleetOwnable, components.ArmyConfig)
+
         if (attackFromFleetId.length != 1 || attackToMineId.length != 1) {
             setErrorMessage("An error occurred while trying to capture a sea mine.")
             setErrorTitle("Sea Mine Capture Error")
             setShowError(true)
-            setIsLoading(false)
-            return
         }
+
         setIsLoading(true)
         const tx = await systemCalls.captureMine(attackFromFleetId[0], attackToMineId[0], 1)
+
         if (tx == null) {
             setErrorMessage("An error occurred while trying to capture a sea mine.")
             setErrorTitle("Sea Mine Capture Error")
             setShowError(true)
-            setIsLoading(false)
-            return
         }
 
         setSeaMineStage(false);
@@ -73,25 +72,13 @@ export const SeaMineCaptureDrawer = () => {
         setIsLoading(false)
     };
 
-    const seaMineCaptureCanvasStyles = {
-        width: "500px",
-        left: "0",
-        right: "0",
-        margin: "auto",
-        bottom: "25px",
-        padding: "10px",
-        backgroundColor: "rgb(148, 163, 184, 0.5)"
-    }
-
     return (
         <>
             {isLoading && <EventProgressBar text={"Fleet is capturing the resources..."} />}
             <div
-                className="offcanvas offcanvas-bottom rounded-4 font-bold text-white"
+                className="offcanvas offcanvas-bottom attack-drawer"
                 data-bs-keyboard="false"
                 data-bs-backdrop="false"
-                style={seaMineCaptureCanvasStyles}
-                tabIndex={-1}
                 id="seaMineCaptureDrawer"
                 aria-labelledby="seaMineCaptureDrawerLabel"
             >
@@ -108,40 +95,32 @@ export const SeaMineCaptureDrawer = () => {
                             numBig={mineFleet && mineFleet.numCavalry} />
                     </div>
                 </div>
-                <div className="d-flex justify-content-center">
-                    <div className="flex-column align-items-center">
-                        <Button
-                            colorScheme="whatsapp"
-                            border="solid"
-                            textColor="dark"
-                            data-bs-dismiss="offcanvas"
-                            onClick={handleCapture}
-                            className="mr-2"
-                        >
-                            Capture the Mine
-                        </Button>
-                        <Button
-                            colorScheme="red"
-                            border="solid"
-                            textColor="dark"
-                            data-bs-dismiss="offcanvas"
-                            onClick={handleCaptureLater}
-                            className="ml-2"
-                        >
-                            Wait and Capture Later
-                        </Button>
-                    </div>
+                <div className="d-flex justify-content-evenly">
+                    <Button
+                        colorScheme="whatsapp"
+                        border="solid"
+                        textColor="dark"
+                        data-bs-dismiss="offcanvas"
+                        onClick={handleCapture}
+                    >
+                        Capture the Sea Mine
+                    </Button>
+                    <Button
+                        colorScheme="red"
+                        border="solid"
+                        textColor="dark"
+                        data-bs-dismiss="offcanvas"
+                        onClick={handleCaptureLater}
+                    >
+                        Wait and Capture Later
+                    </Button>
                 </div>
             </div>
         </>
     );
 }
 
-interface MineCaptureModalHeaderProps {
-    resourceType: number
-}
-
-const MineCaptureModalHeader = ({ resourceType }: MineCaptureModalHeaderProps) => {
+const MineCaptureModalHeader = ({ resourceType }: { resourceType: number }) => {
     return (
         <h2 className="offcanvas-title text-center" id="mineCaptureDrawerLabel">
             {
@@ -164,33 +143,31 @@ interface SeaMineAttackFleetCardPropTypes {
 
 const SeaMineAttackFleetCard = (props: SeaMineAttackFleetCardPropTypes) => {
     return (
-        <>
-            <div className="col-6">
-                <h1 className={`text-center text-white p-2 bg-${props.titleBg}`}>
-                    {props.title}
-                </h1>
-                <div className="row">
-                    <div className="row text-center mt-2">
-                        <p>
-                            Baron's Dagger: {props.numSmall && props.numSmall}
-                        </p>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="row text-center mt-2">
-                        <p>
-                            Knight's Galley: {props.numMedium && props.numMedium}
-                        </p>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="row text-center mt-2">
-                        <p>
-                            King's Leviathan: {props.numBig && props.numBig}
-                        </p>
-                    </div>
+        <div className="col-6">
+            <h1 className={`text-center p-2 bg-${props.titleBg}`}>
+                {props.title}
+            </h1>
+            <div className="row">
+                <div className="row text-center mt-2">
+                    <p>
+                        Baron's Dagger: {props.numSmall && props.numSmall}
+                    </p>
                 </div>
             </div>
-        </>
+            <div className="row">
+                <div className="row text-center mt-2">
+                    <p>
+                        Knight's Galley: {props.numMedium && props.numMedium}
+                    </p>
+                </div>
+            </div>
+            <div className="row">
+                <div className="row text-center mt-2">
+                    <p>
+                        King's Leviathan: {props.numBig && props.numBig}
+                    </p>
+                </div>
+            </div>
+        </div>
     )
 }

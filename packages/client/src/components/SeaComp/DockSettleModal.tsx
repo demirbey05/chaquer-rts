@@ -1,29 +1,29 @@
-import { useMUD } from "../../context/MUDContext";
-import { Entity } from "@latticexyz/recs";
 import { useRef, useEffect, useState } from "react";
 import { Button } from "@chakra-ui/react";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
+import { Entity } from "@latticexyz/recs";
+import { useMUD } from "../../context/MUDContext";
+import { useArmy } from "../../context/ArmyContext";
 import { useError } from "../../context/ErrorContext";
 import { useSea } from "../../context/SeaContext";
 import { usePlayer } from "../../context/PlayerContext";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { useMyDockPositions } from "../../hooks/SeaHooks/useMyDockPositions";
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { useNumberOfResource } from "../../hooks/ResourceHooks/useNumberOfResource";
-import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
-import { useArmy } from "../../context/ArmyContext";
-import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 
 export const DockSettleModal = () => {
     const { systemCalls, components } = useMUD();
-    const movingArmyId = useRef<Entity>("0" as Entity);
-    const [isDisabled, setIsDisabled] = useState<boolean>(true);
-    const [isLoadingDock, setIsLoadingDock] = useState<boolean>(false);
-    const [isLoadingMove, setIsLoadingMove] = useState<boolean>(false);
-
     const { armyPositionToSettleDock, dockPosition, setDockPosition, setArmyPositionToSettleDock, setDockSettleStage } = useSea();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { userWallet } = usePlayer();
     const { setIsArmyMoveStage } = useArmy();
+
+    const movingArmyId = useRef<Entity>("0" as Entity);
+    const [isDisabled, setIsDisabled] = useState<boolean>(true);
+    const [isLoadingDock, setIsLoadingDock] = useState<boolean>(false);
+    const [isLoadingMove, setIsLoadingMove] = useState<boolean>(false);
 
     const myDockPositions = useMyDockPositions(userWallet);
     const myCredit = useCredit(1, userWallet);
@@ -59,6 +59,7 @@ export const DockSettleModal = () => {
 
         setIsArmyMoveStage(false)
         setIsLoadingDock(true)
+
         var targetDiv = document.getElementById(`${dockPosition.y},${dockPosition.x}`);
         targetDiv?.classList.add("animate-border-army-move");
 
@@ -73,12 +74,12 @@ export const DockSettleModal = () => {
             setErrorMessage("An error occurred while trying to settle dock.")
             setErrorTitle("Dock Settle Error")
             setShowError(true)
-            setIsLoadingDock(false)
         }
         else {
             setDockSettleStage(false);
             setDockPosition(undefined);
         }
+
         setIsLoadingDock(false)
         targetDiv?.classList.remove("animate-border-army-move");
     };
@@ -107,13 +108,13 @@ export const DockSettleModal = () => {
                 setErrorMessage("You need 30 food + 30 gold to move your army.")
                 setErrorTitle("Army Move Error")
                 setShowError(true)
-                setIsLoadingMove(false)
             }
 
             document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.innerHTML = "";
             document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
 
             targetDiv?.classList.remove("animate-border-army-move");
+
             setDockSettleStage(false);
             setIsArmyMoveStage(false)
             setArmyPositionToSettleDock(undefined);

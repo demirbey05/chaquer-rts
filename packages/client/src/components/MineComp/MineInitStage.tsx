@@ -1,12 +1,13 @@
+import { useState } from 'react';
 import { Tooltip, CircularProgress } from '@chakra-ui/react'
 import { useMUD } from '../../context/MUDContext';
 import { useError } from '../../context/ErrorContext';
 import { useIsMineInitialized } from '../../hooks/ResourceHooks/useIsMineInitialized';
-import { useState } from 'react';
 
 export const MineInitStage = () => {
     const { systemCalls } = useMUD();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
+
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const isMineInited = useIsMineInitialized(1)
@@ -19,8 +20,6 @@ export const MineInitStage = () => {
                 setErrorMessage("An error occurred while initializing the mines.")
                 setErrorTitle("Mine Initialize Error")
                 setShowError(true)
-                setIsLoading(false)
-                return
             }
         }
         setIsLoading(false)
@@ -41,7 +40,6 @@ export const MineInitStage = () => {
                         {isLoading && <div className='text-center mt-4'><CircularProgress isIndeterminate color='green.300' /></div>}
                     </div>
                 }
-
             </div>
         </div >
     )

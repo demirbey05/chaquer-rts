@@ -149,3 +149,16 @@
 .players-in-game-drawer.open {
     left: 0;
 }
+
+.attack-drawer {
+    width: 500px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    bottom: 25px;
+    padding: 10px;
+    background-color: rgba(148, 163, 184, 0.5);
+    font-weight: bolder;
+    font-size: 18px;
+    border-radius: 25px;
+}

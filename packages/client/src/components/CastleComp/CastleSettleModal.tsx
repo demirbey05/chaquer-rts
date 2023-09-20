@@ -1,22 +1,18 @@
-import { useMUD } from "../../context/MUDContext";
 import { useEffect, useState } from "react";
 import { Button } from "@chakra-ui/react";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
+import { useMUD } from "../../context/MUDContext";
 import { useCastle } from "../../context/CastleContext";
 import { useError } from "../../context/ErrorContext";
-import { EventProgressBar } from "../ProgressComp/EventProgressBar";
-import { usePlayerIsValid } from "../../hooks/IdentityHooks/usePlayerIsValid";
 import { usePlayer } from "../../context/PlayerContext";
+import { usePlayerIsValid } from "../../hooks/IdentityHooks/usePlayerIsValid";
 
 export const CastleSettleModal = () => {
-  const {
-    isCastleSettled,
-    tempCastle,
-    setCastle,
-    setIsCastleSettled
-  } = useCastle();
+  const { systemCalls } = useMUD();
+  const { isCastleSettled, tempCastle, setCastle, setIsCastleSettled } = useCastle();
   const { setShowError, setErrorMessage, setErrorTitle } = useError();
   const { userWallet } = usePlayer();
-  const { systemCalls } = useMUD();
+
   const [isLoadingJoin, setIsLoadingJoin] = useState<boolean>(false);
 
   const userValid = usePlayerIsValid(1, userWallet);
@@ -52,6 +48,7 @@ export const CastleSettleModal = () => {
 
   return (
     <>
+      {isLoadingJoin && <EventProgressBar text="Joining to the game..." />}
       <div
         className="modal fade"
         id="castleSettleModal"
@@ -92,7 +89,6 @@ export const CastleSettleModal = () => {
           </div>
         </div>
       </div>
-      {isLoadingJoin && <EventProgressBar text="Joining to the game..." />}
     </>
   );
 };

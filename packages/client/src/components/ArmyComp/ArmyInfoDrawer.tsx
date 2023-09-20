@@ -1,7 +1,7 @@
+import archerImg from "../../images/armyAssets/archer.png";
+import cavalryImg from "../../images/armyAssets/cavalry.png";
+import swordsmanImg from "../../images/armyAssets/swordsman.png";
 import React, { useState, useEffect } from "react";
-import archerImg from "../../images/archer.png";
-import cavalryImg from "../../images/cavalry.png";
-import swordsmanImg from "../../images/swordsman.png";
 import { MdLocationPin } from 'react-icons/md'
 import { Button } from "@chakra-ui/react";
 import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
@@ -72,24 +72,24 @@ export const ArmyInfoDrawer = () => {
                     myArmyPosition.map((army: any, index: number) => {
                         return (
                             <React.Fragment key={index}>
-                                <div className="row mt-2">
+                                <div className="row mt-1 p-2">
                                     <ArmyInfoModalCard imageSource={swordsmanImg}
                                         soldierName={"Swordsman"}
-                                        soliderCount={army.myArmyConfig.numSwordsman}
+                                        soldierCount={army.myArmyConfig.numSwordsman}
                                         imageHeight={"75px"}
                                         imageWidth={"65px"} />
                                     <ArmyInfoModalCard imageSource={archerImg}
                                         soldierName={"Archer"}
-                                        soliderCount={army.myArmyConfig.numArcher}
+                                        soldierCount={army.myArmyConfig.numArcher}
                                         imageHeight={"75px"}
                                         imageWidth={"65px"} />
                                     <ArmyInfoModalCard imageSource={cavalryImg}
                                         soldierName={"Cavalry"}
-                                        soliderCount={army.myArmyConfig.numCavalry}
+                                        soldierCount={army.myArmyConfig.numCavalry}
                                         imageHeight={"75px"}
                                         imageWidth={"100px"} />
                                 </div>
-                                <div className="row mt-2 mb-2 align-items-center justify-content-center">
+                                <div className="row mt-1 mb-1 justify-content-center">
                                     <Button
                                         colorScheme="linkedin"
                                         className="w-50"
@@ -111,35 +111,29 @@ export const ArmyInfoDrawer = () => {
     )
 }
 
-interface ArmyInfoModalCardPropTypes {
+const ArmyInfoModalCard = ({ imageSource, imageHeight, imageWidth, soldierName, soldierCount }: {
     imageSource: string,
     imageHeight: string,
     imageWidth: string,
     soldierName: string,
-    soliderCount: number
-}
-
-const ArmyInfoModalCard = (props: ArmyInfoModalCardPropTypes) => {
+    soldierCount: number
+}) => {
     return (
         <div className="col align-items-center">
             <div className="row justify-content-center">
                 <img
-                    src={props.imageSource}
-                    style={{ height: props.imageHeight, width: props.imageWidth }}
+                    src={imageSource}
+                    style={{ height: imageHeight, width: imageWidth }}
                 />
             </div>
-            <div className="row justify-content-center text-center border-1 mt-2">
-                <SoliderInfo soliderCount={props.soliderCount} soliderName={props.soldierName} />
+            <div className="row justify-content-center text-center border-1 mt-2 p-1">
+                <SoldierInfo soldierCount={soldierCount} soldierName={soldierName} />
             </div>
         </div>
     )
 }
 
-interface SoliderInfoPropTypes {
-    soliderName: string,
-    soliderCount: number
-}
 
-const SoliderInfo = (props: SoliderInfoPropTypes) => {
-    return <p style={{ fontSize: "12px" }}>{props.soliderName}: {props.soliderCount}</p>
+const SoldierInfo = ({ soldierName, soldierCount }: { soldierName: string, soldierCount: number }) => {
+    return <p style={{ fontSize: "12px" }}>{soldierName}: {soldierCount}</p>
 }

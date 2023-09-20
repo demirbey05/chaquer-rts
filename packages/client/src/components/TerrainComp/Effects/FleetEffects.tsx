@@ -1,8 +1,7 @@
-import shipEmoji from "../../../images/ship_emoji.png"
+import shipEmoji from "../../../images/shipAssets/ship_emoji.png"
 import { useEffect } from "react";
 import { getManhattanPositions } from "../../../utils/helperFunctions/CustomFunctions/getManhattanPositions";
 import { canFleetBeSettled } from "../../../utils/helperFunctions/SeaFunctions/canFleetBeSettled";
-import { isFleetPosition } from '../../../utils/helperFunctions/SeaFunctions/isFleetPosition';
 import { colorPath } from "../../../utils/constants/constants";
 import { isMyFleet } from "../../../utils/helperFunctions/SeaFunctions/isMyFleet";
 
@@ -70,6 +69,7 @@ export const FleetEffects = (myFleetPositions: any[] | undefined, fleetPositions
         //Puts the ship emojis to fleet positions
         fleetPositions.map((data: any) => {
             document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)!.innerHTML = '<img src="' + shipEmoji + '" width="20px" height="20px" />';
+            document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)!.style.border = "2px solid";
             document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)!.style.borderColor = colorPath[Number(data.fleetColor.colorIndex)];
             document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)?.classList.add("fleet-emoji");
         });

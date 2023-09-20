@@ -1,21 +1,16 @@
 import React, { useEffect } from 'react';
 import { AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai';
 
-interface ZoomHandlerPropTypes {
-    zoomLevel: number;
-    setZoomLevel: React.Dispatch<React.SetStateAction<number>>;
-}
-
-export const ZoomHandler = (props: ZoomHandlerPropTypes) => {
+export const ZoomHandler = ({ zoomLevel, setZoomLevel }: { zoomLevel: number, setZoomLevel: React.Dispatch<React.SetStateAction<number>> }) => {
     const handleZoomIn = () => {
-        if (props.zoomLevel < 1.3) {
-            props.setZoomLevel(props.zoomLevel + 0.1);
+        if (zoomLevel < 1.3) {
+            setZoomLevel(zoomLevel + 0.1);
         }
     };
 
     const handleZoomOut = () => {
-        if (props.zoomLevel > 0.5) {
-            props.setZoomLevel(props.zoomLevel - 0.1);
+        if (zoomLevel > 0.5) {
+            setZoomLevel(zoomLevel - 0.1);
         }
     };
 
@@ -32,7 +27,7 @@ export const ZoomHandler = (props: ZoomHandlerPropTypes) => {
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [props.zoomLevel]);
+    }, [zoomLevel]);
 
     return (
         <>

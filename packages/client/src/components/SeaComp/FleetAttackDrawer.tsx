@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Button } from "@chakra-ui/react";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useMUD } from "../../context/MUDContext";
-import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { useError } from "../../context/ErrorContext";
 import { useFleet } from "../../context/FleetContext";
-import { EventProgressBar } from "../ProgressComp/EventProgressBar";
+import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 
 export const FleetAttackDrawer = () => {
     const { components, systemCalls } = useMUD();
@@ -16,6 +16,7 @@ export const FleetAttackDrawer = () => {
         setIsFleetAttackStage,
         attackerFleetPosition,
         targetFleetPosition } = useFleet();
+
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleAttackLater = () => {
@@ -39,9 +40,8 @@ export const FleetAttackDrawer = () => {
             setErrorMessage("An error occurred while trying to attack to fleet.")
             setErrorTitle("Fleet Attack Error")
             setShowError(true)
-            setIsLoading(false)
-            return
         }
+
         setIsLoading(true)
         const tx = await systemCalls.attackFleet(attackFromArmyId[0] as string, attackToArmyId[0] as string, 1)
 
@@ -49,8 +49,6 @@ export const FleetAttackDrawer = () => {
             setErrorMessage("An error occurred while trying to attack to fleet.")
             setErrorTitle("Fleet Attack Error")
             setShowError(true)
-            setIsLoading(false)
-            return
         }
 
         document.getElementById(`${targetFleetPosition.y},${targetFleetPosition.x}`)!.setAttribute("data-bs-toggle", "");
@@ -62,25 +60,13 @@ export const FleetAttackDrawer = () => {
         setIsLoading(false)
     };
 
-    const fleetAttackOffCanvasDivStyles: any = {
-        width: "500px",
-        left: "0",
-        right: "0",
-        margin: "auto",
-        bottom: "25px",
-        padding: "10px",
-        backgroundColor: "rgb(148, 163, 184, 0.5)"
-    }
-
     return (
         <>
             {isLoading && <EventProgressBar text="Ships are fighting..." />}
             <div
-                className="offcanvas offcanvas-bottom rounded-4 font-bold text-white"
+                className="offcanvas offcanvas-bottom attack-drawer"
                 data-bs-keyboard="false"
                 data-bs-backdrop="false"
-                style={fleetAttackOffCanvasDivStyles}
-                tabIndex={-1}
                 id="fleetAttackDrawer"
                 aria-labelledby="fleetAttackDrawerLabel"
             >
@@ -101,42 +87,33 @@ export const FleetAttackDrawer = () => {
                             titleBg={"danger"} />
                     </div>
                 </div>
-                <div className="d-flex justify-content-center">
-                    <div className="flex-column align-items-center">
-                        <Button
-                            colorScheme="whatsapp"
-                            border="solid"
-                            textColor="dark"
-                            data-bs-dismiss="offcanvas"
-                            onClick={handleAttack}
-                            className="mr-2"
-                        >
-                            Attack to the Enemy
-                        </Button>
-                        <Button
-                            colorScheme="red"
-                            border="solid"
-                            textColor="dark"
-                            data-bs-dismiss="offcanvas"
-                            onClick={handleAttackLater}
-                            className="ml-2">
-                            Wait and Attack Later
-                        </Button>
-                    </div>
+                <div className="d-flex justify-content-evenly">
+                    <Button
+                        colorScheme="whatsapp"
+                        border="solid"
+                        textColor="dark"
+                        data-bs-dismiss="offcanvas"
+                        onClick={handleAttack}>
+                        Attack to the Fleet
+                    </Button>
+                    <Button
+                        colorScheme="red"
+                        border="solid"
+                        textColor="dark"
+                        data-bs-dismiss="offcanvas"
+                        onClick={handleAttackLater}>
+                        Wait and Attack Later
+                    </Button>
                 </div>
             </div>
         </>
     );
 }
 
-interface FleetAttackModalHeaderPropTypes {
-    headerText: string
-};
-
-const FleetAttackModalHeader = (props: FleetAttackModalHeaderPropTypes) => {
+const FleetAttackModalHeader = ({ headerText }: { headerText: string }) => {
     return (
         <h5 className="offcanvas-title text-center" id="fleetAttackDrawerLabel">
-            {props.headerText}
+            {headerText}
         </h5>
     )
 }
@@ -152,7 +129,7 @@ interface FleetAttackModalCardPropTypes {
 const FleetAttackModalCard = (props: FleetAttackModalCardPropTypes) => {
     return (
         <div className="col-6">
-            <h1 className={`text-center bg-${props.titleBg}  text-white p-2`}>
+            <h1 className={`text-center bg-${props.titleBg} p-2`}>
                 {props.title}
             </h1>
             <FleetAttackModalCardRow numShip={props.numSmall} shipName={"Baron's Dagger"} />
@@ -162,20 +139,12 @@ const FleetAttackModalCard = (props: FleetAttackModalCardPropTypes) => {
     )
 }
 
-interface FleetAttackModalCardRowPropTypes {
-    numShip: number,
-    shipName: string
-}
-
-const FleetAttackModalCardRow = (props: FleetAttackModalCardRowPropTypes) => {
+const FleetAttackModalCardRow = ({ numShip, shipName }: { numShip: number, shipName: string }) => {
     return (
-        <div className="row">
-            <div className="row text-center mt-2">
-                <p>
-                    {props.shipName && props.shipName}: {props.numShip && props.numShip}
-                </p>
-            </div>
+        <div className="row text-center mt-2">
+            <p>
+                {shipName && shipName}: {numShip && numShip}
+            </p>
         </div>
     )
-
 }

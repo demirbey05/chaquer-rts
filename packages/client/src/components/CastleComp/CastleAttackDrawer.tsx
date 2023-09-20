@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { Button } from "@chakra-ui/react";
 import { useMUD } from "../../context/MUDContext";
 import { useAttack } from "../../context/AttackContext";
 import { useError } from "../../context/ErrorContext";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
-import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 
 export const CastleAttackDrawer = () => {
   const { components, systemCalls } = useMUD();
@@ -16,6 +16,7 @@ export const CastleAttackDrawer = () => {
     attackToArmyPositionToCastle,
     attackFromArmyPositionToCastle,
     setIsAttackStage } = useAttack();
+
   const [castleArmy, setCastleArmy] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -48,15 +49,15 @@ export const CastleAttackDrawer = () => {
     )];
 
     findCastleCloseArmies(attackToCastleId[0], components.Position, components.CastleOwnable, components.ArmyOwnable, components.ArmyConfig)
+
     if (attackFromArmyId.length != 1 || attackToCastleId.length != 1) {
       setErrorMessage("An error occurred while trying to attack to castle.")
       setErrorTitle("Castle Attack Error")
       setShowError(true)
       setIsLoading(false)
-      return
     }
-    setIsLoading(true)
 
+    setIsLoading(true)
     const tx = await systemCalls.castleCapture(attackFromArmyId[0], attackToCastleId[0])
 
     if (tx == null) {
@@ -64,7 +65,6 @@ export const CastleAttackDrawer = () => {
       setErrorTitle("Castle Attack Error")
       setShowError(true)
       setIsLoading(false)
-      return
     }
 
     setIsAttackStage(false);
@@ -73,25 +73,13 @@ export const CastleAttackDrawer = () => {
     setIsLoading(false)
   };
 
-  const castleAttackOffCanvasDivStyle: any = {
-    width: "500px",
-    left: "0",
-    right: "0",
-    margin: "auto",
-    bottom: "25px",
-    padding: "10px",
-    backgroundColor: "rgb(148, 163, 184, 0.5)"
-  }
-
   return (
     <>
       {isLoading && <EventProgressBar text="Soliders are trying to capture the castle..." />}
       <div
-        className="offcanvas offcanvas-bottom rounded-4 font-bold text-white"
+        className="offcanvas offcanvas-bottom attack-drawer"
         data-bs-keyboard="false"
         data-bs-backdrop="false"
-        style={castleAttackOffCanvasDivStyle}
-        tabIndex={-1}
         id="castleAttackDrawer"
         aria-labelledby="castleAttackDrawerLabel"
       >
@@ -108,78 +96,66 @@ export const CastleAttackDrawer = () => {
               numCavalry={castleArmy && castleArmy.numCavalry} />
           </div>
         </div>
-        <div className="d-flex justify-content-center">
-          <div className="flex-column align-items-center">
-            <Button
-              colorScheme="whatsapp"
-              border="solid"
-              textColor="dark"
-              data-bs-dismiss="offcanvas"
-              onClick={handleAttack}
-              className="mr-2"
-            >
-              Attack to Castle
-            </Button>
-            <Button
-              colorScheme="red"
-              border="solid"
-              textColor="dark"
-              data-bs-dismiss="offcanvas"
-              onClick={handleAttackLater}
-              className="ml-2"
-            >
-              Wait and Attack Later
-            </Button>
-          </div>
+        <div className="d-flex justify-content-evenly">
+          <Button
+            colorScheme="whatsapp"
+            border="solid"
+            textColor="dark"
+            data-bs-dismiss="offcanvas"
+            onClick={handleAttack}
+          >
+            Capture the Castle
+          </Button>
+          <Button
+            colorScheme="red"
+            border="solid"
+            textColor="dark"
+            data-bs-dismiss="offcanvas"
+            onClick={handleAttackLater}
+          >
+            Wait and Attack Later
+          </Button>
         </div>
       </div>
     </>
   );
 }
 
-interface CastleAttackModalArmyCardPropTypes {
+const CastleAttackModalArmyCard = ({ title, titleBg, numSwordsman, numArcher, numCavalry }: {
   title: string,
   titleBg: string,
   numSwordsman: number,
   numArcher: number,
   numCavalry: number
-}
-
-const CastleAttackModalArmyCard = (props: CastleAttackModalArmyCardPropTypes) => {
+}) => {
   return (
-    <>
-      <div className="col-6" style={{ overflow: "hidden" }}>
-        <h1 className={`text-center text-white p-2 bg-${props.titleBg}`}>
-          {props.title}
-        </h1>
-        <CastleAttackModalArmyCardRow soliderNum={props.numSwordsman} soliderName={"Swordsman"} />
-        <CastleAttackModalArmyCardRow soliderNum={props.numArcher} soliderName={"Archer"} />
-        <CastleAttackModalArmyCardRow soliderNum={props.numCavalry} soliderName={"Cavalry"} />
-      </div>
-    </>
+    <div className="col">
+      <h1 className={`text-center p-2 bg-${titleBg}`}>
+        {title}
+      </h1>
+      <CastleAttackModalArmyCardRow soldierNum={numSwordsman} soldierName={"Swordsman"} />
+      <CastleAttackModalArmyCardRow soldierNum={numArcher} soldierName={"Archer"} />
+      <CastleAttackModalArmyCardRow soldierNum={numCavalry} soldierName={"Cavalry"} />
+    </div>
   )
 }
 
-interface CastleAttackModalArmyCardRowPropTypes {
-  soliderNum: number,
-  soliderName: string
-}
-
-const CastleAttackModalArmyCardRow = (props: CastleAttackModalArmyCardRowPropTypes) => {
+const CastleAttackModalArmyCardRow = ({ soldierNum, soldierName }: {
+  soldierNum: number,
+  soldierName: string
+}) => {
   return (
-    <div className="row">
-      <div className="row text-center mt-2">
-        <p>
-          {props.soliderName && props.soliderName}: {props.soliderNum && props.soliderNum}
-        </p>
-      </div>
+    <div className="row text-center mt-2">
+      <p>
+        {soldierName && soldierName}: {soldierNum && soldierNum}
+      </p>
     </div>
   )
 }
 
 const CastleAttackModalHeader = () => {
   return (
-    <h5 className="offcanvas-title text-center text-white" id="castleAttackDrawerLabel">
+    <h5 className="offcanvas-title text-center" id="castleAttackDrawerLabel">
       Castle Capture | War - Army Information
     </h5>
   )

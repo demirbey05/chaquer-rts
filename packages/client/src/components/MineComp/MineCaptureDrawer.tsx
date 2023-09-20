@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "@chakra-ui/react";
+import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useMUD } from "../../context/MUDContext";
 import { useMine } from "../../context/MineContext";
 import { useAttack } from "../../context/AttackContext";
@@ -8,7 +9,6 @@ import { useResources } from "../../hooks/ResourceHooks/useResources";
 import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
 import { getResourceTypeByPosition } from "../../utils/helperFunctions/ResourceFuntions/getResourceTypeByPosition";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
-import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 
 export const MineCaptureDrawer = () => {
     const { components, systemCalls } = useMUD();
@@ -18,6 +18,7 @@ export const MineCaptureDrawer = () => {
 
     const [mineArmy, setMineArmy] = useState<any>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
+
     const resources = useResources();
 
     const handleCaptureLater = () => {
@@ -49,49 +50,36 @@ export const MineCaptureDrawer = () => {
         )];
 
         findCastleCloseArmies(attackToMineId[0], components.Position, components.ResourceOwnable, components.ArmyOwnable, components.ArmyConfig)
+
         if (attackFromArmyId.length != 1 || attackToMineId.length != 1) {
             setErrorMessage("An error occurred while trying to capture a mine.")
             setErrorTitle("Mine Capture Error")
             setShowError(true)
             setIsLoading(false)
-            return
         }
 
         setIsLoading(true)
         const tx = await systemCalls.captureMine(attackFromArmyId[0], attackToMineId[0], 0)
+
         if (tx == null) {
             setErrorMessage("An error occurred while trying to capture a mine.")
             setErrorTitle("Mine Capture Error")
             setShowError(true)
             setIsLoading(false)
-            return
         }
-
         setIsMineStage(false);
         setMyArmyConfig(undefined);
         setEnemyArmyConfig(undefined);
         setIsLoading(false)
     };
 
-    const mineCaptureDrawerStyles = {
-        width: "500px",
-        left: "0",
-        right: "0",
-        margin: "auto",
-        bottom: "25px",
-        padding: "10px",
-        backgroundColor: "rgb(148, 163, 184, 0.5)"
-    }
-
     return (
         <>
             {isLoading && <EventProgressBar text="Armies are capturing the resources..." />}
             <div
-                className="offcanvas offcanvas-bottom rounded-4 font-bold text-white"
+                className="offcanvas offcanvas-bottom attack-drawer"
                 data-bs-keyboard="false"
                 data-bs-backdrop="false"
-                style={mineCaptureDrawerStyles}
-                tabIndex={-1}
                 id="mineCaptureDrawer"
                 aria-labelledby="mineCaptureDrawerLabel"
             >
@@ -108,40 +96,32 @@ export const MineCaptureDrawer = () => {
                             numCavalry={mineArmy && mineArmy.numCavalry} />
                     </div>
                 </div>
-                <div className="d-flex justify-content-center">
-                    <div className="flex-column align-items-center">
-                        <Button
-                            colorScheme="whatsapp"
-                            border="solid"
-                            textColor="dark"
-                            data-bs-dismiss="offcanvas"
-                            onClick={handleCapture}
-                            className="mr-2"
-                        >
-                            Capture the Mine
-                        </Button>
-                        <Button
-                            colorScheme="red"
-                            border="solid"
-                            textColor="dark"
-                            data-bs-dismiss="offcanvas"
-                            onClick={handleCaptureLater}
-                            className="ml-2"
-                        >
-                            Wait and Capture Later
-                        </Button>
-                    </div>
+                <div className="d-flex justify-content-evenly">
+                    <Button
+                        colorScheme="whatsapp"
+                        border="solid"
+                        textColor="dark"
+                        data-bs-dismiss="offcanvas"
+                        onClick={handleCapture}
+                    >
+                        Capture the Mine
+                    </Button>
+                    <Button
+                        colorScheme="red"
+                        border="solid"
+                        textColor="dark"
+                        data-bs-dismiss="offcanvas"
+                        onClick={handleCaptureLater}
+                    >
+                        Wait and Capture Later
+                    </Button>
                 </div>
             </div>
         </>
     );
 }
 
-interface MineCaptureModalHeaderProps {
-    resourceType: number
-}
-
-const MineCaptureModalHeader = ({ resourceType }: MineCaptureModalHeaderProps) => {
+const MineCaptureModalHeader = ({ resourceType }: { resourceType: number }) => {
     return (
         <h2 className="offcanvas-title text-center" id="mineCaptureDrawerLabel">
             {
@@ -164,33 +144,31 @@ interface MineCaptureDrawerArmyCardPropTypes {
 
 const MineCaptureDrawerArmyCard = (props: MineCaptureDrawerArmyCardPropTypes) => {
     return (
-        <>
-            <div className="col-6">
-                <h1 className={`text-center text-white p-2 bg-${props.titleBg}`}>
-                    {props.title}
-                </h1>
-                <div className="row">
-                    <div className="row text-center mt-2">
-                        <p>
-                            Swordsman: {props.numSwordsman && props.numSwordsman}
-                        </p>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="row text-center mt-2">
-                        <p>
-                            Archer: {props.numArcher && props.numArcher}
-                        </p>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="row text-center mt-2">
-                        <p>
-                            Cavalry: {props.numCavalry && props.numCavalry}
-                        </p>
-                    </div>
+        <div className="col-6">
+            <h1 className={`text-center p-2 bg-${props.titleBg}`}>
+                {props.title}
+            </h1>
+            <div className="row">
+                <div className="row text-center mt-2">
+                    <p>
+                        Swordsman: {props.numSwordsman && props.numSwordsman}
+                    </p>
                 </div>
             </div>
-        </>
+            <div className="row">
+                <div className="row text-center mt-2">
+                    <p>
+                        Archer: {props.numArcher && props.numArcher}
+                    </p>
+                </div>
+            </div>
+            <div className="row">
+                <div className="row text-center mt-2">
+                    <p>
+                        Cavalry: {props.numCavalry && props.numCavalry}
+                    </p>
+                </div>
+            </div>
+        </div>
     )
 }

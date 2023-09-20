@@ -1,4 +1,4 @@
-import shipEmoji from '../../../images/ship_emoji.png';
+import shipEmoji from '../../../images/shipAssets/ship_emoji.png';
 import { Tooltip, Progress, ProgressLabel } from '@chakra-ui/react'
 import { usePlayer } from '../../../context/PlayerContext';
 import { useMyDockPositions } from '../../../hooks/SeaHooks/useMyDockPositions';

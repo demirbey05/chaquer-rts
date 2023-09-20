@@ -1,4 +1,4 @@
-import MapImg from '../../images/map.png';
+import MapImg from '../../images/backgrounds/map.png';
 import map from "../../../map.json";
 import { TerrainType } from "../../terrain-helper/types";
 import { useRef, useState } from "react";
@@ -59,13 +59,7 @@ import { isEnemyFleet } from "../../utils/helperFunctions/SeaFunctions/isEnemyFl
 import { SeaMineCaptureEvent } from "./Events/SeaMineCaptureEvent";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 
-export type DataProp = {
-  pixelStyles: Array<any>;
-  isBorder: boolean;
-  zoomLevel: number;
-};
-
-export const Terrain = (props: DataProp) => {
+export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Array<any>, isBorder: boolean, zoomLevel: number, }) => {
   const { components, systemCalls } = useMUD();
   const { width, height } = useTerrain();
 
@@ -278,17 +272,17 @@ export const Terrain = (props: DataProp) => {
 
   CastleEffects(myCastlePosition, setIsCastleSettled, castlePositions, isCastleSettled);
   ResourceEffects(values, fromFleetPosition, seaMineStage, myResourcePositions, resources, isMineStage, fromArmyPosition);
-  ArmyEffects(isArmyUpdateStage, values, props.isBorder, myCastlePosition, dockPositions, castlePositions, isArmySettleStage, armyPositions, myArmyPosition, setNumberOfArmy, myArmyPosition.length, resources);
+  ArmyEffects(isArmyUpdateStage, values, isBorder, myCastlePosition, dockPositions, castlePositions, isArmySettleStage, armyPositions, myArmyPosition, setNumberOfArmy, myArmyPosition.length, resources);
   AttackEffects(myResourcePositions, myFleetPositions, fleetPositions, fromFleetPosition, isFleetAttackStage, myCastlePosition, castlePositions, armyPositions, myArmyPosition, isAttackStage, fromArmyPosition);
-  HoverEffects(myFleetPositions, myDockPositions, myResourcePositions, myArmyPosition, dockPositions, fromFleetPosition, isFleetMoveStage, armyPositions, resources, numberOfArmy, isArmySettleStage, props.isBorder, castlePositions, myCastlePosition, values, fromArmyPosition, isArmyMoveStage);
+  HoverEffects(myFleetPositions, myDockPositions, myResourcePositions, myArmyPosition, dockPositions, fromFleetPosition, isFleetMoveStage, armyPositions, resources, numberOfArmy, isArmySettleStage, isBorder, castlePositions, myCastlePosition, values, fromArmyPosition, isArmyMoveStage);
   DockEffects(castlePositions, resources, myArmyPosition, armyPositions, dockPositions, myDockPositions, values, dockSettleStage, dockCaptureStage, rows, columns, fromArmyPosition);
-  FleetEffects(myFleetPositions, fleetPositions, fleetSettleStage, myDockPositions, props.isBorder, values);
+  FleetEffects(myFleetPositions, fleetPositions, fleetSettleStage, myDockPositions, isBorder, values);
 
   return (
     <>
-      <div className={`inline-grid ${props.isBorder && "border-4 border-black"}`}
+      <div className={`inline-grid ${isBorder && "border-4 border-black"}`}
         style={{
-          transform: `scale(${props.zoomLevel})`,
+          transform: `scale(${zoomLevel})`,
           transition: "transform 0.2s ease-in-out",
           zIndex: "1",
           backgroundImage: `url(${MapImg})`, // Remove the 4 next line to remove AI generated terrain
@@ -308,32 +302,32 @@ export const Terrain = (props: DataProp) => {
                   style={{
                     gridColumn: column + 1,
                     gridRow: row + 1,
-                    width: `${props.pixelStyles[1]}px`,
-                    height: `${props.pixelStyles[1]}px`,
+                    width: `${pixelStyles[1]}px`,
+                    height: `${pixelStyles[1]}px`,
                     //backgroundImage: `${getTerrainAsset(values[row][column])}`, // remove the next 2 line for AI generated map
                     //backgroundSize: "cover",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    fontSize: `${props.isBorder ? "7px" : "20px"}`,
+                    fontSize: `${isBorder ? "7px" : "20px"}`,
                     border: "0.5px solid rgba(0, 0, 0, 0.1)"
                   }}
                   onClick={(e) => {
                     handleClick(e);
                   }}
                   className={`
-                ${!props.isBorder &&
+                ${!isBorder &&
                     isValidTerrainType(values[row][column]) &&
                     "hoverTileEffect"
                     }`}
                   data-bs-toggle={`${canCastleBeSettle(values[row][column]) &&
                     !isCastleSettled &&
-                    !props.isBorder
+                    !isBorder
                     ? "modal" : ""
                     }`}
                   data-bs-target={`${canCastleBeSettle(values[row][column]) &&
                     !isCastleSettled &&
-                    !props.isBorder
+                    !isBorder
                     ? "#castleSettleModal" : ""
                     }`}
                 ></span>

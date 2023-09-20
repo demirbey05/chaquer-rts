@@ -1,4 +1,5 @@
 import map from '../../../map.json';
+import cursor from '../../images/cursor/cursor.png';
 import { ethers } from "ethers";
 import { Terrain } from "../../components/TerrainComp/Terrain";
 import { TerrainSpinner } from "../../components/TerrainComp/TerrainSpinner";

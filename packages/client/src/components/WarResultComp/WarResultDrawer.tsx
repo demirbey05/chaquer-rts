@@ -1,4 +1,4 @@
-import warResultIcon from '../../images/warResult.png';
+import warResultIcon from '../../images/customAssets/warResult.png';
 import { useState } from "react";
 import { usePlayer } from '../../context/PlayerContext';
 import { useWarResult } from '../../hooks/useWarResult';
