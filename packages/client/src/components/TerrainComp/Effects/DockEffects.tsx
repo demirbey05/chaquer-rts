@@ -15,8 +15,11 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
             dockPositions.map(
                 (data) => {
                     document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.innerHTML = "⚓";
-                    document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.border = "4px solid";
-                    document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.borderColor = colorPath[Number(data.dockColor.colorIndex)];
+                    if (Number(data.dockColor.colorIndex) !== 0) {
+                        document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.border = "4px solid";
+                        document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.borderColor = colorPath[Number(data.dockColor.colorIndex)];
+                    }
+
                 }
             );
         }
@@ -26,8 +29,10 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
     useEffect(() => {
         if (myDockPositions && myDockPositions.length > 0) {
             myDockPositions.map((position: any) => {
-                document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.border = "4px solid";
-                document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.borderColor = colorPath[Number(position.myDockColor.colorIndex)];
+                if (Number(position.dockColor.colorIndex) !== 0) {
+                    document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.border = "4px solid";
+                    document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.borderColor = colorPath[Number(position.myDockColor.colorIndex)];
+                }
             });
         }
 
