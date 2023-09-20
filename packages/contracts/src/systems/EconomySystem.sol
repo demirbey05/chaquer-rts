@@ -10,7 +10,7 @@ import { MineType } from "../codegen/Types.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 
-uint256 constant mineRate = 30;
+uint256 constant mineRate = 10;
 uint256 constant blockRate = 0;
 uint256 constant startFood = 300;
 uint256 constant startWood = 100;
