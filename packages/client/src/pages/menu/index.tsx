@@ -1,7 +1,5 @@
 import map from '../../../map.json';
-import chaquerImg from '../../images/chaquer_bg.jpg';
 import { ethers } from "ethers";
-import { Button } from "@chakra-ui/react";
 import { Terrain } from "../../components/TerrainComp/Terrain";
 import { TerrainSpinner } from "../../components/TerrainComp/TerrainSpinner";
 import { UserNameModal } from '../../components/PlayerComp/UserNameModal';
@@ -14,6 +12,7 @@ import { limitOfUser } from "../../utils/constants/constants";
 import { useGameState } from "../../hooks/useGameState";
 
 export const Menu = () => {
+  const { systemCalls } = useMUD();
   const {
     setIsLoading,
     width,
@@ -26,9 +25,9 @@ export const Menu = () => {
     saveTerrain,
   } = useTerrain();
 
-  const { systemCalls } = useMUD();
-
   const gameState = useGameState(1);
+
+  const terrainStyles = [8, 14];
 
   const handleRefresh = (event: any) => {
     setIsLoading(true);
@@ -48,126 +47,77 @@ export const Menu = () => {
     }
   };
 
-  const terrainStyles = [8, 14];
-
-  const menuBackgroundStyles: any = {
-    backgroundImage: `url(${chaquerImg})`,
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-  }
-
   return (
-    <div style={menuBackgroundStyles}>
-      <div className="container d-flex align-items-center h-screen">
-        {isLoading === true ? <Spinner /> :
-          (<>
-            {refresh === 0 ? null : <TerrainMap terrainStyles={terrainStyles} />}
-          </>)
-        }
-        <div className="col">
-          <h2 className="text-center text-white text-6xl border-top border-bottom font-bold p-2">
+    <div className='menu-background'>
+      <div className="menu-row" style={refresh === 0 ? { justifyContent: "center" } : { justifyContent: "space-evenly" }}>
+        <div id="menu-items">
+          <h2 className="menu-title">
             Chaquer
           </h2>
           {refresh !== 0 && <StartGameButton gameState={gameState} isLoading={isLoading} handleTerrain={handleTerrain} />}
-          <RegenerateButton isLoading={isLoading} refresh={refresh} handleRefresh={handleRefresh} />
-          {refresh !== 0 && (
-            <GameTutorialButton />
-          )}
+          {refresh === 0 && <EnterGameButton handleRefresh={handleRefresh} />}
+          {refresh !== 0 && <RegenerateButton handleRefresh={handleRefresh} isLoading={isLoading} />}
+          {refresh !== 0 && <GameTutorialButton />}
+        </div>
+        <div id="map">
+          {isLoading === true ? <TerrainSpinner /> :
+            (<>
+              {refresh === 0 ? null : <Terrain pixelStyles={terrainStyles} isBorder={true} zoomLevel={1} />}
+            </>)
+          }
         </div>
       </div>
       <UserNameModal />
       <GameTutorial />
-    </div >
+    </div>
   );
 }
 
-const Spinner = () => {
+const StartGameButton = ({ isLoading, handleTerrain, gameState }: { isLoading: boolean, handleTerrain: () => Promise<void>, gameState: any }) => {
   return (
-    <div className="col-8 align-items-center justify-content-center">
-      <TerrainSpinner />
-    </div>
+    <button
+      className='btn btn-dark menu-buttons mb-4'
+      style={{ marginTop: "100px" }}
+      data-bs-toggle="modal"
+      data-bs-target="#userNameModal"
+      disabled={isLoading && gameState}
+      onClick={handleTerrain}
+    >
+      Start the Game
+    </button>
   )
 }
 
-interface TerrainMapPropStyles {
-  terrainStyles: number[]
-}
-
-const TerrainMap = (props: TerrainMapPropStyles) => {
+const RegenerateButton = ({ isLoading, handleRefresh }: { isLoading: boolean, handleRefresh: (event: any) => void, }) => {
   return (
-    <div className="col-8 align-items-center justify-content-center">
-      <Terrain
-        pixelStyles={props.terrainStyles}
-        isBorder={true}
-        zoomLevel={1}
-      />
-    </div>
+    <button
+      className='btn btn-dark menu-buttons mb-4'
+      disabled={isLoading || true}
+      onClick={handleRefresh}
+    >
+      Regenerate the Terrain
+    </button>
   )
 }
 
-interface StartGameButtonPropTypes {
-  isLoading: boolean,
-  handleTerrain: any,
-  gameState: any
-}
-
-const StartGameButton = (props: StartGameButtonPropTypes) => {
+const EnterGameButton = ({ handleRefresh }: { handleRefresh: (event: any) => void }) => {
   return (
-    <div className="text-center mt-2 mb-2">
-      <Button
-        data-bs-toggle="modal"
-        data-bs-target="#userNameModal"
-        colorScheme="whiteAlpha"
-        textColor="dark"
-        p="8"
-        mt="16"
-        width="200px"
-        isDisabled={props.isLoading && props.gameState}
-        onClick={props.handleTerrain}
-      >
-        Start the Game
-      </Button>
-    </div>
-  )
-}
-
-interface RegenerateButtonPropTypes {
-  isLoading: boolean,
-  handleRefresh: any,
-  refresh: number
-}
-
-const RegenerateButton = (props: RegenerateButtonPropTypes) => {
-  return (
-    <div className="text-center mb-2">
-      <Button
-        colorScheme="whiteAlpha"
-        p="8"
-        textColor="dark"
-        width="200px"
-        isDisabled={props.isLoading}
-        onClick={props.handleRefresh}
-        marginTop={props.refresh === 0 ? "300px" : "0"}
-      >
-        {props.refresh === 0 ? "Enter the Game" : "Regenerate the Terrain"}
-      </Button>
-    </div>
+    <button
+      className='btn btn-dark menu-buttons mb-4'
+      style={{ marginTop: "250px" }}
+      onClick={handleRefresh}>
+      Enter the Game
+    </button>
   )
 }
 
 const GameTutorialButton = () => {
   return (
-    <div className="text-center mt-2 mb-2">
-      <Button
-        data-bs-toggle="modal"
-        data-bs-target="#tutorialModal1"
-        colorScheme="whiteAlpha"
-        textColor="dark"
-        p="8"
-        width="200px"
-      >
-        Game Tutorial
-      </Button>
-    </div>
+    <button
+      className='btn btn-dark menu-buttons'
+      data-bs-toggle="modal"
+      data-bs-target="#tutorialModal1">
+      Game Tutorial
+    </button>
   )
 }

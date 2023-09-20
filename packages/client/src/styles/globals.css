@@ -1,3 +1,9 @@
+body,
+html {
+    margin: 0;
+    padding: 0;
+}
+
 body::-webkit-scrollbar {
     display: none;
 }
@@ -29,4 +35,53 @@ input::-webkit-inner-spin-button {
 .dark-input::-ms-input-placeholder {
     /* Microsoft Edge */
     color: white;
+}
+
+.menu-background {
+    background-image: url("../images/chaquer_bg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+}
+
+.menu-title {
+    font-size: 60px;
+    font-weight: bolder;
+    border-top: 2px solid rgba(0, 0, 0, 0.7);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.7);
+    width: 600px;
+    text-align: center;
+}
+
+#menu-items {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.menu-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.menu-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+@media (min-width: 1000px) {
+    .menu-row {
+        flex-direction: row;
+        min-height: 100vh;
+    }
+}
+
+@media (max-width: 1000px) {
+    .menu-row {
+        flex-direction: column;
+        justify-content: center;
+    }
 }

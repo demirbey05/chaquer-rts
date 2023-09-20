@@ -114,3 +114,12 @@
     bottom: 25px;
     z-index: 1;
 }
+
+.menu-buttons {
+    width: 225px;
+    color: dark;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    font-weight: bolder;
+    border: none;
+}
