@@ -35,7 +35,6 @@ error MoveArmy__NoAuthorized();
 error MoveArmy__TooFar();
 error MoveArmy__TileIsNotEmpty();
 error MoveArmy__WrongTerrainType();
-error MoveArmy__UnsufficientResource();
 
 //Attack System Errors
 error AttackSystem__ArmyNotBelongYou();

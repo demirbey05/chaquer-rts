@@ -14,6 +14,9 @@ import { State } from "../codegen/Types.sol";
 import { maxArmyNum, armyMoveFoodCost, armyMoveGoldCost } from "./Constants.sol";
 import "./Errors.sol";
 
+error MoveArmy__UnsufficientFood();
+error MoveArmy__UnsufficientGold();
+
 contract MapSystem is System {
   uint256 constant capacityLowerBound = 1;
 
@@ -170,8 +173,11 @@ contract MapSystem is System {
     (address armyOwner, uint256 gameIDArmy) = ArmyOwnable.get(armyID);
     (uint32 xArmy, uint32 yArmy, ) = Position.get(armyID);
     ResourceOwnData memory resourcesOfUser = ResourceOwn.get(ownerCandidate, gameID);
-    if (resourcesOfUser.numOfFood < armyMoveFoodCost || resourcesOfUser.numOfGold < armyMoveGoldCost) {
-      revert MoveArmy__UnsufficientResource();
+    if (resourcesOfUser.numOfFood < armyMoveFoodCost) {
+      revert MoveArmy__UnsufficientFood();
+    }
+    if (resourcesOfUser.numOfGold < armyMoveGoldCost) {
+      revert MoveArmy__UnsufficientGold();
     }
 
     if ((armyOwner != ownerCandidate) || (gameIDArmy != gameID)) {

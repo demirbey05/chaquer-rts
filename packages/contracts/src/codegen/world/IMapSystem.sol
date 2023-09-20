@@ -6,6 +6,9 @@ pragma solidity >=0.8.0;
 import { ArmyConfigData } from "./../Tables.sol";
 
 interface IMapSystem {
+  error MoveArmy__UnsufficientFood();
+  error MoveArmy__UnsufficientGold();
+
   function initMapData(uint256 gameID, uint32 width, uint32 height, bytes calldata terrain) external;
 
   function InitNumberOfGamer(uint256 gameID, uint256 capacity) external;
