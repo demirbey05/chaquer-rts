@@ -7,9 +7,10 @@ export function useMyDockPositions(address: any) {
     const { components } = useMUD();
 
     const dockEntity = useEntityQuery([HasValue(components.DockOwnable, { owner: address })]);
+    const valueOwn = useObservableValue(components.DockOwnable.update$);
+    const valueCol = useObservableValue(components.ColorOwnable.update$);
 
     const [docks, setDocks] = useState<any[]>();
-    const value = useObservableValue(components.DockOwnable.update$);
 
     useEffect(() => {
         const dockPosition = dockEntity.map((entityIndex) => {
@@ -19,7 +20,7 @@ export function useMyDockPositions(address: any) {
             return { myDockPosition, myDockColor }
         })
         setDocks(dockPosition);
-    }, [dockEntity, value]);
+    }, [dockEntity, valueOwn, valueCol]);
 
     return docks;
 }

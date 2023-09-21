@@ -89,3 +89,30 @@ input::-webkit-inner-spin-button {
         justify-content: center;
     }
 }
+
+.loader-background {
+    background-image: url("../images/backgrounds/chaquer_bg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+    position: relative;
+}
+
+.loader-box {
+    width: 400px;
+    margin-top: 100px;
+    margin-bottom: 50px;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.loader-footer {
+    color: black;
+    font-size: 25px;
+    font-weight: bolder;
+    border-top: 2px solid rgba(0, 0, 0, 0.7);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.7);
+    width: 400px;
+    text-align: center;
+    margin-top: 100px;
+}

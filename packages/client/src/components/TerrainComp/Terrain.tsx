@@ -276,7 +276,7 @@ export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Arr
   AttackEffects(myResourcePositions, myFleetPositions, fleetPositions, fromFleetPosition, isFleetAttackStage, myCastlePosition, castlePositions, armyPositions, myArmyPosition, isAttackStage, fromArmyPosition);
   HoverEffects(myFleetPositions, myDockPositions, myResourcePositions, myArmyPosition, dockPositions, fromFleetPosition, isFleetMoveStage, armyPositions, resources, numberOfArmy, isArmySettleStage, isBorder, castlePositions, myCastlePosition, values, fromArmyPosition, isArmyMoveStage);
   DockEffects(castlePositions, resources, myArmyPosition, armyPositions, dockPositions, myDockPositions, values, dockSettleStage, dockCaptureStage, rows, columns, fromArmyPosition);
-  FleetEffects(myFleetPositions, fleetPositions, fleetSettleStage, myDockPositions, isBorder, values);
+  FleetEffects(resources, myFleetPositions, fleetPositions, fleetSettleStage, myDockPositions, isBorder, values);
 
   return (
     <>

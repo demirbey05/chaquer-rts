@@ -1,16 +1,17 @@
 import map from '../../../map.json';
-import cursor from '../../images/cursor/cursor.png';
 import { ethers } from "ethers";
+import { Progress } from "@chakra-ui/react";
+import { useMUD } from "../../context/MUDContext";
+import { useTerrain } from "../../context/TerrainContext.js"
 import { Terrain } from "../../components/TerrainComp/Terrain";
 import { TerrainSpinner } from "../../components/TerrainComp/TerrainSpinner";
 import { UserNameModal } from '../../components/PlayerComp/UserNameModal';
 import { GameTutorial } from "../../components/TipsComp/GameTutorial";
 import { generatePerlinValues } from "../../terrain-helper/utils";
-import { useMUD } from "../../context/MUDContext";
-import { useTerrain } from "../../context/TerrainContext.js"
 import { flatten2D } from "../../utils/terrainArray";
 import { limitOfUser } from "../../utils/constants/constants";
 import { useGameState } from "../../hooks/useGameState";
+import { useSyncProgress } from "../../hooks/useSyncProgress";
 
 export const Menu = () => {
   const { systemCalls } = useMUD();
@@ -27,6 +28,7 @@ export const Menu = () => {
   } = useTerrain();
 
   const gameState = useGameState(1);
+  const progress = useSyncProgress();
 
   const terrainStyles = [8, 14];
 
@@ -55,10 +57,14 @@ export const Menu = () => {
           <h2 className="menu-title">
             Chaquer
           </h2>
+          {refresh === 0 && <Loader progress={progress} />}
+          {refresh === 0 && <EnterGameButton handleRefresh={handleRefresh} percentage={progress && progress.percentage} />}
           {refresh !== 0 && <StartGameButton gameState={gameState} isLoading={isLoading} handleTerrain={handleTerrain} />}
-          {refresh === 0 && <EnterGameButton handleRefresh={handleRefresh} />}
           {refresh !== 0 && <RegenerateButton handleRefresh={handleRefresh} isLoading={isLoading} />}
           {refresh !== 0 && <GameTutorialButton />}
+          <div className="loader-footer">
+            powered by Nakamo & MUD
+          </div>
         </div>
         <div id="map">
           {isLoading === true ? <TerrainSpinner /> :
@@ -101,12 +107,12 @@ const RegenerateButton = ({ isLoading, handleRefresh }: { isLoading: boolean, ha
   )
 }
 
-const EnterGameButton = ({ handleRefresh }: { handleRefresh: (event: any) => void }) => {
+const EnterGameButton = ({ handleRefresh, percentage }: { handleRefresh: (event: any) => void, percentage: number }) => {
   return (
     <button
       className='btn btn-dark menu-buttons mb-4'
-      style={{ marginTop: "250px" }}
-      onClick={handleRefresh}>
+      onClick={handleRefresh}
+      disabled={percentage !== 100}>
       Enter the Game
     </button>
   )
@@ -120,5 +126,27 @@ const GameTutorialButton = () => {
       data-bs-target="#tutorialModal1">
       Game Tutorial
     </button>
+  )
+}
+
+const Loader = ({ progress }: { progress: any }) => {
+  return (
+    <>
+      <div className="loader-box">
+        <div className="d-flex justify-content-center pt-3">
+          <Progress colorScheme="linkedin"
+            borderRadius={"25px"}
+            width={"75%"}
+            height='32px'
+            hasStripe
+            isAnimated
+            value={progress ? progress.percentage * 100 : 0} />
+        </div>
+        <div className="text-center p-3">
+          <p className="text-white text-2xl">{progress ? (progress.percentage !== 100 ? progress.percentage * 100 : 100) : 0}%</p>
+          <p className="text-white text-xl">{progress ? progress.message : "Fetching data from blockchain"}...</p>
+        </div>
+      </div>
+    </>
   )
 }

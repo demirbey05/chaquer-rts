@@ -7,7 +7,8 @@ export function useCastlePositions() {
   const { components } = useMUD();
 
   const castleEntities = useEntityQuery([Has(components.CastleOwnable)]);
-  const value = useObservableValue(components.CastleOwnable.update$);
+  const valuePos = useObservableValue(components.CastleOwnable.update$);
+  const valueCol = useObservableValue(components.ColorOwnable.update$);
 
   const [castle, setCastle] = useState<any[]>([]);
   useEffect(() => {
@@ -15,11 +16,10 @@ export function useCastlePositions() {
       const castlePosition = getComponentValue(components.Position, entityIndex);
       const castleColor = getComponentValue(components.ColorOwnable, entityIndex);
       return { castlePosition, castleColor }
-    }
+    });
 
-    );
     setCastle(positions);
-  }, [castleEntities, value]);
+  }, [castleEntities, valuePos, valueCol]);
 
   return castle;
 }

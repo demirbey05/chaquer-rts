@@ -68,7 +68,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean, values: number[][], isBo
             element.style.borderColor = colorPath[Number(data.armyColor.colorIndex)]
             element.classList.add("army-emoji");
         });
-    }, [armyPositions, myArmyPosition]);
+    }, [armyPositions, myArmyPosition, myArmyNumber]);
 
     // Army Update Drawer data-bs attributes
     useEffect(() => {
@@ -112,5 +112,5 @@ export const ArmyEffects = (isArmyUpdateStage: boolean, values: number[][], isBo
                 );
             });
         }
-    }, [armyPositions, myArmyPosition, isArmyUpdateStage, myCastlePosition, resources, dockPositions]);
+    }, [armyPositions, myArmyPosition, isArmyUpdateStage, myCastlePosition, resources, dockPositions, castlePositions, isBorder, values]);
 }

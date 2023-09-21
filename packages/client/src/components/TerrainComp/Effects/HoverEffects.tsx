@@ -56,7 +56,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined, myDockPosition
                 });
             }
         }
-    }, [fromArmyPosition, isArmyMoveStage, myCastlePosition, myArmyPosition, myResourcePositions, myDockPositions]);
+    }, [fromArmyPosition, isArmyMoveStage, myCastlePosition, myArmyPosition, myResourcePositions, myDockPositions, isBorder, values]);
 
     //Orange hover effect and data-bs assign when user deploys an army
     useEffect(() => {
@@ -102,7 +102,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined, myDockPosition
                 );
             });
         }
-    }, [isArmySettleStage, myCastlePosition, resources, myCastlePosition, castlePositions, armyPositions, dockPositions]);
+    }, [isArmySettleStage, myCastlePosition, resources, myCastlePosition, castlePositions, armyPositions, dockPositions, values, isBorder]);
 
     //Yellow hover effect when user moves a fleet
     useEffect(() => {
@@ -136,5 +136,5 @@ export const HoverEffects = (myFleetPositions: any[] | undefined, myDockPosition
                 });
             }
         }
-    }, [fromFleetPosition, isFleetMoveStage, myFleetPositions, myResourcePositions]);
+    }, [fromFleetPosition, isFleetMoveStage, myFleetPositions, myResourcePositions, isBorder, values]);
 }

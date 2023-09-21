@@ -3,9 +3,6 @@ import { isManhattanPosition } from "../../../utils/helperFunctions/CustomFuncti
 import { isMyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isMyArmy";
 import { isEnemyCastle } from "../../../utils/helperFunctions/CastleFunctions/isEnemyCastle";
 import { isMyFleet } from "../../../utils/helperFunctions/SeaFunctions/isMyFleet";
-import { isMyCastle } from "../../../utils/helperFunctions/CastleFunctions/isMyCastle";
-import { isMyResource } from "../../../utils/helperFunctions/ResourceFuntions/isMyResource";
-import { isMyDock } from "../../../utils/helperFunctions/SeaFunctions/isMyDock";
 
 export const AttackEffects = (myResourcePositions: any[], myFleetPositions: any[] | undefined, fleetPositions: any[], fromFleetPosition: any, isFleetAttackStage: boolean, myCastlePosition: any[], castlePositions: any[], armyPositions: any[], myArmyPosition: any[], isAttackStage: boolean | undefined, fromArmyPosition: { x: any, y: any } | undefined,) => {
     // Handle Army and Castle Attack OffCanvas
@@ -52,7 +49,7 @@ export const AttackEffects = (myResourcePositions: any[], myFleetPositions: any[
                 })
             }
         }
-    }, [isAttackStage]);
+    }, [isAttackStage, armyPositions, fromArmyPosition, castlePositions, myCastlePosition, myArmyPosition]);
 
     // Handle fleet attack drawer
     useEffect(() => {
@@ -78,5 +75,5 @@ export const AttackEffects = (myResourcePositions: any[], myFleetPositions: any[
                 })
             }
         }
-    }, [isFleetAttackStage]);
+    }, [isFleetAttackStage, fleetPositions, myFleetPositions, fromFleetPosition]);
 }

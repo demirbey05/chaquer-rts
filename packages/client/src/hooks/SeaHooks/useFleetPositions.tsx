@@ -7,7 +7,9 @@ export function useFleetPositions() {
     const { components } = useMUD();
 
     const fleetEntites = useEntityQuery([Has(components.FleetOwnable)]);
-    const value = useObservableValue(components.Position.update$);
+    const valuePos = useObservableValue(components.Position.update$);
+    const valueCfg = useObservableValue(components.FleetConfig.update$);
+    const valueCol = useObservableValue(components.ColorOwnable.update$);
 
     const [fleet, setFleet] = useState<any[]>([]);
     useEffect(() => {
@@ -18,7 +20,7 @@ export function useFleetPositions() {
             return { fleetPosition, fleetConfig, fleetColor }
         });
         setFleet(fleets);
-    }, [fleetEntites, value]);
+    }, [fleetEntites, valuePos, valueCfg, valueCol]);
 
     return fleet;
 }

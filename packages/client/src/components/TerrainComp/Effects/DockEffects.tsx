@@ -29,7 +29,7 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
     useEffect(() => {
         if (myDockPositions && myDockPositions.length > 0) {
             myDockPositions.map((position: any) => {
-                if (Number(position.dockColor.colorIndex) !== 0) {
+                if (Number(position.myDockColor.colorIndex) !== 0) {
                     document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.border = "4px solid";
                     document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.borderColor = colorPath[Number(position.myDockColor.colorIndex)];
                 }

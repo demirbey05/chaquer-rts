@@ -49,7 +49,7 @@ export const ResourceEffects = (values: number[][], fromFleetPosition: any, seaM
                 });
             }
         };
-    }, [myResourcePositions])
+    }, [myResourcePositions, resources])
 
     // Handle Mine Capture OffCanvas
     useEffect(() => {
@@ -76,7 +76,7 @@ export const ResourceEffects = (values: number[][], fromFleetPosition: any, seaM
                 });
             }
         }
-    }, [isMineStage, fromArmyPosition])
+    }, [isMineStage, fromArmyPosition, myResourcePositions, resources, values])
 
     // Handle Sea Mine Capture OffCanvas
     useEffect(() => {
@@ -101,5 +101,5 @@ export const ResourceEffects = (values: number[][], fromFleetPosition: any, seaM
                 });
             }
         }
-    }, [seaMineStage, fromFleetPosition])
+    }, [seaMineStage, fromFleetPosition, resources, myResourcePositions])
 }

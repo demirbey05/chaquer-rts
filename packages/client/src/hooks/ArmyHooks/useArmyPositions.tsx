@@ -7,7 +7,9 @@ export function useArmyPositions() {
   const { components } = useMUD();
 
   const armyEntities = useEntityQuery([Has(components.ArmyOwnable)]);
-  const value = useObservableValue(components.Position.update$);
+  const valuePos = useObservableValue(components.Position.update$);
+  const valueCfg = useObservableValue(components.ArmyConfig.update$);
+  const valueCol = useObservableValue(components.ColorOwnable.update$);
 
   const [army, setArmy] = useState<any[]>([]);
 
@@ -20,7 +22,7 @@ export function useArmyPositions() {
     });
 
     setArmy(army)
-  }, [armyEntities, value]);
+  }, [armyEntities, valuePos, valueCfg, valueCol]);
 
   return army;
 }

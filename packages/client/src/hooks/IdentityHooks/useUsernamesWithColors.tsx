@@ -3,12 +3,11 @@ import { useEntityQuery, useObservableValue } from "@latticexyz/react";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
 import { useState, useEffect } from "react";
 
-// Change it when we add multi maps feature
 export function useUsernameWithColors() {
     const { components } = useMUD();
 
     const userEntity = useEntityQuery([Has(components.AddressToUsername)]);
-    const value = useObservableValue(components.Position.update$);
+    const value = useObservableValue(components.AddressToUsername.update$);
 
     const [userData, setUserData] = useState<any>();
 
