@@ -43,10 +43,11 @@ import { FleetAttackDrawer } from "../../components/SeaComp/FleetAttackDrawer";
 import { PlayerListDrawer } from "../../components/PlayerComp/PlayerListDrawer";
 import { SeaMineCaptureDrawer } from "../../components/SeaComp/SeaMineCaptureDrawer";
 import { ArmyUpdateModal } from "../../components/ArmyComp/ArmyUpdateModal";
+import { ArmyUpdateWarning } from "../../components/ArmyComp/ArmyUpdateWarning";
 
 export const Game = () => {
   const { isCastleSettled } = useCastle();
-  const { isArmySettleStage, isArmyMoveStage } = useArmy();
+  const { isArmySettleStage, isArmyMoveStage, isArmyUpdateStage } = useArmy();
   const { isPlayerLost, isPlayerWinner } = usePlayer();
   const { fleetSettleStage, isFleetMoveStage } = useFleet();
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -74,6 +75,7 @@ export const Game = () => {
       {gameState === 2 && !isPlayerLost && <PlayerSeedStage />}
       {(playerSeedCount === limitOfUser) && !mineInited && <MineInitStage />}
       {gameState === 3 && isArmySettleStage && !isPlayerLost && mineInited && <ArmySettleWarning />}
+      {gameState === 3 && isArmyUpdateStage && !isPlayerLost && mineInited && <ArmyUpdateWarning />}
       {gameState === 3 && isArmyMoveStage && !isPlayerLost && mineInited && <ArmyMoveWarning />}
       <SettingsDrawer />
       <PlayerListDrawer />

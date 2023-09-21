@@ -157,13 +157,15 @@ export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Arr
   const handleClick = async (e: any) => {
     // Toggle orange tiles for army settlement
     if (!isArmyMoveStage && isMyCastle(myCastlePosition, getDataAtrX(e), getDataAtrY(e))) {
-      if (isArmySettleStage) {
+      if (isArmySettleStage || isArmyUpdateStage) {
         setIsArmySettleStage(false);
         setIsArmyUpdateStage(false);
       }
-      else if (!isArmySettleStage && numberOfArmy < 5) {
+      else if (!isArmySettleStage) {
+        if (numberOfArmy < 5) {
+          setIsArmySettleStage(true);
+        }
         setCastlePosition({ x: getDataAtrX(e), y: getDataAtrY(e) })
-        setIsArmySettleStage(true);
         setIsArmyUpdateStage(true);
       }
     }
@@ -227,7 +229,7 @@ export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Arr
     }
 
     // Logic of Army-Castle-Mine-Dock Attack and Dock Settle
-    if (!fromArmyPosition && isCastleSettled && !isArmySettleStage && myArmyPosition && isMyArmy({ x: getDataAtrX(e), y: getDataAtrY(e) }, myArmyPosition)) {
+    if (!fromArmyPosition && isCastleSettled && !isArmySettleStage && !isArmyUpdateStage && myArmyPosition && isMyArmy({ x: getDataAtrX(e), y: getDataAtrY(e) }, myArmyPosition)) {
       setFromArmyPosition({ x: getDataAtrX(e), y: getDataAtrY(e) });
       setIsArmyMoveStage(true);
       setIsAttackStage(true);

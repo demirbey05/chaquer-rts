@@ -6,7 +6,8 @@ import { useError } from "../../context/ErrorContext";
 import { useNumberOfResource } from '../../hooks/ResourceHooks/useNumberOfResource';
 
 interface SellResourcesPropTypes {
-    setIsLoading: (value: boolean) => void
+    setIsLoading: (value: boolean) => void,
+    isLoading: boolean
 }
 
 export const SellResources = (props: SellResourcesPropTypes) => {
@@ -236,6 +237,7 @@ export const SellResources = (props: SellResourcesPropTypes) => {
                 setResourceCount={setNumFood}
                 resourceType={0}
                 isDisabled={isFoodDisabled}
+                isLoading={props.isLoading}
                 is30Disabled={is30FoodDisabled}
                 is100Disabled={is100FoodDisabled}
                 is500Disabled={is500FoodDisabled}
@@ -248,6 +250,7 @@ export const SellResources = (props: SellResourcesPropTypes) => {
                 setResourceCount={setNumWood}
                 resourceType={1}
                 isDisabled={isWoodDisabled}
+                isLoading={props.isLoading}
                 is30Disabled={is30WoodDisabled}
                 is100Disabled={is100WoodDisabled}
                 is500Disabled={is500WoodDisabled}
@@ -260,6 +263,7 @@ export const SellResources = (props: SellResourcesPropTypes) => {
                 setResourceCount={setNumGold}
                 resourceType={2}
                 isDisabled={isGoldDisabled}
+                isLoading={props.isLoading}
                 is30Disabled={is30GoldDisabled}
                 is100Disabled={is100GoldDisabled}
                 is500Disabled={is500GoldDisabled}
@@ -276,6 +280,7 @@ interface ResourceCardPropTypes {
     resourceName: string,
     setResourceCount: React.Dispatch<React.SetStateAction<string>>,
     isDisabled: boolean,
+    isLoading: boolean,
     is100Disabled: boolean,
     is30Disabled: boolean,
     is500Disabled: boolean,
@@ -305,9 +310,9 @@ const ResourceCard = (props: ResourceCardPropTypes) => {
                     onClick={(e: any) => e.target.select()} />
             </div>
             <ManualButton isDisabled={props.isDisabled} handleSell={props.handleSell} numOfResource={""} resourceEmoji={props.resourceEmoji} />
-            <AutoButton isDisabled={props.is30Disabled} resourceType={props.resourceType} handleSell={props.handle30ResourceSell} numOfResource={"30"} resourceEmoji={props.resourceEmoji} />
-            <AutoButton isDisabled={props.is100Disabled} resourceType={props.resourceType} handleSell={props.handle100ResourceSell} numOfResource={"100"} resourceEmoji={props.resourceEmoji} />
-            <AutoButton isDisabled={props.is500Disabled} resourceType={props.resourceType} handleSell={props.handle500ResourceSell} numOfResource={"500"} resourceEmoji={props.resourceEmoji} />
+            <AutoButton isLoading={props.isLoading} isDisabled={props.is30Disabled} resourceType={props.resourceType} handleSell={props.handle30ResourceSell} numOfResource={"30"} resourceEmoji={props.resourceEmoji} />
+            <AutoButton isLoading={props.isLoading} isDisabled={props.is100Disabled} resourceType={props.resourceType} handleSell={props.handle100ResourceSell} numOfResource={"100"} resourceEmoji={props.resourceEmoji} />
+            <AutoButton isLoading={props.isLoading} isDisabled={props.is500Disabled} resourceType={props.resourceType} handleSell={props.handle500ResourceSell} numOfResource={"500"} resourceEmoji={props.resourceEmoji} />
         </div>
     )
 }
@@ -338,6 +343,7 @@ const ManualButton = (props: ManualButtonPropTypes) => {
 
 interface AutoButtonPropTypes {
     isDisabled: boolean,
+    isLoading: boolean,
     handleSell: any,
     resourceEmoji: string,
     numOfResource: string,
@@ -353,7 +359,7 @@ const AutoButton = (props: AutoButtonPropTypes) => {
             textColor="dark"
             className="w-75"
             mt={4}
-            isDisabled={props.isDisabled}
+            isDisabled={props.isDisabled || props.isLoading}
             onClick={() => props.handleSell({ resourceType: props.resourceType })}
         >
             Sell {props.numOfResource} {props.resourceEmoji}

@@ -58,6 +58,8 @@ export const MarketDrawer = () => {
 
     return (
         <>
+            {isLoadingSell && <EventProgressBar text={"Selling resources..."} />}
+            {isLoadingBuy && <EventProgressBar text={"Buying resources..."} />}
             <button className="market-button" onClick={toggleDrawer}>
                 🛒
             </button>
@@ -74,10 +76,10 @@ export const MarketDrawer = () => {
                         </TabList>
                         <TabPanels>
                             <TabPanel>
-                                <SellResources setIsLoading={setIsLoadingSell} />
+                                <SellResources setIsLoading={setIsLoadingSell} isLoading={isLoadingSell} />
                             </TabPanel>
                             <TabPanel>
-                                <BuyResources setIsLoading={setIsLoadingBuy} />
+                                <BuyResources setIsLoading={setIsLoadingBuy} isLoading={isLoadingBuy} />
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
@@ -110,8 +112,6 @@ export const MarketDrawer = () => {
                     </div>
                 </div>
             </div>
-            {isLoadingSell && <EventProgressBar text={"Selling resources..."} />}
-            {isLoadingBuy && <EventProgressBar text={"Buying resources..."} />}
         </>
     )
 }

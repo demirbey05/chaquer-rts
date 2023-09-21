@@ -8,6 +8,7 @@ import { isMyCastle } from "../../../utils/helperFunctions/CastleFunctions/isMyC
 import { armySettlePositions } from "../../../utils/helperFunctions/ArmyFunctions/armySettlePositions";
 import { isDockPosition } from "../../../utils/helperFunctions/SeaFunctions/isDockPosition";
 import { isEnemyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isEnemyArmy";
+import { isMyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isMyArmy";
 
 export const ArmyEffects = (isArmyUpdateStage: boolean, values: number[][], isBorder: boolean, myCastlePosition: any[], dockPositions: any[], castlePositions: any[], isArmySettleStage: boolean | undefined, armyPositions: any[], myArmyPosition: any[], setNumberOfArmy: any, myArmyNumber: any, resources: any[]) => {
     //Makes castle, army and resource positions unClickable to not cause bug during army settlement
@@ -84,7 +85,8 @@ export const ArmyEffects = (isArmyUpdateStage: boolean, values: number[][], isBo
                                 !isEnemyCastle({ x: data.x, y: data.y }, myCastlePosition, castlePositions) &&
                                 !isMyCastle(myCastlePosition, data.x, data.y) &&
                                 !isDockPosition(data.x, data.y, dockPositions) &&
-                                armySettlePositions(data.x, data.y, myCastlePosition)
+                                armySettlePositions(data.x, data.y, myCastlePosition) &&
+                                isMyArmy({ x: data.x, y: data.y }, myArmyPosition)
                             ) {
                                 const element = document.getElementById(`${data.y},${data.x}`)!;
                                 if (element) {
