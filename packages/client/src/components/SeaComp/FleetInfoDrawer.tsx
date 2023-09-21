@@ -1,11 +1,12 @@
-import archerImg from "../../images/armyAssets/archer.png";
-import cavalryImg from "../../images/armyAssets/cavalry.png";
-import swordsmanImg from "../../images/armyAssets/swordsman.png";
+import smallShip from '../../images/shipAssets/small_ship.png'
+import mediumShip from '../../images/shipAssets/medium_ship.png'
+import largeShip from '../../images/shipAssets/large_ship.png'
+import shipEmoji from '../../images/shipAssets/ship_emoji.png'
 import React, { useState, useEffect } from "react";
 import { MdLocationPin } from 'react-icons/md'
 import { Button } from "@chakra-ui/react";
-import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
 import { usePlayer } from "../../context/PlayerContext";
+import { useMyFleetPositions } from '../../hooks/SeaHooks/useMyFleetPositions';
 
 // Scroll to div by id as middle of the screen
 const scrollToDiv = (targetId: any) => {
@@ -21,18 +22,18 @@ const scrollToDiv = (targetId: any) => {
     }
 };
 
-export const ArmyInfoDrawer = () => {
+export const FleetInfoDrawer = () => {
     const { userWallet } = usePlayer()
     const [isOpen, setIsOpen] = useState(false);
 
-    const myArmyPosition = useMyArmy(userWallet);
+    const myFleetPositions = useMyFleetPositions(userWallet);
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen);
     };
 
     const handleKeyPress = (event: KeyboardEvent) => {
-        if (event.key === 'a' || event.key === 'A') {
+        if (event.key === 'f' || event.key === 'F') {
             toggleDrawer();
         } else if (event.key === 'Escape') {
             setIsOpen(false);
@@ -60,41 +61,41 @@ export const ArmyInfoDrawer = () => {
 
     return (
         <>
-            <button className="army-info-button" onClick={toggleDrawer}>
-                ⚔️
+            <button className="fleet-info-button" onClick={toggleDrawer}>
+                <img src={shipEmoji} width="35px" height="35px" />
             </button>
-            <div id="army-info-drawer" className={`army-info-drawer ${isOpen ? "open" : ""}`}>
+            <div id="fleet-info-drawer" className={`fleet-info-drawer ${isOpen ? "open" : ""}`}>
                 <div className="d-flex justify-between border-bottom mb-2 p-2">
-                    <h5 className="font-extrabold">My Army Details</h5>
+                    <h5 className="font-extrabold">My Fleet Details</h5>
                     <button type="button" onClick={() => setIsOpen(false)}>&#10008;</button>
                 </div>
-                {myArmyPosition.length !== 0 ?
-                    myArmyPosition.map((army: any, index: number) => {
+                {(myFleetPositions && myFleetPositions.length > 0) ?
+                    myFleetPositions.map((fleet: any, index: number) => {
                         return (
                             <React.Fragment key={index}>
                                 <div className="row mt-1 p-2">
-                                    <ArmyInfoModalCard imageSource={swordsmanImg}
-                                        soldierName={"Swordsman"}
-                                        soldierCount={army.myArmyConfig.numSwordsman}
+                                    <FleetInfoModalCard imageSource={smallShip}
+                                        shipName={"Baron's Dagger"}
+                                        shipCount={fleet.myFleetConfig.numSmall}
                                         imageHeight={"75px"}
-                                        imageWidth={"65px"} />
-                                    <ArmyInfoModalCard imageSource={archerImg}
-                                        soldierName={"Archer"}
-                                        soldierCount={army.myArmyConfig.numArcher}
+                                        imageWidth={"75px"} />
+                                    <FleetInfoModalCard imageSource={mediumShip}
+                                        shipName={"Knight's Galley"}
+                                        shipCount={fleet.myFleetConfig.numMedium}
                                         imageHeight={"75px"}
-                                        imageWidth={"65px"} />
-                                    <ArmyInfoModalCard imageSource={cavalryImg}
-                                        soldierName={"Cavalry"}
-                                        soldierCount={army.myArmyConfig.numCavalry}
+                                        imageWidth={"75px"} />
+                                    <FleetInfoModalCard imageSource={largeShip}
+                                        shipName={"King's Leviathan"}
+                                        shipCount={fleet.myFleetConfig.numBig}
                                         imageHeight={"75px"}
-                                        imageWidth={"100px"} />
+                                        imageWidth={"75px"} />
                                 </div>
                                 <div className="row mt-1 mb-1 justify-content-center">
                                     <Button
                                         colorScheme="linkedin"
                                         className="w-50"
                                         onClick={() => {
-                                            handleClick(`${army.myArmyPosition.y},${army.myArmyPosition.x}`);
+                                            handleClick(`${fleet.myFleetPosition.y},${fleet.myFleetPosition.x}`);
                                             setIsOpen(false)
                                         }}
                                     >
@@ -104,19 +105,19 @@ export const ArmyInfoDrawer = () => {
                                 <hr />
                             </React.Fragment>)
                     })
-                    : <p className="text-center text-warning">You have no army!</p>
+                    : <p className="text-center text-warning">You have no fleet!</p>
                 }
             </div>
         </>
     )
 }
 
-const ArmyInfoModalCard = ({ imageSource, imageHeight, imageWidth, soldierName, soldierCount }: {
+const FleetInfoModalCard = ({ imageSource, imageHeight, imageWidth, shipName, shipCount }: {
     imageSource: string,
     imageHeight: string,
     imageWidth: string,
-    soldierName: string,
-    soldierCount: number
+    shipName: string,
+    shipCount: number
 }) => {
     return (
         <div className="col align-items-center">
@@ -127,13 +128,13 @@ const ArmyInfoModalCard = ({ imageSource, imageHeight, imageWidth, soldierName, 
                 />
             </div>
             <div className="row justify-content-center text-center border-1 mt-2 p-1">
-                <SoldierInfo soldierCount={soldierCount} soldierName={soldierName} />
+                <ShipInfo shipCount={shipCount} shipName={shipName} />
             </div>
         </div>
     )
 }
 
 
-const SoldierInfo = ({ soldierName, soldierCount }: { soldierName: string, soldierCount: number }) => {
-    return <p style={{ fontSize: "12px" }}>{soldierName}: {soldierCount}</p>
+const ShipInfo = ({ shipName, shipCount }: { shipName: string, shipCount: number }) => {
+    return <p style={{ fontSize: "12px" }}>{shipName}: {shipCount}</p>
 }

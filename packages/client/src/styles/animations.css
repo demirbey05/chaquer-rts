@@ -1,6 +1,6 @@
 /* Army position show effect*/
 .animate-border {
-    animation: borderAnimation 1.5s infinite alternate;
+    animation: borderAnimation 2s infinite alternate;
 }
 
 @keyframes borderAnimation {
@@ -9,7 +9,7 @@
     }
 
     50% {
-        border-width: 5px;
+        border-width: 10px;
     }
 
     100% {

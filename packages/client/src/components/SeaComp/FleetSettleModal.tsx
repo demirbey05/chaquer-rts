@@ -44,7 +44,19 @@ export const FleetSettleModal = () => {
     const myResources = useNumberOfResource(userWallet, 1);
 
     useEffect(() => {
-        if (!smallShipCount || !mediumShipCount || !largeShipCount) {
+        if (Number.isNaN(parseInt(smallShipCount))) {
+            setSmallShipCount("0")
+        }
+
+        if (Number.isNaN(parseInt(mediumShipCount))) {
+            setMediumShipCount("0")
+        }
+
+        if (Number.isNaN(parseInt(largeShipCount))) {
+            setLargeShipCount("0")
+        }
+
+        if (smallShipCount.length === 0 && mediumShipCount.length === 0 && largeShipCount.length === 0) {
             setIsDisabled(true);
             return;
         }

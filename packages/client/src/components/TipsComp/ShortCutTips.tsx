@@ -24,6 +24,7 @@ export const ShortCutTips = () => {
                     <UnorderedList spacing={3}>
                         <ListItem>⚙️ Settings {"->"} Press "S"</ListItem>
                         <ListItem>⚔️ Army Info {"->"} Press "A"</ListItem>
+                        <ListItem>🚢 Fleet Info {"->"} Press "F"</ListItem>
                         <ListItem>🛒 Market {"->"} Press "M"</ListItem>
                         <ListItem>＄ Prices {"->"} Press "P"</ListItem>
                         <ListItem>🎮 Players {"->"} Press "U"</ListItem>
