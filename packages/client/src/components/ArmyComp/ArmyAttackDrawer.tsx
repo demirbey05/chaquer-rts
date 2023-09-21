@@ -64,53 +64,54 @@ export const ArmyAttackDrawer = () => {
     }
   };
 
+  if (isLoading) {
+    return <EventProgressBar text={"Armies are fighting..."} />
+  }
+
   return (
-    <>
-      {isLoading && <EventProgressBar text={"Armies are fighting..."} />}
-      <div
-        className="offcanvas offcanvas-bottom attack-drawer"
-        data-bs-keyboard="false"
-        data-bs-backdrop="false"
-        id="armyAttackDrawer"
-        aria-labelledby="armyAttackDrawerLabel"
-      >
-        <ArmyAttackModalHeader headerText={"War - Army Information"} />
-        <div className="offcanvas-body small">
-          <div className="row">
-            <ArmyAttackModalCard
-              numSwordsman={myArmyConfig && myArmyConfig.myArmyConfig.numSwordsman}
-              numArcher={myArmyConfig && myArmyConfig.myArmyConfig.numArcher}
-              numCavalry={myArmyConfig && myArmyConfig.myArmyConfig.numCavalry}
-              title={"My Army"}
-              titleBg={"success"} />
-            < ArmyAttackModalCard
-              numSwordsman={enemyArmyConfig && enemyArmyConfig.armyConfig.numSwordsman}
-              numArcher={enemyArmyConfig && enemyArmyConfig.armyConfig.numArcher}
-              numCavalry={enemyArmyConfig && enemyArmyConfig.armyConfig.numCavalry}
-              title={"Enemy Army"}
-              titleBg={"danger"} />
-          </div>
-        </div>
-        <div className="d-flex justify-content-evenly">
-          <Button
-            colorScheme="whatsapp"
-            border="solid"
-            textColor="dark"
-            data-bs-dismiss="offcanvas"
-            onClick={handleAttack}>
-            Attack to the Army
-          </Button>
-          <Button
-            colorScheme="red"
-            border="solid"
-            textColor="dark"
-            data-bs-dismiss="offcanvas"
-            onClick={handleAttackLater}>
-            Wait and Attack Later
-          </Button>
+    <div
+      className="offcanvas offcanvas-bottom attack-drawer"
+      data-bs-keyboard="false"
+      data-bs-backdrop="false"
+      id="armyAttackDrawer"
+      aria-labelledby="armyAttackDrawerLabel"
+    >
+      <ArmyAttackModalHeader headerText={"War - Army Information"} />
+      <div className="offcanvas-body small">
+        <div className="row">
+          <ArmyAttackModalCard
+            numSwordsman={myArmyConfig && myArmyConfig.myArmyConfig.numSwordsman}
+            numArcher={myArmyConfig && myArmyConfig.myArmyConfig.numArcher}
+            numCavalry={myArmyConfig && myArmyConfig.myArmyConfig.numCavalry}
+            title={"My Army"}
+            titleBg={"success"} />
+          < ArmyAttackModalCard
+            numSwordsman={enemyArmyConfig && enemyArmyConfig.armyConfig.numSwordsman}
+            numArcher={enemyArmyConfig && enemyArmyConfig.armyConfig.numArcher}
+            numCavalry={enemyArmyConfig && enemyArmyConfig.armyConfig.numCavalry}
+            title={"Enemy Army"}
+            titleBg={"danger"} />
         </div>
       </div>
-    </>
+      <div className="d-flex justify-content-evenly">
+        <Button
+          colorScheme="whatsapp"
+          border="solid"
+          textColor="dark"
+          data-bs-dismiss="offcanvas"
+          onClick={handleAttack}>
+          Attack to the Army
+        </Button>
+        <Button
+          colorScheme="red"
+          border="solid"
+          textColor="dark"
+          data-bs-dismiss="offcanvas"
+          onClick={handleAttackLater}>
+          Wait and Attack Later
+        </Button>
+      </div>
+    </div>
   );
 }
 

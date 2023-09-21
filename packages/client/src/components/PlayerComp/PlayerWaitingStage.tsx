@@ -5,11 +5,13 @@ import { limitOfUser } from '../../utils/constants/constants';
 import { useGameState } from '../../hooks/useGameState';
 import { GameTips } from '../TipsComp/GameTips';
 import { useMUD } from '../../context/MUDContext';
+import { useCastle } from '../../context/CastleContext';
 
 export const PlayerWaitingStage = () => {
     const { systemCalls } = useMUD();
     const numberOfUser = useNumberOfUsers(1);
     const gameState = useGameState(1);
+    const { isCastleSettled } = useCastle();
 
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -24,23 +26,27 @@ export const PlayerWaitingStage = () => {
         })
     }, [])
 
-    return (
-        <div id="overlay" className="waiting-for-players-fade-overlay">
-            <div className="waiting-for-players-message-container">
-                {
-                    (gameState && gameState === 1) &&
-                    <>
-                        <span className="waiting-for-players-info-message">
-                            Waiting for the other players...
-                            <CircularProgress className='ms-4' value={(Number(numberOfUser) / Number(limitOfUser)) * 100} color='green.400' thickness='12px'>
-                                <CircularProgressLabel>({numberOfUser}/{limitOfUser})</CircularProgressLabel>
-                            </CircularProgress>
-                        </span>
-                        <Progress size='sm' colorScheme={"whatsapp"} isIndeterminate />
-                    </>
-                }
-                <GameTips />
+    if (isCastleSettled) {
+        return (
+            <div id="overlay" className="waiting-for-players-fade-overlay">
+                <div className="waiting-for-players-message-container">
+                    {
+                        (gameState && gameState === 1) &&
+                        <>
+                            <span className="waiting-for-players-info-message">
+                                Waiting for the other players...
+                                <CircularProgress className='ms-4' value={(Number(numberOfUser) / Number(limitOfUser)) * 100} color='green.400' thickness='12px'>
+                                    <CircularProgressLabel>({numberOfUser}/{limitOfUser})</CircularProgressLabel>
+                                </CircularProgress>
+                            </span>
+                            <Progress size='sm' colorScheme={"whatsapp"} isIndeterminate />
+                        </>
+                    }
+                    <GameTips />
+                </div>
             </div>
-        </div>
-    )
+        )
+    } else {
+        return null;
+    }
 }

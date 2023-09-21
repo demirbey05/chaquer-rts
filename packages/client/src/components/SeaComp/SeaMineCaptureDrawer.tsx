@@ -73,51 +73,52 @@ export const SeaMineCaptureDrawer = () => {
         }
     };
 
+    if (isLoading) {
+        return <EventProgressBar text={"Fleet is capturing the resources..."} />
+    }
+
     return (
-        <>
-            {isLoading && <EventProgressBar text={"Fleet is capturing the resources..."} />}
-            <div
-                className="offcanvas offcanvas-bottom attack-drawer"
-                data-bs-keyboard="false"
-                data-bs-backdrop="false"
-                id="seaMineCaptureDrawer"
-                aria-labelledby="seaMineCaptureDrawerLabel"
-            >
-                <MineCaptureModalHeader resourceType={getResourceTypeByPosition(resources, targetSeaMinePosition)} />
-                <div className="offcanvas-body small">
-                    <div className="row">
-                        <SeaMineAttackFleetCard title={"My Fleet"} titleBg={"success"}
-                            numSmall={myFleetConfig && myFleetConfig.myFleetConfig.numSmall}
-                            numMedium={myFleetConfig && myFleetConfig.myFleetConfig.numMedium}
-                            numBig={myFleetConfig && myFleetConfig.myFleetConfig.numBig} />
-                        <SeaMineAttackFleetCard title={"Enemy Fleet"} titleBg={"danger"}
-                            numSmall={mineFleet && mineFleet.numSwordsman}
-                            numMedium={mineFleet && mineFleet.numArcher}
-                            numBig={mineFleet && mineFleet.numCavalry} />
-                    </div>
-                </div>
-                <div className="d-flex justify-content-evenly">
-                    <Button
-                        colorScheme="whatsapp"
-                        border="solid"
-                        textColor="dark"
-                        data-bs-dismiss="offcanvas"
-                        onClick={handleCapture}
-                    >
-                        Capture the Sea Mine
-                    </Button>
-                    <Button
-                        colorScheme="red"
-                        border="solid"
-                        textColor="dark"
-                        data-bs-dismiss="offcanvas"
-                        onClick={handleCaptureLater}
-                    >
-                        Wait and Capture Later
-                    </Button>
+        <div
+            className="offcanvas offcanvas-bottom attack-drawer"
+            data-bs-keyboard="false"
+            data-bs-backdrop="false"
+            id="seaMineCaptureDrawer"
+            aria-labelledby="seaMineCaptureDrawerLabel"
+        >
+            <MineCaptureModalHeader resourceType={getResourceTypeByPosition(resources, targetSeaMinePosition)} />
+            <div className="offcanvas-body small">
+                <div className="row">
+                    <SeaMineAttackFleetCard title={"My Fleet"} titleBg={"success"}
+                        numSmall={myFleetConfig && myFleetConfig.myFleetConfig.numSmall}
+                        numMedium={myFleetConfig && myFleetConfig.myFleetConfig.numMedium}
+                        numBig={myFleetConfig && myFleetConfig.myFleetConfig.numBig} />
+                    <SeaMineAttackFleetCard title={"Enemy Fleet"} titleBg={"danger"}
+                        numSmall={mineFleet && mineFleet.numSwordsman}
+                        numMedium={mineFleet && mineFleet.numArcher}
+                        numBig={mineFleet && mineFleet.numCavalry} />
                 </div>
             </div>
-        </>
+            <div className="d-flex justify-content-evenly">
+                <Button
+                    colorScheme="whatsapp"
+                    border="solid"
+                    textColor="dark"
+                    data-bs-dismiss="offcanvas"
+                    onClick={handleCapture}
+                >
+                    Capture the Sea Mine
+                </Button>
+                <Button
+                    colorScheme="red"
+                    border="solid"
+                    textColor="dark"
+                    data-bs-dismiss="offcanvas"
+                    onClick={handleCaptureLater}
+                >
+                    Wait and Capture Later
+                </Button>
+            </div>
+        </div>
     );
 }
 

@@ -119,63 +119,67 @@ export const DockSettleModal = () => {
         };
     }
 
-    return (
-        <>
-            {isLoadingDock && <EventProgressBar text="Dock is being placed..." />}
-            {isLoadingMove && <EventProgressBar text="Soliders are moving to the new position..." />}
-            <div
-                className="modal fade"
-                id="dockSettleModal"
-                data-bs-backdrop="static"
-                aria-labelledby="dockSettleModalLabel"
-                aria-hidden="true"
-            >
-                <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content bg-dark text-white">
-                        <div className="modal-header justify-center">
-                            <h1 className="modal-title text-2xl" id="dockSettleModalLabel">
-                                Dock Settlement
-                            </h1>
-                        </div>
-                        <div className="modal-body font-bold">
-                            <span>{"You are going to deploy a dock ⚓. Price of this dock ⚓ is "}</span>
-                            {myDockPositions && (100 * (myDockPositions.length + 1))} 💰 + {myDockPositions && (1500 * (myDockPositions.length + 1))} 🪓 ,
-                            <span>{" are you sure?"}</span>
-                        </div>
-                        <div className="modal-footer d-flex justify-between">
-                            <Button
-                                colorScheme="linkedin"
-                                border="solid"
-                                textColor="dark"
-                                data-bs-dismiss="modal"
-                                onClick={() => handleMove()}
-                            >
-                                Move Army
-                            </Button>
-                            <Button
-                                colorScheme="red"
-                                border="solid"
-                                textColor="dark"
-                                data-bs-dismiss="modal"
-                                onClick={() => handleBackMap()}
-                            >
-                                Back to Map
-                            </Button>
-                            <Button
-                                colorScheme="whatsapp"
-                                border="solid"
-                                textColor="dark"
-                                data-bs-dismiss="modal"
-                                isDisabled={isDisabled}
-                                onClick={() => handleSettle()}
-                            >
-                                Settle Dock
-                            </Button>
+    if (isLoadingDock) {
+        return <EventProgressBar text="Dock is being placed..." />
+    }
 
-                        </div>
+    if (isLoadingMove) {
+        return <EventProgressBar text="Soliders are moving to the new position..." />
+    }
+
+    return (
+        <div
+            className="modal fade"
+            id="dockSettleModal"
+            data-bs-backdrop="static"
+            aria-labelledby="dockSettleModalLabel"
+            aria-hidden="true"
+        >
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content bg-dark text-white">
+                    <div className="modal-header justify-center">
+                        <h1 className="modal-title text-2xl" id="dockSettleModalLabel">
+                            Dock Settlement
+                        </h1>
+                    </div>
+                    <div className="modal-body font-bold">
+                        <span>{"You are going to deploy a dock ⚓. Price of this dock ⚓ is "}</span>
+                        {myDockPositions && (100 * (myDockPositions.length + 1))} 💰 + {myDockPositions && (1500 * (myDockPositions.length + 1))} 🪓 ,
+                        <span>{" are you sure?"}</span>
+                    </div>
+                    <div className="modal-footer d-flex justify-between">
+                        <Button
+                            colorScheme="linkedin"
+                            border="solid"
+                            textColor="dark"
+                            data-bs-dismiss="modal"
+                            onClick={() => handleMove()}
+                        >
+                            Move Army
+                        </Button>
+                        <Button
+                            colorScheme="red"
+                            border="solid"
+                            textColor="dark"
+                            data-bs-dismiss="modal"
+                            onClick={() => handleBackMap()}
+                        >
+                            Back to Map
+                        </Button>
+                        <Button
+                            colorScheme="whatsapp"
+                            border="solid"
+                            textColor="dark"
+                            data-bs-dismiss="modal"
+                            isDisabled={isDisabled}
+                            onClick={() => handleSettle()}
+                        >
+                            Settle Dock
+                        </Button>
+
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

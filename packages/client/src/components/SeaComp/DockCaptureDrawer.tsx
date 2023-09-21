@@ -71,51 +71,52 @@ export const DockCaptureDrawer = () => {
         }
     };
 
+    if (isLoading) {
+        return <EventProgressBar text="Armies are capturing the dock..." />
+    }
+
     return (
-        <>
-            {isLoading && <EventProgressBar text="Armies are capturing the dock..." />}
-            <div
-                className="offcanvas offcanvas-bottom attack-drawer"
-                data-bs-keyboard="false"
-                data-bs-backdrop="false"
-                id="dockCaptureDrawer"
-                aria-labelledby="dockCaptureDrawerLabel"
-            >
-                <DockAttackDrawerHeader />
-                <div className="offcanvas-body small">
-                    <div className="row">
-                        <DockDrawerArmyCard title={"My Army"} titleBg={"success"}
-                            numSwordsman={myArmyConfig && myArmyConfig.myArmyConfig.numSwordsman}
-                            numArcher={myArmyConfig && myArmyConfig.myArmyConfig.numArcher}
-                            numCavalry={myArmyConfig && myArmyConfig.myArmyConfig.numCavalry} />
-                        <DockDrawerArmyCard title={"Enemy Army"} titleBg={"danger"}
-                            numSwordsman={dockArmy && dockArmy.numSwordsman}
-                            numArcher={dockArmy && dockArmy.numArcher}
-                            numCavalry={dockArmy && dockArmy.numCavalry} />
-                    </div>
-                </div>
-                <div className="d-flex justify-content-evenly">
-                    <Button
-                        colorScheme="whatsapp"
-                        border="solid"
-                        textColor="dark"
-                        data-bs-dismiss="offcanvas"
-                        onClick={handleAttack}
-                    >
-                        Capture the Dock
-                    </Button>
-                    <Button
-                        colorScheme="red"
-                        border="solid"
-                        textColor="dark"
-                        data-bs-dismiss="offcanvas"
-                        onClick={handleAttackLater}
-                    >
-                        Wait and Capture Later
-                    </Button>
+        <div
+            className="offcanvas offcanvas-bottom attack-drawer"
+            data-bs-keyboard="false"
+            data-bs-backdrop="false"
+            id="dockCaptureDrawer"
+            aria-labelledby="dockCaptureDrawerLabel"
+        >
+            <DockAttackDrawerHeader />
+            <div className="offcanvas-body small">
+                <div className="row">
+                    <DockDrawerArmyCard title={"My Army"} titleBg={"success"}
+                        numSwordsman={myArmyConfig && myArmyConfig.myArmyConfig.numSwordsman}
+                        numArcher={myArmyConfig && myArmyConfig.myArmyConfig.numArcher}
+                        numCavalry={myArmyConfig && myArmyConfig.myArmyConfig.numCavalry} />
+                    <DockDrawerArmyCard title={"Enemy Army"} titleBg={"danger"}
+                        numSwordsman={dockArmy && dockArmy.numSwordsman}
+                        numArcher={dockArmy && dockArmy.numArcher}
+                        numCavalry={dockArmy && dockArmy.numCavalry} />
                 </div>
             </div>
-        </>
+            <div className="d-flex justify-content-evenly">
+                <Button
+                    colorScheme="whatsapp"
+                    border="solid"
+                    textColor="dark"
+                    data-bs-dismiss="offcanvas"
+                    onClick={handleAttack}
+                >
+                    Capture the Dock
+                </Button>
+                <Button
+                    colorScheme="red"
+                    border="solid"
+                    textColor="dark"
+                    data-bs-dismiss="offcanvas"
+                    onClick={handleAttackLater}
+                >
+                    Wait and Capture Later
+                </Button>
+            </div>
+        </div>
     );
 }
 

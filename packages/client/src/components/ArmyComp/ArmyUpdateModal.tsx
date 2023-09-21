@@ -119,6 +119,7 @@ export const ArmyUpdateModal = () => {
     }, [swordsmanCount, archerCount, cavalryCount, armyPrices, myCredit, armyConfig]);
 
     const handleBackMap = () => {
+        setArmyPositionUpdate(undefined)
         setArmyConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 })
     }
 
@@ -183,84 +184,84 @@ export const ArmyUpdateModal = () => {
         }
     };
 
+    if (isLoading) {
+        return <EventProgressBar text="New soldiers are joining to the army..." />
+    }
+
     return (
-        <>
-            {isLoading && <EventProgressBar text="New soldiers are joining to the army..." />}
-            <div
-                className="modal fade"
-                id="armyUpdateModal"
-                data-bs-backdrop="static"
-                aria-labelledby="armyUpdateModalLabel"
-                aria-hidden="true"
-            >
-                <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content bg-dark text-white">
-                        <div className="modal-header justify-center">
-                            <h1 className="modal-title text-2xl" id="armyUpdateModalLabel">
-                                Army Update
-                            </h1>
-                        </div>
-                        <div className="modal-body">
-                            <div className="container-fluid">
-                                {
-                                    !enoughCredit &&
-                                    <Alert status='warning' color={"black"}>
-                                        <AlertIcon />
-                                        <AlertTitle>You have no enough credit, sell some resources! Total Charge: {totalCharge} 💰</AlertTitle>
-                                    </Alert>
-                                }
-                                {
-                                    !lessThanPrevArmySize &&
-                                    <Alert status='warning' color={"black"}>
-                                        <AlertIcon />
-                                        <AlertTitle>Soldier number in the army must be bigger or equal to previous soldier number.</AlertTitle>
-                                    </Alert>
-                                }
-                                <div className="row mt-2">
-                                    <ArmySettleInputBody imageSource={swordsmanImg}
-                                        soldierName={"Swordsman"}
-                                        setSoliderCount={setSwordsmanCount}
-                                        imageHeight={"100px"}
-                                        imageWidth={"75px"} />
-                                    <ArmySettleInputBody imageSource={archerImg}
-                                        soldierName={"Archer"}
-                                        setSoliderCount={setArcherCount}
-                                        imageHeight={"100px"}
-                                        imageWidth={"85px"} />
-                                    <ArmySettleInputBody imageSource={cavalryImg}
-                                        soldierName={"Cavalry"}
-                                        setSoliderCount={setCavalryCount}
-                                        imageHeight={"100px"}
-                                        imageWidth={"125px"} />
-                                </div>
+        <div
+            className="modal fade"
+            id="armyUpdateModal"
+            data-bs-backdrop="static"
+            aria-labelledby="armyUpdateModalLabel"
+            aria-hidden="true"
+        >
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content bg-dark text-white">
+                    <div className="modal-header justify-center">
+                        <h1 className="modal-title text-2xl" id="armyUpdateModalLabel">
+                            Army Update
+                        </h1>
+                    </div>
+                    <div className="modal-body">
+                        <div className="container-fluid">
+                            {
+                                !enoughCredit &&
+                                <Alert status='warning' color={"black"}>
+                                    <AlertIcon />
+                                    <AlertTitle>You have no enough credit, sell some resources! Total Charge: {totalCharge} 💰</AlertTitle>
+                                </Alert>
+                            }
+                            {
+                                !lessThanPrevArmySize &&
+                                <Alert status='warning' color={"black"}>
+                                    <AlertIcon />
+                                    <AlertTitle>Soldier number in the army must be bigger or equal to previous soldier number.</AlertTitle>
+                                </Alert>
+                            }
+                            <div className="row mt-2">
+                                <ArmySettleInputBody imageSource={swordsmanImg}
+                                    soldierName={"Swordsman"}
+                                    setSoliderCount={setSwordsmanCount}
+                                    imageHeight={"100px"}
+                                    imageWidth={"75px"} />
+                                <ArmySettleInputBody imageSource={archerImg}
+                                    soldierName={"Archer"}
+                                    setSoliderCount={setArcherCount}
+                                    imageHeight={"100px"}
+                                    imageWidth={"85px"} />
+                                <ArmySettleInputBody imageSource={cavalryImg}
+                                    soldierName={"Cavalry"}
+                                    setSoliderCount={setCavalryCount}
+                                    imageHeight={"100px"}
+                                    imageWidth={"125px"} />
                             </div>
                         </div>
-                        <div className="modal-footer">
-                            <Button
-                                colorScheme="whatsapp"
-                                border="solid"
-                                textColor="dark"
-                                data-bs-dismiss="modal"
-                                isDisabled={isDisabled}
-                                onClick={() => handleClick()}
-                            >
-                                Update Army
-                            </Button>
-                            <Button
-                                colorScheme="red"
-                                border="solid"
-                                textColor="dark"
-                                data-bs-dismiss="modal"
-                                onClick={() => handleBackMap()}
-                            >
-                                Back to Map
-                            </Button>
-                        </div>
+                    </div>
+                    <div className="modal-footer">
+                        <Button
+                            colorScheme="whatsapp"
+                            border="solid"
+                            textColor="dark"
+                            data-bs-dismiss="modal"
+                            isDisabled={isDisabled}
+                            onClick={() => handleClick()}
+                        >
+                            Update Army
+                        </Button>
+                        <Button
+                            colorScheme="red"
+                            border="solid"
+                            textColor="dark"
+                            data-bs-dismiss="modal"
+                            onClick={() => handleBackMap()}
+                        >
+                            Back to Map
+                        </Button>
                     </div>
                 </div>
             </div>
-        </>
-
+        </div>
     );
 }
 

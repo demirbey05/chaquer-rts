@@ -42,9 +42,12 @@ export const CastleSettleModal = () => {
     }
   };
 
-  return (
-    <>
-      {isLoadingJoin && <EventProgressBar text="Joining to the game..." />}
+  if (isLoadingJoin) {
+    return <EventProgressBar text="Joining to the game..." />
+  }
+
+  if (!isCastleSettled) {
+    return (
       <div
         className="modal fade"
         id="castleSettleModal"
@@ -85,6 +88,8 @@ export const CastleSettleModal = () => {
           </div>
         </div>
       </div>
-    </>
-  );
+    );
+  } else {
+    return null;
+  }
 };

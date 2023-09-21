@@ -2,10 +2,7 @@ import "../../styles/globals.css"
 import gameBgImg from '../../images/backgrounds/gameBackground.jpg'
 import ScrollContainer from "react-indiana-drag-scroll";
 import { useState } from "react";
-import { useCastle } from "../../context/CastleContext";
-import { useArmy } from "../../context/ArmyContext";
 import { usePlayer } from "../../context/PlayerContext";
-import { useFleet } from "../../context/FleetContext";
 import { useGameState } from "../../hooks/useGameState";
 import { useCountOfPlayerSeed } from "../../hooks/IdentityHooks/useCountOfPlayerSeed";
 import { useIsMineInitialized } from "../../hooks/ResourceHooks/useIsMineInitialized";
@@ -47,10 +44,7 @@ import { ArmyUpdateWarning } from "../../components/ArmyComp/ArmyUpdateWarning";
 import { FleetInfoDrawer } from "../../components/SeaComp/FleetInfoDrawer";
 
 export const Game = () => {
-  const { isCastleSettled } = useCastle();
-  const { isArmySettleStage, isArmyMoveStage, isArmyUpdateStage } = useArmy();
   const { isPlayerLost, isPlayerWinner } = usePlayer();
-  const { fleetSettleStage, isFleetMoveStage } = useFleet();
   const [zoomLevel, setZoomLevel] = useState(1);
 
   const gameState = useGameState(1);
@@ -70,23 +64,20 @@ export const Game = () => {
 
   return (
     <>
-      {!isCastleSettled && !isPlayerLost && <CastleSettleWarning />}
-      {!isCastleSettled && !isPlayerLost && <CastleSettleModal />}
-      {isCastleSettled && gameState === 1 && !isPlayerLost && <PlayerWaitingStage />}
+      {!isPlayerLost && <CastleSettleWarning />}
+      {!isPlayerLost && <CastleSettleModal />}
+      {gameState === 1 && !isPlayerLost && <PlayerWaitingStage />}
       {gameState === 2 && !isPlayerLost && <PlayerSeedStage />}
       {(playerSeedCount === limitOfUser) && !mineInited && <MineInitStage />}
-      {gameState === 3 && isArmySettleStage && !isPlayerLost && mineInited && <ArmySettleWarning />}
-      {gameState === 3 && isArmyUpdateStage && !isPlayerLost && mineInited && <ArmyUpdateWarning />}
-      {gameState === 3 && isArmyMoveStage && !isPlayerLost && mineInited && <ArmyMoveWarning />}
-      <SettingsDrawer />
-      <PlayerListDrawer />
+      {gameState === 3 && !isPlayerLost && mineInited && <ArmySettleWarning />}
+      {gameState === 3 && !isPlayerLost && mineInited && <ArmyUpdateWarning />}
+      {gameState === 3 && !isPlayerLost && mineInited && <ArmyMoveWarning />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmyProgressBar />}
       {gameState === 3 && !isPlayerLost && mineInited && <MineProgressBar />}
       {gameState === 3 && !isPlayerLost && mineInited && <CreditProgressBar />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmyInfoDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <FleetInfoDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <MarketDrawer />}
-      {gameState === 3 && !isPlayerLost && mineInited && <PriceListDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <ShortCutTips />}
       {gameState === 3 && !isPlayerLost && mineInited && <WarResultDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmySettleModal />}
@@ -97,13 +88,16 @@ export const Game = () => {
       {gameState === 3 && !isPlayerLost && mineInited && <DockSettleModal />}
       {gameState === 3 && !isPlayerLost && mineInited && <DockCaptureDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <FleetSettleModal />}
-      {gameState === 3 && fleetSettleStage && !isPlayerLost && mineInited && <FleetSettleWarning />}
-      {gameState === 3 && isFleetMoveStage && !isPlayerLost && mineInited && <FleetMoveWarning />}
+      {gameState === 3 && !isPlayerLost && mineInited && <FleetSettleWarning />}
+      {gameState === 3 && !isPlayerLost && mineInited && <FleetMoveWarning />}
       {gameState === 3 && !isPlayerLost && mineInited && <FleetAttackDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <SeaMineCaptureDrawer />}
+      {gameState === 3 && mineInited && <PriceListDrawer />}
       {isPlayerLost && <PlayerLostWarning />}
       {gameState === 4 && isPlayerWinner && <PlayerWonAnimation />}
 
+      <SettingsDrawer />
+      <PlayerListDrawer />
       {<ZoomHandler zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />}
       <ScrollContainer className="scrollable-container" style={terrainContainer}>
         <Terrain pixelStyles={terrainStyles} isBorder={false} zoomLevel={zoomLevel} />

@@ -15,11 +15,6 @@ export const MineInitStage = () => {
         const initResource = async () => {
             if (!isMineInited) {
                 const tx = await systemCalls.resourceSystemInit(1);
-                if (tx === null) {
-                    setErrorMessage("An error occurred while initializing the mines.")
-                    setErrorTitle("Mine Initialize Error")
-                    setShowError(true)
-                }
             }
         };
 

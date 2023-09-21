@@ -72,51 +72,52 @@ export const MineCaptureDrawer = () => {
         }
     };
 
+    if (isLoading) {
+        return <EventProgressBar text="Armies are capturing the resources..." />
+    }
+
     return (
-        <>
-            {isLoading && <EventProgressBar text="Armies are capturing the resources..." />}
-            <div
-                className="offcanvas offcanvas-bottom attack-drawer"
-                data-bs-keyboard="false"
-                data-bs-backdrop="false"
-                id="mineCaptureDrawer"
-                aria-labelledby="mineCaptureDrawerLabel"
-            >
-                <MineCaptureModalHeader resourceType={getResourceTypeByPosition(resources, targetMinePosition)} />
-                <div className="offcanvas-body small">
-                    <div className="row">
-                        <MineCaptureDrawerArmyCard title={"My Army"} titleBg={"success"}
-                            numSwordsman={myArmyConfig && myArmyConfig.myArmyConfig.numSwordsman}
-                            numArcher={myArmyConfig && myArmyConfig.myArmyConfig.numArcher}
-                            numCavalry={myArmyConfig && myArmyConfig.myArmyConfig.numCavalry} />
-                        <MineCaptureDrawerArmyCard title={"Enemy Army"} titleBg={"danger"}
-                            numSwordsman={mineArmy && mineArmy.numSwordsman}
-                            numArcher={mineArmy && mineArmy.numArcher}
-                            numCavalry={mineArmy && mineArmy.numCavalry} />
-                    </div>
-                </div>
-                <div className="d-flex justify-content-evenly">
-                    <Button
-                        colorScheme="whatsapp"
-                        border="solid"
-                        textColor="dark"
-                        data-bs-dismiss="offcanvas"
-                        onClick={handleCapture}
-                    >
-                        Capture the Mine
-                    </Button>
-                    <Button
-                        colorScheme="red"
-                        border="solid"
-                        textColor="dark"
-                        data-bs-dismiss="offcanvas"
-                        onClick={handleCaptureLater}
-                    >
-                        Wait and Capture Later
-                    </Button>
+        <div
+            className="offcanvas offcanvas-bottom attack-drawer"
+            data-bs-keyboard="false"
+            data-bs-backdrop="false"
+            id="mineCaptureDrawer"
+            aria-labelledby="mineCaptureDrawerLabel"
+        >
+            <MineCaptureModalHeader resourceType={getResourceTypeByPosition(resources, targetMinePosition)} />
+            <div className="offcanvas-body small">
+                <div className="row">
+                    <MineCaptureDrawerArmyCard title={"My Army"} titleBg={"success"}
+                        numSwordsman={myArmyConfig && myArmyConfig.myArmyConfig.numSwordsman}
+                        numArcher={myArmyConfig && myArmyConfig.myArmyConfig.numArcher}
+                        numCavalry={myArmyConfig && myArmyConfig.myArmyConfig.numCavalry} />
+                    <MineCaptureDrawerArmyCard title={"Enemy Army"} titleBg={"danger"}
+                        numSwordsman={mineArmy && mineArmy.numSwordsman}
+                        numArcher={mineArmy && mineArmy.numArcher}
+                        numCavalry={mineArmy && mineArmy.numCavalry} />
                 </div>
             </div>
-        </>
+            <div className="d-flex justify-content-evenly">
+                <Button
+                    colorScheme="whatsapp"
+                    border="solid"
+                    textColor="dark"
+                    data-bs-dismiss="offcanvas"
+                    onClick={handleCapture}
+                >
+                    Capture the Mine
+                </Button>
+                <Button
+                    colorScheme="red"
+                    border="solid"
+                    textColor="dark"
+                    data-bs-dismiss="offcanvas"
+                    onClick={handleCaptureLater}
+                >
+                    Wait and Capture Later
+                </Button>
+            </div>
+        </div>
     );
 }
 

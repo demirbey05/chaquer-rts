@@ -61,53 +61,54 @@ export const FleetAttackDrawer = () => {
         }
     };
 
+    if (isLoading) {
+        return <EventProgressBar text="Ships are fighting..." />
+    }
+
     return (
-        <>
-            {isLoading && <EventProgressBar text="Ships are fighting..." />}
-            <div
-                className="offcanvas offcanvas-bottom attack-drawer"
-                data-bs-keyboard="false"
-                data-bs-backdrop="false"
-                id="fleetAttackDrawer"
-                aria-labelledby="fleetAttackDrawerLabel"
-            >
-                <FleetAttackModalHeader headerText={"War - Fleet Information"} />
-                <div className="offcanvas-body small">
-                    <div className="row">
-                        <FleetAttackModalCard
-                            numSmall={myFleetConfig && myFleetConfig.myFleetConfig.numSmall}
-                            numMedium={myFleetConfig && myFleetConfig.myFleetConfig.numMedium}
-                            numBig={myFleetConfig && myFleetConfig.myFleetConfig.numBig}
-                            title={"My Fleet"}
-                            titleBg={"success"} />
-                        <FleetAttackModalCard
-                            numSmall={enemyFleetConfig && enemyFleetConfig.fleetConfig.numSmall}
-                            numMedium={enemyFleetConfig && enemyFleetConfig.fleetConfig.numMedium}
-                            numBig={enemyFleetConfig && enemyFleetConfig.fleetConfig.numBig}
-                            title={"Enemy Fleet"}
-                            titleBg={"danger"} />
-                    </div>
-                </div>
-                <div className="d-flex justify-content-evenly">
-                    <Button
-                        colorScheme="whatsapp"
-                        border="solid"
-                        textColor="dark"
-                        data-bs-dismiss="offcanvas"
-                        onClick={handleAttack}>
-                        Attack to the Fleet
-                    </Button>
-                    <Button
-                        colorScheme="red"
-                        border="solid"
-                        textColor="dark"
-                        data-bs-dismiss="offcanvas"
-                        onClick={handleAttackLater}>
-                        Wait and Attack Later
-                    </Button>
+        <div
+            className="offcanvas offcanvas-bottom attack-drawer"
+            data-bs-keyboard="false"
+            data-bs-backdrop="false"
+            id="fleetAttackDrawer"
+            aria-labelledby="fleetAttackDrawerLabel"
+        >
+            <FleetAttackModalHeader headerText={"War - Fleet Information"} />
+            <div className="offcanvas-body small">
+                <div className="row">
+                    <FleetAttackModalCard
+                        numSmall={myFleetConfig && myFleetConfig.myFleetConfig.numSmall}
+                        numMedium={myFleetConfig && myFleetConfig.myFleetConfig.numMedium}
+                        numBig={myFleetConfig && myFleetConfig.myFleetConfig.numBig}
+                        title={"My Fleet"}
+                        titleBg={"success"} />
+                    <FleetAttackModalCard
+                        numSmall={enemyFleetConfig && enemyFleetConfig.fleetConfig.numSmall}
+                        numMedium={enemyFleetConfig && enemyFleetConfig.fleetConfig.numMedium}
+                        numBig={enemyFleetConfig && enemyFleetConfig.fleetConfig.numBig}
+                        title={"Enemy Fleet"}
+                        titleBg={"danger"} />
                 </div>
             </div>
-        </>
+            <div className="d-flex justify-content-evenly">
+                <Button
+                    colorScheme="whatsapp"
+                    border="solid"
+                    textColor="dark"
+                    data-bs-dismiss="offcanvas"
+                    onClick={handleAttack}>
+                    Attack to the Fleet
+                </Button>
+                <Button
+                    colorScheme="red"
+                    border="solid"
+                    textColor="dark"
+                    data-bs-dismiss="offcanvas"
+                    onClick={handleAttackLater}>
+                    Wait and Attack Later
+                </Button>
+            </div>
+        </div>
     );
 }
 

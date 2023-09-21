@@ -16,7 +16,7 @@ export const ShortCutTips = () => {
             <PopoverTrigger>
                 <button className="tips-button">i</button>
             </PopoverTrigger>
-            <PopoverContent>
+            <PopoverContent backgroundColor={"blackAlpha.700"} color={"white"}>
                 <PopoverArrow />
                 <PopoverCloseButton />
                 <PopoverHeader>Shortcut Tips</PopoverHeader>
