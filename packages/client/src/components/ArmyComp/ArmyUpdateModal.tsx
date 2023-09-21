@@ -126,7 +126,6 @@ export const ArmyUpdateModal = () => {
     const handleClick = async () => {
         setIsArmyUpdateStage(false);
         setIsArmySettleStage(false)
-        setIsLoading(true);
 
         var targetDiv = document.getElementById(`${armyPositionUpdate.y},${armyPositionUpdate.x}`);
         targetDiv?.classList.add("animate-border-settle");
@@ -145,7 +144,7 @@ export const ArmyUpdateModal = () => {
             setErrorMessage("An error occurred while trying to update an army.")
             setErrorTitle("Army Update Error")
             setShowError(true)
-            setIsLoading(false)
+            return
         }
 
         if ((document.getElementById('SwordsmanUpdate') as HTMLInputElement).value === "") {
@@ -161,6 +160,7 @@ export const ArmyUpdateModal = () => {
         }
 
         try {
+            setIsLoading(true);
             const tx = await systemCalls.updateArmy(
                 armyID.toString(),
                 Number(swordsmanCount),
@@ -171,6 +171,7 @@ export const ArmyUpdateModal = () => {
             );
 
             if (tx) {
+                setArmyConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 })
                 setArmyPositionUpdate(undefined)
                 setCastlePosition(undefined)
             }
