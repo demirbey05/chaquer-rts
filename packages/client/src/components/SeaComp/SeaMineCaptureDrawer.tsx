@@ -55,21 +55,22 @@ export const SeaMineCaptureDrawer = () => {
             setErrorMessage("An error occurred while trying to capture a sea mine.")
             setErrorTitle("Sea Mine Capture Error")
             setShowError(true)
+            return
         }
 
-        setIsLoading(true)
-        const tx = await systemCalls.captureMine(attackFromFleetId[0], attackToMineId[0], 1)
-
-        if (tx == null) {
+        try {
+            setIsLoading(true)
+            const tx = await systemCalls.captureMine(attackFromFleetId[0], attackToMineId[0], 1)
+        } catch (error) {
             setErrorMessage("An error occurred while trying to capture a sea mine.")
             setErrorTitle("Sea Mine Capture Error")
             setShowError(true)
+        } finally {
+            setSeaMineStage(false);
+            setMyFleetConfig(undefined);
+            setEnemyFleetConfig(undefined);
+            setIsLoading(false)
         }
-
-        setSeaMineStage(false);
-        setMyFleetConfig(undefined);
-        setEnemyFleetConfig(undefined);
-        setIsLoading(false)
     };
 
     return (

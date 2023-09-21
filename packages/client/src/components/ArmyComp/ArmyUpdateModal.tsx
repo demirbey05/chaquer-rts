@@ -172,10 +172,6 @@ export const ArmyUpdateModal = () => {
             if (tx) {
                 setArmyPositionUpdate(undefined)
                 setCastlePosition(undefined)
-            } else {
-                setErrorMessage("You have no enough credit!");
-                setErrorTitle("Army Update Error");
-                setShowError(true);
             }
         } catch (error) {
             setErrorMessage("An error occurred during army update.");

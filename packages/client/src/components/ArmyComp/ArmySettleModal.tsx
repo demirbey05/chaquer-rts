@@ -135,10 +135,6 @@ export const ArmySettleModal = () => {
         (document.getElementById('Swordsman') as HTMLInputElement).value = '';
         (document.getElementById('Cavalry') as HTMLInputElement).value = '';
         (document.getElementById('Archer') as HTMLInputElement).value = '';
-      } else {
-        setErrorMessage("You have no enough credit!");
-        setErrorTitle("Army Settlement Error");
-        setShowError(true);
       }
     } catch (error) {
       setErrorMessage("An error occurred during army settlement.");

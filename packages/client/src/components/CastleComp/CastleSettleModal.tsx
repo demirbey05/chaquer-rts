@@ -34,10 +34,6 @@ export const CastleSettleModal = () => {
 
       if (tx) {
         setCastle({ x: tempCastle.x, y: tempCastle.y });
-      } else {
-        setErrorMessage("An error occurred during castle settlement.");
-        setErrorTitle("Castle Settlement Error");
-        setShowError(true);
       }
     } catch (error) {
       setErrorMessage("An error occurred during castle settlement.");

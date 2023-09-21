@@ -53,21 +53,22 @@ export const DockCaptureDrawer = () => {
             setErrorMessage("An error occurred while trying to capture the dock.")
             setErrorTitle("Dock Capture Error")
             setShowError(true)
+            return
         }
 
-        setIsLoading(true)
-        const tx = await systemCalls.captureDock(attackFromArmyId[0], attackToDockID[0])
-
-        if (tx == null) {
+        try {
+            setIsLoading(true)
+            const tx = await systemCalls.captureDock(attackFromArmyId[0], attackToDockID[0])
+        } catch (error) {
             setErrorMessage("An error occurred while trying to capture the dock.")
             setErrorTitle("Dock Capture Error")
             setShowError(true)
+        } finally {
+            setDockCaptureStage(false);
+            setMyArmyConfig(undefined);
+            setEnemyArmyConfig(undefined);
+            setIsLoading(false)
         }
-
-        setDockCaptureStage(false);
-        setMyArmyConfig(undefined);
-        setEnemyArmyConfig(undefined);
-        setIsLoading(false)
     };
 
     return (

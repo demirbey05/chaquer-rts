@@ -40,26 +40,28 @@ export const ArmyAttackDrawer = () => {
       setErrorMessage("An error occurred while trying to attack to army.")
       setErrorTitle("Army Attack Error")
       setShowError(true)
-      setIsLoading(false)
+      return
     }
 
-    setIsLoading(true)
-    const tx = await systemCalls.attackToArmy(attackFromArmyId[0] as string, attackToArmyId[0] as string, 1)
+    try {
+      setIsLoading(true);
+      await systemCalls.attackToArmy(attackFromArmyId[0] as string, attackToArmyId[0] as string, 1);
+    } catch (error) {
+      setErrorMessage("An error occurred while attacking to army.");
+      setErrorTitle("Army Attack Error");
+      setShowError(true);
+    } finally {
+      const element = document.getElementById(`${attackToArmyPositionToArmy.y},${attackToArmyPositionToArmy.x}`);
+      if (element) {
+        element.removeAttribute("data-bs-toggle");
+        element.removeAttribute("data-bs-target");
+      }
 
-    if (tx == null) {
-      setErrorMessage("An error occurred while attacking to army.")
-      setErrorTitle("Army Attack Error")
-      setShowError(true)
-      setIsLoading(false)
+      setIsAttackStage(false);
+      setMyArmyConfig(undefined);
+      setEnemyArmyConfig(undefined);
+      setIsLoading(false);
     }
-
-    document.getElementById(`${attackToArmyPositionToArmy.y},${attackToArmyPositionToArmy.x}`)!.setAttribute("data-bs-toggle", "");
-    document.getElementById(`${attackToArmyPositionToArmy.y},${attackToArmyPositionToArmy.x}`)!.setAttribute("data-bs-target", "");
-
-    setIsAttackStage(false);
-    setMyArmyConfig(undefined);
-    setEnemyArmyConfig(undefined);
-    setIsLoading(false)
   };
 
   return (

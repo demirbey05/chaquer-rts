@@ -54,23 +54,22 @@ export const MineCaptureDrawer = () => {
         if (attackFromArmyId.length != 1 || attackToMineId.length != 1) {
             setErrorMessage("An error occurred while trying to capture a mine.")
             setErrorTitle("Mine Capture Error")
-            setShowError(true)
-            setIsLoading(false)
+            return
         }
 
-        setIsLoading(true)
-        const tx = await systemCalls.captureMine(attackFromArmyId[0], attackToMineId[0], 0)
-
-        if (tx == null) {
+        try {
+            setIsLoading(true)
+            await systemCalls.captureMine(attackFromArmyId[0], attackToMineId[0], 0)
+        } catch (error) {
             setErrorMessage("An error occurred while trying to capture a mine.")
             setErrorTitle("Mine Capture Error")
             setShowError(true)
+        } finally {
+            setIsMineStage(false);
+            setMyArmyConfig(undefined);
+            setEnemyArmyConfig(undefined);
             setIsLoading(false)
         }
-        setIsMineStage(false);
-        setMyArmyConfig(undefined);
-        setEnemyArmyConfig(undefined);
-        setIsLoading(false)
     };
 
     return (

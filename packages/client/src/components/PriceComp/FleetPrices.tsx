@@ -32,7 +32,7 @@ interface PriceListItemPropTypes {
 }
 
 const PriceListItem = (props: PriceListItemPropTypes) => {
-    return <p className="border-bottom border-black d-flex justify-between">
+    return <p className="d-flex justify-between">
         <span className="ms-2">
             {props.name}
         </span>

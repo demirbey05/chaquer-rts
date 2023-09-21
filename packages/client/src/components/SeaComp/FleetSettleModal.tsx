@@ -124,36 +124,38 @@ export const FleetSettleModal = () => {
         }
 
         setFleetSettleStage(false);
-        setIsLoading(true)
         var targetDiv = document.getElementById(`${fleetPosition.y},${fleetPosition.x}`);
         targetDiv?.classList.add("animate-border-settle");
 
-        const tx = await systemCalls.settleFleet(
-            fleetPosition.x,
-            fleetPosition.y,
-            dockID.current,
-            parseInt(smallShipCount),
-            parseInt(mediumShipCount),
-            parseInt(largeShipCount),
-            1
-        );
-        if (tx) {
-            setSmallShipCount('');
-            setMediumShipCount('');
-            setLargeShipCount('');
+        try {
+            setIsLoading(true)
 
-            (document.getElementById("Baron's Dagger") as HTMLInputElement).value = '';
-            (document.getElementById("Knight's Galley") as HTMLInputElement).value = '';
-            (document.getElementById("King's Leviathan") as HTMLInputElement).value = '';
-        }
-        else {
+            const tx = await systemCalls.settleFleet(
+                fleetPosition.x,
+                fleetPosition.y,
+                dockID.current,
+                parseInt(smallShipCount),
+                parseInt(mediumShipCount),
+                parseInt(largeShipCount),
+                1
+            );
+            if (tx) {
+                setSmallShipCount('');
+                setMediumShipCount('');
+                setLargeShipCount('');
+
+                (document.getElementById("Baron's Dagger") as HTMLInputElement).value = '';
+                (document.getElementById("Knight's Galley") as HTMLInputElement).value = '';
+                (document.getElementById("King's Leviathan") as HTMLInputElement).value = '';
+            }
+        } catch (error) {
             setErrorMessage("You have no enough credit!")
             setErrorTitle("Fleet Settlement Error")
             setShowError(true)
+        } finally {
+            setIsLoading(false)
+            targetDiv?.classList.remove("animate-border-settle");
         }
-
-        setIsLoading(false)
-        targetDiv?.classList.remove("animate-border-settle");
     };
 
     return (

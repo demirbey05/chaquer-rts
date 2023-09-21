@@ -40,24 +40,25 @@ export const FleetAttackDrawer = () => {
             setErrorMessage("An error occurred while trying to attack to fleet.")
             setErrorTitle("Fleet Attack Error")
             setShowError(true)
+            return
         }
 
-        setIsLoading(true)
-        const tx = await systemCalls.attackFleet(attackFromArmyId[0] as string, attackToArmyId[0] as string, 1)
+        try {
+            setIsLoading(true)
+            await systemCalls.attackFleet(attackFromArmyId[0] as string, attackToArmyId[0] as string, 1)
 
-        if (tx == null) {
+            document.getElementById(`${targetFleetPosition.y},${targetFleetPosition.x}`)!.setAttribute("data-bs-toggle", "");
+            document.getElementById(`${targetFleetPosition.y},${targetFleetPosition.x}`)!.setAttribute("data-bs-target", "");
+        } catch (error) {
             setErrorMessage("An error occurred while trying to attack to fleet.")
             setErrorTitle("Fleet Attack Error")
             setShowError(true)
+        } finally {
+            setIsFleetAttackStage(false);
+            setMyFleetConfig(undefined);
+            setEnemyFleetConfig(undefined);
+            setIsLoading(false)
         }
-
-        document.getElementById(`${targetFleetPosition.y},${targetFleetPosition.x}`)!.setAttribute("data-bs-toggle", "");
-        document.getElementById(`${targetFleetPosition.y},${targetFleetPosition.x}`)!.setAttribute("data-bs-target", "");
-
-        setIsFleetAttackStage(false);
-        setMyFleetConfig(undefined);
-        setEnemyFleetConfig(undefined);
-        setIsLoading(false)
     };
 
     return (

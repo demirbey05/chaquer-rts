@@ -48,13 +48,7 @@ export const ArmyMoveEvent = async (
                 1
             );
 
-            if (tx == null) {
-                setErrorMessage("You need 30 food + 30 gold to move your army.");
-                setErrorTitle("Army Move Error");
-                setShowError(true);
-                setIsLoading(false)
-            }
-            else {
+            if (tx) {
                 document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
                 document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
             }
