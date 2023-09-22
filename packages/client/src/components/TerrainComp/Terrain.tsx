@@ -272,13 +272,13 @@ export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Arr
     }
   };
 
-  CastleEffects(myCastlePosition, setIsCastleSettled, castlePositions, isCastleSettled);
+  CastleEffects(fleetSettleStage, myCastlePosition, setIsCastleSettled, castlePositions, isCastleSettled);
   ResourceEffects(values, fromFleetPosition, seaMineStage, myResourcePositions, resources, isMineStage, fromArmyPosition);
-  ArmyEffects(isArmyUpdateStage, values, isBorder, myCastlePosition, dockPositions, castlePositions, isArmySettleStage, armyPositions, myArmyPosition, setNumberOfArmy, myArmyPosition.length, resources);
+  ArmyEffects(myDockPositions, isArmyUpdateStage, values, isBorder, myCastlePosition, dockPositions, castlePositions, isArmySettleStage, armyPositions, myArmyPosition, setNumberOfArmy, myArmyPosition.length, resources);
   AttackEffects(myResourcePositions, myFleetPositions, fleetPositions, fromFleetPosition, isFleetAttackStage, myCastlePosition, castlePositions, armyPositions, myArmyPosition, isAttackStage, fromArmyPosition);
   HoverEffects(myFleetPositions, myDockPositions, myResourcePositions, myArmyPosition, dockPositions, fromFleetPosition, isFleetMoveStage, armyPositions, resources, numberOfArmy, isArmySettleStage, isBorder, castlePositions, myCastlePosition, values, fromArmyPosition, isArmyMoveStage);
-  DockEffects(castlePositions, resources, myArmyPosition, armyPositions, dockPositions, myDockPositions, values, dockSettleStage, dockCaptureStage, rows, columns, fromArmyPosition);
-  FleetEffects(resources, myFleetPositions, fleetPositions, fleetSettleStage, myDockPositions, isBorder, values);
+  DockEffects(fleetSettleStage, isArmySettleStage, castlePositions, resources, myArmyPosition, armyPositions, dockPositions, myDockPositions, values, dockSettleStage, dockCaptureStage, rows, columns, fromArmyPosition);
+  FleetEffects(isArmySettleStage, resources, myFleetPositions, fleetPositions, fleetSettleStage, myDockPositions, isBorder, values);
 
   return (
     <>

@@ -143,10 +143,6 @@ export const FleetSettleModal = () => {
                 setSmallShipCount('');
                 setMediumShipCount('');
                 setLargeShipCount('');
-
-                (document.getElementById("Baron's Dagger") as HTMLInputElement).value = '';
-                (document.getElementById("Knight's Galley") as HTMLInputElement).value = '';
-                (document.getElementById("King's Leviathan") as HTMLInputElement).value = '';
             }
         } catch (error) {
             setErrorMessage("You have no enough credit!")

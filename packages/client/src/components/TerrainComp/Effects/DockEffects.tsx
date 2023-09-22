@@ -8,7 +8,7 @@ import { colorPath } from "../../../utils/constants/constants";
 import { isArmyPosition } from "../../../utils/helperFunctions/ArmyFunctions/isArmyPosition";
 import { getNumberOfSoldierInArmy } from "../../../utils/helperFunctions/ArmyFunctions/getNumberOfSoliderInArmy";
 
-export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosition: any[], armyPositions: any[], dockPositions: any[], myDockPositions: any[] | undefined, values: number[][], dockSettleStage: boolean, dockCaptureStage: boolean, rows: number[], columns: number[], fromArmyPosition: any) => {
+export const DockEffects = (fleetSettleStage: boolean, isArmySettleStage: boolean, castlePositions: any[], resources: any[], myArmyPosition: any[], armyPositions: any[], dockPositions: any[], myDockPositions: any[] | undefined, values: number[][], dockSettleStage: boolean, dockCaptureStage: boolean, rows: number[], columns: number[], fromArmyPosition: any) => {
     /* Deploy dock emojis */
     useEffect(() => {
         if (dockPositions && dockPositions.length > 0) {
@@ -74,7 +74,7 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
                 rows.forEach((row) => {
                     columns.forEach((column) => {
                         const element = document.getElementById(`${column},${row}`);
-                        if (element && isPositionNextToSea(row, column, values)) {
+                        if (element && isPositionNextToSea(row, column, values) && !isArmySettleStage) {
                             element.setAttribute("data-bs-toggle", "");
                             element.setAttribute("data-bs-target", "");
                         }
@@ -82,7 +82,7 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
                 });
             }
         }
-    }, [values, rows, columns, armyPositions, resources, castlePositions, dockSettleStage, myArmyPosition, fromArmyPosition]);
+    }, [values, rows, columns, armyPositions, resources, castlePositions, dockSettleStage, myArmyPosition, fromArmyPosition, isArmySettleStage]);
 
     // Handle Dock Capture OffCanvas
     useEffect(() => {
@@ -108,4 +108,42 @@ export const DockEffects = (castlePositions: any[], resources: any[], myArmyPosi
             }
         }
     }, [dockPositions, myDockPositions, dockCaptureStage, fromArmyPosition])
+
+    // Make docks unclickable during castle settlement
+    useEffect(() => {
+        if (dockPositions && isArmySettleStage) {
+            dockPositions.map(
+                (data) => {
+                    document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.pointerEvents = "none";
+                }
+            );
+        }
+
+        if (dockPositions && !isArmySettleStage) {
+            dockPositions.map(
+                (data) => {
+                    document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.pointerEvents = "auto";
+                }
+            );
+        }
+    }, [dockPositions, isArmySettleStage])
+
+    // Make armies unclickable during dock settlement
+    useEffect(() => {
+        if (armyPositions && fleetSettleStage) {
+            armyPositions.map(
+                (data) => {
+                    document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.style.pointerEvents = "none";
+                }
+            );
+        }
+
+        if (armyPositions && !fleetSettleStage) {
+            armyPositions.map(
+                (data) => {
+                    document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.style.pointerEvents = "auto";
+                }
+            );
+        }
+    }, [armyPositions, fleetSettleStage])
 }

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { colorPath } from "../../../utils/constants/constants";
 
-export const CastleEffects = (myCastlePosition: any[], setIsCastleSettled: (value: boolean) => void, castlePositions: any[], isCastleSettled: boolean | undefined) => {
+export const CastleEffects = (fleetSettleStage: boolean, myCastlePosition: any[], setIsCastleSettled: (value: boolean) => void, castlePositions: any[], isCastleSettled: boolean | undefined) => {
     // Check if castle settled before and deploy castle emojis
     useEffect(() => {
         //Checks that if the user has already settled the castle
@@ -38,7 +38,7 @@ export const CastleEffects = (myCastlePosition: any[], setIsCastleSettled: (valu
         }
     }, [castlePositions])
 
-    // Make castles unclickable during castle settlement
+    // Make docks unclickable during army settlement
     useEffect(() => {
         if (castlePositions && !isCastleSettled) {
             castlePositions.map(
@@ -56,4 +56,23 @@ export const CastleEffects = (myCastlePosition: any[], setIsCastleSettled: (valu
             );
         }
     }, [castlePositions, isCastleSettled])
+
+    // Make castles unclickable during fleet settlement
+    useEffect(() => {
+        if (castlePositions && fleetSettleStage) {
+            castlePositions.map(
+                (data) => {
+                    document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.style.pointerEvents = "none";
+                }
+            );
+        }
+
+        if (castlePositions && !fleetSettleStage) {
+            castlePositions.map(
+                (data) => {
+                    document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.style.pointerEvents = "auto";
+                }
+            );
+        }
+    }, [castlePositions, fleetSettleStage])
 }

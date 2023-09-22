@@ -19,35 +19,35 @@ import { getMyArmyConfigByPosition } from "../../utils/helperFunctions/ArmyFunct
 export const ArmyUpdateModal = () => {
     const { systemCalls, components } = useMUD();
     const { userWallet } = usePlayer();
-    const { setIsArmyUpdateStage, armyPositionUpdate, setIsArmySettleStage, setArmyPositionUpdate } = useArmy();
+    const { setIsArmyUpdateStage, armyPositionUpdate, setIsArmySettleStage, setArmyPositionUpdate, isArmyUpdateStage } = useArmy();
     const { setErrorMessage, setErrorTitle, setShowError } = useError();
-    const { castlePosition, setCastlePosition } = useCastle();
+    const { setCastlePosition, castlePosition } = useCastle();
 
     const [swordsmanCount, setSwordsmanCount] = useState<string>("");
     const [archerCount, setArcherCount] = useState<string>("");
     const [cavalryCount, setCavalryCount] = useState<string>("");
 
     const [isDisabled, setIsDisabled] = useState(true);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
     const [enoughCredit, setEnoughCredit] = useState(true);
     const [lessThanPrevArmySize, setLessThenPrevArmySize] = useState<boolean>(true)
     const [totalCharge, setTotalCharge] = useState<number>(0);
 
     const [armyConfig, setArmyConfig] = useState<any>({ numSwordsman: 0, numArcher: 0, numCavalry: 0 });
 
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-
     const armyPrices = useArmyPrices(1);
     const myCredit = useCredit(1, userWallet);
     const myArmyPositions = useMyArmy(userWallet);
 
     useEffect(() => {
-        if (armyPositionUpdate && myArmyPositions) {
+        if (armyPositionUpdate && myArmyPositions && isArmyUpdateStage) {
             setArmyConfig(getMyArmyConfigByPosition({ x: armyPositionUpdate.x, y: armyPositionUpdate.y }, myArmyPositions).myArmyConfig)
         }
-    }, [armyPositionUpdate, myArmyPositions])
+    }, [armyPositionUpdate, myArmyPositions, isArmyUpdateStage])
 
     useEffect(() => {
-        if (armyConfig) {
+        if (armyConfig && isArmyUpdateStage) {
             setSwordsmanCount(`${armyConfig.numSwordsman}`);
             setArcherCount(`${armyConfig.numArcher}`);
             setCavalryCount(`${armyConfig.numCavalry}`);
@@ -55,7 +55,7 @@ export const ArmyUpdateModal = () => {
             (document.getElementById('CavalryUpdate') as HTMLInputElement).value = `${armyConfig.numCavalry}`;
             (document.getElementById('ArcherUpdate') as HTMLInputElement).value = `${armyConfig.numArcher}`;
         }
-    }, [armyConfig])
+    }, [armyConfig, isArmyUpdateStage])
 
     useEffect(() => {
         if (Number.isNaN(parseInt(swordsmanCount))) {
@@ -125,7 +125,9 @@ export const ArmyUpdateModal = () => {
 
     const handleClick = async () => {
         setIsArmyUpdateStage(false);
-        setIsArmySettleStage(false)
+        setIsArmySettleStage(false);
+
+        document.getElementById(`${castlePosition.y},${castlePosition.x}`)!.style.pointerEvents = "none";
 
         var targetDiv = document.getElementById(`${armyPositionUpdate.y},${armyPositionUpdate.x}`);
         targetDiv?.classList.add("animate-border-settle");
@@ -172,6 +174,7 @@ export const ArmyUpdateModal = () => {
 
             if (tx) {
                 setArmyConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 })
+                document.getElementById(`${castlePosition.y},${castlePosition.x}`)!.style.pointerEvents = "auto";
                 setArmyPositionUpdate(undefined)
                 setCastlePosition(undefined)
             }

@@ -6,7 +6,7 @@ import { colorPath } from "../../../utils/constants/constants";
 import { isMyFleet } from "../../../utils/helperFunctions/SeaFunctions/isMyFleet";
 import { isResourcePosition } from "../../../utils/helperFunctions/ResourceFuntions/isResourcePosition";
 
-export const FleetEffects = (resources: any[], myFleetPositions: any[] | undefined, fleetPositions: any[], fleetSettleStage: boolean, myDockPositions: any[] | undefined, isBorder: boolean, values: number[][]) => {
+export const FleetEffects = (isArmySettleStage: boolean, resources: any[], myFleetPositions: any[] | undefined, fleetPositions: any[], fleetSettleStage: boolean, myDockPositions: any[] | undefined, isBorder: boolean, values: number[][]) => {
 
     // Orange hover effect for fleet deployment
     useEffect(() => {

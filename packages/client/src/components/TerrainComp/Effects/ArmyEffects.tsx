@@ -6,11 +6,10 @@ import { canCastleBeSettle } from "../../../utils/helperFunctions/CastleFunction
 import { isResourcePosition } from "../../../utils/helperFunctions/ResourceFuntions/isResourcePosition";
 import { isMyCastle } from "../../../utils/helperFunctions/CastleFunctions/isMyCastle";
 import { armySettlePositions } from "../../../utils/helperFunctions/ArmyFunctions/armySettlePositions";
-import { isDockPosition } from "../../../utils/helperFunctions/SeaFunctions/isDockPosition";
-import { isEnemyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isEnemyArmy";
 import { isMyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isMyArmy";
+import { isMyDock } from "../../../utils/helperFunctions/SeaFunctions/isMyDock";
 
-export const ArmyEffects = (isArmyUpdateStage: boolean, values: number[][], isBorder: boolean, myCastlePosition: any[], dockPositions: any[], castlePositions: any[], isArmySettleStage: boolean | undefined, armyPositions: any[], myArmyPosition: any[], setNumberOfArmy: any, myArmyNumber: any, resources: any[]) => {
+export const ArmyEffects = (myDockPositions: any[], isArmyUpdateStage: boolean, values: number[][], isBorder: boolean, myCastlePosition: any[], dockPositions: any[], castlePositions: any[], isArmySettleStage: boolean | undefined, armyPositions: any[], myArmyPosition: any[], setNumberOfArmy: any, myArmyNumber: any, resources: any[]) => {
     //Makes castle, army and resource positions unClickable to not cause bug during army settlement
     useEffect(() => {
         if (armyPositions && isArmySettleStage) {
@@ -84,7 +83,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean, values: number[][], isBo
                                 !isResourcePosition(data.x, data.y, resources) &&
                                 !isEnemyCastle({ x: data.x, y: data.y }, myCastlePosition, castlePositions) &&
                                 !isMyCastle(myCastlePosition, data.x, data.y) &&
-                                !isDockPosition(data.x, data.y, dockPositions) &&
+                                !isMyDock(data.x, data.y, myDockPositions) &&
                                 armySettlePositions(data.x, data.y, myCastlePosition) &&
                                 isMyArmy({ x: data.x, y: data.y }, myArmyPosition)
                             ) {

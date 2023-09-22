@@ -52,9 +52,9 @@ export const ArmySettleModal = () => {
       return;
     }
 
-    const parsedSwordsmanCount = parseInt(swordsmanCount);
-    const parsedArcherCount = parseInt(archerCount);
-    const parsedCavalryCount = parseInt(cavalryCount);
+    const parsedSwordsmanCount = Number(swordsmanCount);
+    const parsedArcherCount = Number(archerCount);
+    const parsedCavalryCount = Number(cavalryCount);
 
     const totalTroops = parsedSwordsmanCount + parsedArcherCount + parsedCavalryCount;
 
@@ -72,7 +72,7 @@ export const ArmySettleModal = () => {
         setEnoughCredit(false);
         setTotalCharge(totalCharge);
       } else {
-        if (totalCharge > parseInt(getNumberFromBigInt(myCredit))) {
+        if (totalCharge > Number(getNumberFromBigInt(myCredit))) {
           setIsDisabled(true);
           setEnoughCredit(false);
           setTotalCharge(totalCharge);
@@ -134,7 +134,6 @@ export const ArmySettleModal = () => {
         setCavalryCount('');
       }
     } catch (error) {
-      console.log(error)
       setErrorMessage("An error occurred during army settlement.");
       setErrorTitle("Army Settlement Error");
       setShowError(true);
