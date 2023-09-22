@@ -4,7 +4,14 @@ import { canCastleBeSettle } from "../../../utils/helperFunctions/CastleFunction
 import { isManhattanPosition } from "../../../utils/helperFunctions/CustomFunctions/isManhattanPosition";
 import { isMyResource } from "../../../utils/helperFunctions/ResourceFuntions/isMyResource";
 
-export const ResourceEffects = (values: number[][], fromFleetPosition: any, seaMineStage: boolean, myResourcePositions: any[], resources: any[], isMineStage: boolean | undefined, fromArmyPosition: { x: any, y: any } | undefined) => {
+export const ResourceEffects = (values: number[][],
+    fromFleetPosition: any,
+    seaMineStage: boolean,
+    myResourcePositions: any[],
+    resources: any[],
+    isMineStage: boolean | undefined,
+    fromArmyPosition: { x: any, y: any } | undefined
+) => {
     // Deploy resource emojis
     useEffect(() => {
         if (myResourcePositions) {

@@ -6,7 +6,6 @@ import { isArmyPosition } from '../../../utils/helperFunctions/ArmyFunctions/isA
 import { armySettlePositions } from '../../../utils/helperFunctions/ArmyFunctions/armySettlePositions';
 import { canFleetBeSettled } from '../../../utils/helperFunctions/SeaFunctions/canFleetBeSettled';
 import { isMyCastle } from '../../../utils/helperFunctions/CastleFunctions/isMyCastle';
-import { isDockPosition } from '../../../utils/helperFunctions/SeaFunctions/isDockPosition';
 import { isEnemyCastle } from '../../../utils/helperFunctions/CastleFunctions/isEnemyCastle';
 import { isMyArmy } from '../../../utils/helperFunctions/ArmyFunctions/isMyArmy';
 import { isMyResource } from '../../../utils/helperFunctions/ResourceFuntions/isMyResource';
@@ -30,7 +29,10 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
     myCastlePosition: any[],
     values: number[][],
     fromArmyPosition: { x: any, y: any } | undefined,
-    isArmyMoveStage: boolean | undefined) => {
+    isArmyMoveStage: boolean | undefined,
+    fleetSettleStage: boolean,
+    fleetPositions: any[]
+) => {
 
     //Blue hover effect when user moves an army
     useEffect(() => {
@@ -57,7 +59,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
         }
 
         return () => {
-            if (fromArmyPosition && myCastlePosition) {
+            if (fromArmyPosition) {
                 getManhattanPositions({
                     x: parseInt(fromArmyPosition.x),
                     y: parseInt(fromArmyPosition.y),
@@ -66,17 +68,19 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                         if (canCastleBeSettle(values[data.x][data.y])) {
                             document.getElementById(`${data.y},${data.x}`)?.classList.remove("blueTileEffect");
                         }
-
-                        if (isMyCastle(myCastlePosition, data.x, data.y)) {
-                            document.getElementById(`${data.y},${data.x}`)!.style.pointerEvents = "auto"
-                        }
                     }
                 });
+            }
+
+            if (!fromArmyPosition && myCastlePosition && myCastlePosition.length > 0) {
+                myCastlePosition.map((data) => {
+                    document.getElementById(`${data.myCastlePosition.y},${data.myCastlePosition.x}`)!.style.pointerEvents = "auto"
+                })
             }
         }
     }, [fromArmyPosition, isArmyMoveStage, myCastlePosition, myArmyPosition, myResourcePositions, myDockPositions, isBorder, values]);
 
-    //Orange hover effect and data-bs assign when user deploys an army
+    //Orange hover effect and Army Settle data-bs
     useEffect(() => {
         if (isArmySettleStage && myCastlePosition) {
             myCastlePosition.map((position: any) => {
@@ -121,7 +125,46 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                 );
             });
         }
-    }, [isArmySettleStage, myCastlePosition, resources, myCastlePosition, castlePositions, armyPositions, dockPositions, values, isBorder]);
+    }, [isArmySettleStage, myCastlePosition, resources, myCastlePosition, castlePositions, armyPositions, dockPositions, values, isBorder, myDockPositions]);
+
+    // Orange hover effect - Fleet Settle data-bs
+    useEffect(() => {
+        if (fleetSettleStage && myDockPositions && fleetPositions) {
+            myDockPositions.map((position: any) => {
+                getManhattanPositions(position.myDockPosition).map(
+                    (data) => {
+                        if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
+                            if (
+                                !isBorder &&
+                                canFleetBeSettled(values[data.x][data.y]) &&
+                                !isMyFleet({ x: data.x, y: data.y }, myFleetPositions) &&
+                                !isResourcePosition(data.x, data.y, resources)
+                            ) {
+                                const element = document.getElementById(`${data.y},${data.x}`)!;
+                                if (element) {
+                                    element.classList.add("orangeTileEffect");
+                                    element.setAttribute("data-bs-toggle", "modal");
+                                    element.setAttribute("data-bs-target", "#fleetSettleModal");
+                                }
+                            }
+                        }
+                    }
+                );
+            });
+        } else if (!fleetSettleStage && myDockPositions) {
+            myDockPositions.map((position: any) => {
+                getManhattanPositions(position.myDockPosition).map(
+                    (data) => {
+                        if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
+                            document.getElementById(`${data.y},${data.x}`)?.classList.remove("orangeTileEffect")
+                            document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-toggle", "");
+                            document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-target", "");
+                        }
+                    }
+                );
+            });
+        }
+    }, [fleetSettleStage, myDockPositions, fleetPositions, resources]);
 
     //Yellow hover effect when user moves a fleet
     useEffect(() => {

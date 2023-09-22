@@ -19,6 +19,7 @@ export const ArmyMoveEvent = async (
     setShowError: any,
     setIsLoading: (value: boolean) => void
 ) => {
+    setIsArmyMoveStage(false);
     setIsAttackStage(false);
     setIsMineStage(false);
     setDockSettleStage(false);
@@ -55,7 +56,6 @@ export const ArmyMoveEvent = async (
                 setShowError(true);
             }
 
-            setIsArmyMoveStage(false);
             setFromArmyPosition(undefined);
             toArmyPositionRef.current = { x: -1, y: -1 };
             fromArmyPositionRef.current = { x: "-1", y: "-1" };

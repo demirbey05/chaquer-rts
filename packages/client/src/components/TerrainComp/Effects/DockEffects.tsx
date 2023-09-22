@@ -8,7 +8,21 @@ import { colorPath } from "../../../utils/constants/constants";
 import { isArmyPosition } from "../../../utils/helperFunctions/ArmyFunctions/isArmyPosition";
 import { getNumberOfSoldierInArmy } from "../../../utils/helperFunctions/ArmyFunctions/getNumberOfSoliderInArmy";
 
-export const DockEffects = (fleetSettleStage: boolean, isArmySettleStage: boolean, castlePositions: any[], resources: any[], myArmyPosition: any[], armyPositions: any[], dockPositions: any[], myDockPositions: any[] | undefined, values: number[][], dockSettleStage: boolean, dockCaptureStage: boolean, rows: number[], columns: number[], fromArmyPosition: any) => {
+export const DockEffects = (fleetSettleStage: boolean,
+    isArmySettleStage: boolean | undefined,
+    castlePositions: any[],
+    resources: any[],
+    myArmyPosition: any[],
+    armyPositions: any[],
+    dockPositions: any[],
+    myDockPositions: any[] | undefined,
+    values: number[][],
+    dockSettleStage: boolean,
+    dockCaptureStage: boolean,
+    rows: number[],
+    columns: number[],
+    fromArmyPosition: any
+) => {
     /* Deploy dock emojis */
     useEffect(() => {
         if (dockPositions && dockPositions.length > 0) {
@@ -53,13 +67,17 @@ export const DockEffects = (fleetSettleStage: boolean, isArmySettleStage: boolea
             rows.forEach((row) => {
                 columns.forEach((column) => {
                     const element = document.getElementById(`${column},${row}`);
-                    if (element && isPositionNextToSea(row, column, values) && isManhattanPosition({ x: row, y: column }, fromArmyPosition.x, fromArmyPosition.y) && getNumberOfSoldierInArmy(fromArmyPosition, myArmyPosition) >= 20) {
+                    if (
+                        element &&
+                        isPositionNextToSea(row, column, values) &&
+                        isManhattanPosition({ x: row, y: column }, fromArmyPosition.x, fromArmyPosition.y) &&
+                        getNumberOfSoldierInArmy(fromArmyPosition, myArmyPosition) >= 20
+                    ) {
                         const position = { x: row, y: column };
                         const isPositionOccupied = isArmyPosition(position.x, position.y, armyPositions) ||
                             isResourcePosition(position.x, position.y, resources) ||
                             isCastlePosition(position.x, position.y, castlePositions) ||
                             isMyDock(position.x, position.y, myDockPositions)
-
                         if (!isPositionOccupied) {
                             element.setAttribute("data-bs-toggle", "modal");
                             element.setAttribute("data-bs-target", "#dockSettleModal");
@@ -70,7 +88,7 @@ export const DockEffects = (fleetSettleStage: boolean, isArmySettleStage: boolea
         }
 
         return () => {
-            if (values) {
+            if (values && !dockSettleStage) {
                 rows.forEach((row) => {
                     columns.forEach((column) => {
                         const element = document.getElementById(`${column},${row}`);
@@ -98,7 +116,7 @@ export const DockEffects = (fleetSettleStage: boolean, isArmySettleStage: boolea
         }
 
         return () => {
-            if (dockPositions) {
+            if (dockPositions && !dockCaptureStage) {
                 dockPositions.map((data: any) => {
                     if (document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`) !== null) {
                         document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.setAttribute("data-bs-toggle", "");
@@ -127,23 +145,4 @@ export const DockEffects = (fleetSettleStage: boolean, isArmySettleStage: boolea
             );
         }
     }, [dockPositions, isArmySettleStage])
-
-    // Make armies unclickable during dock settlement
-    useEffect(() => {
-        if (armyPositions && fleetSettleStage) {
-            armyPositions.map(
-                (data) => {
-                    document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.style.pointerEvents = "none";
-                }
-            );
-        }
-
-        if (armyPositions && !fleetSettleStage) {
-            armyPositions.map(
-                (data) => {
-                    document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.style.pointerEvents = "auto";
-                }
-            );
-        }
-    }, [armyPositions, fleetSettleStage])
 }

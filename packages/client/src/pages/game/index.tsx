@@ -1,6 +1,4 @@
 import "../../styles/globals.css"
-import gameBgImg from '../../images/backgrounds/gameBackground.jpg'
-import ScrollContainer from "react-indiana-drag-scroll";
 import { useState } from "react";
 import { usePlayer } from "../../context/PlayerContext";
 import { useGameState } from "../../hooks/useGameState";
@@ -52,15 +50,6 @@ export const Game = () => {
   const mineInited = useIsMineInitialized(1);
 
   const terrainStyles = [0, 40];
-  const terrainContainer = {
-    zIndex: "0",
-    height: "100vh",
-    minWidth: "100vh",
-    overflow: "scroll",
-    backgroundImage: `url(${gameBgImg})`,
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover"
-  }
 
   return (
     <>
@@ -98,10 +87,8 @@ export const Game = () => {
 
       <SettingsDrawer />
       <PlayerListDrawer />
-      {<ZoomHandler zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />}
-      <ScrollContainer className="scrollable-container" style={terrainContainer}>
-        <Terrain pixelStyles={terrainStyles} isBorder={false} zoomLevel={zoomLevel} />
-      </ScrollContainer>
+      <ZoomHandler zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />
+      <Terrain pixelStyles={terrainStyles} isBorder={false} zoomLevel={zoomLevel} />
     </>
   );
 }

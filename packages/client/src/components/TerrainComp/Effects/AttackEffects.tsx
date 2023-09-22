@@ -4,8 +4,18 @@ import { isMyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isMyArmy"
 import { isEnemyCastle } from "../../../utils/helperFunctions/CastleFunctions/isEnemyCastle";
 import { isMyFleet } from "../../../utils/helperFunctions/SeaFunctions/isMyFleet";
 
-export const AttackEffects = (myResourcePositions: any[], myFleetPositions: any[] | undefined, fleetPositions: any[], fromFleetPosition: any, isFleetAttackStage: boolean, myCastlePosition: any[], castlePositions: any[], armyPositions: any[], myArmyPosition: any[], isAttackStage: boolean | undefined, fromArmyPosition: { x: any, y: any } | undefined,) => {
-    // Handle Army and Castle Attack OffCanvas
+export const AttackEffects = (myFleetPositions: any[] | undefined,
+    fleetPositions: any[],
+    fromFleetPosition: any,
+    isFleetAttackStage: boolean,
+    myCastlePosition: any[],
+    castlePositions: any[],
+    armyPositions: any[],
+    myArmyPosition: any[],
+    isAttackStage: boolean | undefined,
+    fromArmyPosition: { x: any, y: any } | undefined
+) => {
+    // Handle Army Attack OffCanvas
     useEffect(() => {
         armyPositions.map((data: any) => {
             if (isAttackStage && fromArmyPosition) {
@@ -19,6 +29,20 @@ export const AttackEffects = (myResourcePositions: any[], myFleetPositions: any[
             }
         });
 
+        return () => {
+            if (armyPositions.length > 0) {
+                armyPositions.map((data: any) => {
+                    if (document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`) !== null) {
+                        document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.setAttribute("data-bs-toggle", "");
+                        document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.setAttribute("data-bs-target", "");
+                    }
+                })
+            }
+        }
+    }, [isAttackStage, armyPositions, fromArmyPosition])
+
+    // Handle Castle Attack OffCanvas
+    useEffect(() => {
         castlePositions.map((data: any) => {
             if (isAttackStage && fromArmyPosition) {
                 isManhattanPosition(data.castlePosition, fromArmyPosition.x, fromArmyPosition.y) &&
@@ -39,17 +63,8 @@ export const AttackEffects = (myResourcePositions: any[], myFleetPositions: any[
                     }
                 });
             }
-
-            if (armyPositions.length > 0) {
-                armyPositions.map((data: any) => {
-                    if (document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`) !== null) {
-                        document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.setAttribute("data-bs-toggle", "");
-                        document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.setAttribute("data-bs-target", "");
-                    }
-                })
-            }
         }
-    }, [isAttackStage, armyPositions, fromArmyPosition, castlePositions, myCastlePosition, myArmyPosition]);
+    }, [isAttackStage, fromArmyPosition, castlePositions, myCastlePosition]);
 
     // Handle fleet attack drawer
     useEffect(() => {

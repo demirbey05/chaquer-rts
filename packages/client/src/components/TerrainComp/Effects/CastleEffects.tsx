@@ -1,7 +1,12 @@
 import { useEffect } from "react";
 import { colorPath } from "../../../utils/constants/constants";
 
-export const CastleEffects = (fleetSettleStage: boolean, myCastlePosition: any[], setIsCastleSettled: (value: boolean) => void, castlePositions: any[], isCastleSettled: boolean | undefined) => {
+export const CastleEffects = (fleetSettleStage: boolean,
+    myCastlePosition: any[],
+    setIsCastleSettled: (value: boolean) => void,
+    castlePositions: any[],
+    isCastleSettled: boolean | undefined
+) => {
     // Check if castle settled before and deploy castle emojis
     useEffect(() => {
         //Checks that if the user has already settled the castle
@@ -38,7 +43,7 @@ export const CastleEffects = (fleetSettleStage: boolean, myCastlePosition: any[]
         }
     }, [castlePositions])
 
-    // Make docks unclickable during army settlement
+    // Make castles unclickable during army settlement
     useEffect(() => {
         if (castlePositions && !isCastleSettled) {
             castlePositions.map(

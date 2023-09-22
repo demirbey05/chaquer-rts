@@ -1,5 +1,7 @@
 import MapImg from '../../images/backgrounds/map.png';
+import gameBgImg from '../../images/backgrounds/gameBackground.jpg'
 import map from "../../../map.json";
+import ScrollContainer from "react-indiana-drag-scroll";
 import { TerrainType } from "../../terrain-helper/types";
 import { useRef, useState } from "react";
 import { Entity } from "@latticexyz/recs";
@@ -272,16 +274,89 @@ export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Arr
     }
   };
 
-  CastleEffects(fleetSettleStage, myCastlePosition, setIsCastleSettled, castlePositions, isCastleSettled);
-  ResourceEffects(values, fromFleetPosition, seaMineStage, myResourcePositions, resources, isMineStage, fromArmyPosition);
-  ArmyEffects(myDockPositions, isArmyUpdateStage, values, isBorder, myCastlePosition, dockPositions, castlePositions, isArmySettleStage, armyPositions, myArmyPosition, setNumberOfArmy, myArmyPosition.length, resources);
-  AttackEffects(myResourcePositions, myFleetPositions, fleetPositions, fromFleetPosition, isFleetAttackStage, myCastlePosition, castlePositions, armyPositions, myArmyPosition, isAttackStage, fromArmyPosition);
-  HoverEffects(myFleetPositions, myDockPositions, myResourcePositions, myArmyPosition, dockPositions, fromFleetPosition, isFleetMoveStage, armyPositions, resources, numberOfArmy, isArmySettleStage, isBorder, castlePositions, myCastlePosition, values, fromArmyPosition, isArmyMoveStage);
-  DockEffects(fleetSettleStage, isArmySettleStage, castlePositions, resources, myArmyPosition, armyPositions, dockPositions, myDockPositions, values, dockSettleStage, dockCaptureStage, rows, columns, fromArmyPosition);
-  FleetEffects(isArmySettleStage, resources, myFleetPositions, fleetPositions, fleetSettleStage, myDockPositions, isBorder, values);
+  CastleEffects(fleetSettleStage,
+    myCastlePosition,
+    setIsCastleSettled,
+    castlePositions,
+    isCastleSettled);
+  ResourceEffects(values,
+    fromFleetPosition,
+    seaMineStage,
+    myResourcePositions,
+    resources,
+    isMineStage,
+    fromArmyPosition);
+  ArmyEffects(myDockPositions,
+    isArmyUpdateStage, values,
+    isBorder,
+    myCastlePosition,
+    dockPositions,
+    castlePositions,
+    isArmySettleStage,
+    armyPositions,
+    myArmyPosition,
+    setNumberOfArmy,
+    myArmyPosition.length,
+    resources,
+    fleetSettleStage);
+  AttackEffects(myFleetPositions,
+    fleetPositions,
+    fromFleetPosition,
+    isFleetAttackStage,
+    myCastlePosition,
+    castlePositions,
+    armyPositions,
+    myArmyPosition,
+    isAttackStage,
+    fromArmyPosition);
+  HoverEffects(myFleetPositions,
+    myDockPositions,
+    myResourcePositions,
+    myArmyPosition,
+    dockPositions,
+    fromFleetPosition,
+    isFleetMoveStage,
+    armyPositions,
+    resources,
+    numberOfArmy,
+    isArmySettleStage,
+    isBorder,
+    castlePositions,
+    myCastlePosition,
+    values,
+    fromArmyPosition,
+    isArmyMoveStage,
+    fleetSettleStage,
+    fleetPositions);
+  DockEffects(fleetSettleStage,
+    isArmySettleStage,
+    castlePositions,
+    resources,
+    myArmyPosition,
+    armyPositions,
+    dockPositions,
+    myDockPositions,
+    values,
+    dockSettleStage,
+    dockCaptureStage,
+    rows,
+    columns,
+    fromArmyPosition);
+  FleetEffects(myFleetPositions,
+    fleetPositions);
+
+  const terrainContainer = {
+    zIndex: "0",
+    height: "100vh",
+    minWidth: "100vh",
+    overflow: "scroll",
+    backgroundImage: `url(${gameBgImg})`,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover"
+  }
 
   return (
-    <>
+    <ScrollContainer className={`${!isBorder && "scroll-container"}`} style={isBorder === false ? terrainContainer : {}}>
       <div className={`inline-grid ${isBorder && "border-4 border-black"}`}
         style={{
           transform: `scale(${zoomLevel})`,
@@ -340,7 +415,6 @@ export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Arr
       </div >
       {isLoadingArmy && <EventProgressBar text={"Soldiers are passing to new position..."} />}
       {isLoadingFleet && <EventProgressBar text={"Ships are passing to new position..."} />}
-    </>
-
+    </ScrollContainer>
   );
 }

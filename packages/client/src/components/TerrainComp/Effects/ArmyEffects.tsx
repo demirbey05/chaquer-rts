@@ -8,28 +8,55 @@ import { isMyCastle } from "../../../utils/helperFunctions/CastleFunctions/isMyC
 import { armySettlePositions } from "../../../utils/helperFunctions/ArmyFunctions/armySettlePositions";
 import { isMyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isMyArmy";
 import { isMyDock } from "../../../utils/helperFunctions/SeaFunctions/isMyDock";
+import { isEnemyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isEnemyArmy";
 
-export const ArmyEffects = (myDockPositions: any[], isArmyUpdateStage: boolean, values: number[][], isBorder: boolean, myCastlePosition: any[], dockPositions: any[], castlePositions: any[], isArmySettleStage: boolean | undefined, armyPositions: any[], myArmyPosition: any[], setNumberOfArmy: any, myArmyNumber: any, resources: any[]) => {
+export const ArmyEffects = (myDockPositions: any[] | undefined,
+    isArmyUpdateStage: boolean,
+    values: number[][],
+    isBorder: boolean,
+    myCastlePosition: any[],
+    dockPositions: any[],
+    castlePositions: any[],
+    isArmySettleStage: boolean | undefined,
+    armyPositions: any[], myArmyPosition: any[],
+    setNumberOfArmy: any,
+    myArmyNumber: any,
+    resources: any[],
+    fleetSettleStage: boolean
+) => {
     //Makes castle, army and resource positions unClickable to not cause bug during army settlement
     useEffect(() => {
         if (armyPositions && isArmySettleStage) {
             armyPositions.map((data) => {
-                document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.setAttribute("data-bs-toggle", "");
-                document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.setAttribute("data-bs-target", "");
+                if (isEnemyArmy({ x: data.armyPosition.x, y: data.armyPosition.y }, armyPositions, myArmyPosition)) {
+                    document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.style.pointerEvents = "none"
+                }
+            });
+        } else if (armyPositions && !isArmySettleStage) {
+            armyPositions.map((data) => {
+                if (isEnemyArmy({ x: data.armyPosition.x, y: data.armyPosition.y }, armyPositions, myArmyPosition)) {
+                    document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.style.pointerEvents = "auto"
+                }
             });
         }
 
         if (resources && isArmySettleStage) {
             resources.map((data) => {
-                document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-toggle", "");
-                document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-target", "");
+                document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.pointerEvents = "none"
+            });
+        } else if (armyPositions && !isArmySettleStage) {
+            resources.map((data) => {
+                document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.pointerEvents = "auto"
             });
         }
 
         if (dockPositions && isArmySettleStage) {
             dockPositions.map((data) => {
-                document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.setAttribute("data-bs-toggle", "");
-                document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.setAttribute("data-bs-target", "");
+                document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.pointerEvents = "none"
+            });
+        } else if (armyPositions && !isArmySettleStage) {
+            dockPositions.map((data) => {
+                document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.pointerEvents = "auto"
             });
         }
     }, [isArmySettleStage, castlePositions, resources, dockPositions]);
@@ -80,11 +107,6 @@ export const ArmyEffects = (myDockPositions: any[], isArmyUpdateStage: boolean, 
                             if (
                                 canCastleBeSettle(values[data.x][data.y]) &&
                                 !isBorder &&
-                                !isResourcePosition(data.x, data.y, resources) &&
-                                !isEnemyCastle({ x: data.x, y: data.y }, myCastlePosition, castlePositions) &&
-                                !isMyCastle(myCastlePosition, data.x, data.y) &&
-                                !isMyDock(data.x, data.y, myDockPositions) &&
-                                armySettlePositions(data.x, data.y, myCastlePosition) &&
                                 isMyArmy({ x: data.x, y: data.y }, myArmyPosition)
                             ) {
                                 const element = document.getElementById(`${data.y},${data.x}`)!;
@@ -113,5 +135,24 @@ export const ArmyEffects = (myDockPositions: any[], isArmyUpdateStage: boolean, 
                 );
             });
         }
-    }, [armyPositions, myArmyPosition, isArmyUpdateStage, myCastlePosition, resources, dockPositions, castlePositions, isBorder, values]);
+    }, [myArmyPosition, isArmyUpdateStage, myCastlePosition, isBorder, values]);
+
+    // Make armies unclickable during dock settlement
+    useEffect(() => {
+        if (armyPositions && fleetSettleStage) {
+            armyPositions.map(
+                (data) => {
+                    document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.style.pointerEvents = "none";
+                }
+            );
+        }
+
+        if (armyPositions && !fleetSettleStage) {
+            armyPositions.map(
+                (data) => {
+                    document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.style.pointerEvents = "auto";
+                }
+            );
+        }
+    }, [armyPositions, fleetSettleStage])
 }

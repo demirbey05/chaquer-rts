@@ -1,52 +1,10 @@
 import shipEmoji from "../../../images/shipAssets/ship_emoji.png"
 import { useEffect } from "react";
-import { getManhattanPositions } from "../../../utils/helperFunctions/CustomFunctions/getManhattanPositions";
-import { canFleetBeSettled } from "../../../utils/helperFunctions/SeaFunctions/canFleetBeSettled";
 import { colorPath } from "../../../utils/constants/constants";
-import { isMyFleet } from "../../../utils/helperFunctions/SeaFunctions/isMyFleet";
-import { isResourcePosition } from "../../../utils/helperFunctions/ResourceFuntions/isResourcePosition";
 
-export const FleetEffects = (isArmySettleStage: boolean, resources: any[], myFleetPositions: any[] | undefined, fleetPositions: any[], fleetSettleStage: boolean, myDockPositions: any[] | undefined, isBorder: boolean, values: number[][]) => {
-
-    // Orange hover effect for fleet deployment
-    useEffect(() => {
-        if (fleetSettleStage && myDockPositions && fleetPositions) {
-            myDockPositions.map((position: any) => {
-                getManhattanPositions(position.myDockPosition).map(
-                    (data) => {
-                        if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
-                            if (
-                                !isBorder &&
-                                canFleetBeSettled(values[data.x][data.y]) &&
-                                !isMyFleet({ x: data.x, y: data.y }, myFleetPositions) &&
-                                !isResourcePosition(data.x, data.y, resources)
-                            ) {
-                                const element = document.getElementById(`${data.y},${data.x}`)!;
-                                if (element) {
-                                    element.classList.add("orangeTileEffect");
-                                    element.setAttribute("data-bs-toggle", "modal");
-                                    element.setAttribute("data-bs-target", "#fleetSettleModal");
-                                }
-                            }
-                        }
-                    }
-                );
-            });
-        } else if (!fleetSettleStage && myDockPositions) {
-            myDockPositions.map((position: any) => {
-                getManhattanPositions(position.myDockPosition).map(
-                    (data) => {
-                        if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
-                            document.getElementById(`${data.y},${data.x}`)?.classList.remove("orangeTileEffect")
-                            document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-toggle", "");
-                            document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-target", "");
-                        }
-                    }
-                );
-            });
-        }
-    }, [fleetSettleStage, myDockPositions, fleetPositions, resources]);
-
+export const FleetEffects = (myFleetPositions: any[] | undefined,
+    fleetPositions: any[],
+) => {
     // Deploy ship emojis to position. Add border for user's fleet.
     useEffect(() => {
         const clearBoard = () => {
