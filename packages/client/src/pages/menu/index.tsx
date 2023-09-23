@@ -6,7 +6,6 @@ import { useTerrain } from "../../context/TerrainContext.js"
 import { Terrain } from "../../components/TerrainComp/Terrain";
 import { TerrainSpinner } from "../../components/TerrainComp/TerrainSpinner";
 import { UserNameModal } from '../../components/PlayerComp/UserNameModal';
-import { GameTutorial } from "../../components/TipsComp/GameTutorial";
 import { generatePerlinValues } from "../../terrain-helper/utils";
 import { flatten2D } from "../../utils/terrainArray";
 import { limitOfUser } from "../../utils/constants/constants";
@@ -63,7 +62,7 @@ export const Menu = () => {
           {refresh !== 0 && <RegenerateButton handleRefresh={handleRefresh} isLoading={isLoading} />}
           {refresh !== 0 && <GameTutorialButton />}
           <div className="loader-footer">
-            powered by Nakamo & MUD
+            powered by Nakamo & <a href="https://mud.dev/">MUD</a>
           </div>
         </div>
         <div id="map">
@@ -75,7 +74,6 @@ export const Menu = () => {
         </div>
       </div>
       <UserNameModal />
-      <GameTutorial />
     </div>
   );
 }
@@ -120,12 +118,12 @@ const EnterGameButton = ({ handleRefresh, percentage }: { handleRefresh: (event:
 
 const GameTutorialButton = () => {
   return (
-    <button
-      className='btn btn-dark menu-buttons'
-      data-bs-toggle="modal"
-      data-bs-target="#tutorialModal1">
-      Game Tutorial
-    </button>
+    <a href="https://www.notion.so/psiket-comm/Chaquer-Game-Tutorial-680ce3a3fcf345fbb9a2bcc458e3b21b" target={"_blank"}>
+      <button
+        className='btn btn-dark menu-buttons'>
+        Game Tutorial
+      </button>
+    </a>
   )
 }
 
