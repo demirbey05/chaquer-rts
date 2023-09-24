@@ -309,7 +309,7 @@ const ResourceCard = (props: ResourceCardPropTypes) => {
                     onChange={(e: any) => props.setResourceCount(e.target.value)}
                     onClick={(e: any) => e.target.select()} />
             </div>
-            <ManualButton isDisabled={props.isDisabled} handleSell={props.handleSell} numOfResource={""} resourceEmoji={props.resourceEmoji} />
+            <ManualButton isLoading={props.isLoading} isDisabled={props.isDisabled} handleSell={props.handleSell} numOfResource={""} resourceEmoji={props.resourceEmoji} />
             <AutoButton isLoading={props.isLoading} isDisabled={props.is30Disabled} resourceType={props.resourceType} handleSell={props.handle30ResourceSell} numOfResource={"30"} resourceEmoji={props.resourceEmoji} />
             <AutoButton isLoading={props.isLoading} isDisabled={props.is100Disabled} resourceType={props.resourceType} handleSell={props.handle100ResourceSell} numOfResource={"100"} resourceEmoji={props.resourceEmoji} />
             <AutoButton isLoading={props.isLoading} isDisabled={props.is500Disabled} resourceType={props.resourceType} handleSell={props.handle500ResourceSell} numOfResource={"500"} resourceEmoji={props.resourceEmoji} />
@@ -319,6 +319,7 @@ const ResourceCard = (props: ResourceCardPropTypes) => {
 
 interface ManualButtonPropTypes {
     isDisabled: boolean,
+    isLoading: boolean,
     handleSell: any,
     resourceEmoji: string,
     numOfResource: string
@@ -333,7 +334,7 @@ const ManualButton = (props: ManualButtonPropTypes) => {
             textColor="dark"
             className="w-75"
             mt={4}
-            isDisabled={props.isDisabled}
+            isDisabled={props.isDisabled || props.isLoading}
             onClick={() => props.handleSell()}
         >
             Sell {props.numOfResource} {props.resourceEmoji}
