@@ -1,5 +1,5 @@
 import warResultIcon from '../../images/customAssets/warResult.png';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePlayer } from '../../context/PlayerContext';
 import { useWarResult } from '../../hooks/useWarResult';
 import { useMyUsername } from "../../hooks/IdentityHooks/useMyUsername";
@@ -15,6 +15,21 @@ export const WarResultDrawer = () => {
     const toggleOffcanvas = () => {
         setIsOpen(!isOpen);
     };
+
+    const handleKeyPress = (event: KeyboardEvent) => {
+        if (event.key === 'w' || event.key === 'W') {
+            toggleOffcanvas();
+        } else if (event.key === 'Escape') {
+            setIsOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyPress);
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [isOpen]);
 
     return (
         <div>

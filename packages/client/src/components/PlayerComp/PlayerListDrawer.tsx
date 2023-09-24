@@ -4,7 +4,7 @@ import { useUsernameWithColors } from '../../hooks/IdentityHooks/useUsernamesWit
 import { colorPath } from '../../utils/constants/constants';
 
 export const PlayerListDrawer = () => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     const users = useUsernameWithColors();
 

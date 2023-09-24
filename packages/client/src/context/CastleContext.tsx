@@ -22,12 +22,12 @@ const CastleContext = createContext<CastleContextType>({
     setCastlePosition: () => { }
 });
 
-const CastleProvider: React.FC<{ children: ReactNode }> = ({ children, }: { children: ReactNode; }) => {
+const CastleProvider: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode; }) => {
     const [isCastleSettled, setIsCastleSettled] = useState<boolean>();
     const [castle, setCastle] = useState<any>();
     const [tempCastle, setTempCastle] = useState<any>();
     const [castlePosition, setCastlePosition] = useState<any>();
-    
+
 
     const results: CastleContextType = {
         setCastle,
