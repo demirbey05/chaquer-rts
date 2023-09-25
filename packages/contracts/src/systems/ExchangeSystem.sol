@@ -57,7 +57,8 @@ contract ExchangeSystem is System {
     uint256 balance = CreditOwn.get(gameID, owner);
     uint256 startBlock = GameMetaData.getStartBlock(gameID);
     if (mineType == MineType.Food) {
-      uint256 price = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Food, block.number - startBlock);
+      uint256 price = (3 *
+        LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Food, block.number - startBlock)) / 2;
       uint256 cost = price * amount;
       if (balance < cost) {
         revert EconomySystem__InsufficientCredit();
@@ -69,7 +70,8 @@ contract ExchangeSystem is System {
       CreditOwn.set(gameID, owner, balance - cost);
       ResourcesSold.setFoodSold(gameID, ResourcesSold.getFoodSold(gameID) - amount);
     } else if (mineType == MineType.Wood) {
-      uint256 price = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Wood, block.number - startBlock);
+      uint256 price = (3 *
+        LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Wood, block.number - startBlock)) / 2;
       uint256 cost = price * amount;
       if (balance < cost) {
         revert EconomySystem__InsufficientCredit();
@@ -81,7 +83,8 @@ contract ExchangeSystem is System {
       CreditOwn.set(gameID, owner, balance - cost);
       ResourcesSold.setWoodSold(gameID, ResourcesSold.getWoodSold(gameID) - amount);
     } else if (mineType == MineType.Gold) {
-      uint256 price = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Gold, block.number - startBlock);
+      uint256 price = (3 *
+        LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Gold, block.number - startBlock)) / 2;
       uint256 cost = price * amount;
       if (balance < cost) {
         revert EconomySystem__InsufficientCredit();
