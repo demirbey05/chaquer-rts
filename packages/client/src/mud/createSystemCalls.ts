@@ -373,6 +373,25 @@ export function createSystemCalls(
     }
   };
 
+  const mergeArmy = async (
+    armyOneID: string,
+    armyTwoID: string,
+    gameID: number
+  ) => {
+    try {
+      const tx = await worldContract.write.mergeArmy([
+        armyOneID,
+        armyTwoID,
+        BigInt(gameID),
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
   return {
     initMapDataSystem,
     settleCastle,
@@ -396,5 +415,6 @@ export function createSystemCalls(
     buyResource,
     exitGame,
     updateArmy,
+    mergeArmy,
   };
 }

@@ -88,7 +88,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                     (data) => {
                         if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
                             if (
-                                numberOfArmy !== 5 &&
+                                numberOfArmy !== (5 + myCastlePosition.length - 1) &&
                                 canCastleBeSettle(values[data.x][data.y]) &&
                                 !isBorder &&
                                 !isResourcePosition(data.x, data.y, resources) &&

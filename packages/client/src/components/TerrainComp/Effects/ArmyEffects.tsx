@@ -1,17 +1,14 @@
 import { useEffect } from "react"
 import { colorPath } from "../../../utils/constants/constants";
-import { isEnemyCastle } from "../../../utils/helperFunctions/CastleFunctions/isEnemyCastle";
 import { getManhattanPositions } from "../../../utils/helperFunctions/CustomFunctions/getManhattanPositions";
 import { canCastleBeSettle } from "../../../utils/helperFunctions/CastleFunctions/canCastleBeSettle";
-import { isResourcePosition } from "../../../utils/helperFunctions/ResourceFuntions/isResourcePosition";
-import { isMyCastle } from "../../../utils/helperFunctions/CastleFunctions/isMyCastle";
 import { armySettlePositions } from "../../../utils/helperFunctions/ArmyFunctions/armySettlePositions";
 import { isMyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isMyArmy";
-import { isMyDock } from "../../../utils/helperFunctions/SeaFunctions/isMyDock";
 import { isEnemyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isEnemyArmy";
+import { getArmyMergePositions } from "../../../utils/helperFunctions/CustomFunctions/getArmyMergePositions";
+import { isArmyMergePosition } from "../../../utils/helperFunctions/CustomFunctions/isArmyMergePositions";
 
-export const ArmyEffects = (myDockPositions: any[] | undefined,
-    isArmyUpdateStage: boolean,
+export const ArmyEffects = (isArmyUpdateStage: boolean,
     values: number[][],
     isBorder: boolean,
     myCastlePosition: any[],
@@ -22,7 +19,9 @@ export const ArmyEffects = (myDockPositions: any[] | undefined,
     setNumberOfArmy: any,
     myArmyNumber: any,
     resources: any[],
-    fleetSettleStage: boolean
+    fleetSettleStage: boolean,
+    isArmyMergeStage: boolean,
+    fromArmyPosition: any
 ) => {
     //Makes castle, army and resource positions unClickable to not cause bug during army settlement
     useEffect(() => {
@@ -155,4 +154,32 @@ export const ArmyEffects = (myDockPositions: any[] | undefined,
             );
         }
     }, [armyPositions, fleetSettleStage])
+
+    // Handle Army Merge OffCanvas
+    useEffect(() => {
+        myArmyPosition.map((position) => {
+            getArmyMergePositions(position.myArmyPosition).map((mergePosition) => {
+                if (fromArmyPosition && isArmyMergeStage) {
+                    isArmyMergePosition(mergePosition.x, mergePosition.y, fromArmyPosition) &&
+                        isMyArmy({ x: mergePosition.x, y: mergePosition.y }, myArmyPosition) &&
+                        document.getElementById(`${mergePosition.y},${mergePosition.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
+
+                    isArmyMergePosition(mergePosition.x, mergePosition.y, fromArmyPosition) &&
+                        isMyArmy({ x: mergePosition.x, y: mergePosition.y }, myArmyPosition) &&
+                        document.getElementById(`${mergePosition.y},${mergePosition.x}`)!.setAttribute("data-bs-target", "#armyMergeDrawer");
+                }
+            })
+        })
+
+        return () => {
+            if (myArmyPosition.length > 0) {
+                myArmyPosition.map((data: any) => {
+                    if (document.getElementById(`${data.myArmyPosition.y},${data.myArmyPosition.x}`) !== null) {
+                        document.getElementById(`${data.myArmyPosition.y},${data.myArmyPosition.x}`)!.setAttribute("data-bs-toggle", "");
+                        document.getElementById(`${data.myArmyPosition.y},${data.myArmyPosition.x}`)!.setAttribute("data-bs-target", "");
+                    }
+                })
+            }
+        }
+    }, [isArmyMergeStage, fromArmyPosition, myArmyPosition])
 }

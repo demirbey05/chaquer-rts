@@ -40,6 +40,7 @@ import { SeaMineCaptureDrawer } from "../../components/SeaComp/SeaMineCaptureDra
 import { ArmyUpdateModal } from "../../components/ArmyComp/ArmyUpdateModal";
 import { ArmyUpdateWarning } from "../../components/ArmyComp/ArmyUpdateWarning";
 import { FleetInfoDrawer } from "../../components/SeaComp/FleetInfoDrawer";
+import { ArmyMergeDrawer } from "../../components/ArmyComp/ArmyMergeDrawer";
 
 export const Game = () => {
   const { isPlayerLost, isPlayerWinner } = usePlayer();
@@ -71,6 +72,7 @@ export const Game = () => {
       {gameState === 3 && !isPlayerLost && mineInited && <WarResultDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmySettleModal />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmyUpdateModal />}
+      {gameState === 3 && !isPlayerLost && mineInited && <ArmyMergeDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmyAttackDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <CastleAttackDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <MineCaptureDrawer />}

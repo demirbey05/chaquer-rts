@@ -15,6 +15,12 @@ type ArmyContextType = {
     setIsArmyUpdateStage: (value: boolean) => void;
     armyPositionUpdate: any;
     setArmyPositionUpdate: (value: any) => void;
+    isArmyMergeStage: boolean;
+    setIsArmyMergeStage: (value: boolean) => void;
+    mergeTargetArmyPosition: any;
+    setMergeTargetArmyPosition: (value: any) => void;
+    mergeFromArmyPosition: any;
+    setMergeFromArmyPosition: (value: any) => void;
 };
 
 const ArmyContext = createContext<ArmyContextType>({
@@ -31,7 +37,13 @@ const ArmyContext = createContext<ArmyContextType>({
     isArmyUpdateStage: false,
     setIsArmyUpdateStage: () => { },
     armyPositionUpdate: undefined,
-    setArmyPositionUpdate: () => { }
+    setArmyPositionUpdate: () => { },
+    isArmyMergeStage: false,
+    setIsArmyMergeStage: () => { },
+    mergeTargetArmyPosition: undefined,
+    setMergeTargetArmyPosition: () => { },
+    mergeFromArmyPosition: undefined,
+    setMergeFromArmyPosition: () => { }
 });
 
 const ArmyProvider: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode; }) => {
@@ -44,6 +56,10 @@ const ArmyProvider: React.FC<{ children: ReactNode }> = ({ children }: { childre
 
     const [isArmyUpdateStage, setIsArmyUpdateStage] = useState<boolean>(false);
     const [armyPositionUpdate, setArmyPositionUpdate] = useState<any>();
+
+    const [isArmyMergeStage, setIsArmyMergeStage] = useState<boolean>(false);
+    const [mergeTargetArmyPosition, setMergeTargetArmyPosition] = useState<any>();
+    const [mergeFromArmyPosition, setMergeFromArmyPosition] = useState<any>();
 
     const results: ArmyContextType = {
         isArmySettleStage,
@@ -59,7 +75,13 @@ const ArmyProvider: React.FC<{ children: ReactNode }> = ({ children }: { childre
         isArmyUpdateStage,
         setIsArmyUpdateStage,
         armyPositionUpdate,
-        setArmyPositionUpdate
+        setArmyPositionUpdate,
+        isArmyMergeStage,
+        setIsArmyMergeStage,
+        mergeTargetArmyPosition,
+        setMergeTargetArmyPosition,
+        mergeFromArmyPosition,
+        setMergeFromArmyPosition
     };
 
     return (

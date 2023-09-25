@@ -60,6 +60,7 @@ import { FleetAttackEvent } from "./Events/FleetAttackEvent";
 import { isEnemyFleet } from "../../utils/helperFunctions/SeaFunctions/isEnemyFleet";
 import { SeaMineCaptureEvent } from "./Events/SeaMineCaptureEvent";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
+import { ArmyMergeEvent } from './Events/ArmyMergeEvent';
 
 export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Array<any>, isBorder: boolean, zoomLevel: number, }) => {
   const { components, systemCalls } = useMUD();
@@ -89,7 +90,11 @@ export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Arr
     setIsArmySettleStage,
     setIsArmyUpdateStage,
     isArmyUpdateStage,
-    setArmyPositionUpdate } = useArmy();
+    setArmyPositionUpdate,
+    setIsArmyMergeStage,
+    isArmyMergeStage,
+    setMergeTargetArmyPosition,
+    setMergeFromArmyPosition } = useArmy();
 
   const { userWallet } = usePlayer();
 
@@ -164,7 +169,7 @@ export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Arr
         setIsArmyUpdateStage(false);
       }
       else if (!isArmySettleStage) {
-        if (numberOfArmy < 5) {
+        if (numberOfArmy < (5 + myCastlePosition.length - 1)) {
           setIsArmySettleStage(true);
         }
         setCastlePosition({ x: getDataAtrX(e), y: getDataAtrY(e) })
@@ -238,28 +243,107 @@ export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Arr
       setIsMineStage(true)
       setDockSettleStage(true);
       setDockCaptureStage(true);
+      setIsArmyMergeStage(true)
     }
     else if (fromArmyPosition && isUserClickedManhattanPosition(fromArmyPosition, getDataAtrX(e), getDataAtrY(e))) {
       toArmyPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
       fromArmyPositionRef.current = { x: fromArmyPosition.x, y: fromArmyPosition.y, };
 
       if (isEnemyArmy(toArmyPositionRef.current, armyPositions, myArmyPosition)) {
-        ArmyAttackEvent(setIsArmyMoveStage, setIsMineStage, setDockSettleStage, setDockCaptureStage, setFromArmyPosition, setAttackFromArmyPositionToArmy, setAttackToArmyPositionToArmy, fromArmyPositionRef, toArmyPositionRef, setMyArmyConfig, setEnemyArmyConfig, myArmyPosition, armyPositions);
+        ArmyAttackEvent(setIsArmyMoveStage,
+          setIsMineStage,
+          setDockSettleStage,
+          setDockCaptureStage,
+          setFromArmyPosition,
+          setAttackFromArmyPositionToArmy,
+          setAttackToArmyPositionToArmy,
+          fromArmyPositionRef,
+          toArmyPositionRef,
+          setMyArmyConfig,
+          setEnemyArmyConfig,
+          myArmyPosition,
+          armyPositions);
       }
       else if (isEnemyCastle(toArmyPositionRef.current, myCastlePosition, castlePositions)) {
-        CastleAttackEvent(setIsArmyMoveStage, setIsMineStage, setDockSettleStage, setDockCaptureStage, setFromArmyPosition, setAttackFromArmyPositionToCastle, setAttackToArmyPositionToCastle, fromArmyPositionRef, toArmyPositionRef, setMyArmyConfig, myArmyPosition)
+        CastleAttackEvent(setIsArmyMoveStage,
+          setIsMineStage,
+          setDockSettleStage,
+          setDockCaptureStage,
+          setFromArmyPosition,
+          setAttackFromArmyPositionToCastle,
+          setAttackToArmyPositionToCastle,
+          fromArmyPositionRef,
+          toArmyPositionRef,
+          setMyArmyConfig,
+          myArmyPosition)
       }
       else if (isUserClickedMine(toArmyPositionRef.current.x, toArmyPositionRef.current.y, resources) && canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y])) {
-        MineCaptureEvent(setIsArmyMoveStage, setIsAttackStage, setDockSettleStage, setDockCaptureStage, setFromArmyPosition, setAttackerArmyPosition, fromArmyPositionRef, setTargetMinePosition, toArmyPositionRef, setMyArmyConfig, myArmyPosition);
+        MineCaptureEvent(setIsArmyMoveStage,
+          setIsAttackStage,
+          setDockSettleStage,
+          setDockCaptureStage,
+          setFromArmyPosition,
+          setAttackerArmyPosition,
+          fromArmyPositionRef,
+          setTargetMinePosition,
+          toArmyPositionRef,
+          setMyArmyConfig,
+          myArmyPosition);
       }
       else if (isEnemyDock(toArmyPositionRef.current, dockPositions, myDockPositions)) {
-        DockCaptureEvent(setIsArmyMoveStage, setIsAttackStage, setDockSettleStage, setIsMineStage, setFromArmyPosition, setDockAttackerArmyPosition, fromArmyPositionRef, setTargetDockPosition, toArmyPositionRef, setMyArmyConfig, myArmyPosition)
+        DockCaptureEvent(setIsArmyMoveStage,
+          setIsAttackStage,
+          setDockSettleStage,
+          setIsMineStage,
+          setFromArmyPosition,
+          setDockAttackerArmyPosition,
+          fromArmyPositionRef,
+          setTargetDockPosition,
+          toArmyPositionRef,
+          setMyArmyConfig,
+          myArmyPosition)
       }
       else if (isPositionNextToSea(toArmyPositionRef.current.x, toArmyPositionRef.current.y, values) && isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition) && getNumberOfSoldierInArmy(fromArmyPositionRef.current, myArmyPosition) >= 20) {
-        DockSettleEvent(setIsMineStage, setIsAttackStage, setIsArmyMoveStage, setDockCaptureStage, setFromArmyPosition, setArmyPositionToSettleDock, fromArmyPositionRef, setDockPosition, toArmyPositionRef);
+        DockSettleEvent(setIsMineStage,
+          setIsAttackStage,
+          setIsArmyMoveStage,
+          setDockCaptureStage,
+          setFromArmyPosition,
+          setArmyPositionToSettleDock,
+          fromArmyPositionRef,
+          setDockPosition,
+          toArmyPositionRef);
+      }
+      else if (isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition) && isMyArmy({ x: toArmyPositionRef.current.x, y: toArmyPositionRef.current.y }, myArmyPosition)) {
+        ArmyMergeEvent(setIsAttackStage,
+          setIsArmyMoveStage,
+          setIsMineStage,
+          setDockSettleStage,
+          setDockCaptureStage,
+          setFromArmyPosition,
+          setMergeTargetArmyPosition,
+          setMergeFromArmyPosition,
+          fromArmyPositionRef,
+          toArmyPositionRef)
       }
       else if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y]) && !isMyCastle(myCastlePosition, toArmyPositionRef.current.x, toArmyPositionRef.current.y) && !isMyDock(Number(toArmyPositionRef.current.x), Number(toArmyPositionRef.current.y), myDockPositions)) {
-        await ArmyMoveEvent(setIsAttackStage, setIsMineStage, setDockSettleStage, setDockCaptureStage, fromArmyPositionRef, setIsArmyMoveStage, toArmyPositionRef, isArmyMoveStage, fromArmyPosition, setFromArmyPosition, components, movingArmyId, systemCalls, setErrorMessage, setErrorTitle, setShowError, setIsLoadingArmy);
+        await ArmyMoveEvent(setIsAttackStage,
+          setIsMineStage,
+          setDockSettleStage,
+          setDockCaptureStage,
+          fromArmyPositionRef,
+          setIsArmyMoveStage,
+          toArmyPositionRef,
+          isArmyMoveStage,
+          fromArmyPosition,
+          setFromArmyPosition,
+          components,
+          movingArmyId,
+          systemCalls,
+          setErrorMessage,
+          setErrorTitle,
+          setShowError,
+          setIsLoadingArmy);
       }
     }
     else {
@@ -268,6 +352,7 @@ export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Arr
       setIsMineStage(false)
       setDockSettleStage(false);
       setDockCaptureStage(false)
+      setIsArmyMergeStage(false)
       setFromArmyPosition(undefined);
       toArmyPositionRef.current = { x: -1, y: -1 };
       fromArmyPositionRef.current = { x: "-1", y: "-1" };
@@ -286,8 +371,8 @@ export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Arr
     resources,
     isMineStage,
     fromArmyPosition);
-  ArmyEffects(myDockPositions,
-    isArmyUpdateStage, values,
+  ArmyEffects(isArmyUpdateStage,
+    values,
     isBorder,
     myCastlePosition,
     dockPositions,
@@ -298,7 +383,9 @@ export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Arr
     setNumberOfArmy,
     myArmyPosition.length,
     resources,
-    fleetSettleStage);
+    fleetSettleStage,
+    isArmyMergeStage,
+    fromArmyPosition);
   AttackEffects(myFleetPositions,
     fleetPositions,
     fromFleetPosition,
