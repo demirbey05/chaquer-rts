@@ -75,6 +75,16 @@ contract ArmyUpdateSystem is System {
       revert ArmyUpdate__WrongGameID();
     }
 
+    //distance is max 1
+    {
+      (uint32 xOne, uint32 yOne, ) = Position.get(armyOneID);
+      (uint32 xTwo, uint32 yTwo, ) = Position.get(armyTwoID);
+      uint32 distanceBetween = LibMath.manhattan(xOne, yOne, xTwo, yTwo);
+      if (distanceBetween > 1) {
+        revert ArmyUpdate__TooFar();
+      }
+    }
+
     ArmyConfigData memory armyOneConfig = ArmyConfig.get(armyOneID);
     ArmyConfigData memory armyTwoConfig = ArmyConfig.get(armyTwoID);
 
