@@ -129,8 +129,11 @@ contract MapSystem is System {
     if (LibQueries.queryPositionEntity(IStore(_world()), x, y, config.gameID) > 0) {
       revert ArmySettle__TileIsNotEmpty();
     }
-    // You can have three army
-    if (LibQueries.queryGetArmyNumber(IStore(_world()), ownerCandidate, config.gameID) >= maxArmyNum) {
+    // You can have five + conquered castles army
+    if (
+      LibQueries.queryGetArmyNumber(IStore(_world()), ownerCandidate, config.gameID) >=
+      maxArmyNum + LibQueries.getOwnedCastleIDs(IStore(_world()), ownerCandidate, config.gameID).length - 1
+    ) {
       revert ArmySettle__NoArmyRight();
     }
     if (CastleOwnable.getOwner(castleID) != ownerCandidate) {

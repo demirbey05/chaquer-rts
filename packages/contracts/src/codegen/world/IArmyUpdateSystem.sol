@@ -7,4 +7,6 @@ import { ArmyConfigData } from "./../Tables.sol";
 
 interface IArmyUpdateSystem {
   function updateArmy(bytes32 armyID, ArmyConfigData memory newArmyConfig, bytes32 castleID) external;
+
+  function mergeArmy(bytes32 armyOneID, bytes32 armyTwoID, uint256 gameID) external;
 }

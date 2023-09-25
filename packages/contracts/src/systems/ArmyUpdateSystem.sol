@@ -58,4 +58,33 @@ contract ArmyUpdateSystem is System {
     LibUtils.handleEconomyCheck(IWorld(_world()), owner, delta);
     ArmyConfig.set(armyID, newArmyConfig);
   }
+
+  function mergeArmy(
+    bytes32 armyOneID,
+    bytes32 armyTwoID,
+    uint256 gameID
+  ) public {
+    // Army two is destroyed and added to armyOne
+
+    // Checks
+    if (ArmyOwnable.getOwner(armyOneID) != _msgSender() || ArmyOwnable.getOwner(armyTwoID) != _msgSender()) {
+      revert ArmyUpdateSystem__NotArmyOwner();
+    }
+
+    if (ArmyConfig.getGameID(armyOneID) != gameID || ArmyConfig.getGameID(armyTwoID) != gameID) {
+      revert ArmyUpdate__WrongGameID();
+    }
+
+    ArmyConfigData memory armyOneConfig = ArmyConfig.get(armyOneID);
+    ArmyConfigData memory armyTwoConfig = ArmyConfig.get(armyTwoID);
+
+    ArmyConfigData memory lastConfig = ArmyConfigData(
+      armyOneConfig.numSwordsman + armyTwoConfig.numSwordsman,
+      armyOneConfig.numArcher + armyTwoConfig.numArcher,
+      armyOneConfig.numCavalry + armyTwoConfig.numCavalry,
+      gameID
+    );
+    ArmyConfig.set(armyOneID, lastConfig);
+    LibUtils.deleteArmy(armyTwoID);
+  }
 }
