@@ -11,7 +11,7 @@ import { LibVRGDA } from "../libraries/LibVRGDA.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 
 uint256 constant mineRate = 10;
-uint256 constant blockRate = 2;
+uint256 constant blockRate = 1;
 uint256 constant startFood = 300;
 uint256 constant startWood = 100;
 uint256 constant startGold = 300;

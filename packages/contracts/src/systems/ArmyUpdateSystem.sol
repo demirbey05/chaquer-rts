@@ -94,6 +94,11 @@ contract ArmyUpdateSystem is System {
       armyOneConfig.numCavalry + armyTwoConfig.numCavalry,
       gameID
     );
+
+    // New army's size cannot be more than 500
+    if (lastConfig.numSwordsman + lastConfig.numArcher + lastConfig.numCavalry > 500) {
+      revert ArmyUpdate__InvalidUserSize();
+    }
     ArmyConfig.set(armyOneID, lastConfig);
     LibUtils.deleteArmy(armyTwoID);
   }
