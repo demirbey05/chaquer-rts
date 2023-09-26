@@ -50,8 +50,6 @@ export const Game = () => {
   const playerSeedCount = useCountOfPlayerSeed(1);
   const mineInited = useIsMineInitialized(1);
 
-  const terrainStyles = [0, 40];
-
   return (
     <>
       {!isPlayerLost && <CastleSettleWarning />}
@@ -90,7 +88,7 @@ export const Game = () => {
       <SettingsDrawer />
       <PlayerListDrawer />
       <ZoomHandler zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />
-      <Terrain pixelStyles={terrainStyles} isBorder={false} zoomLevel={zoomLevel} />
+      <Terrain isBorder={false} zoomLevel={zoomLevel} tileSize={40} fontSize={20} isSpectator={false} />
     </>
   );
 }

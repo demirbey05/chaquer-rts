@@ -62,7 +62,7 @@ import { SeaMineCaptureEvent } from "./Events/SeaMineCaptureEvent";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { ArmyMergeEvent } from './Events/ArmyMergeEvent';
 
-export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Array<any>, isBorder: boolean, zoomLevel: number, }) => {
+export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }: { isBorder: boolean, zoomLevel: number, tileSize: number, fontSize: number, isSpectator: boolean }) => {
   const { components, systemCalls } = useMUD();
   const { width, height } = useTerrain();
 
@@ -443,9 +443,10 @@ export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Arr
   }
 
   return (
-    <ScrollContainer className={`${!isBorder && "scroll-container"}`} style={isBorder === false ? terrainContainer : {}}>
+    <ScrollContainer className={`${!isBorder && "scroll-container"}`} style={isBorder === false ? terrainContainer : (isSpectator ? terrainContainer : {})}>
       <div className={`inline-grid ${isBorder && "border-4 border-black"}`}
         style={{
+          pointerEvents: isBorder === true ? "none" : "auto",
           transform: `scale(${zoomLevel})`,
           transition: "transform 0.2s ease-in-out",
           zIndex: "1",
@@ -466,14 +467,14 @@ export const Terrain = ({ pixelStyles, isBorder, zoomLevel }: { pixelStyles: Arr
                   style={{
                     gridColumn: column + 1,
                     gridRow: row + 1,
-                    width: `${pixelStyles[1]}px`,
-                    height: `${pixelStyles[1]}px`,
+                    width: `${tileSize}px`,
+                    height: `${tileSize}px`,
                     //backgroundImage: `${getTerrainAsset(values[row][column])}`, // remove the next 2 line for AI generated map
                     //backgroundSize: "cover",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    fontSize: `${isBorder ? "7px" : "20px"}`,
+                    fontSize: `${fontSize}px`,
                     border: "0.5px solid rgba(0, 0, 0, 0.1)"
                   }}
                   onClick={(e) => {

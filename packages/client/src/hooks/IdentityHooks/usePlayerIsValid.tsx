@@ -7,7 +7,6 @@ export function usePlayerIsValid(gameID: number, address: string) {
     const { components } = useMUD();
     const [isPlayer, setIsPlayer] = useState<boolean | undefined>();
     const value = useComponentValue(components.Players, encodeEntity(components.Players.metadata.keySchema, { userAddress: address, gameId: BigInt(gameID) }));
-
     useEffect(() => {
         if (value) {
             setIsPlayer(value.userValid)

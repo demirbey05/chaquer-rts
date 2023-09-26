@@ -1,4 +1,6 @@
 import map from '../../../map.json';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ethers } from "ethers";
 import { Progress } from "@chakra-ui/react";
 import { useMUD } from "../../context/MUDContext";
@@ -26,10 +28,10 @@ export const Menu = () => {
     saveTerrain,
   } = useTerrain();
 
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const gameState = useGameState(1);
   const progress = useSyncProgress();
-
-  const terrainStyles = [8, 14];
 
   const handleRefresh = (event: any) => {
     setIsLoading(true);
@@ -42,6 +44,7 @@ export const Menu = () => {
 
   const handleTerrain = async () => {
     saveTerrain();
+    setIsOpen(true)
     if (!gameState) {
       const data: string = ethers.utils.hexlify(flatten2D(map));
       await systemCalls.initMapDataSystem(1, width, height, data);
@@ -59,6 +62,7 @@ export const Menu = () => {
           {refresh === 0 && <Loader progress={progress} />}
           {refresh === 0 && <EnterGameButton handleRefresh={handleRefresh} percentage={progress && progress.percentage} />}
           {refresh !== 0 && <StartGameButton gameState={gameState} isLoading={isLoading} handleTerrain={handleTerrain} />}
+          {refresh !== 0 && <SpectatorButton gameState={gameState} isLoading={isLoading} handleTerrain={handleTerrain} />}
           {refresh !== 0 && <RegenerateButton handleRefresh={handleRefresh} isLoading={isLoading} />}
           {refresh !== 0 && <GameTutorialButton />}
           <div className="loader-footer">
@@ -68,12 +72,12 @@ export const Menu = () => {
         <div id="map">
           {isLoading === true ? <TerrainSpinner /> :
             (<>
-              {refresh === 0 ? null : <Terrain pixelStyles={terrainStyles} isBorder={true} zoomLevel={1} />}
+              {refresh === 0 ? null : <Terrain isBorder={true} zoomLevel={1} fontSize={7} tileSize={14} isSpectator={false} />}
             </>)
           }
         </div>
       </div>
-      <UserNameModal />
+      <UserNameModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 }
@@ -90,6 +94,32 @@ const StartGameButton = ({ isLoading, handleTerrain, gameState }: { isLoading: b
     >
       Start the Game
     </button>
+  )
+}
+
+const SpectatorButton = ({ isLoading, handleTerrain, gameState }: { isLoading: boolean, handleTerrain: () => Promise<void>, gameState: any }) => {
+  return (
+    <>
+      {
+        (gameState === 3 || gameState === 4) ?
+          <Link to={'/game/spectator'}>
+            <button
+              className='btn btn-dark menu-buttons mb-4'
+              disabled={isLoading}
+              onClick={handleTerrain}
+            >
+              Join as Spectator
+            </button>
+          </Link> :
+          <button
+            className='btn btn-dark menu-buttons mb-4'
+            disabled={true}
+            onClick={handleTerrain}
+          >
+            Join as Spectator
+          </button>
+      }
+    </>
   )
 }
 

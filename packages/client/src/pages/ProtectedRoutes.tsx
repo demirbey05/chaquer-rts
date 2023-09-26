@@ -1,14 +1,7 @@
 import { Route, Redirect } from 'react-router-dom'
-import { usePlayer } from '../context/PlayerContext';
-import { useNumberOfUsers } from '../hooks/IdentityHooks/useNumberOfUsers';
-import { usePlayerIsValid } from '../hooks/IdentityHooks/usePlayerIsValid';
-import { limitOfUser } from '../utils/constants/constants';
 import { useSyncProgress } from '../hooks/useSyncProgress';
 
-export const ProtectedRoutes = ({ component: Component, ...rest }: any) => {
-    const { userWallet } = usePlayer();
-    const userValid = usePlayerIsValid(1, userWallet);
-    const numberOfPlayers = useNumberOfUsers(1);
+export const ProtectedRoutes = ({ isUserValid, component: Component, ...rest }: any) => {
     const progress = useSyncProgress();
 
     return (
@@ -18,7 +11,7 @@ export const ProtectedRoutes = ({ component: Component, ...rest }: any) => {
                 return <Redirect to={{ pathname: "/" }} ></Redirect>;
             }
 
-            if (!(!userValid && numberOfPlayers === limitOfUser)) {
+            if (isUserValid === true || isUserValid === false) {
                 return <Component {...props}></Component>;
             }
 
