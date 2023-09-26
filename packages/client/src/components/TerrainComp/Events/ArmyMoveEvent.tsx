@@ -1,6 +1,7 @@
 import { findIDFromPosition } from "../../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 
 export const ArmyMoveEvent = async (
+    setIsArmyMergeStage: (value: boolean) => void,
     setIsAttackStage: (value: boolean) => void,
     setIsMineStage: (value: boolean) => void,
     setDockSettleStage: (value: boolean) => void,
@@ -24,6 +25,7 @@ export const ArmyMoveEvent = async (
     setIsMineStage(false);
     setDockSettleStage(false);
     setDockCaptureStage(false);
+    setIsArmyMergeStage(false)
 
     const movingArmyIdMap = findIDFromPosition(
         fromArmyPositionRef.current,

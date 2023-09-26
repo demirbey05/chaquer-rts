@@ -415,8 +415,7 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
     isArmyMoveStage,
     fleetSettleStage,
     fleetPositions);
-  DockEffects(fleetSettleStage,
-    isArmySettleStage,
+  DockEffects(isArmySettleStage,
     castlePositions,
     resources,
     myArmyPosition,

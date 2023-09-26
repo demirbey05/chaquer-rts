@@ -8,8 +8,7 @@ import { colorPath } from "../../../utils/constants/constants";
 import { isArmyPosition } from "../../../utils/helperFunctions/ArmyFunctions/isArmyPosition";
 import { getNumberOfSoldierInArmy } from "../../../utils/helperFunctions/ArmyFunctions/getNumberOfSoliderInArmy";
 
-export const DockEffects = (fleetSettleStage: boolean,
-    isArmySettleStage: boolean | undefined,
+export const DockEffects = (isArmySettleStage: boolean | undefined,
     castlePositions: any[],
     resources: any[],
     myArmyPosition: any[],

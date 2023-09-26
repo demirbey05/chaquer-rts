@@ -1,6 +1,7 @@
 import { getMyArmyConfigByPosition } from "../../../utils/helperFunctions/ArmyFunctions/getArmyConfigByPosition"
 
 export const CastleAttackEvent = (
+    setIsArmyMergeStage: (value: boolean) => void,
     setIsArmyMoveStage: (value: boolean) => void,
     setIsMineStage: (value: boolean) => void,
     setDockSettleStage: (value: boolean) => void,
@@ -16,6 +17,7 @@ export const CastleAttackEvent = (
     setIsMineStage(false)
     setDockSettleStage(false)
     setDockCaptureStage(false)
+    setIsArmyMergeStage(false)
     setFromArmyPosition(undefined);
     setAttackFromArmyPositionToCastle(fromArmyPositionRef.current);
     setAttackToArmyPositionToCastle(toArmyPositionRef.current);

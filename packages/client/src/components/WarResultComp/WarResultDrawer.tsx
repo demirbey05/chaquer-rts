@@ -37,7 +37,7 @@ export const WarResultDrawer = () => {
                 <img src={warResultIcon} width={"30px"} height={"30px"}></img>
             </button>
             <div id="warResultDrawer" className={`my-war-result-drawer ${isOpen ? "open" : ""}`}>
-                <h4 className="text-center text-white p-2 mb-2 border-bottom">War Results</h4>
+                <h4 className="text-center text-white p-2 mb-3 border-bottom">War Results</h4>
                 <div>
                     {
                         warResults && warResults.map((data, key) => {

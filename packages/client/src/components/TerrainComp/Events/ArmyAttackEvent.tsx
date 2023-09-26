@@ -2,6 +2,7 @@ import { getMyArmyConfigByPosition } from "../../../utils/helperFunctions/ArmyFu
 import { getEnemyArmyConfigByPosition } from "../../../utils/helperFunctions/ArmyFunctions/getArmyConfigByPosition";
 
 export const ArmyAttackEvent = (
+    setIsArmyMergeStage: (value: boolean) => void,
     setIsArmyMoveStage: (value: boolean) => void,
     setIsMineStage: (value: boolean) => void,
     setDockSettleStage: (value: boolean) => void,
@@ -20,6 +21,7 @@ export const ArmyAttackEvent = (
     setIsMineStage(false)
     setDockSettleStage(false);
     setDockCaptureStage(false)
+    setIsArmyMergeStage(false)
     setFromArmyPosition(undefined);
     setAttackFromArmyPositionToArmy(fromArmyPositionRef.current);
     setAttackToArmyPositionToArmy(toArmyPositionRef.current);

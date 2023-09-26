@@ -55,6 +55,14 @@ export const ResourceEffects = (values: number[][],
                     }
                 });
             }
+
+            if (resources) {
+                resources.map((position: any) => {
+                    if (document.getElementById(`${position.positions.y},${position.positions.x}`)) {
+                        document.getElementById(`${position.positions.y},${position.positions.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
+                    }
+                });
+            }
         };
     }, [myResourcePositions, resources])
 

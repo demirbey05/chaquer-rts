@@ -16,6 +16,7 @@
     top: 0;
     right: -305px;
     transition: right 0.3s ease;
+    font-size: 14px;
 }
 
 .my-war-result-drawer.open {
