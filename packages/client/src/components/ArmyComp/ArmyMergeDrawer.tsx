@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button } from "@chakra-ui/react";
+import { Button, Alert, AlertIcon } from "@chakra-ui/react";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useMUD } from "../../context/MUDContext";
 import { useError } from "../../context/ErrorContext";
@@ -23,18 +23,31 @@ export const ArmyMergeDrawer = () => {
     const [armyTwoConfig, setArmyTwoConfig] = useState<any>({ numSwordsman: 0, numArcher: 0, numCavalry: 0 });
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [totalArmy, setTotalArmy] = useState<number>(0);
 
     const myArmyPositions = useMyArmy(userWallet);
 
     useEffect(() => {
-        if (mergeTargetArmyPosition) {
-            setArmyTwoConfig(getMyArmyConfigByPosition({ x: mergeTargetArmyPosition.x, y: mergeTargetArmyPosition.y }, myArmyPositions).myArmyConfig)
+        if (armyOneConfig && armyTwoConfig) {
+            const armyOneNumber = armyOneConfig.numSwordsman + armyOneConfig.numArcher + armyOneConfig.numCavalry;
+            const armyTwoNumber = armyTwoConfig.numSwordsman + armyTwoConfig.numArcher + armyTwoConfig.numCavalry;
+            setTotalArmy(armyOneNumber + armyTwoNumber)
+        }
+    }, [armyOneConfig, armyTwoConfig])
+
+    useEffect(() => {
+        if (mergeTargetArmyPosition && myArmyPositions) {
+            if (getMyArmyConfigByPosition({ x: mergeTargetArmyPosition.x, y: mergeTargetArmyPosition.y }, myArmyPositions)) {
+                setArmyTwoConfig(getMyArmyConfigByPosition({ x: mergeTargetArmyPosition.x, y: mergeTargetArmyPosition.y }, myArmyPositions).myArmyConfig)
+            }
         } else {
             setArmyTwoConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 })
         }
 
-        if (mergeFromArmyPosition) {
-            setArmyOneConfig(getMyArmyConfigByPosition({ x: mergeFromArmyPosition.x, y: mergeFromArmyPosition.y }, myArmyPositions).myArmyConfig)
+        if (mergeFromArmyPosition && myArmyPositions) {
+            if (getMyArmyConfigByPosition({ x: mergeFromArmyPosition.x, y: mergeFromArmyPosition.y }, myArmyPositions)) {
+                setArmyOneConfig(getMyArmyConfigByPosition({ x: mergeFromArmyPosition.x, y: mergeFromArmyPosition.y }, myArmyPositions).myArmyConfig)
+            }
         }
         else {
             setArmyOneConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 })
@@ -96,6 +109,7 @@ export const ArmyMergeDrawer = () => {
         >
             <ArmyMergeDrawerHeader headerText={"Army Merge Information"} />
             <div className="offcanvas-body small">
+
                 <div className="row">
                     <ArmyMergeDrawerCard
                         numSwordsman={armyOneConfig.numSwordsman}
@@ -109,6 +123,13 @@ export const ArmyMergeDrawer = () => {
                         numCavalry={armyTwoConfig.numCavalry}
                         title={"Army II"}
                         titleBg={"success"} />
+                    {
+                        totalArmy > 500 &&
+                        <Alert status='warning' p={1} mt={2}>
+                            <AlertIcon />
+                            Total soldier number is bigger than 500. You cannot merge!
+                        </Alert>
+                    }
                 </div>
             </div>
             <div className="d-flex justify-content-evenly">
@@ -117,6 +138,7 @@ export const ArmyMergeDrawer = () => {
                     border="solid"
                     textColor="dark"
                     data-bs-dismiss="offcanvas"
+                    isDisabled={totalArmy > 500}
                     onClick={handleMerge}>
                     Merge the Armies
                 </Button>

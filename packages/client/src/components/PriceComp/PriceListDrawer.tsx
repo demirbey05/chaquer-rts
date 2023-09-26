@@ -1,4 +1,4 @@
-import { Tooltip } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useMUD } from "../../context/MUDContext";
 import { useError } from '../../context/ErrorContext';
@@ -6,6 +6,7 @@ import { ArmyPrices } from "./ArmyPrices";
 import { ResourcePrices } from "./ResourcePrices";
 import { FleetPrices } from "./FleetPrices";
 import { useGameState } from "../../hooks/useGameState";
+import { ResourceBuyPrices } from "./ResourceBuyPrices";
 
 export const PriceListDrawer = () => {
     const [isOpen, setIsOpen] = useState(true);
@@ -56,15 +57,26 @@ export const PriceListDrawer = () => {
             </button>
             <div id="prices-drawer-body" className={`prices-drawer ${isOpen ? "open" : ""}`}>
                 <h4 className="text-center p-2 mb-2 border-bottom font-extrabold">Current Prices</h4>
-                <Tooltip label="You can reach the current resource prices from here..." placement="top-start" bg="blue.400" fontSize="md">
-                    <h6 className="text-center p-2 mb-2 border-bottom">Resource Prices</h6>
-                </Tooltip>
-                <ResourcePrices />
-                <Tooltip label="You can reach the current army prices from here..." placement="top-start" bg="blue.400" fontSize="md">
-                    <h6 className="text-center p-2 border-bottom">Army Prices</h6>
-                </Tooltip>
-                <ArmyPrices />
-                <FleetPrices />
+                <Tabs isFitted variant='enclosed'>
+                    <TabList>
+                        <Tab _selected={{ color: 'white', bg: 'red.500' }}>Buy Prices</Tab>
+                        <Tab _selected={{ color: 'white', bg: 'green.500' }}>Sell Prices</Tab>
+                    </TabList>
+                    <TabPanels>
+                        <TabPanel>
+                            <h6 className="text-center p-2 border-bottom">Army Prices</h6>
+                            <ArmyPrices />
+                            <h6 className="text-center p-2 mb-2 border-bottom">Resource Prices</h6>
+                            <ResourceBuyPrices />
+                            <h6 className="text-center p-2 mt-2 border-bottom">Fleet Prices</h6>
+                            <FleetPrices />
+                        </TabPanel>
+                        <TabPanel>
+                            <h6 className="text-center p-2 mb-2 border-bottom">Resource Prices</h6>
+                            <ResourcePrices />
+                        </TabPanel>
+                    </TabPanels>
+                </Tabs>
             </div>
         </div>
     )

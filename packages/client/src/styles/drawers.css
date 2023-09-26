@@ -35,6 +35,7 @@
     top: 0;
     right: -305px;
     transition: right 0.3s ease;
+    font-size: 13px;
 }
 
 .prices-drawer.open {

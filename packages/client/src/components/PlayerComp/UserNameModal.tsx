@@ -129,7 +129,7 @@ export const UserNameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
                         }
                         {
                             (((userValid || userValid === false) && gameState !== 0) && !isLoading) &&
-                            <p>Click Join to the Game button to connect to the game.</p>
+                            <p>Click Join to the Game button to connect to game.</p>
                         }
                         <div className="modal-footer justify-content-around mt-3">
                             <Button

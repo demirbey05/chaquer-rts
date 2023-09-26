@@ -87,8 +87,6 @@ const StartGameButton = ({ isLoading, handleTerrain, gameState }: { isLoading: b
     <button
       className='btn btn-dark menu-buttons mb-4'
       style={{ marginTop: "100px" }}
-      data-bs-toggle="modal"
-      data-bs-target="#userNameModal"
       disabled={isLoading && gameState}
       onClick={handleTerrain}
     >

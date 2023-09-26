@@ -49,10 +49,6 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                         !isMyDock(data.x, data.y, myDockPositions) &&
                         !isBorder &&
                         document.getElementById(`${data.y},${data.x}`)?.classList.add("blueTileEffect");
-
-                    if (isMyCastle(myCastlePosition, data.x, data.y)) {
-                        document.getElementById(`${data.y},${data.x}`)!.style.pointerEvents = "none"
-                    }
                 }
             });
 
@@ -70,12 +66,6 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                         }
                     }
                 });
-            }
-
-            if (!fromArmyPosition && myCastlePosition && myCastlePosition.length > 0) {
-                myCastlePosition.map((data) => {
-                    document.getElementById(`${data.myCastlePosition.y},${data.myCastlePosition.x}`)!.style.pointerEvents = "auto"
-                })
             }
         }
     }, [fromArmyPosition, isArmyMoveStage, myCastlePosition, myArmyPosition, myResourcePositions, myDockPositions, isBorder, values]);

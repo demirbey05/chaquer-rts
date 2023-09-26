@@ -1,4 +1,3 @@
-import { Tooltip } from "@chakra-ui/react";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 
 export const FleetPrices = () => {
@@ -12,16 +11,11 @@ export const FleetPrices = () => {
     }
 
     return (
-        <>
-            <Tooltip label="You can reach the fleet prices. They are constant." placement="top-start" bg="blue.400" fontSize="md">
-                <h6 className="text-center p-2 mt-2 border-bottom">Fleet Prices</h6>
-            </Tooltip>
-            <div className="mt-2">
-                <PriceListItem name={"Baron's Dagger/per"} isFleetPrices={true} price={`${fleetPrices.smallShipCredit} 💰 + ${fleetPrices.smallShipWood} 🪓`} />
-                <PriceListItem name={"Knight's Galley/per"} isFleetPrices={true} price={`${fleetPrices.mediumShipCredit} 💰 + ${fleetPrices.mediumShipWood} 🪓`} />
-                <PriceListItem name={"King's Leviathan/per"} isFleetPrices={true} price={`${fleetPrices.bigShipCredit} 💰 + ${fleetPrices.bigShipWood} 🪓`} />
-            </div>
-        </>
+        <div className="mt-2">
+            <PriceListItem name={"Baron's Dagger/per"} isFleetPrices={true} price={`${fleetPrices.smallShipCredit} 💰 + ${fleetPrices.smallShipWood} 🪓`} />
+            <PriceListItem name={"Knight's Galley/per"} isFleetPrices={true} price={`${fleetPrices.mediumShipCredit} 💰 + ${fleetPrices.mediumShipWood} 🪓`} />
+            <PriceListItem name={"King's Leviathan/per"} isFleetPrices={true} price={`${fleetPrices.bigShipCredit} 💰 + ${fleetPrices.bigShipWood} 🪓`} />
+        </div>
     )
 }
 
