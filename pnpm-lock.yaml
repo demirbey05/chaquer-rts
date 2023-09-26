@@ -189,7 +189,7 @@ importers:
         version: 5.46.1(eslint@8.29.0)(typescript@4.9.5)
       '@vitejs/plugin-react':
         specifier: ^3.1.0
-        version: 3.1.0(vite@4.2.1)
+        version: 3.1.0(vite@4.2.3)
       autoprefixer:
         specifier: ^10.4.13
         version: 10.4.13(postcss@8.4.23)
@@ -221,8 +221,8 @@ importers:
         specifier: ^4.9.5
         version: 4.9.5
       vite:
-        specifier: ^4.2.1
-        version: 4.2.1
+        specifier: ^4.2.3
+        version: 4.2.3
       wait-port:
         specifier: ^1.0.4
         version: 1.0.4
@@ -277,10 +277,10 @@ importers:
         version: 18.15.11
       ds-test:
         specifier: https://github.com/dapphub/ds-test.git#c9ce3f25bde29fc5eb9901842bf02850dfd2d084
-        version: github.com/dapphub/ds-test/c9ce3f25bde29fc5eb9901842bf02850dfd2d084
+        version: git@github.com+dapphub/ds-test/c9ce3f25bde29fc5eb9901842bf02850dfd2d084
       forge-std:
         specifier: https://github.com/foundry-rs/forge-std.git#b4f121555729b3afb3c5ffccb62ff4b6e2818fd3
-        version: github.com/foundry-rs/forge-std/b4f121555729b3afb3c5ffccb62ff4b6e2818fd3
+        version: git@github.com+foundry-rs/forge-std/b4f121555729b3afb3c5ffccb62ff4b6e2818fd3
       prettier:
         specifier: ^2.6.2
         version: 2.6.2
@@ -4550,7 +4550,7 @@ packages:
       eslint-visitor-keys: 3.4.1
     dev: true
 
-  /@vitejs/plugin-react@3.1.0(vite@4.2.1):
+  /@vitejs/plugin-react@3.1.0(vite@4.2.3):
     resolution: {integrity: sha512-AfgcRL8ZBhAlc3BFdigClmTUMISmmzHn7sB2h9U1odvc5U/MjWXsAaz18b/WoppUTDBzxOJwo2VdClfUcItu9g==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -4561,7 +4561,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.19.6(@babel/core@7.22.8)
       magic-string: 0.27.0
       react-refresh: 0.14.0
-      vite: 4.2.1
+      vite: 4.2.3
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -9329,8 +9329,8 @@ packages:
       - utf-8-validate
       - zod
 
-  /vite@4.2.1:
-    resolution: {integrity: sha512-7MKhqdy0ISo4wnvwtqZkjke6XN4taqQ2TBaTccLIpOKv7Vp2h4Y+NpmWCnGDeSvvn45KxvWgGyb0MkHvY1vgbg==}
+  /vite@4.2.3:
+    resolution: {integrity: sha512-kLU+m2q0Y434Y1kCy3TchefAdtFso0ILi0dLyFV8Us3InXTU11H/B5ZTqCKIQHzSKNxVG/yEx813EA9f1imQ9A==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -9551,14 +9551,14 @@ packages:
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
-  github.com/dapphub/ds-test/c9ce3f25bde29fc5eb9901842bf02850dfd2d084:
-    resolution: {tarball: https://codeload.github.com/dapphub/ds-test/tar.gz/c9ce3f25bde29fc5eb9901842bf02850dfd2d084}
+  git@github.com+dapphub/ds-test/c9ce3f25bde29fc5eb9901842bf02850dfd2d084:
+    resolution: {commit: c9ce3f25bde29fc5eb9901842bf02850dfd2d084, repo: git@github.com:dapphub/ds-test.git, type: git}
     name: ds-test
     version: 1.0.0
     dev: true
 
-  github.com/foundry-rs/forge-std/b4f121555729b3afb3c5ffccb62ff4b6e2818fd3:
-    resolution: {tarball: https://codeload.github.com/foundry-rs/forge-std/tar.gz/b4f121555729b3afb3c5ffccb62ff4b6e2818fd3}
+  git@github.com+foundry-rs/forge-std/b4f121555729b3afb3c5ffccb62ff4b6e2818fd3:
+    resolution: {commit: b4f121555729b3afb3c5ffccb62ff4b6e2818fd3, repo: git@github.com:foundry-rs/forge-std.git, type: git}
     name: forge-std
     version: 1.2.0
     dev: true
