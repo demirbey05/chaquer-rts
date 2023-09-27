@@ -232,7 +232,18 @@ export default mudConfig({
         colorIndex:"uint256",
         gameID:"uint256"
       }
-    }
+    },
+    ChatMessages:{
+      schema:{
+        time:"uint256",
+        gameID:"uint256",
+        userName:"string",
+        message:"string",
+        
+      },
+      ephemeral:true,
+    },
+
   },
   
   enums: {
