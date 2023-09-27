@@ -6,7 +6,7 @@ import { FaPlay, FaStop } from 'react-icons/fa'
 import { RiArrowGoBackFill } from 'react-icons/ri'
 import { Link } from 'react-router-dom';
 
-export const SettingsDrawer = () => {
+export const SettingsDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const audioRef = useRef<any>();
@@ -63,11 +63,13 @@ export const SettingsDrawer = () => {
     };
 
     useEffect(() => {
-        window.addEventListener('keydown', handleKeyPress);
+        if (!isInputFocused) {
+            window.addEventListener('keydown', handleKeyPress);
+        }
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [isOpen]);
+    }, [isOpen, isInputFocused]);
 
     return (
         <>

@@ -5,37 +5,13 @@ import { SellResources } from "./SellResources";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useResourcesInStoke } from "../../hooks/ResourceHooks/useResourcesInStoke";
 
-export const MarketDrawer = () => {
+export const MarketDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const [isLoadingSell, setIsLoadingSell] = useState<boolean>(false);
     const [isLoadingBuy, setIsLoadingBuy] = useState<boolean>(false);
 
     const resourcesInStock = useResourcesInStoke(1);
-
-    useEffect(() => {
-        const handleKeyPress = (event: KeyboardEvent) => {
-            if (event.key === 'm' || event.key === 'M') {
-                const offcanvasElement = document.getElementById('marketDrawer');
-                if (offcanvasElement && !offcanvasElement.classList.contains("show")) {
-                    offcanvasElement.classList.add('show');
-                }
-                else if (offcanvasElement) {
-                    offcanvasElement.classList.remove('show');
-                }
-            } else if (event.key === 'Escape') {
-                const offcanvasElement = document.getElementById('marketDrawer');
-                if (offcanvasElement) {
-                    offcanvasElement.classList.remove('show');
-                }
-            }
-        };
-
-        document.addEventListener('keydown', handleKeyPress);
-        return () => {
-            document.removeEventListener('keydown', handleKeyPress);
-        };
-    }, []);
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen);
@@ -50,11 +26,13 @@ export const MarketDrawer = () => {
     };
 
     useEffect(() => {
-        window.addEventListener('keydown', handleKeyPress);
+        if (!isInputFocused) {
+            window.addEventListener('keydown', handleKeyPress);
+        }
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [isOpen]);
+    }, [isOpen, isInputFocused]);
 
     return (
         <>

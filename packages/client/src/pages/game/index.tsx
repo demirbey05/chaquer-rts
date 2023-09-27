@@ -1,5 +1,5 @@
 import "../../styles/globals.css"
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { usePlayer } from "../../context/PlayerContext";
 import { useGameState } from "../../hooks/useGameState";
 import { useCountOfPlayerSeed } from "../../hooks/IdentityHooks/useCountOfPlayerSeed";
@@ -41,10 +41,12 @@ import { ArmyUpdateModal } from "../../components/ArmyComp/ArmyUpdateModal";
 import { ArmyUpdateWarning } from "../../components/ArmyComp/ArmyUpdateWarning";
 import { FleetInfoDrawer } from "../../components/SeaComp/FleetInfoDrawer";
 import { ArmyMergeDrawer } from "../../components/ArmyComp/ArmyMergeDrawer";
+import { ChatMessageDrawer } from "../../components/ChatComp/ChatMessageDrawer";
 
 export const Game = () => {
   const { isPlayerLost, isPlayerWinner } = usePlayer();
   const [zoomLevel, setZoomLevel] = useState(1);
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const gameState = useGameState(1);
   const playerSeedCount = useCountOfPlayerSeed(1);
@@ -63,11 +65,12 @@ export const Game = () => {
       {gameState === 3 && !isPlayerLost && mineInited && <ArmyProgressBar />}
       {gameState === 3 && !isPlayerLost && mineInited && <MineProgressBar />}
       {gameState === 3 && !isPlayerLost && mineInited && <CreditProgressBar />}
-      {gameState === 3 && !isPlayerLost && mineInited && <ArmyInfoDrawer />}
-      {gameState === 3 && !isPlayerLost && mineInited && <FleetInfoDrawer />}
-      {gameState === 3 && !isPlayerLost && mineInited && <MarketDrawer />}
+      {gameState === 3 && !isPlayerLost && mineInited && <ArmyInfoDrawer isInputFocused={isInputFocused} />}
+      {gameState === 3 && !isPlayerLost && mineInited && <FleetInfoDrawer isInputFocused={isInputFocused} />}
+      {gameState === 3 && !isPlayerLost && mineInited && <MarketDrawer isInputFocused={isInputFocused} />}
       {gameState === 3 && !isPlayerLost && mineInited && <ShortCutTips />}
-      {gameState === 3 && !isPlayerLost && mineInited && <WarResultDrawer />}
+      {gameState === 3 && !isPlayerLost && mineInited && <WarResultDrawer isInputFocused={isInputFocused} />}
+      {gameState === 3 && !isPlayerLost && mineInited && <ChatMessageDrawer isInputFocused={isInputFocused} setIsInputFocused={setIsInputFocused} />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmySettleModal />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmyUpdateModal />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmyMergeDrawer />}
@@ -81,13 +84,13 @@ export const Game = () => {
       {gameState === 3 && !isPlayerLost && mineInited && <FleetMoveWarning />}
       {gameState === 3 && !isPlayerLost && mineInited && <FleetAttackDrawer />}
       {gameState === 3 && !isPlayerLost && mineInited && <SeaMineCaptureDrawer />}
-      {gameState === 3 && mineInited && <PriceListDrawer />}
+      {gameState === 3 && mineInited && <PriceListDrawer isInputFocused={isInputFocused} />}
       {isPlayerLost && <PlayerLostWarning />}
       {gameState === 4 && isPlayerWinner && <PlayerWonAnimation />}
 
-      <SettingsDrawer />
-      <PlayerListDrawer />
-      <ZoomHandler zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />
+      <SettingsDrawer isInputFocused={isInputFocused} />
+      <PlayerListDrawer isInputFocused={isInputFocused} />
+      <ZoomHandler isInputFocused={isInputFocused} zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />
       <Terrain isBorder={false} zoomLevel={zoomLevel} tileSize={40} fontSize={20} isSpectator={false} />
     </>
   );
