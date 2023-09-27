@@ -55,7 +55,7 @@ export const Game = () => {
       {!isPlayerLost && <CastleSettleWarning />}
       {!isPlayerLost && <CastleSettleModal />}
       {gameState === 1 && !isPlayerLost && <PlayerWaitingStage />}
-      {gameState === 2 && !isPlayerLost && <PlayerSeedStage />}
+      {!(playerSeedCount >= limitOfUser - 2) && gameState === 2 && !isPlayerLost && <PlayerSeedStage />}
       {(playerSeedCount >= limitOfUser - 2) && !mineInited && <MineInitStage />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmySettleWarning />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmyUpdateWarning />}
