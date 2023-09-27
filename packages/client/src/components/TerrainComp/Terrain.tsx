@@ -250,7 +250,8 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
       fromArmyPositionRef.current = { x: fromArmyPosition.x, y: fromArmyPosition.y, };
 
       if (isEnemyArmy(toArmyPositionRef.current, armyPositions, myArmyPosition)) {
-        ArmyAttackEvent(setIsArmyMoveStage,
+        ArmyAttackEvent(setIsArmyMergeStage,
+          setIsArmyMoveStage,
           setIsMineStage,
           setDockSettleStage,
           setDockCaptureStage,
@@ -265,7 +266,8 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
           armyPositions);
       }
       else if (isEnemyCastle(toArmyPositionRef.current, myCastlePosition, castlePositions)) {
-        CastleAttackEvent(setIsArmyMoveStage,
+        CastleAttackEvent(setIsArmyMergeStage,
+          setIsArmyMoveStage,
           setIsMineStage,
           setDockSettleStage,
           setDockCaptureStage,
@@ -278,7 +280,8 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
           myArmyPosition)
       }
       else if (isUserClickedMine(toArmyPositionRef.current.x, toArmyPositionRef.current.y, resources) && canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y])) {
-        MineCaptureEvent(setIsArmyMoveStage,
+        MineCaptureEvent(setIsArmyMergeStage,
+          setIsArmyMoveStage,
           setIsAttackStage,
           setDockSettleStage,
           setDockCaptureStage,
@@ -327,7 +330,8 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
           toArmyPositionRef)
       }
       else if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y]) && !isMyCastle(myCastlePosition, toArmyPositionRef.current.x, toArmyPositionRef.current.y) && !isMyDock(Number(toArmyPositionRef.current.x), Number(toArmyPositionRef.current.y), myDockPositions)) {
-        await ArmyMoveEvent(setIsAttackStage,
+        await ArmyMoveEvent(setIsArmyMergeStage,
+          setIsAttackStage,
           setIsMineStage,
           setDockSettleStage,
           setDockCaptureStage,
