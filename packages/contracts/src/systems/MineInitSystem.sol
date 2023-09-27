@@ -53,7 +53,7 @@ contract MineInitSystem is System {
     if (currentNumOfUser != limit) {
       revert MineSystem__GameIsNotFull();
     }
-    if (playerSeeds.length != limit) {
+    if (playerSeeds.length < limit - 2) {
       revert MineSystem__NotAllUsersSubmitSeed();
     }
     if (ResourceInited.get(gameID)) {
