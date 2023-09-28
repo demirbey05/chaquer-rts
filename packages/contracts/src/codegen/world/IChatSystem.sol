@@ -6,6 +6,7 @@ pragma solidity >=0.8.0;
 interface IChatSystem {
   error ChatSystem__MessageIsTooLong();
   error ChatSystem__NotJoined();
+  error ChatSystem__Cooldown();
 
   function sendMessage(uint256 gameID, string memory message) external;
 }

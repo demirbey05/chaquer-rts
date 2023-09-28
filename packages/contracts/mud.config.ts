@@ -243,6 +243,14 @@ export default mudConfig({
       },
       ephemeral:true,
     },
+    LastMessageTime:{
+      keySchema:{
+        gameID:"uint256",
+        user:"address"
+      },schema:{
+        time:"uint256"
+       }
+    }
 
   },
   
