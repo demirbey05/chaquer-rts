@@ -58,7 +58,7 @@ export const ChatMessageDrawer = ({ isInputFocused, setIsInputFocused }: { isInp
 
     const handleSend = async () => {
         if (message && message.length <= 32 && message.length > 0) {
-            const tx = systemCalls.sendMessage(1, message);
+            const tx = await systemCalls.sendMessage(1, message);
             if (tx) {
                 document.getElementById("message-input")!.value = "";
                 setMessage("");
@@ -98,6 +98,7 @@ export const ChatMessageDrawer = ({ isInputFocused, setIsInputFocused }: { isInp
                         ref={inputRef} />
                     <button
                         className='btn btn-outline-light btn-sm text-2xl ms-3'
+                        disabled={message.length === 0}
                         onClick={handleSend}>
                         <AiOutlineSend />
                     </button>

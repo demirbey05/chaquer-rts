@@ -1,22 +1,26 @@
-import { useObservableValue } from "@latticexyz/react";
 import { useMUD } from "../context/MUDContext";
 import { useEffect, useState } from "react";
+import { useEntityQuery, useObservableValue } from "@latticexyz/react";
+import { Has, getComponentValueStrict } from "@latticexyz/recs";
 
 export function useWarResult(maxElementSize: number) {
     const { components } = useMUD()
 
-    const warResult = useObservableValue(components.ClashResult.update$);
+    const warEntity = useEntityQuery([Has(components.ClashResult)]);
+    const value = useObservableValue(components.ClashResult.update$);
 
-    const [lastFive, setLastFive] = useState<any[]>([]);
+    const [warResults, setWarResults] = useState<any[]>([]);
 
     useEffect(() => {
-        if (warResult) {
-            setLastFive((prevResults) => [
-                ...prevResults.slice(-maxElementSize + 1),
-                warResult?.value[0]
-            ]);
-        }
-    }, [warResult])
+        const newWars = warEntity.map((entityIndex) => {
+            const newWar = getComponentValueStrict(components.ClashResult, entityIndex);
+            return newWar;
+        });
 
-    return lastFive;
+        const limitedWars = newWars.slice(-maxElementSize);
+
+        setWarResults(limitedWars);
+    }, [warEntity, value]);
+
+    return warResults;
 }
