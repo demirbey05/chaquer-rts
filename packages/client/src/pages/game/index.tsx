@@ -70,7 +70,7 @@ export const Game = () => {
       {gameState === 3 && !isPlayerLost && mineInited && <MarketDrawer isInputFocused={isInputFocused} />}
       {gameState === 3 && !isPlayerLost && mineInited && <ShortCutTips />}
       {gameState === 3 && !isPlayerLost && mineInited && <WarResultDrawer isInputFocused={isInputFocused} />}
-      {gameState === 3 && !isPlayerLost && mineInited && <ChatMessageDrawer isInputFocused={isInputFocused} setIsInputFocused={setIsInputFocused} />}
+      {gameState === 3 && !isPlayerLost && mineInited && <ChatMessageDrawer isInputFocused={isInputFocused} setIsInputFocused={setIsInputFocused} isSpectator={false} />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmySettleModal />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmyUpdateModal />}
       {gameState === 3 && !isPlayerLost && mineInited && <ArmyMergeDrawer />}

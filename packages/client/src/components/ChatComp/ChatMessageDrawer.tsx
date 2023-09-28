@@ -17,7 +17,7 @@ function censorMessage(inputMessage: string, badWordsList: string[]) {
     return censoredMessage;
 }
 
-export const ChatMessageDrawer = ({ isInputFocused, setIsInputFocused }: { isInputFocused: boolean, setIsInputFocused: (value: boolean) => void }) => {
+export const ChatMessageDrawer = ({ isInputFocused, setIsInputFocused, isSpectator }: { isInputFocused: boolean, setIsInputFocused: (value: boolean) => void, isSpectator: boolean }) => {
     const { systemCalls } = useMUD();
     const { setErrorMessage, setErrorTitle, setShowError } = useError();
     const messages = useChatMessages(25);
@@ -114,21 +114,24 @@ export const ChatMessageDrawer = ({ isInputFocused, setIsInputFocused }: { isInp
                         }
                     </div>
                 </div>
-                <div className='d-flex justify-content-center align-items-center'>
-                    <input type="text"
-                        id="message-input"
-                        className="form-control-sm border bg-transparent dark-input text-white w-75"
-                        placeholder="Type your message..."
-                        onChange={(e) => setMessage(e.target.value)}
-                        maxLength={32}
-                        ref={inputRef} />
-                    <button
-                        className='btn btn-outline-light btn-sm text-2xl ms-3'
-                        disabled={message.length === 0 || isButtonDisabled}
-                        onClick={handleSend}>
-                        <AiOutlineSend />
-                    </button>
-                </div>
+                {
+                    !isSpectator &&
+                    <div className='d-flex justify-content-center align-items-center'>
+                        <input type="text"
+                            id="message-input"
+                            className="form-control-sm border bg-transparent dark-input text-white w-75"
+                            placeholder="Type your message..."
+                            onChange={(e) => setMessage(e.target.value)}
+                            maxLength={32}
+                            ref={inputRef} />
+                        <button
+                            className='btn btn-outline-light btn-sm text-2xl ms-3'
+                            disabled={message.length === 0 || isButtonDisabled}
+                            onClick={handleSend}>
+                            <AiOutlineSend />
+                        </button>
+                    </div>
+                }
             </div>
         </>
     )
