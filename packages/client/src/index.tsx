@@ -1,5 +1,4 @@
 import "tailwindcss/tailwind.css";
-import "react-toastify/dist/ReactToastify.css";
 import './styles/globals.css'
 import './styles/drawers.css'
 import './styles/buttons.css'

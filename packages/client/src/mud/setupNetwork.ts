@@ -29,7 +29,7 @@ export async function setupNetwork() {
 
   const clientOptions = {
     chain: networkConfig.chain,
-    transport: transportObserver(fallback([webSocket(undefined,{retryCount:0}), http(undefined,{retryCount:0})])),
+    transport: transportObserver(fallback([webSocket(), http()])),
     pollingInterval: 1000,
   } as const satisfies ClientConfig;
 
@@ -48,7 +48,6 @@ export async function setupNetwork() {
     publicClient,
     walletClient: burnerWalletClient,
     onWrite: (write: any) => write$.next(write),
-
   });
 
   const {
