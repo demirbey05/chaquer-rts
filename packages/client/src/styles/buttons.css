@@ -102,6 +102,22 @@
     border-radius: 10px;
 }
 
+.chat-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ECC94B;
+    z-index: 1;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-top: 350px;
+    font-size: 30px;
+    border-radius: 10px;
+}
+
 /*Circle Button for tips*/
 .tips-button {
     width: 35px;

@@ -39,69 +39,69 @@ export const SellResources = (props: SellResourcesPropTypes) => {
 
     useEffect(() => {
         // Food
-        if (numberOfResource && numberOfResource!.numOfFood < 30) {
-            setIs30FoodDisabled(true);
-        }
-        else {
+        if (numberOfResource && numberOfResource!.numOfFood >= 30) {
             setIs30FoodDisabled(false);
         }
-
-        if (numberOfResource && numberOfResource!.numOfFood < 100) {
-            setIs100FoodDisabled(true);
-        }
         else {
+            setIs30FoodDisabled(true);
+        }
+
+        if (numberOfResource && numberOfResource!.numOfFood >= 100) {
             setIs100FoodDisabled(false);
         }
+        else {
+            setIs100FoodDisabled(true);
+        }
 
-        if (numberOfResource && numberOfResource!.numOfFood < 500) {
-            setIs500FoodDisabled(true);
+        if (numberOfResource && numberOfResource!.numOfFood >= 500) {
+            setIs500FoodDisabled(false);
         }
         else {
-            setIs500FoodDisabled(false);
+            setIs500FoodDisabled(true);
         }
 
         // Wood
-        if (numberOfResource && numberOfResource!.numOfWood < 30) {
-            setIs30WoodDisabled(true);
-        }
-        else {
+        if (numberOfResource && numberOfResource!.numOfWood >= 30) {
             setIs30WoodDisabled(false);
         }
-
-        if (numberOfResource && numberOfResource!.numOfWood < 100) {
-            setIs100WoodDisabled(true);
-        }
         else {
+            setIs30WoodDisabled(true);
+        }
+
+        if (numberOfResource && numberOfResource!.numOfWood >= 100) {
             setIs100WoodDisabled(false);
         }
+        else {
+            setIs100WoodDisabled(true);
+        }
 
-        if (numberOfResource && numberOfResource!.numOfWood < 500) {
-            setIs500WoodDisabled(true);
+        if (numberOfResource && numberOfResource!.numOfWood >= 500) {
+            setIs500WoodDisabled(false);
         }
         else {
-            setIs500WoodDisabled(false);
+            setIs500WoodDisabled(true);
         }
 
         // Gold
-        if (numberOfResource && numberOfResource!.numOfGold < 30) {
-            setIs30GoldDisabled(true);
-        }
-        else {
+        if (numberOfResource && numberOfResource!.numOfGold >= 30) {
             setIs30GoldDisabled(false);
         }
-
-        if (numberOfResource && numberOfResource!.numOfGold < 100) {
-            setIs100GoldDisabled(true);
-        }
         else {
+            setIs30GoldDisabled(true);
+        }
+
+        if (numberOfResource && numberOfResource!.numOfGold >= 100) {
             setIs100GoldDisabled(false);
         }
+        else {
+            setIs100GoldDisabled(true);
+        }
 
-        if (numberOfResource && numberOfResource!.numOfGold < 500) {
-            setIs500GoldDisabled(true);
+        if (numberOfResource && numberOfResource!.numOfGold >= 500) {
+            setIs500GoldDisabled(false);
         }
         else {
-            setIs500GoldDisabled(false);
+            setIs500GoldDisabled(true);
         }
 
     }, [numberOfResource])

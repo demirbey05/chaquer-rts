@@ -51,7 +51,7 @@ contract EconomySystem is System {
     uint256 startBlock = GameMetaData.getStartBlock(gameID);
     uint256 priceFood = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Food, block.number - startBlock);
     uint256 priceWood = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Wood, block.number - startBlock);
-    uint256 priceGold = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Wood, block.number - startBlock);
+    uint256 priceGold = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Gold, block.number - startBlock);
     uint256 swordsmanPrice = LibVRGDA.getArmyPrice(IWorld(_world()), gameID, 0, block.number - startBlock);
     uint256 archerPrice = LibVRGDA.getArmyPrice(IWorld(_world()), gameID, 1, block.number - startBlock);
     uint256 cavalryPrice = LibVRGDA.getArmyPrice(IWorld(_world()), gameID, 2, block.number - startBlock);

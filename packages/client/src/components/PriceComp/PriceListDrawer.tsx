@@ -8,7 +8,7 @@ import { FleetPrices } from "./FleetPrices";
 import { useGameState } from "../../hooks/useGameState";
 import { ResourceBuyPrices } from "./ResourceBuyPrices";
 
-export const PriceListDrawer = () => {
+export const PriceListDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const [isOpen, setIsOpen] = useState(true);
 
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
@@ -44,11 +44,13 @@ export const PriceListDrawer = () => {
     };
 
     useEffect(() => {
-        window.addEventListener('keydown', handleKeyPress);
+        if (!isInputFocused) {
+            window.addEventListener('keydown', handleKeyPress);
+        }
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [isOpen]);
+    }, [isOpen, isInputFocused]);
 
     return (
         <div>

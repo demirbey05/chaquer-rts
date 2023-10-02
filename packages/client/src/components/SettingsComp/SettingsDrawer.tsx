@@ -1,18 +1,21 @@
 import soundTrack from '../../sounds/chaquerSoundTrack.mp3'
 import { useState, useEffect, useRef } from 'react'
-import { Button } from "@chakra-ui/react";
+import { Button, Slider, SliderTrack, SliderFilledTrack, SliderThumb } from "@chakra-ui/react";
 import { SettingsIcon } from '@chakra-ui/icons'
 import { FaPlay, FaStop } from 'react-icons/fa'
 import { RiArrowGoBackFill } from 'react-icons/ri'
 import { Link } from 'react-router-dom';
 
-export const SettingsDrawer = () => {
+export const SettingsDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const [isPlaying, setIsPlaying] = useState(false);
+    const [volume, setVolume] = useState<number>(0.1);
     const [isOpen, setIsOpen] = useState(false);
+
     const audioRef = useRef<any>();
 
     useEffect(() => {
         const audioElement = audioRef.current;
+        audioRef.current.volume = volume;
 
         const handleEnded = () => {
             if (audioElement) {
@@ -34,20 +37,28 @@ export const SettingsDrawer = () => {
     }, []);
 
     useEffect(() => {
-        if (localStorage.getItem('audioPaused')) {
+        if (localStorage.getItem('audioPaused') === "true") {
             setIsPlaying(true);
+        } else {
+            setIsPlaying(false);
         }
     }, [])
 
+    const handleVolumeChange = (newValue: number) => {
+        setVolume(newValue);
+        if (audioRef.current) {
+            audioRef.current.volume = newValue;
+        }
+    };
+
     const handlePlay = () => {
         setIsPlaying(false);
+        localStorage.setItem('audioPaused', "false")
     };
 
     const handleStop = () => {
         setIsPlaying(true);
-        if (!localStorage.getItem('audioPaused')) {
-            localStorage.setItem('audioPaused', "true")
-        }
+        localStorage.setItem('audioPaused', "true")
     };
 
     const toggleDrawer = () => {
@@ -63,11 +74,13 @@ export const SettingsDrawer = () => {
     };
 
     useEffect(() => {
-        window.addEventListener('keydown', handleKeyPress);
+        if (!isInputFocused) {
+            window.addEventListener('keydown', handleKeyPress);
+        }
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [isOpen]);
+    }, [isOpen, isInputFocused]);
 
     return (
         <>
@@ -77,9 +90,17 @@ export const SettingsDrawer = () => {
             <div id="settings-drawer" className={`settings-drawer ${isOpen ? "open" : ""}`}>
                 <AudioControlCompHeader toggleDrawer={toggleDrawer} />
                 <div className='ms-2'>
-                    <h5 className='mb-2'>Music Settings</h5>
+                    <h5 className='mb-2'>Music</h5>
                     <PlayMusicButton handlePlay={handlePlay} closeDrawer={toggleDrawer} />
                     <PauseMusicButton handleStop={handleStop} closeDrawer={toggleDrawer} />
+                    <hr className='mt-2 mb-2' />
+                    <h5 className='mb-2'>Music Volume</h5>
+                    <Slider aria-label='slider-ex-1' step={0.05} defaultValue={volume} min={0} max={0.5} colorScheme='whatsapp' width={"75%"} onChange={handleVolumeChange}>
+                        <SliderTrack>
+                            <SliderFilledTrack />
+                        </SliderTrack>
+                        <SliderThumb />
+                    </Slider>
                     <hr className='mt-2 mb-2' />
                     <h5 className="mb-2 mt-2">Back to Menu</h5>
                     <BackToMenuButton toggleDrawer={toggleDrawer} />
@@ -117,8 +138,7 @@ const BackToMenuButton = (props: BackToMenuButtonPropTypes) => {
                 style={{ height: "40px" }}
                 onClick={props.toggleDrawer}
                 aria-label="Close">
-                Back to Menu
-                <RiArrowGoBackFill className='ms-2' />
+                <RiArrowGoBackFill />
             </Button>
         </Link>
     )
@@ -134,8 +154,7 @@ const PlayMusicButton = ({ handlePlay, closeDrawer }: any) => {
                 handlePlay();
             }}
             aria-label="Close">
-            Play Music
-            <FaPlay className='ms-2' />
+            <FaPlay />
         </Button>
     )
 }
@@ -150,8 +169,7 @@ const PauseMusicButton = ({ handleStop, closeDrawer }: any) => {
                 handleStop();
             }}
             aria-label="Close">
-            Pause Music
-            <FaStop className='ms-2' />
+            <FaStop />
         </Button>
     )
 }

@@ -22,7 +22,7 @@ const scrollToDiv = (targetId: any) => {
     }
 };
 
-export const FleetInfoDrawer = () => {
+export const FleetInfoDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const { userWallet } = usePlayer()
     const [isOpen, setIsOpen] = useState(false);
 
@@ -41,11 +41,14 @@ export const FleetInfoDrawer = () => {
     };
 
     useEffect(() => {
-        window.addEventListener('keydown', handleKeyPress);
+        if (!isInputFocused) {
+            window.addEventListener('keydown', handleKeyPress);
+        }
+
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [isOpen]);
+    }, [isOpen, isInputFocused]);
 
     // Find the army on the map
     const handleClick = (targetId: any) => {
