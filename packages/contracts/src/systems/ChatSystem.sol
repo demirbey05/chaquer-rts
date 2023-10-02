@@ -25,7 +25,7 @@ contract ChatSystem is System {
       keccak256(abi.encodePacked(block.timestamp, sender, message, gameID)),
       block.number,
       gameID,
-      AddressToUsername.getUserName(sender, gameID),
+      AddressToUsername.getUserName(sender),
       message
     );
     LastMessageTime.set(gameID, sender, block.number);

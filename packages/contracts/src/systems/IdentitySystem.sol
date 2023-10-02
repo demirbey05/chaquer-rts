@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Players, AddressToUsername, MapConfig, GameMetaData, CreditOwn } from "../codegen/index.sol";
+import { Players, AddressToColorIndex, MapConfig, GameMetaData, CreditOwn } from "../codegen/index.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { LibMath } from "../libraries/LibMath.sol";
@@ -38,7 +38,7 @@ contract IdentitySystem is System {
     }
     {
       uint256 colorCursor = GameMetaData.getColorCursor(gameID);
-      AddressToUsername.set(sender, gameID,gameID, colorCursor + 1, userName);
+      AddressToColorIndex.set(sender, gameID, gameID,colorCursor + 1);
       GameMetaData.setColorCursor(gameID, colorCursor + 1);
     }
 

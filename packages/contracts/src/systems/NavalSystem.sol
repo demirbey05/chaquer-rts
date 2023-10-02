@@ -9,7 +9,7 @@ import { ClashType } from "../codegen/common.sol";
 import { LibQueries, LibMath, LibNaval, LibUtils, LibAttack } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { baseCostDock, requiredArmySize, baseWoodCostDock, maxShipInFleet, smallCreditCost, smallWoodCost, mediumCreditCost, mediumWoodCost, bigCreditCost, bigWoodCost, fleetMoveFoodCost, fleetMoveGoldCost } from "./Constants.sol";
-import { CreditOwn, ColorOwnable, AddressToUsername, ResourceOwnData, FleetOwnable, FleetConfig, Position, FleetConfigData, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, ArmyOwnable } from "../codegen/index.sol";
+import { CreditOwn, ColorOwnable, AddressToColorIndex, ResourceOwnData, FleetOwnable, FleetConfig, Position, FleetConfigData, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, ArmyOwnable } from "../codegen/index.sol";
 
 contract NavalSystem is System {
   function buildDock(
@@ -60,7 +60,7 @@ contract NavalSystem is System {
 
     Position.set(entityID, coord_x, coord_y, gameID);
     DockOwnable.set(entityID, sender, gameID);
-    ColorOwnable.set(entityID, AddressToUsername.getColorIndex(sender, gameID), gameID);
+    ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(sender, gameID), gameID);
     CreditOwn.set(gameID, sender, totalCredit - (creditCost * 1e18));
     ResourceOwn.setNumOfWood(sender, gameID, totalWood - woodCost);
     return entityID;
@@ -99,7 +99,7 @@ contract NavalSystem is System {
 
     if (result == 1) {
       DockOwnable.setOwner(dockID, armyOwner);
-      ColorOwnable.setColorIndex(dockID, AddressToUsername.getColorIndex(armyOwner, gameID));
+      ColorOwnable.setColorIndex(dockID, AddressToColorIndex.getColorIndex(armyOwner, gameID));
 
       // Destroy all the army which belongs to castle owner
 
@@ -159,7 +159,7 @@ contract NavalSystem is System {
     Position.set(entityID, x, y, fleet.gameID);
     FleetConfig.set(entityID, fleet);
     FleetOwnable.set(entityID, ownerCandidate, fleet.gameID);
-    ColorOwnable.set(entityID, AddressToUsername.getColorIndex(ownerCandidate, fleet.gameID), fleet.gameID);
+    ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(ownerCandidate, fleet.gameID), fleet.gameID);
     ResourceOwn.setNumOfWood(ownerCandidate, fleet.gameID, totalWood - woodCost);
     CreditOwn.set(fleet.gameID, ownerCandidate, totalCredit - (costCredit * 1e18));
     return entityID;

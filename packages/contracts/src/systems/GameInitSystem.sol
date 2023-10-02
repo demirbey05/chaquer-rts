@@ -3,9 +3,12 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import {MapConfig,GameMetaData} from "../codegen/index.sol";
+import {MapConfig,GameMetaData,AddressToUsername} from "../codegen/index.sol";
 import "./Errors.sol";
 import {State} from "../codegen/common.sol";
+
+
+error InitSystem__UsernameAlreadyInitialized();
 
 contract GameInitSystem is System {
     uint256 constant capacityLowerBound = 1;
@@ -53,6 +56,16 @@ contract GameInitSystem is System {
     GameMetaData.setName(gameID,name);
     GameMetaData.setMapId(gameID,mapId);
     GameMetaData.setMirror(gameID,gameID);
+
+  }
+
+  function initUsername(string memory userName) public{
+    address sender = _msgSender();
+
+    if (bytes(AddressToUsername.getUserName(sender)).length > 0) {
+      revert InitSystem__UsernameAlreadyInitialized();
+    }
+    AddressToUsername.setUserName(sender, userName);
 
   }
 }

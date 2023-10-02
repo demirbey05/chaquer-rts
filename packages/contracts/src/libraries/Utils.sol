@@ -6,7 +6,7 @@ import "./Libraries.sol";
 import "../systems/Errors.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
 import { AttackerType, ClashType } from "../codegen/common.sol";
-import { CastleOwnable, CreditOwn, Position, ResourceOwnable, SoldierCreated, DockOwnable, ArmyConfig, ArmyConfigData, ArmyOwnable, ClashResult, ColorOwnable, AddressToUsername, Players, GameMetaData } from "../codegen/index.sol";
+import { CastleOwnable, CreditOwn, Position, ResourceOwnable, SoldierCreated, DockOwnable, ArmyConfig, ArmyConfigData, ArmyOwnable, ClashResult, ColorOwnable, AddressToColorIndex, Players, GameMetaData } from "../codegen/index.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 error ErrorInCalculatingBattleScores();
@@ -209,7 +209,7 @@ library LibUtils {
 
     if (result == 1) {
       ResourceOwnable.setOwner(mineID, attackerOwner);
-      ColorOwnable.setColorIndex(mineID, AddressToUsername.getColorIndex(attackerOwner, gameID));
+      ColorOwnable.setColorIndex(mineID, AddressToColorIndex.getColorIndex(attackerOwner, gameID));
 
       // Destroy all the army which belongs to castle owner
 
@@ -234,7 +234,7 @@ library LibUtils {
     uint8 result = LibNaval.fightFleetToFleetGroup(attackerID, ownerEntitiesSurrondMine, gameID);
     if (result == 1) {
       ResourceOwnable.setOwner(mineID, attackerOwner);
-      ColorOwnable.setColorIndex(mineID, AddressToUsername.getColorIndex(attackerOwner, gameID));
+      ColorOwnable.setColorIndex(mineID, AddressToColorIndex.getColorIndex(attackerOwner, gameID));
     }
     emitClashTableEvent(result, attackerID, mineID, gameID, attackerOwner, mineOwner, ClashType.Mine);
   }
@@ -279,7 +279,7 @@ library LibUtils {
       GameMetaData.setNumberOfCastle(gameID, GameMetaData.getNumberOfCastle(gameID) - 1);
       Position.deleteRecord(ownedCastles[i]);
     }
-    AddressToUsername.deleteRecord(player, gameID);
+    AddressToColorIndex.deleteRecord(player, gameID);
     CreditOwn.deleteRecord(gameID, player);
   }
 

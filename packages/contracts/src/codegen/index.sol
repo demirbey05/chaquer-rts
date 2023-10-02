@@ -11,7 +11,8 @@ import { Position, PositionTableId } from "./tables/Position.sol";
 import { Players, PlayersTableId } from "./tables/Players.sol";
 import { PlayerSeeds, PlayerSeedsTableId } from "./tables/PlayerSeeds.sol";
 import { SeedInited, SeedInitedTableId } from "./tables/SeedInited.sol";
-import { AddressToUsername, AddressToUsernameData, AddressToUsernameTableId } from "./tables/AddressToUsername.sol";
+import { AddressToUsername, AddressToUsernameTableId } from "./tables/AddressToUsername.sol";
+import { AddressToColorIndex, AddressToColorIndexData, AddressToColorIndexTableId } from "./tables/AddressToColorIndex.sol";
 import { ResourceOwnable, ResourceOwnableData, ResourceOwnableTableId } from "./tables/ResourceOwnable.sol";
 import { ResourceInited, ResourceInitedTableId } from "./tables/ResourceInited.sol";
 import { GameMetaData, GameMetaDataData, GameMetaDataTableId } from "./tables/GameMetaData.sol";
@@ -29,3 +30,4 @@ import { ClashResult, ClashResultData, ClashResultTableId } from "./tables/Clash
 import { ColorOwnable, ColorOwnableData, ColorOwnableTableId } from "./tables/ColorOwnable.sol";
 import { ChatMessages, ChatMessagesData, ChatMessagesTableId } from "./tables/ChatMessages.sol";
 import { LastMessageTime, LastMessageTimeTableId } from "./tables/LastMessageTime.sol";
+import { LatestGameID, LatestGameIDTableId } from "./tables/LatestGameID.sol";

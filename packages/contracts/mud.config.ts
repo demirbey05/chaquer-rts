@@ -71,20 +71,27 @@ export default mudConfig({
         seedInit:"bool"
       }
     },
+
     AddressToUsername:{
       keySchema:{
         ownerAddress:"address",
+      },
+      valueSchema:{
+        userName:"string",      
+      }
+    },
+
+    AddressToColorIndex:{
+      keySchema:{
+        ownerAddress:"address",
         gameID:"uint256"
-        
       },
       valueSchema:{
         mirror:"uint256",
-        colorIndex:"uint256",
-        userName:"string",
-        
-        
+        colorIndex:"uint256",      
       }
     },
+
     ResourceOwnable :{
       valueSchema:{
         sourceType:"MineType",
@@ -243,7 +250,8 @@ export default mudConfig({
       },valueSchema:{
         time:"uint256"
        }
-    }
+    },
+    LatestGameID:"uint256"
 
   },
   

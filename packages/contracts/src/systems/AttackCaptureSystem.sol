@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
-import { ArmyOwnable, ClashResult, FleetOwnable, FleetConfigData, FleetConfig, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, ResourceOwnable, Players, GameMetaData, DockOwnable, AddressToUsername, ColorOwnable } from "../codegen/index.sol";
+import { ArmyOwnable, ClashResult, FleetOwnable, FleetConfigData, FleetConfig, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, ResourceOwnable, Players, GameMetaData, DockOwnable, AddressToColorIndex, ColorOwnable } from "../codegen/index.sol";
 import { LibMath, LibAttack, BattleScore, LibUtils, LibQueries, LibNaval } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
@@ -108,7 +108,7 @@ contract AttackCaptureSystem is System {
     LibUtils.takeOwnershipOfDocks(IStore(_world()), castleOwner, gameID, castleOwner);
     GameMetaData.setNumberOfPlayer(gameID, GameMetaData.getNumberOfPlayer(gameID) - 1);
     Players.set(gameID, castleOwner, false);
-    AddressToUsername.deleteRecord(castleOwner, gameID);
+    AddressToColorIndex.deleteRecord(castleOwner, gameID);
   }
 
   function captureCastle(bytes32 armyID, bytes32 castleID) public returns (uint256 result) {
@@ -145,7 +145,7 @@ contract AttackCaptureSystem is System {
 
     if (result == 1) {
       CastleOwnable.setOwner(castleID, armyOwner);
-      ColorOwnable.setColorIndex(castleID, AddressToUsername.getColorIndex(armyOwner, gameID));
+      ColorOwnable.setColorIndex(castleID, AddressToColorIndex.getColorIndex(armyOwner, gameID));
 
       // Destroy all the army which belongs to castle owner
       if (!LibQueries.queryAddressHasCastle(IStore(_world()), castleOwner, gameID)) {
