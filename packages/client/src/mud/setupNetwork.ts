@@ -79,7 +79,9 @@ export async function setupNetwork() {
     abi: IWorldAbi,
     publicClient,
     walletClient: burnerWalletClient,
+
     onWrite: (write) => write$.next(write),
+
   });
 
   /*
