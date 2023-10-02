@@ -1,12 +1,14 @@
 import { useMUD } from "../context/MUDContext";
 import { useEffect, useState } from "react";
 import { useEntityQuery, useObservableValue } from "@latticexyz/react";
-import { Has, getComponentValueStrict } from "@latticexyz/recs";
+import { HasValue, getComponentValueStrict } from "@latticexyz/recs";
 
 export function useChatMessages(maxElementSize: number) {
     const { components } = useMUD();
 
-    const chatEntity = useEntityQuery([Has(components.ChatMessages)]);
+    const chatEntity = useEntityQuery([
+        HasValue(components.ChatMessages, { gameID: BigInt(1) }),
+    ]);
     const value = useObservableValue(components.ChatMessages.update$);
 
     const [messages, setMessages] = useState<any[]>([]);

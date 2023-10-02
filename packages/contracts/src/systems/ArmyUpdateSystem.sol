@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
-import { ArmyOwnable, ArmyConfig, ArmyConfigData, Position, CastleOwnable } from "../codegen/Tables.sol";
+import { ArmyOwnable, ArmyConfig, ArmyConfigData, Position, CastleOwnable } from "../codegen/index.sol";
 import { LibMath } from "../libraries/LibMath.sol";
 import { LibUtils } from "../libraries/Utils.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";

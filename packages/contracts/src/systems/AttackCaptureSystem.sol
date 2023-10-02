@@ -3,11 +3,11 @@ pragma solidity ^0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
-import { ArmyOwnable, ClashResult, FleetOwnable, FleetConfigData, FleetConfig, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, ResourceOwnable, Players, NumberOfUsers, DockOwnable, AddressToUsername, ColorOwnable } from "../codegen/Tables.sol";
+import { ArmyOwnable, ClashResult, FleetOwnable, FleetConfigData, FleetConfig, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, ResourceOwnable, Players, NumberOfUsers, DockOwnable, AddressToUsername, ColorOwnable } from "../codegen/index.sol";
 import { LibMath, LibAttack, BattleScore, LibUtils, LibQueries, LibNaval } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
-import { MineType, ClashType } from "../codegen/Types.sol";
+import { MineType, ClashType } from "../codegen/common.sol";
 
 contract AttackCaptureSystem is System {
   function attackToArmy(
@@ -51,7 +51,7 @@ contract AttackCaptureSystem is System {
       );
       ArmyConfig.set(armyOne, newConfig);
 
-      ClashResult.emitEphemeral(
+      ClashResult.set(
         keccak256(abi.encodePacked(block.timestamp, armyTwo, armyOne, battleScore.scoreArmyTwo)),
         owner,
         ownerTwo,
@@ -69,7 +69,7 @@ contract AttackCaptureSystem is System {
         gameID
       );
       ArmyConfig.set(armyTwo, newConfig);
-      ClashResult.emitEphemeral(
+      ClashResult.set(
         keccak256(abi.encodePacked(block.timestamp, armyTwo, armyOne, battleScore.scoreArmyTwo)),
         ownerTwo,
         owner,
@@ -81,7 +81,7 @@ contract AttackCaptureSystem is System {
       LibUtils.deleteArmy(armyOne);
       LibUtils.deleteArmy(armyTwo);
 
-      ClashResult.emitEphemeral(
+      ClashResult.set(
         keccak256(abi.encodePacked(block.timestamp, armyTwo, armyOne, battleScore.scoreArmyTwo)),
         ownerTwo,
         owner,

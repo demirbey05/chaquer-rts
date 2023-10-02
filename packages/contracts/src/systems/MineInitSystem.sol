@@ -2,14 +2,13 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { PlayerSeeds, Players, LimitOfGame, GameMetaData, ResourcesSold, NumberOfUsers, ResourceInited, ColorOwnable, SeedInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, ClashResult, ArmyConfig, ArmyOwnable, FleetOwnable } from "../codegen/Tables.sol";
-import { MineType } from "../codegen/Types.sol";
+import { PlayerSeeds, Players, LimitOfGame, GameMetaData, ResourcesSold, NumberOfUsers, ResourceInited, ColorOwnable, SeedInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, ClashResult, ArmyConfig, ArmyOwnable, FleetOwnable } from "../codegen/index.sol";
 import { LibRandom, LibQueries, LibAttack, LibUtils, LibMath, LibNaval } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import "./Errors.sol";
 import { initialMarketSupply } from "./Constants.sol";
-import { State, ClashType, AttackerType } from "../codegen/Types.sol";
+import { State, ClashType, AttackerType, MineType } from "../codegen/common.sol";
 
 uint256 constant minePerResource = 1;
 uint256 constant maxIter = 30;

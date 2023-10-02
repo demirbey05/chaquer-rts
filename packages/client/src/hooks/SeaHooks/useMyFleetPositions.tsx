@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 export function useMyFleetPositions(address: any) {
     const { components } = useMUD();
 
-    const fleetEntity = useEntityQuery([HasValue(components.FleetOwnable, { owner: address })]);
+    const fleetEntity = useEntityQuery([HasValue(components.FleetOwnable, { owner: address, gameID: BigInt(1) })]);
     const valuePos = useObservableValue(components.Position.update$);
     const valueCfg = useObservableValue(components.FleetConfig.update$);
     const valueCol = useObservableValue(components.ColorOwnable.update$);

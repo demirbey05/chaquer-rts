@@ -5,7 +5,7 @@ import { resolveTableId } from "@latticexyz/config";
 export default mudConfig({
   tables: {
     ArmyConfig: {
-      schema: {
+      valueSchema: {
         numSwordsman: "uint32",
         numArcher: "uint32",
         numCavalry: "uint32",
@@ -14,14 +14,14 @@ export default mudConfig({
       dataStruct: true,
     },
     ArmyOwnable: {
-      schema: {
+      valueSchema: {
         owner: "address",
         gameID: "uint256",
       },
       dataStruct: false,
     },
     CastleOwnable: {
-      schema: {
+      valueSchema: {
         owner: "address",
         gameID: "uint256",
       },
@@ -31,7 +31,7 @@ export default mudConfig({
       keySchema: {
         gameID: "uint256",
       },
-      schema: {
+      valueSchema: {
         width: "uint32",
         height: "uint32",
         terrain: "bytes",
@@ -39,7 +39,7 @@ export default mudConfig({
       dataStruct: false,
     },
     Position: {
-      schema: {
+      valueSchema: {
         x: "uint32",
         y: "uint32",
         gameID: "uint256",
@@ -50,7 +50,7 @@ export default mudConfig({
       keySchema:{
         gameId:"uint256",
         userAddress:"address"
-      } ,schema :{
+      } ,valueSchema :{
         userValid:"bool"
       }
     },
@@ -58,7 +58,7 @@ export default mudConfig({
       keySchema:{
         gameId:"uint256"
       },
-      schema:{
+      valueSchema:{
         seeds:"uint256[]",
       }
     },
@@ -67,7 +67,7 @@ export default mudConfig({
         gameId:"uint256",
         user:"address"
       },
-      schema:{
+      valueSchema:{
         seedInit:"bool"
       }
     },
@@ -75,7 +75,7 @@ export default mudConfig({
       keySchema:{
         gameId:"uint256"
       },
-      schema:{
+      valueSchema:{
         numOfUsers:"uint256"
       }
     },
@@ -83,7 +83,7 @@ export default mudConfig({
       keySchema:{
         gameId:"uint256"
       },
-      schema:{
+      valueSchema:{
         numOfUsers:"uint256"
       }
     },
@@ -92,14 +92,14 @@ export default mudConfig({
         ownerAddress:"address",
         gameId:"uint256"
       },
-      schema:{
+      valueSchema:{
         colorIndex:"uint256",
         userName:"string",
         
       }
     },
     ResourceOwnable :{
-      schema:{
+      valueSchema:{
         sourceType:"MineType",
         owner:"address",
         gameID:"uint256"
@@ -109,7 +109,7 @@ export default mudConfig({
       keySchema:{
         gameID:"uint256"
       },
-      schema:{
+      valueSchema:{
         isInited:"bool"
       }
     },
@@ -117,7 +117,7 @@ export default mudConfig({
       keySchema:{
         gameID:"uint256"
       },
-      schema:{
+      valueSchema:{
         state:"State",
         startBlock:"uint256",
         winner:"address",
@@ -130,7 +130,7 @@ export default mudConfig({
         owner:"address",
         gameID:"uint256"
       },
-      schema:{
+      valueSchema:{
         numOfFood:"uint256",
         numOfWood:"uint256",
         numOfGold:"uint256"
@@ -141,7 +141,7 @@ export default mudConfig({
         owner:"address",
         gameID:"uint256"
       },
-      schema:{
+      valueSchema:{
         lastCollect:"uint256"
       }
     },
@@ -149,7 +149,7 @@ export default mudConfig({
       keySchema:{
         gameID:"uint256"
       },
-      schema:{
+      valueSchema:{
         foodSold:"uint256",
         woodSold:"uint256",
         goldSold:"uint256",
@@ -160,7 +160,7 @@ export default mudConfig({
         gameID:"uint256",
         owner:"address"
       },
-      schema:{
+      valueSchema:{
         amount:"uint256"
       }
     },
@@ -168,7 +168,7 @@ export default mudConfig({
       keySchema:{
         gameID:"uint256",
       },
-      schema:{
+      valueSchema:{
         numOfSwordsman:"uint256",
         numOfArcher:"uint256",
         numOfCavalry:"uint256"
@@ -179,7 +179,7 @@ export default mudConfig({
       keySchema:{
         gameID:"uint256"
       },
-      schema:{
+      valueSchema:{
         priceFood:"uint256",
         priceWood:"uint256",
         priceGold:"uint256"
@@ -189,21 +189,21 @@ export default mudConfig({
       keySchema:{
         gameID:"uint256"
       },
-      schema:{
+      valueSchema:{
         priceSwordsman:"uint256",
         priceArcher:"uint256",
         priceCavalry:"uint256"
       }
     },
     DockOwnable: {
-      schema: {
+      valueSchema: {
         owner: "address",
         gameID: "uint256",
       },
       dataStruct: false,
     },
     FleetConfig: {
-      schema: {
+      valueSchema: {
         numSmall: "uint32",
         numMedium: "uint32",
         numBig: "uint32",
@@ -212,42 +212,42 @@ export default mudConfig({
       dataStruct: true,
     },
     FleetOwnable: {
-      schema: {
+      valueSchema: {
         owner: "address",
         gameID: "uint256",
       },
       dataStruct: false,
     },
     ClashResult:{
-      schema:{
+      valueSchema:{
         winner:"address",
         loser:"address",
         isDraw:"bool",
         clashType:"ClashType"
       },
-      ephemeral:true,
+      offchainOnly:true,
     },
     ColorOwnable:{
-      schema:{
+      valueSchema:{
         colorIndex:"uint256",
         gameID:"uint256"
       }
     },
     ChatMessages:{
-      schema:{
+      valueSchema:{
         time:"uint256",
         gameID:"uint256",
         userName:"string",
         message:"string",
         
       },
-      ephemeral:true,
+      offchainOnly:true,
     },
     LastMessageTime:{
       keySchema:{
         gameID:"uint256",
         user:"address"
-      },schema:{
+      },valueSchema:{
         time:"uint256"
        }
     }

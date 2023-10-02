@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.0;
 import { System } from "@latticexyz/world/src/System.sol";
-import { ResourceOwnData, ResourceOwn, GameMetaData, CreditOwn, ResourcesSold } from "../codegen/Tables.sol";
+import { ResourceOwnData, ResourceOwn, GameMetaData, CreditOwn, ResourcesSold } from "../codegen/index.sol";
 import "./Errors.sol";
-import { MineType } from "../codegen/Types.sol";
+import { MineType } from "../codegen/common.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 

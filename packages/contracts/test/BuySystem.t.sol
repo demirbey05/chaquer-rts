@@ -3,9 +3,9 @@
 import { TestUtils } from "./utils/TestUtils.sol";
 import { NakamoTest } from "./utils/NakamoTest.sol";
 import "../src/systems/Errors.sol";
-import { CreditOwn, ResourceOwn, GameMetaData, ResourcesSold } from "../src/codegen/Tables.sol";
+import { CreditOwn, ResourceOwn, GameMetaData, ResourcesSold } from "../src/codegen/index.sol";
 import { LibVRGDA } from "../src/libraries/LibVRGDA.sol";
-import { MineType } from "../src/codegen/Types.sol";
+import { MineType } from "../src/codegen/common.sol";
 pragma solidity ^0.8.0;
 
 contract BuySystem is NakamoTest {

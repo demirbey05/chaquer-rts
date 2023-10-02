@@ -2,11 +2,11 @@
 
 pragma solidity ^0.8.0;
 import { IWorld } from "../../src/codegen/world/IWorld.sol";
-import { ArmyOwnable, ArmyConfigData, Position } from "../../src/codegen/Tables.sol";
+import { ArmyOwnable, ArmyConfigData, Position } from "../../src/codegen/index.sol";
 import { Vm } from "forge-std/Vm.sol";
-import { hasKey } from "@latticexyz/world/src/modules/keysintable/hasKey.sol";
+import { hasKey } from "@latticexyz/world-modules/src/modules/keysintable/hasKey.sol";
 import { LibMath, LibQueries } from "../../src/libraries/Libraries.sol";
-import { MineType, AttackerType } from "../../src/codegen/Types.sol";
+import { MineType, AttackerType } from "../../src/codegen/common.sol";
 
 address constant HEVM_ADDRESS = address(uint160(uint256(keccak256("hevm cheat code"))));
 

@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 export function useMyDockPositions(address: any) {
     const { components } = useMUD();
 
-    const dockEntity = useEntityQuery([HasValue(components.DockOwnable, { owner: address })]);
+    const dockEntity = useEntityQuery([HasValue(components.DockOwnable, { owner: address, gameID: BigInt(1) })]);
     const valueOwn = useObservableValue(components.DockOwnable.update$);
     const valueCol = useObservableValue(components.ColorOwnable.update$);
 

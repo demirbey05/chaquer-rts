@@ -1,12 +1,14 @@
 import { useMUD } from "../../context/MUDContext";
 import { useEntityQuery, useObservableValue } from "@latticexyz/react";
-import { Has, getComponentValue } from "@latticexyz/recs";
+import { getComponentValue, HasValue } from "@latticexyz/recs";
 import { useState, useEffect } from "react";
 
 export function useArmyPositions() {
   const { components } = useMUD();
 
-  const armyEntities = useEntityQuery([Has(components.ArmyOwnable)]);
+  const armyEntities = useEntityQuery([
+    HasValue(components.ArmyOwnable, { gameID: BigInt(1) }),
+  ]);
   const valuePos = useObservableValue(components.Position.update$);
   const valueCfg = useObservableValue(components.ArmyConfig.update$);
   const valueCol = useObservableValue(components.ColorOwnable.update$);

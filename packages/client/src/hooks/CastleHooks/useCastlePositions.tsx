@@ -1,12 +1,14 @@
 import { useMUD } from "../../context/MUDContext";
 import { useEntityQuery, useObservableValue } from "@latticexyz/react";
-import { Has, getComponentValue } from "@latticexyz/recs";
+import { getComponentValue, HasValue } from "@latticexyz/recs";
 import { useState, useEffect } from "react";
 
 export function useCastlePositions() {
   const { components } = useMUD();
 
-  const castleEntities = useEntityQuery([Has(components.CastleOwnable)]);
+  const castleEntities = useEntityQuery([
+    HasValue(components.CastleOwnable, { gameID: BigInt(1) }),
+  ]);
   const valuePos = useObservableValue(components.CastleOwnable.update$);
   const valueCol = useObservableValue(components.ColorOwnable.update$);
 

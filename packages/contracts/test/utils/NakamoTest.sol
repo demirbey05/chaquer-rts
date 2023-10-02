@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import { MudTest } from "@latticexyz/store/src/MudTest.sol";
+import { MudTest } from "@latticexyz/world/test/MudTest.t.sol";
 import { IWorld } from "../../src/codegen/world/IWorld.sol";
 import "forge-std/Test.sol";
 import { TestUtils } from "./TestUtils.sol";
