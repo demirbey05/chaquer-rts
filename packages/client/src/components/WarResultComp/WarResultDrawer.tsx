@@ -4,7 +4,7 @@ import { usePlayer } from '../../context/PlayerContext';
 import { useWarResult } from '../../hooks/useWarResult';
 import { useMyUsername } from "../../hooks/IdentityHooks/useMyUsername";
 
-export const WarResultDrawer = () => {
+export const WarResultDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const [isOpen, setIsOpen] = useState(true);
 
     const { userWallet } = usePlayer();
@@ -25,14 +25,16 @@ export const WarResultDrawer = () => {
     };
 
     useEffect(() => {
-        window.addEventListener('keydown', handleKeyPress);
+        if (!isInputFocused) {
+            window.addEventListener('keydown', handleKeyPress);
+        }
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [isOpen]);
+    }, [isOpen, isInputFocused]);
 
     return (
-        <div>
+        <>
             <button className="war-result-button" onClick={toggleOffcanvas}>
                 <img src={warResultIcon} width={"30px"} height={"30px"}></img>
             </button>
@@ -60,7 +62,7 @@ export const WarResultDrawer = () => {
                     }
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

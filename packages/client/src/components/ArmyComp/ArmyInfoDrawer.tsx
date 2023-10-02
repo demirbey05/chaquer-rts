@@ -21,7 +21,7 @@ const scrollToDiv = (targetId: any) => {
     }
 };
 
-export const ArmyInfoDrawer = () => {
+export const ArmyInfoDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const { userWallet } = usePlayer()
     const [isOpen, setIsOpen] = useState(false);
 
@@ -40,11 +40,14 @@ export const ArmyInfoDrawer = () => {
     };
 
     useEffect(() => {
-        window.addEventListener('keydown', handleKeyPress);
+        if (!isInputFocused) {
+            window.addEventListener('keydown', handleKeyPress);
+        }
+
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [isOpen]);
+    }, [isOpen, isInputFocused]);
 
     // Find the army on the map
     const handleClick = (targetId: any) => {
