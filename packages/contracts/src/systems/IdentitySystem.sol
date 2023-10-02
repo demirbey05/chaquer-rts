@@ -38,7 +38,7 @@ contract IdentitySystem is System {
     }
     {
       uint256 colorCursor = GameMetaData.getColorCursor(gameID);
-      AddressToUsername.set(sender, gameID, colorCursor + 1, userName);
+      AddressToUsername.set(sender, gameID,gameID, colorCursor + 1, userName);
       GameMetaData.setColorCursor(gameID, colorCursor + 1);
     }
 
