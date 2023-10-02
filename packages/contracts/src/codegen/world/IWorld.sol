@@ -10,6 +10,7 @@ import { IAttackCaptureSystem } from "./IAttackCaptureSystem.sol";
 import { IChatSystem } from "./IChatSystem.sol";
 import { IEconomySystem } from "./IEconomySystem.sol";
 import { IExchangeSystem } from "./IExchangeSystem.sol";
+import { IGameInitSystem } from "./IGameInitSystem.sol";
 import { IIdentitySystem } from "./IIdentitySystem.sol";
 import { IMapSystem } from "./IMapSystem.sol";
 import { IMineCaptureSystem } from "./IMineCaptureSystem.sol";
@@ -30,6 +31,7 @@ interface IWorld is
   IChatSystem,
   IEconomySystem,
   IExchangeSystem,
+  IGameInitSystem,
   IIdentitySystem,
   IMapSystem,
   IMineCaptureSystem,

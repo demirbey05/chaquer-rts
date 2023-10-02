@@ -13,10 +13,6 @@ interface IMapSystem {
   error MoveArmy__UnsufficientFood();
   error MoveArmy__UnsufficientGold();
 
-  function initMapData(uint256 gameID, uint32 width, uint32 height, bytes calldata terrain) external;
-
-  function InitNumberOfGamer(uint256 gameID, uint256 capacity) external;
-
   function settleCastle(uint32 x, uint32 y, uint256 gameID) external returns (bytes32);
 
   function settleArmy(uint32 x, uint32 y, ArmyConfigData calldata config, bytes32 castleID) external returns (bytes32);
