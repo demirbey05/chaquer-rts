@@ -5,7 +5,7 @@ import { BattleResult, RemainingData, EntityType } from "./Types.sol";
 import "./Libraries.sol";
 import "../systems/Errors.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
-import { AttackerType, ClashType } from "../codegen/Types.sol";
+import { AttackerType, ClashType } from "../codegen/common.sol";
 import { CastleOwnable, CreditOwn, Position, ResourceOwnable, SoldierCreated, DockOwnable, ArmyConfig, ArmyConfigData, ArmyOwnable, ClashResult, ColorOwnable, AddressToUsername, Players, NumberOfUsers, GameMetaData } from "../codegen/Tables.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
@@ -168,7 +168,7 @@ library LibUtils {
     ClashType clashType
   ) internal {
     if (result == 0) {
-      ClashResult.emitEphemeral(
+      ClashResult.set(
         keccak256(abi.encodePacked(block.timestamp, attackerID, mineID, gameID)),
         attackerOwner,
         mineOwner,
@@ -176,7 +176,7 @@ library LibUtils {
         clashType
       );
     } else if (result == 1) {
-      ClashResult.emitEphemeral(
+      ClashResult.set(
         keccak256(abi.encodePacked(block.timestamp, attackerID, mineID, gameID)),
         attackerOwner,
         mineOwner,
@@ -184,7 +184,7 @@ library LibUtils {
         clashType
       );
     } else if (result == 2) {
-      ClashResult.emitEphemeral(
+      ClashResult.set(
         keccak256(abi.encodePacked(block.timestamp, attackerID, mineID, gameID)),
         mineOwner,
         attackerOwner,

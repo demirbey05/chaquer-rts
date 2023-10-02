@@ -2,12 +2,12 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Position, ResourceOwnable, ArmyOwnable, FleetOwnable, ColorOwnable, AddressToUsername } from "../codegen/Tables.sol";
+import { Position, ResourceOwnable, ArmyOwnable, FleetOwnable, ColorOwnable, AddressToUsername } from "../codegen/index.sol";
 import { LibUtils, LibMath } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import "./Errors.sol";
-import { AttackerType } from "../codegen/Types.sol";
+import { AttackerType } from "../codegen/common.sol";
 
 contract MineCaptureSystem is System {
   function captureMine(

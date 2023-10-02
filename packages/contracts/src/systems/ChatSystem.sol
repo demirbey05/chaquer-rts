@@ -3,7 +3,7 @@
 pragma solidity ^0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Players, ChatMessages, AddressToUsername, LastMessageTime } from "../codegen/Tables.sol";
+import { Players, ChatMessages, AddressToUsername, LastMessageTime } from "../codegen/index.sol";
 
 error ChatSystem__MessageIsTooLong();
 error ChatSystem__NotJoined();
@@ -21,7 +21,7 @@ contract ChatSystem is System {
     if (!Players.get(gameID, sender)) {
       revert ChatSystem__NotJoined();
     }
-    ChatMessages.emitEphemeral(
+    ChatMessages.set(
       keccak256(abi.encodePacked(block.timestamp, sender, message, gameID)),
       block.number,
       gameID,

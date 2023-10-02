@@ -5,11 +5,11 @@ pragma solidity ^0.8.0;
 import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
-import { ClashType } from "../codegen/Types.sol";
+import { ClashType } from "../codegen/common.sol";
 import { LibQueries, LibMath, LibNaval, LibUtils, LibAttack } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { baseCostDock, requiredArmySize, baseWoodCostDock, maxShipInFleet, smallCreditCost, smallWoodCost, mediumCreditCost, mediumWoodCost, bigCreditCost, bigWoodCost, fleetMoveFoodCost, fleetMoveGoldCost } from "./Constants.sol";
-import { CreditOwn, ColorOwnable, AddressToUsername, ResourceOwnData, FleetOwnable, FleetConfig, Position, FleetConfigData, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, ArmyOwnable } from "../codegen/Tables.sol";
+import { CreditOwn, ColorOwnable, AddressToUsername, ResourceOwnData, FleetOwnable, FleetConfig, Position, FleetConfigData, ArmyConfig, ArmyConfigData, MapConfig, DockOwnable, ResourceOwn, ArmyOwnable } from "../codegen/index.sol";
 
 contract NavalSystem is System {
   function buildDock(

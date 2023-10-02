@@ -3,14 +3,14 @@ pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { wadMul, toWadUnsafe } from "solmate/src/utils/SignedWadMath.sol";
-import { MapConfig, Position, ResourceOwn, ResourceOwnData, ColorOwnable, AddressToUsername, CastleOwnable, NumberOfUsers, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame, Players, CreditOwn, GameMetaData, SoldierCreated } from "../codegen/Tables.sol";
+import { MapConfig, Position, ResourceOwn, ResourceOwnData, ColorOwnable, AddressToUsername, CastleOwnable, NumberOfUsers, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame, Players, CreditOwn, GameMetaData, SoldierCreated } from "../codegen/index.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 import { LibMath } from "../libraries/LibMath.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
 import { LibUtils } from "../libraries/Utils.sol";
-import { State } from "../codegen/Types.sol";
+import { State } from "../codegen/common.sol";
 import { maxArmyNum, armyMoveFoodCost, armyMoveGoldCost } from "./Constants.sol";
 import "./Errors.sol";
 

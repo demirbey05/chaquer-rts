@@ -1,11 +1,12 @@
 //SPDX-License-Identifier:MIT
 
 pragma solidity ^0.8.0;
-import { query, QueryFragment, QueryType } from "@latticexyz/world/src/modules/keysintable/query.sol";
+import { query, QueryFragment, QueryType } from "@latticexyz/world-modules/src/modules/keysintable/query.sol";
 import { PositionTableId, FleetOwnableTableId, FleetOwnable, DockOwnable, DockOwnableTableId, CastleOwnableTableId, Position, CastleOwnable, ArmyOwnableTableId, ArmyOwnable, ResourceOwnable, ResourceOwnableTableId } from "../codegen/Tables.sol";
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
-import { MineType } from "../codegen/Types.sol";
+import { MineType } from "../codegen/common.sol";
+import { PackedCounter } from "@latticexyz/store/src/PackedCounter.sol";
 
 library LibQueries {
   function queryPositionEntity(
@@ -14,7 +15,8 @@ library LibQueries {
     uint32 y,
     uint256 gameID
   ) internal view returns (uint256) {
-    bytes32[] memory entities = getKeysWithValue(world, PositionTableId, Position.encode(x, y, gameID));
+    (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicDat) = Position.encode(x, y, gameID);
+    bytes32[] memory entities = getKeysWithValue(world, PositionTableId, staticData, encodedLengths, dynamicDat);
     return entities.length;
   }
 
@@ -23,11 +25,11 @@ library LibQueries {
     address ownerCandidate,
     uint256 gameID
   ) internal view returns (bool) {
-    bytes32[] memory entities = getKeysWithValue(
-      world,
-      CastleOwnableTableId,
-      CastleOwnable.encode(ownerCandidate, gameID)
+    (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicDat) = CastleOwnable.encode(
+      ownerCandidate,
+      gameID
     );
+    bytes32[] memory entities = getKeysWithValue(world, CastleOwnableTableId, staticData, encodedLengths, dynamicDat);
     return entities.length > 0;
   }
 
@@ -36,7 +38,11 @@ library LibQueries {
     address owner,
     uint256 gameID
   ) internal view returns (bytes32[] memory) {
-    bytes32[] memory entities = getKeysWithValue(world, CastleOwnableTableId, CastleOwnable.encode(owner, gameID));
+    (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicDat) = CastleOwnable.encode(
+      owner,
+      gameID
+    );
+    bytes32[] memory entities = getKeysWithValue(world, CastleOwnableTableId, staticData, encodedLengths, dynamicDat);
     return entities;
   }
 
@@ -45,7 +51,11 @@ library LibQueries {
     address ownerCandidate,
     uint256 gameID
   ) internal view returns (uint256) {
-    bytes32[] memory entities = getKeysWithValue(world, ArmyOwnableTableId, ArmyOwnable.encode(ownerCandidate, gameID));
+    (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicDat) = ArmyOwnable.encode(
+      ownerCandidate,
+      gameID
+    );
+    bytes32[] memory entities = getKeysWithValue(world, ArmyOwnableTableId, staticData, encodedLengths, dynamicDat);
     return entities.length;
   }
 
@@ -54,7 +64,11 @@ library LibQueries {
     address owner,
     uint256 gameID
   ) internal view returns (bytes32[] memory) {
-    bytes32[] memory entities = getKeysWithValue(world, ArmyOwnableTableId, ArmyOwnable.encode(owner, gameID));
+    (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicDat) = ArmyOwnable.encode(
+      owner,
+      gameID
+    );
+    bytes32[] memory entities = getKeysWithValue(world, ArmyOwnableTableId, staticData, encodedLengths, dynamicDat);
     return entities;
   }
 
@@ -64,11 +78,12 @@ library LibQueries {
     uint256 gameID,
     MineType mineType
   ) internal view returns (bytes32[] memory) {
-    bytes32[] memory entities = getKeysWithValue(
-      world,
-      ResourceOwnableTableId,
-      ResourceOwnable.encode(mineType, owner, gameID)
+    (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicDat) = ResourceOwnable.encode(
+      mineType,
+      owner,
+      gameID
     );
+    bytes32[] memory entities = getKeysWithValue(world, ResourceOwnableTableId, staticData, encodedLengths, dynamicDat);
     return entities;
   }
 
@@ -77,7 +92,11 @@ library LibQueries {
     address owner,
     uint256 gameID
   ) internal view returns (bytes32[] memory) {
-    bytes32[] memory entities = getKeysWithValue(world, DockOwnableTableId, DockOwnable.encode(owner, gameID));
+    (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicDat) = DockOwnable.encode(
+      owner,
+      gameID
+    );
+    bytes32[] memory entities = getKeysWithValue(world, DockOwnableTableId, staticData, encodedLengths, dynamicDat);
     return entities;
   }
 
@@ -86,7 +105,11 @@ library LibQueries {
     address owner,
     uint256 gameID
   ) internal view returns (uint256) {
-    bytes32[] memory entities = getKeysWithValue(world, DockOwnableTableId, DockOwnable.encode(owner, gameID));
+    (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicDat) = DockOwnable.encode(
+      owner,
+      gameID
+    );
+    bytes32[] memory entities = getKeysWithValue(world, DockOwnableTableId, staticData, encodedLengths, dynamicDat);
     return entities.length;
   }
 
@@ -95,7 +118,11 @@ library LibQueries {
     address owner,
     uint256 gameID
   ) internal view returns (uint256) {
-    bytes32[] memory entities = getKeysWithValue(world, FleetOwnableTableId, FleetOwnable.encode(owner, gameID));
+    (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicDat) = FleetOwnable.encode(
+      owner,
+      gameID
+    );
+    bytes32[] memory entities = getKeysWithValue(world, FleetOwnableTableId, staticData, encodedLengths, dynamicDat);
     return entities.length;
   }
 
@@ -104,7 +131,11 @@ library LibQueries {
     address owner,
     uint256 gameID
   ) internal view returns (bytes32[] memory) {
-    bytes32[] memory entities = getKeysWithValue(world, FleetOwnableTableId, FleetOwnable.encode(owner, gameID));
+    (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicDat) = FleetOwnable.encode(
+      owner,
+      gameID
+    );
+    bytes32[] memory entities = getKeysWithValue(world, FleetOwnableTableId, staticData, encodedLengths, dynamicDat);
     return entities;
   }
 }

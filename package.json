@@ -13,7 +13,7 @@
     "test": "pnpm recursive run test"
   },
   "devDependencies": {
-    "@latticexyz/cli": "2.0.0-main-c049c23f",
+    "@latticexyz/cli": "2.0.0-main-12a9eb1a",
     "@typescript-eslint/eslint-plugin": "5.46.1",
     "@typescript-eslint/parser": "5.46.1",
     "concurrently": "^8.0.1",
@@ -26,7 +26,7 @@
     "pnpm": "8.x"
   },
   "dependencies": {
-   "@latticexyz/config": "2.0.0-main-c049c23f",
+    "@latticexyz/config": "2.0.0-main-12a9eb1a",
     "snapsync": "link:@latticexyz/world/snapsync"
   }
 }

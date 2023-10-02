@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { ResourceOwnData, ResourceOwn, CreditOwn } from "../codegen/Tables.sol";
+import { ResourceOwnData, ResourceOwn, CreditOwn } from "../codegen/index.sol";
 
 contract TestUtilSystem is System {
   function economyIncreaseResource(

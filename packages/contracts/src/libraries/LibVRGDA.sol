@@ -1,7 +1,7 @@
 //SPDX-License-Identifier:MIT
 pragma solidity >=0.8.19;
 import { wadExp, wadLn, wadMul, unsafeWadMul, toWadUnsafe, unsafeWadDiv } from "solmate/src/utils/SignedWadMath.sol";
-import { MineType } from "../codegen/Types.sol";
+import { MineType } from "../codegen/common.sol";
 import { ResourcesSold, NumberOfUsers, SoldierCreated } from "../codegen/Tables.sol";
 import "../systems/EconomySystem.sol";
 import "../systems/MineInitSystem.sol";
@@ -66,7 +66,7 @@ library LibVRGDA {
     uint256 gameID
   ) internal view returns (int256) {
     uint256 numPlayers = NumberOfUsers.get(world, gameID);
-    //@dev minePerResource 
+    //@dev minePerResource
     int256 perTimeUnit = wadMul(0.5e18, (int256((minePerResource * 3) * mineRate + blockRate * numPlayers)) * 1e18);
     return unsafeWadDiv(sold, perTimeUnit);
   }
