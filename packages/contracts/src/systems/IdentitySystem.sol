@@ -12,7 +12,7 @@ import { State } from "../codegen/common.sol";
 import { initialCredit } from "./Constants.sol";
 
 contract IdentitySystem is System {
-  function joinGame(uint256 gameID, string memory userName) public {
+  function joinGame(uint256 gameID) public {
     address sender = _msgSender();
     uint256 limit = GameMetaData.getLimitOfPlayer(gameID);
     uint256 currentNumOfUser = GameMetaData.getNumberOfPlayer(gameID);
@@ -32,9 +32,6 @@ contract IdentitySystem is System {
 
     if (currentNumOfUser >= limit) {
       revert IdentitySystem__GameIsFull();
-    }
-    if (bytes(userName).length > 32) {
-      revert IdentitySystem__InvalidUserName();
     }
     {
       uint256 colorCursor = GameMetaData.getColorCursor(gameID);

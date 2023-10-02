@@ -116,7 +116,7 @@ library TestUtils {
     address user
   ) internal {
     vm.startPrank(user);
-    world.joinGame(gameID, userName);
+    world.joinGame(gameID);
     vm.stopPrank();
   }
 

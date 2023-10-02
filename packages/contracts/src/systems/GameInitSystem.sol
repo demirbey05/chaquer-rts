@@ -50,6 +50,7 @@ contract GameInitSystem is System {
     GameMetaData.setState(gameID, State.Waiting);
   }
 
+  //@dev founder user go into game 
   function InitGame(uint256 gameID,uint256 capacity,uint32 width,uint32 height,bytes calldata terrain,string memory name,uint8 mapId) public {
     initMapData(gameID,width,height,terrain);
     InitNumberOfGamer(gameID,capacity);
@@ -62,10 +63,9 @@ contract GameInitSystem is System {
   function initUsername(string memory userName) public{
     address sender = _msgSender();
 
-    if (bytes(AddressToUsername.getUserName(sender)).length > 0) {
-      revert InitSystem__UsernameAlreadyInitialized();
+    if (bytes(userName).length > 32) {
+      revert IdentitySystem__InvalidUserName();
     }
     AddressToUsername.setUserName(sender, userName);
-
   }
 }
