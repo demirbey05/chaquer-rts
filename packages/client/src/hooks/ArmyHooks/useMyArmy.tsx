@@ -7,7 +7,7 @@ export function useMyArmy(address: any) {
   const { components } = useMUD();
 
   const armyEntities = useEntityQuery([
-    HasValue(components.ArmyOwnable, { owner: address }),
+    HasValue(components.ArmyOwnable, { owner: address, gameID: BigInt(1) }),
   ]);
 
   const [myArmy, setMyArmy] = useState<any[]>([]);

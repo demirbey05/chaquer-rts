@@ -1,5 +1,4 @@
 import "tailwindcss/tailwind.css";
-import "react-toastify/dist/ReactToastify.css";
 import './styles/globals.css'
 import './styles/drawers.css'
 import './styles/buttons.css'
@@ -63,11 +62,11 @@ setup().then(async (result) => {
       publicClient: result.network.publicClient,
       walletClient: result.network.walletClient,
       latestBlock$: result.network.latestBlock$,
-      blockStorageOperations$: result.network.blockStorageOperations$,
+      storedBlockLogs$: result.network.storedBlockLogs$,
       worldAddress: result.network.worldContract.address,
       worldAbi: result.network.worldContract.abi,
       write$: result.network.write$,
-      recsWorld: result.network.world
+      recsWorld: result.network.world,
     });
   }
 });

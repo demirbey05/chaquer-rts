@@ -24,9 +24,5 @@
   "engines": {
     "node": "18.x",
     "pnpm": "8.x"
-  },
-  "dependencies": {
-    "@latticexyz/config": "2.0.0-main-12a9eb1a",
-    "snapsync": "link:@latticexyz/world/snapsync"
   }
 }

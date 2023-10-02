@@ -6,7 +6,9 @@ import { useState, useEffect } from "react";
 export function useMyResourcePositions(address: any) {
     const { components } = useMUD();
 
-    const resourceEntity = useEntityQuery([HasValue(components.ResourceOwnable, { owner: address })]);
+    const resourceEntity = useEntityQuery([
+        HasValue(components.ResourceOwnable, { gameID: BigInt(1), owner: address }),
+    ]);
 
     const [resources, setResources] = useState<any>();
     const valueOwn = useObservableValue(components.ResourceOwnable.update$);
