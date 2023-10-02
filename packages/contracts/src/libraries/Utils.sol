@@ -6,7 +6,7 @@ import "./Libraries.sol";
 import "../systems/Errors.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
 import { AttackerType, ClashType } from "../codegen/common.sol";
-import { CastleOwnable, CreditOwn, Position, ResourceOwnable, SoldierCreated, DockOwnable, ArmyConfig, ArmyConfigData, ArmyOwnable, ClashResult, ColorOwnable, AddressToUsername, Players, NumberOfUsers, GameMetaData } from "../codegen/Tables.sol";
+import { CastleOwnable, CreditOwn, Position, ResourceOwnable, SoldierCreated, DockOwnable, ArmyConfig, ArmyConfigData, ArmyOwnable, ClashResult, ColorOwnable, AddressToUsername, Players, GameMetaData } from "../codegen/index.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 error ErrorInCalculatingBattleScores();
@@ -173,7 +173,8 @@ library LibUtils {
         attackerOwner,
         mineOwner,
         true,
-        clashType
+        clashType,
+        gameID
       );
     } else if (result == 1) {
       ClashResult.set(
@@ -181,7 +182,8 @@ library LibUtils {
         attackerOwner,
         mineOwner,
         false,
-        clashType
+        clashType,
+        gameID
       );
     } else if (result == 2) {
       ClashResult.set(
@@ -189,7 +191,8 @@ library LibUtils {
         mineOwner,
         attackerOwner,
         false,
-        clashType
+        clashType,
+        gameID
       );
     }
   }
@@ -268,7 +271,7 @@ library LibUtils {
     uint256 gameID
   ) internal {
     Players.deleteRecord(gameID, player);
-    NumberOfUsers.set(gameID, NumberOfUsers.get(gameID) - 1);
+    GameMetaData.setNumberOfPlayer(gameID, GameMetaData.getNumberOfPlayer(gameID) - 1);
     bytes32[] memory ownedCastles = LibQueries.getOwnedCastleIDs(world, player, gameID);
     for (uint i = 0; i < ownedCastles.length; i++) {
       CastleOwnable.deleteRecord(ownedCastles[i]);

@@ -29,7 +29,7 @@ ResourceId constant _tableId = ResourceId.wrap(
 ResourceId constant GameMetaDataTableId = _tableId;
 
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
-  0x0075050001201420200000000000000000000000000000000000000000000000
+  0x00b5070001201420202020000000000000000000000000000000000000000000
 );
 
 struct GameMetaDataData {
@@ -38,6 +38,8 @@ struct GameMetaDataData {
   address winner;
   uint256 numberOfCastle;
   uint256 colorCursor;
+  uint256 numberOfPlayer;
+  uint256 limitOfPlayer;
 }
 
 library GameMetaData {
@@ -65,12 +67,14 @@ library GameMetaData {
    * @return _valueSchema The value schema for the table.
    */
   function getValueSchema() internal pure returns (Schema) {
-    SchemaType[] memory _valueSchema = new SchemaType[](5);
+    SchemaType[] memory _valueSchema = new SchemaType[](7);
     _valueSchema[0] = SchemaType.UINT8;
     _valueSchema[1] = SchemaType.UINT256;
     _valueSchema[2] = SchemaType.ADDRESS;
     _valueSchema[3] = SchemaType.UINT256;
     _valueSchema[4] = SchemaType.UINT256;
+    _valueSchema[5] = SchemaType.UINT256;
+    _valueSchema[6] = SchemaType.UINT256;
 
     return SchemaLib.encode(_valueSchema);
   }
@@ -89,12 +93,14 @@ library GameMetaData {
    * @return fieldNames An array of strings with the names of value fields.
    */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
-    fieldNames = new string[](5);
+    fieldNames = new string[](7);
     fieldNames[0] = "state";
     fieldNames[1] = "startBlock";
     fieldNames[2] = "winner";
     fieldNames[3] = "numberOfCastle";
     fieldNames[4] = "colorCursor";
+    fieldNames[5] = "numberOfPlayer";
+    fieldNames[6] = "limitOfPlayer";
   }
 
   /**
@@ -434,6 +440,132 @@ library GameMetaData {
   }
 
   /**
+   * @notice Get numberOfPlayer.
+   */
+  function getNumberOfPlayer(uint256 gameID) internal view returns (uint256 numberOfPlayer) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 5, _fieldLayout);
+    return (uint256(bytes32(_blob)));
+  }
+
+  /**
+   * @notice Get numberOfPlayer.
+   */
+  function _getNumberOfPlayer(uint256 gameID) internal view returns (uint256 numberOfPlayer) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 5, _fieldLayout);
+    return (uint256(bytes32(_blob)));
+  }
+
+  /**
+   * @notice Get numberOfPlayer (using the specified store).
+   */
+  function getNumberOfPlayer(IStore _store, uint256 gameID) internal view returns (uint256 numberOfPlayer) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 5, _fieldLayout);
+    return (uint256(bytes32(_blob)));
+  }
+
+  /**
+   * @notice Set numberOfPlayer.
+   */
+  function setNumberOfPlayer(uint256 gameID, uint256 numberOfPlayer) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 5, abi.encodePacked((numberOfPlayer)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set numberOfPlayer.
+   */
+  function _setNumberOfPlayer(uint256 gameID, uint256 numberOfPlayer) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    StoreCore.setStaticField(_tableId, _keyTuple, 5, abi.encodePacked((numberOfPlayer)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set numberOfPlayer (using the specified store).
+   */
+  function setNumberOfPlayer(IStore _store, uint256 gameID, uint256 numberOfPlayer) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    _store.setStaticField(_tableId, _keyTuple, 5, abi.encodePacked((numberOfPlayer)), _fieldLayout);
+  }
+
+  /**
+   * @notice Get limitOfPlayer.
+   */
+  function getLimitOfPlayer(uint256 gameID) internal view returns (uint256 limitOfPlayer) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 6, _fieldLayout);
+    return (uint256(bytes32(_blob)));
+  }
+
+  /**
+   * @notice Get limitOfPlayer.
+   */
+  function _getLimitOfPlayer(uint256 gameID) internal view returns (uint256 limitOfPlayer) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 6, _fieldLayout);
+    return (uint256(bytes32(_blob)));
+  }
+
+  /**
+   * @notice Get limitOfPlayer (using the specified store).
+   */
+  function getLimitOfPlayer(IStore _store, uint256 gameID) internal view returns (uint256 limitOfPlayer) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 6, _fieldLayout);
+    return (uint256(bytes32(_blob)));
+  }
+
+  /**
+   * @notice Set limitOfPlayer.
+   */
+  function setLimitOfPlayer(uint256 gameID, uint256 limitOfPlayer) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 6, abi.encodePacked((limitOfPlayer)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set limitOfPlayer.
+   */
+  function _setLimitOfPlayer(uint256 gameID, uint256 limitOfPlayer) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    StoreCore.setStaticField(_tableId, _keyTuple, 6, abi.encodePacked((limitOfPlayer)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set limitOfPlayer (using the specified store).
+   */
+  function setLimitOfPlayer(IStore _store, uint256 gameID, uint256 limitOfPlayer) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    _store.setStaticField(_tableId, _keyTuple, 6, abi.encodePacked((limitOfPlayer)), _fieldLayout);
+  }
+
+  /**
    * @notice Get the full data.
    */
   function get(uint256 gameID) internal view returns (GameMetaDataData memory _table) {
@@ -487,9 +619,19 @@ library GameMetaData {
     uint256 startBlock,
     address winner,
     uint256 numberOfCastle,
-    uint256 colorCursor
+    uint256 colorCursor,
+    uint256 numberOfPlayer,
+    uint256 limitOfPlayer
   ) internal {
-    bytes memory _staticData = encodeStatic(state, startBlock, winner, numberOfCastle, colorCursor);
+    bytes memory _staticData = encodeStatic(
+      state,
+      startBlock,
+      winner,
+      numberOfCastle,
+      colorCursor,
+      numberOfPlayer,
+      limitOfPlayer
+    );
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -509,9 +651,19 @@ library GameMetaData {
     uint256 startBlock,
     address winner,
     uint256 numberOfCastle,
-    uint256 colorCursor
+    uint256 colorCursor,
+    uint256 numberOfPlayer,
+    uint256 limitOfPlayer
   ) internal {
-    bytes memory _staticData = encodeStatic(state, startBlock, winner, numberOfCastle, colorCursor);
+    bytes memory _staticData = encodeStatic(
+      state,
+      startBlock,
+      winner,
+      numberOfCastle,
+      colorCursor,
+      numberOfPlayer,
+      limitOfPlayer
+    );
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -532,9 +684,19 @@ library GameMetaData {
     uint256 startBlock,
     address winner,
     uint256 numberOfCastle,
-    uint256 colorCursor
+    uint256 colorCursor,
+    uint256 numberOfPlayer,
+    uint256 limitOfPlayer
   ) internal {
-    bytes memory _staticData = encodeStatic(state, startBlock, winner, numberOfCastle, colorCursor);
+    bytes memory _staticData = encodeStatic(
+      state,
+      startBlock,
+      winner,
+      numberOfCastle,
+      colorCursor,
+      numberOfPlayer,
+      limitOfPlayer
+    );
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -554,7 +716,9 @@ library GameMetaData {
       _table.startBlock,
       _table.winner,
       _table.numberOfCastle,
-      _table.colorCursor
+      _table.colorCursor,
+      _table.numberOfPlayer,
+      _table.limitOfPlayer
     );
 
     PackedCounter _encodedLengths;
@@ -575,7 +739,9 @@ library GameMetaData {
       _table.startBlock,
       _table.winner,
       _table.numberOfCastle,
-      _table.colorCursor
+      _table.colorCursor,
+      _table.numberOfPlayer,
+      _table.limitOfPlayer
     );
 
     PackedCounter _encodedLengths;
@@ -596,7 +762,9 @@ library GameMetaData {
       _table.startBlock,
       _table.winner,
       _table.numberOfCastle,
-      _table.colorCursor
+      _table.colorCursor,
+      _table.numberOfPlayer,
+      _table.limitOfPlayer
     );
 
     PackedCounter _encodedLengths;
@@ -616,7 +784,15 @@ library GameMetaData {
   )
     internal
     pure
-    returns (State state, uint256 startBlock, address winner, uint256 numberOfCastle, uint256 colorCursor)
+    returns (
+      State state,
+      uint256 startBlock,
+      address winner,
+      uint256 numberOfCastle,
+      uint256 colorCursor,
+      uint256 numberOfPlayer,
+      uint256 limitOfPlayer
+    )
   {
     state = State(uint8(Bytes.slice1(_blob, 0)));
 
@@ -627,6 +803,10 @@ library GameMetaData {
     numberOfCastle = (uint256(Bytes.slice32(_blob, 53)));
 
     colorCursor = (uint256(Bytes.slice32(_blob, 85)));
+
+    numberOfPlayer = (uint256(Bytes.slice32(_blob, 117)));
+
+    limitOfPlayer = (uint256(Bytes.slice32(_blob, 149)));
   }
 
   /**
@@ -640,9 +820,15 @@ library GameMetaData {
     PackedCounter,
     bytes memory
   ) internal pure returns (GameMetaDataData memory _table) {
-    (_table.state, _table.startBlock, _table.winner, _table.numberOfCastle, _table.colorCursor) = decodeStatic(
-      _staticData
-    );
+    (
+      _table.state,
+      _table.startBlock,
+      _table.winner,
+      _table.numberOfCastle,
+      _table.colorCursor,
+      _table.numberOfPlayer,
+      _table.limitOfPlayer
+    ) = decodeStatic(_staticData);
   }
 
   /**
@@ -684,9 +870,11 @@ library GameMetaData {
     uint256 startBlock,
     address winner,
     uint256 numberOfCastle,
-    uint256 colorCursor
+    uint256 colorCursor,
+    uint256 numberOfPlayer,
+    uint256 limitOfPlayer
   ) internal pure returns (bytes memory) {
-    return abi.encodePacked(state, startBlock, winner, numberOfCastle, colorCursor);
+    return abi.encodePacked(state, startBlock, winner, numberOfCastle, colorCursor, numberOfPlayer, limitOfPlayer);
   }
 
   /**
@@ -700,9 +888,19 @@ library GameMetaData {
     uint256 startBlock,
     address winner,
     uint256 numberOfCastle,
-    uint256 colorCursor
+    uint256 colorCursor,
+    uint256 numberOfPlayer,
+    uint256 limitOfPlayer
   ) internal pure returns (bytes memory, PackedCounter, bytes memory) {
-    bytes memory _staticData = encodeStatic(state, startBlock, winner, numberOfCastle, colorCursor);
+    bytes memory _staticData = encodeStatic(
+      state,
+      startBlock,
+      winner,
+      numberOfCastle,
+      colorCursor,
+      numberOfPlayer,
+      limitOfPlayer
+    );
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;

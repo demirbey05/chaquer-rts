@@ -1,7 +1,7 @@
 //SPDX-License-Identifier:MIT
 
 pragma solidity ^0.8.0;
-import { PlayerSeeds } from "../codegen/Tables.sol";
+import { PlayerSeeds } from "../codegen/index.sol";
 
 library LibRandom {
   function generateRandomNumber(bytes32 previousHash, uint256 gameID) internal returns (bytes32) {

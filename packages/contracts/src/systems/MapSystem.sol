@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { wadMul, toWadUnsafe } from "solmate/src/utils/SignedWadMath.sol";
-import { MapConfig, Position, ResourceOwn, ResourceOwnData, ColorOwnable, AddressToUsername, CastleOwnable, NumberOfUsers, ArmyOwnable, ArmyConfig, ArmyConfigData, LimitOfGame, Players, CreditOwn, GameMetaData, SoldierCreated } from "../codegen/index.sol";
+import { MapConfig, Position, ResourceOwn, ResourceOwnData, ColorOwnable, AddressToUsername, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, Players, CreditOwn, GameMetaData, SoldierCreated } from "../codegen/index.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
@@ -42,7 +42,7 @@ contract MapSystem is System {
 
   function InitNumberOfGamer(uint256 gameID, uint256 capacity) public {
     (, , bytes memory terrainData) = MapConfig.get(gameID);
-    uint256 prevCapacity = LimitOfGame.get(gameID);
+    uint256 prevCapacity = GameMetaData.getLimitOfPlayer(gameID);
 
     if (terrainData.length <= 0) {
       revert InitSystem__NotInitialized();
@@ -53,7 +53,7 @@ contract MapSystem is System {
     if (capacity < capacityLowerBound) {
       revert InitSystem__CapacityIsTooLow();
     }
-    LimitOfGame.set(gameID, capacity);
+    GameMetaData.setLimitOfPlayer(gameID, capacity);
     GameMetaData.setState(gameID, State.Waiting);
   }
 
@@ -100,7 +100,7 @@ contract MapSystem is System {
     GameMetaData.setNumberOfCastle(gameID, numOfCastle + 1);
     ColorOwnable.set(entityID, AddressToUsername.getColorIndex(ownerCandidate, gameID), gameID);
 
-    if (numOfCastle == LimitOfGame.get(gameID) - 1) {
+    if (numOfCastle == GameMetaData.getLimitOfPlayer(gameID) - 1) {
       GameMetaData.setState(gameID, State.Seed);
     }
 
@@ -204,7 +204,7 @@ contract MapSystem is System {
     if (!Players.get(gameID, winnerCandidate)) {
       revert GameSystem__NotPlayer();
     }
-    if (NumberOfUsers.get(gameID) != 1) {
+    if (GameMetaData.getNumberOfPlayer(gameID) != 1) {
       revert GameSystem__WrongClaim();
     }
     if (GameMetaData.getState(gameID) != State.Started) {

@@ -11,8 +11,6 @@ import { Position, PositionTableId } from "./tables/Position.sol";
 import { Players, PlayersTableId } from "./tables/Players.sol";
 import { PlayerSeeds, PlayerSeedsTableId } from "./tables/PlayerSeeds.sol";
 import { SeedInited, SeedInitedTableId } from "./tables/SeedInited.sol";
-import { NumberOfUsers, NumberOfUsersTableId } from "./tables/NumberOfUsers.sol";
-import { LimitOfGame, LimitOfGameTableId } from "./tables/LimitOfGame.sol";
 import { AddressToUsername, AddressToUsernameData, AddressToUsernameTableId } from "./tables/AddressToUsername.sol";
 import { ResourceOwnable, ResourceOwnableData, ResourceOwnableTableId } from "./tables/ResourceOwnable.sol";
 import { ResourceInited, ResourceInitedTableId } from "./tables/ResourceInited.sol";

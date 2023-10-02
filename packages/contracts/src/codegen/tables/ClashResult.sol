@@ -29,7 +29,7 @@ ResourceId constant _tableId = ResourceId.wrap(
 ResourceId constant ClashResultTableId = _tableId;
 
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
-  0x002a040014140101000000000000000000000000000000000000000000000000
+  0x004a050014140101200000000000000000000000000000000000000000000000
 );
 
 struct ClashResultData {
@@ -37,6 +37,7 @@ struct ClashResultData {
   address loser;
   bool isDraw;
   ClashType clashType;
+  uint256 gameID;
 }
 
 library ClashResult {
@@ -64,11 +65,12 @@ library ClashResult {
    * @return _valueSchema The value schema for the table.
    */
   function getValueSchema() internal pure returns (Schema) {
-    SchemaType[] memory _valueSchema = new SchemaType[](4);
+    SchemaType[] memory _valueSchema = new SchemaType[](5);
     _valueSchema[0] = SchemaType.ADDRESS;
     _valueSchema[1] = SchemaType.ADDRESS;
     _valueSchema[2] = SchemaType.BOOL;
     _valueSchema[3] = SchemaType.UINT8;
+    _valueSchema[4] = SchemaType.UINT256;
 
     return SchemaLib.encode(_valueSchema);
   }
@@ -87,11 +89,12 @@ library ClashResult {
    * @return fieldNames An array of strings with the names of value fields.
    */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
-    fieldNames = new string[](4);
+    fieldNames = new string[](5);
     fieldNames[0] = "winner";
     fieldNames[1] = "loser";
     fieldNames[2] = "isDraw";
     fieldNames[3] = "clashType";
+    fieldNames[4] = "gameID";
   }
 
   /**
@@ -236,10 +239,40 @@ library ClashResult {
   }
 
   /**
+   * @notice Set gameID.
+   */
+  function setGameID(bytes32 key, uint256 gameID) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 4, abi.encodePacked((gameID)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set gameID.
+   */
+  function _setGameID(bytes32 key, uint256 gameID) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreCore.setStaticField(_tableId, _keyTuple, 4, abi.encodePacked((gameID)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set gameID (using the specified store).
+   */
+  function setGameID(IStore _store, bytes32 key, uint256 gameID) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    _store.setStaticField(_tableId, _keyTuple, 4, abi.encodePacked((gameID)), _fieldLayout);
+  }
+
+  /**
    * @notice Set the full data using individual values.
    */
-  function set(bytes32 key, address winner, address loser, bool isDraw, ClashType clashType) internal {
-    bytes memory _staticData = encodeStatic(winner, loser, isDraw, clashType);
+  function set(bytes32 key, address winner, address loser, bool isDraw, ClashType clashType, uint256 gameID) internal {
+    bytes memory _staticData = encodeStatic(winner, loser, isDraw, clashType, gameID);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -253,8 +286,8 @@ library ClashResult {
   /**
    * @notice Set the full data using individual values.
    */
-  function _set(bytes32 key, address winner, address loser, bool isDraw, ClashType clashType) internal {
-    bytes memory _staticData = encodeStatic(winner, loser, isDraw, clashType);
+  function _set(bytes32 key, address winner, address loser, bool isDraw, ClashType clashType, uint256 gameID) internal {
+    bytes memory _staticData = encodeStatic(winner, loser, isDraw, clashType, gameID);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -268,8 +301,16 @@ library ClashResult {
   /**
    * @notice Set the full data using individual values (using the specified store).
    */
-  function set(IStore _store, bytes32 key, address winner, address loser, bool isDraw, ClashType clashType) internal {
-    bytes memory _staticData = encodeStatic(winner, loser, isDraw, clashType);
+  function set(
+    IStore _store,
+    bytes32 key,
+    address winner,
+    address loser,
+    bool isDraw,
+    ClashType clashType,
+    uint256 gameID
+  ) internal {
+    bytes memory _staticData = encodeStatic(winner, loser, isDraw, clashType, gameID);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -284,7 +325,13 @@ library ClashResult {
    * @notice Set the full data using the data struct.
    */
   function set(bytes32 key, ClashResultData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.winner, _table.loser, _table.isDraw, _table.clashType);
+    bytes memory _staticData = encodeStatic(
+      _table.winner,
+      _table.loser,
+      _table.isDraw,
+      _table.clashType,
+      _table.gameID
+    );
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -299,7 +346,13 @@ library ClashResult {
    * @notice Set the full data using the data struct.
    */
   function _set(bytes32 key, ClashResultData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.winner, _table.loser, _table.isDraw, _table.clashType);
+    bytes memory _staticData = encodeStatic(
+      _table.winner,
+      _table.loser,
+      _table.isDraw,
+      _table.clashType,
+      _table.gameID
+    );
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -314,7 +367,13 @@ library ClashResult {
    * @notice Set the full data using the data struct (using the specified store).
    */
   function set(IStore _store, bytes32 key, ClashResultData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.winner, _table.loser, _table.isDraw, _table.clashType);
+    bytes memory _staticData = encodeStatic(
+      _table.winner,
+      _table.loser,
+      _table.isDraw,
+      _table.clashType,
+      _table.gameID
+    );
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -330,7 +389,7 @@ library ClashResult {
    */
   function decodeStatic(
     bytes memory _blob
-  ) internal pure returns (address winner, address loser, bool isDraw, ClashType clashType) {
+  ) internal pure returns (address winner, address loser, bool isDraw, ClashType clashType, uint256 gameID) {
     winner = (address(Bytes.slice20(_blob, 0)));
 
     loser = (address(Bytes.slice20(_blob, 20)));
@@ -338,6 +397,8 @@ library ClashResult {
     isDraw = (_toBool(uint8(Bytes.slice1(_blob, 40))));
 
     clashType = ClashType(uint8(Bytes.slice1(_blob, 41)));
+
+    gameID = (uint256(Bytes.slice32(_blob, 42)));
   }
 
   /**
@@ -351,7 +412,7 @@ library ClashResult {
     PackedCounter,
     bytes memory
   ) internal pure returns (ClashResultData memory _table) {
-    (_table.winner, _table.loser, _table.isDraw, _table.clashType) = decodeStatic(_staticData);
+    (_table.winner, _table.loser, _table.isDraw, _table.clashType, _table.gameID) = decodeStatic(_staticData);
   }
 
   /**
@@ -392,9 +453,10 @@ library ClashResult {
     address winner,
     address loser,
     bool isDraw,
-    ClashType clashType
+    ClashType clashType,
+    uint256 gameID
   ) internal pure returns (bytes memory) {
-    return abi.encodePacked(winner, loser, isDraw, clashType);
+    return abi.encodePacked(winner, loser, isDraw, clashType, gameID);
   }
 
   /**
@@ -407,9 +469,10 @@ library ClashResult {
     address winner,
     address loser,
     bool isDraw,
-    ClashType clashType
+    ClashType clashType,
+    uint256 gameID
   ) internal pure returns (bytes memory, PackedCounter, bytes memory) {
-    bytes memory _staticData = encodeStatic(winner, loser, isDraw, clashType);
+    bytes memory _staticData = encodeStatic(winner, loser, isDraw, clashType, gameID);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;

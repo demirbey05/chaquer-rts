@@ -74,7 +74,7 @@ library AddressToUsername {
   function getKeyNames() internal pure returns (string[] memory keyNames) {
     keyNames = new string[](2);
     keyNames[0] = "ownerAddress";
-    keyNames[1] = "gameId";
+    keyNames[1] = "gameID";
   }
 
   /**
@@ -111,10 +111,10 @@ library AddressToUsername {
   /**
    * @notice Get colorIndex.
    */
-  function getColorIndex(address ownerAddress, uint256 gameId) internal view returns (uint256 colorIndex) {
+  function getColorIndex(address ownerAddress, uint256 gameID) internal view returns (uint256 colorIndex) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
     return (uint256(bytes32(_blob)));
@@ -123,10 +123,10 @@ library AddressToUsername {
   /**
    * @notice Get colorIndex.
    */
-  function _getColorIndex(address ownerAddress, uint256 gameId) internal view returns (uint256 colorIndex) {
+  function _getColorIndex(address ownerAddress, uint256 gameID) internal view returns (uint256 colorIndex) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
     return (uint256(bytes32(_blob)));
@@ -138,11 +138,11 @@ library AddressToUsername {
   function getColorIndex(
     IStore _store,
     address ownerAddress,
-    uint256 gameId
+    uint256 gameID
   ) internal view returns (uint256 colorIndex) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
     return (uint256(bytes32(_blob)));
@@ -151,10 +151,10 @@ library AddressToUsername {
   /**
    * @notice Set colorIndex.
    */
-  function setColorIndex(address ownerAddress, uint256 gameId, uint256 colorIndex) internal {
+  function setColorIndex(address ownerAddress, uint256 gameID, uint256 colorIndex) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreSwitch.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((colorIndex)), _fieldLayout);
   }
@@ -162,10 +162,10 @@ library AddressToUsername {
   /**
    * @notice Set colorIndex.
    */
-  function _setColorIndex(address ownerAddress, uint256 gameId, uint256 colorIndex) internal {
+  function _setColorIndex(address ownerAddress, uint256 gameID, uint256 colorIndex) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((colorIndex)), _fieldLayout);
   }
@@ -173,10 +173,10 @@ library AddressToUsername {
   /**
    * @notice Set colorIndex (using the specified store).
    */
-  function setColorIndex(IStore _store, address ownerAddress, uint256 gameId, uint256 colorIndex) internal {
+  function setColorIndex(IStore _store, address ownerAddress, uint256 gameID, uint256 colorIndex) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((colorIndex)), _fieldLayout);
   }
@@ -184,10 +184,10 @@ library AddressToUsername {
   /**
    * @notice Get userName.
    */
-  function getUserName(address ownerAddress, uint256 gameId) internal view returns (string memory userName) {
+  function getUserName(address ownerAddress, uint256 gameID) internal view returns (string memory userName) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     bytes memory _blob = StoreSwitch.getDynamicField(_tableId, _keyTuple, 0);
     return (string(_blob));
@@ -196,10 +196,10 @@ library AddressToUsername {
   /**
    * @notice Get userName.
    */
-  function _getUserName(address ownerAddress, uint256 gameId) internal view returns (string memory userName) {
+  function _getUserName(address ownerAddress, uint256 gameID) internal view returns (string memory userName) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     bytes memory _blob = StoreCore.getDynamicField(_tableId, _keyTuple, 0);
     return (string(_blob));
@@ -211,11 +211,11 @@ library AddressToUsername {
   function getUserName(
     IStore _store,
     address ownerAddress,
-    uint256 gameId
+    uint256 gameID
   ) internal view returns (string memory userName) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     bytes memory _blob = _store.getDynamicField(_tableId, _keyTuple, 0);
     return (string(_blob));
@@ -224,10 +224,10 @@ library AddressToUsername {
   /**
    * @notice Set userName.
    */
-  function setUserName(address ownerAddress, uint256 gameId, string memory userName) internal {
+  function setUserName(address ownerAddress, uint256 gameID, string memory userName) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreSwitch.setDynamicField(_tableId, _keyTuple, 0, bytes((userName)));
   }
@@ -235,10 +235,10 @@ library AddressToUsername {
   /**
    * @notice Set userName.
    */
-  function _setUserName(address ownerAddress, uint256 gameId, string memory userName) internal {
+  function _setUserName(address ownerAddress, uint256 gameID, string memory userName) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((userName)));
   }
@@ -246,10 +246,10 @@ library AddressToUsername {
   /**
    * @notice Set userName (using the specified store).
    */
-  function setUserName(IStore _store, address ownerAddress, uint256 gameId, string memory userName) internal {
+  function setUserName(IStore _store, address ownerAddress, uint256 gameID, string memory userName) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     _store.setDynamicField(_tableId, _keyTuple, 0, bytes((userName)));
   }
@@ -257,10 +257,10 @@ library AddressToUsername {
   /**
    * @notice Get the length of userName.
    */
-  function lengthUserName(address ownerAddress, uint256 gameId) internal view returns (uint256) {
+  function lengthUserName(address ownerAddress, uint256 gameID) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     uint256 _byteLength = StoreSwitch.getDynamicFieldLength(_tableId, _keyTuple, 0);
     unchecked {
@@ -271,10 +271,10 @@ library AddressToUsername {
   /**
    * @notice Get the length of userName.
    */
-  function _lengthUserName(address ownerAddress, uint256 gameId) internal view returns (uint256) {
+  function _lengthUserName(address ownerAddress, uint256 gameID) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     uint256 _byteLength = StoreCore.getDynamicFieldLength(_tableId, _keyTuple, 0);
     unchecked {
@@ -285,10 +285,10 @@ library AddressToUsername {
   /**
    * @notice Get the length of userName (using the specified store).
    */
-  function lengthUserName(IStore _store, address ownerAddress, uint256 gameId) internal view returns (uint256) {
+  function lengthUserName(IStore _store, address ownerAddress, uint256 gameID) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     uint256 _byteLength = _store.getDynamicFieldLength(_tableId, _keyTuple, 0);
     unchecked {
@@ -300,10 +300,10 @@ library AddressToUsername {
    * @notice Get an item of userName.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemUserName(address ownerAddress, uint256 gameId, uint256 _index) internal view returns (string memory) {
+  function getItemUserName(address ownerAddress, uint256 gameID, uint256 _index) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     unchecked {
       bytes memory _blob = StoreSwitch.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
@@ -317,12 +317,12 @@ library AddressToUsername {
    */
   function _getItemUserName(
     address ownerAddress,
-    uint256 gameId,
+    uint256 gameID,
     uint256 _index
   ) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     unchecked {
       bytes memory _blob = StoreCore.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
@@ -337,12 +337,12 @@ library AddressToUsername {
   function getItemUserName(
     IStore _store,
     address ownerAddress,
-    uint256 gameId,
+    uint256 gameID,
     uint256 _index
   ) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     unchecked {
       bytes memory _blob = _store.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
@@ -353,10 +353,10 @@ library AddressToUsername {
   /**
    * @notice Push a slice to userName.
    */
-  function pushUserName(address ownerAddress, uint256 gameId, string memory _slice) internal {
+  function pushUserName(address ownerAddress, uint256 gameID, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreSwitch.pushToDynamicField(_tableId, _keyTuple, 0, bytes((_slice)));
   }
@@ -364,10 +364,10 @@ library AddressToUsername {
   /**
    * @notice Push a slice to userName.
    */
-  function _pushUserName(address ownerAddress, uint256 gameId, string memory _slice) internal {
+  function _pushUserName(address ownerAddress, uint256 gameID, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreCore.pushToDynamicField(_tableId, _keyTuple, 0, bytes((_slice)));
   }
@@ -375,10 +375,10 @@ library AddressToUsername {
   /**
    * @notice Push a slice to userName (using the specified store).
    */
-  function pushUserName(IStore _store, address ownerAddress, uint256 gameId, string memory _slice) internal {
+  function pushUserName(IStore _store, address ownerAddress, uint256 gameID, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     _store.pushToDynamicField(_tableId, _keyTuple, 0, bytes((_slice)));
   }
@@ -386,10 +386,10 @@ library AddressToUsername {
   /**
    * @notice Pop a slice from userName.
    */
-  function popUserName(address ownerAddress, uint256 gameId) internal {
+  function popUserName(address ownerAddress, uint256 gameID) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreSwitch.popFromDynamicField(_tableId, _keyTuple, 0, 1);
   }
@@ -397,10 +397,10 @@ library AddressToUsername {
   /**
    * @notice Pop a slice from userName.
    */
-  function _popUserName(address ownerAddress, uint256 gameId) internal {
+  function _popUserName(address ownerAddress, uint256 gameID) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreCore.popFromDynamicField(_tableId, _keyTuple, 0, 1);
   }
@@ -408,10 +408,10 @@ library AddressToUsername {
   /**
    * @notice Pop a slice from userName (using the specified store).
    */
-  function popUserName(IStore _store, address ownerAddress, uint256 gameId) internal {
+  function popUserName(IStore _store, address ownerAddress, uint256 gameID) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     _store.popFromDynamicField(_tableId, _keyTuple, 0, 1);
   }
@@ -419,10 +419,10 @@ library AddressToUsername {
   /**
    * @notice Update a slice of userName at `_index`.
    */
-  function updateUserName(address ownerAddress, uint256 gameId, uint256 _index, string memory _slice) internal {
+  function updateUserName(address ownerAddress, uint256 gameID, uint256 _index, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     unchecked {
       bytes memory _encoded = bytes((_slice));
@@ -433,10 +433,10 @@ library AddressToUsername {
   /**
    * @notice Update a slice of userName at `_index`.
    */
-  function _updateUserName(address ownerAddress, uint256 gameId, uint256 _index, string memory _slice) internal {
+  function _updateUserName(address ownerAddress, uint256 gameID, uint256 _index, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     unchecked {
       bytes memory _encoded = bytes((_slice));
@@ -450,13 +450,13 @@ library AddressToUsername {
   function updateUserName(
     IStore _store,
     address ownerAddress,
-    uint256 gameId,
+    uint256 gameID,
     uint256 _index,
     string memory _slice
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     unchecked {
       bytes memory _encoded = bytes((_slice));
@@ -467,10 +467,10 @@ library AddressToUsername {
   /**
    * @notice Get the full data.
    */
-  function get(address ownerAddress, uint256 gameId) internal view returns (AddressToUsernameData memory _table) {
+  function get(address ownerAddress, uint256 gameID) internal view returns (AddressToUsernameData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = StoreSwitch.getRecord(
       _tableId,
@@ -483,10 +483,10 @@ library AddressToUsername {
   /**
    * @notice Get the full data.
    */
-  function _get(address ownerAddress, uint256 gameId) internal view returns (AddressToUsernameData memory _table) {
+  function _get(address ownerAddress, uint256 gameID) internal view returns (AddressToUsernameData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = StoreCore.getRecord(
       _tableId,
@@ -502,11 +502,11 @@ library AddressToUsername {
   function get(
     IStore _store,
     address ownerAddress,
-    uint256 gameId
+    uint256 gameID
   ) internal view returns (AddressToUsernameData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = _store.getRecord(
       _tableId,
@@ -519,7 +519,7 @@ library AddressToUsername {
   /**
    * @notice Set the full data using individual values.
    */
-  function set(address ownerAddress, uint256 gameId, uint256 colorIndex, string memory userName) internal {
+  function set(address ownerAddress, uint256 gameID, uint256 colorIndex, string memory userName) internal {
     bytes memory _staticData = encodeStatic(colorIndex);
 
     PackedCounter _encodedLengths = encodeLengths(userName);
@@ -527,7 +527,7 @@ library AddressToUsername {
 
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreSwitch.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
   }
@@ -535,7 +535,7 @@ library AddressToUsername {
   /**
    * @notice Set the full data using individual values.
    */
-  function _set(address ownerAddress, uint256 gameId, uint256 colorIndex, string memory userName) internal {
+  function _set(address ownerAddress, uint256 gameID, uint256 colorIndex, string memory userName) internal {
     bytes memory _staticData = encodeStatic(colorIndex);
 
     PackedCounter _encodedLengths = encodeLengths(userName);
@@ -543,7 +543,7 @@ library AddressToUsername {
 
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreCore.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData, _fieldLayout);
   }
@@ -554,7 +554,7 @@ library AddressToUsername {
   function set(
     IStore _store,
     address ownerAddress,
-    uint256 gameId,
+    uint256 gameID,
     uint256 colorIndex,
     string memory userName
   ) internal {
@@ -565,7 +565,7 @@ library AddressToUsername {
 
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
   }
@@ -573,7 +573,7 @@ library AddressToUsername {
   /**
    * @notice Set the full data using the data struct.
    */
-  function set(address ownerAddress, uint256 gameId, AddressToUsernameData memory _table) internal {
+  function set(address ownerAddress, uint256 gameID, AddressToUsernameData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.colorIndex);
 
     PackedCounter _encodedLengths = encodeLengths(_table.userName);
@@ -581,7 +581,7 @@ library AddressToUsername {
 
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreSwitch.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
   }
@@ -589,7 +589,7 @@ library AddressToUsername {
   /**
    * @notice Set the full data using the data struct.
    */
-  function _set(address ownerAddress, uint256 gameId, AddressToUsernameData memory _table) internal {
+  function _set(address ownerAddress, uint256 gameID, AddressToUsernameData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.colorIndex);
 
     PackedCounter _encodedLengths = encodeLengths(_table.userName);
@@ -597,7 +597,7 @@ library AddressToUsername {
 
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreCore.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData, _fieldLayout);
   }
@@ -605,7 +605,7 @@ library AddressToUsername {
   /**
    * @notice Set the full data using the data struct (using the specified store).
    */
-  function set(IStore _store, address ownerAddress, uint256 gameId, AddressToUsernameData memory _table) internal {
+  function set(IStore _store, address ownerAddress, uint256 gameID, AddressToUsernameData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.colorIndex);
 
     PackedCounter _encodedLengths = encodeLengths(_table.userName);
@@ -613,7 +613,7 @@ library AddressToUsername {
 
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
   }
@@ -659,10 +659,10 @@ library AddressToUsername {
   /**
    * @notice Delete all data for given keys.
    */
-  function deleteRecord(address ownerAddress, uint256 gameId) internal {
+  function deleteRecord(address ownerAddress, uint256 gameID) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreSwitch.deleteRecord(_tableId, _keyTuple);
   }
@@ -670,10 +670,10 @@ library AddressToUsername {
   /**
    * @notice Delete all data for given keys.
    */
-  function _deleteRecord(address ownerAddress, uint256 gameId) internal {
+  function _deleteRecord(address ownerAddress, uint256 gameID) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
   }
@@ -681,10 +681,10 @@ library AddressToUsername {
   /**
    * @notice Delete all data for given keys (using the specified store).
    */
-  function deleteRecord(IStore _store, address ownerAddress, uint256 gameId) internal {
+  function deleteRecord(IStore _store, address ownerAddress, uint256 gameID) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     _store.deleteRecord(_tableId, _keyTuple);
   }
@@ -737,10 +737,10 @@ library AddressToUsername {
   /**
    * @notice Encode keys as a bytes32 array using this table's field layout.
    */
-  function encodeKeyTuple(address ownerAddress, uint256 gameId) internal pure returns (bytes32[] memory) {
+  function encodeKeyTuple(address ownerAddress, uint256 gameID) internal pure returns (bytes32[] memory) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(ownerAddress)));
-    _keyTuple[1] = bytes32(uint256(gameId));
+    _keyTuple[1] = bytes32(uint256(gameID));
 
     return _keyTuple;
   }

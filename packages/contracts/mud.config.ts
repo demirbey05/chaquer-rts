@@ -71,26 +71,11 @@ export default mudConfig({
         seedInit:"bool"
       }
     },
-    NumberOfUsers:{
-      keySchema:{
-        gameId:"uint256"
-      },
-      valueSchema:{
-        numOfUsers:"uint256"
-      }
-    },
-    LimitOfGame:{
-      keySchema:{
-        gameId:"uint256"
-      },
-      valueSchema:{
-        numOfUsers:"uint256"
-      }
-    },
     AddressToUsername:{
       keySchema:{
         ownerAddress:"address",
-        gameId:"uint256"
+        gameID:"uint256"
+        
       },
       valueSchema:{
         colorIndex:"uint256",
@@ -122,7 +107,9 @@ export default mudConfig({
         startBlock:"uint256",
         winner:"address",
         numberOfCastle:"uint256",
-        colorCursor:"uint256"
+        colorCursor:"uint256",
+        numberOfPlayer:"uint256",
+        limitOfPlayer:"uint256",
       }
     },
     ResourceOwn : {
@@ -223,7 +210,8 @@ export default mudConfig({
         winner:"address",
         loser:"address",
         isDraw:"bool",
-        clashType:"ClashType"
+        clashType:"ClashType",
+        gameID:"uint256",
       },
       offchainOnly:true,
     },

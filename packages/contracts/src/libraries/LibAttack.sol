@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import { ArmyConfigData, ArmyConfig, ArmyOwnable, CastleOwnable, Position } from "../codegen/Tables.sol";
+import { ArmyConfigData, ArmyConfig, ArmyOwnable, CastleOwnable, Position } from "../codegen/index.sol";
 import { BattleResult, BattleScore, RemainingData } from "./Types.sol";
 import { findRemainings, calculateScoreSingleRemaining, calculateScoreDoubleRemaining, calculateArmyScore, LibUtils } from "./Utils.sol";
 

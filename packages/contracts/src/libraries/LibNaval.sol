@@ -1,7 +1,7 @@
 //SPDX-License-Identifier:MIT
 
 pragma solidity ^0.8.0;
-import { ArmyConfig, ArmyConfigData, Position, MapConfig, FleetConfigData, FleetConfig, FleetOwnable, ColorOwnable } from "../codegen/Tables.sol";
+import { ArmyConfig, ArmyConfigData, Position, MapConfig, FleetConfigData, FleetConfig, FleetOwnable, ColorOwnable } from "../codegen/index.sol";
 import { LibMath } from "./LibMath.sol";
 
 library LibNaval {

@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Players, NumberOfUsers, AddressToUsername, LimitOfGame, MapConfig, GameMetaData, CreditOwn } from "../codegen/index.sol";
+import { Players, AddressToUsername, MapConfig, GameMetaData, CreditOwn } from "../codegen/index.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { LibMath } from "../libraries/LibMath.sol";
@@ -14,8 +14,8 @@ import { initialCredit } from "./Constants.sol";
 contract IdentitySystem is System {
   function joinGame(uint256 gameID, string memory userName) public {
     address sender = _msgSender();
-    uint256 limit = LimitOfGame.get(gameID);
-    uint256 currentNumOfUser = NumberOfUsers.get(gameID);
+    uint256 limit = GameMetaData.getLimitOfPlayer(gameID);
+    uint256 currentNumOfUser = GameMetaData.getNumberOfPlayer(gameID);
 
     (, , bytes memory terrainData) = MapConfig.get(gameID);
 
@@ -43,7 +43,7 @@ contract IdentitySystem is System {
     }
 
     Players.set(gameID, sender, true);
-    NumberOfUsers.set(gameID, currentNumOfUser + 1);
+    GameMetaData.setNumberOfPlayer(gameID, currentNumOfUser + 1);
     CreditOwn.set(gameID, sender, initialCredit);
   }
 

@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { PlayerSeeds, Players, LimitOfGame, GameMetaData, ResourcesSold, NumberOfUsers, ResourceInited, ColorOwnable, SeedInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, ClashResult, ArmyConfig, ArmyOwnable, FleetOwnable } from "../codegen/index.sol";
+import { PlayerSeeds, Players, GameMetaData, ResourcesSold, ResourceInited, ColorOwnable, SeedInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, ArmyConfig, ArmyOwnable, FleetOwnable } from "../codegen/index.sol";
 import { LibRandom, LibQueries, LibAttack, LibUtils, LibMath, LibNaval } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
@@ -37,16 +37,16 @@ contract MineInitSystem is System {
     }
     PlayerSeeds.push(gameID, seed);
     SeedInited.set(gameID, sender, true);
-    if (PlayerSeeds.length(gameID) == LimitOfGame.get(gameID)) {
+    if (PlayerSeeds.length(gameID) == GameMetaData.getLimitOfPlayer(gameID)) {
       GameMetaData.setState(gameID, State.Started);
     }
   }
 
   function resourceSystemInit(uint256 gameID) public {
-    uint256 limit = LimitOfGame.get(gameID);
+    uint256 limit = GameMetaData.getLimitOfPlayer(gameID);
     uint32 width = MapConfig.getWidth(gameID);
     uint32 height = MapConfig.getHeight(gameID);
-    uint256 currentNumOfUser = NumberOfUsers.get(gameID);
+    uint256 currentNumOfUser = GameMetaData.getNumberOfPlayer(gameID);
     uint256[] memory playerSeeds = PlayerSeeds.get(gameID);
 
     if (currentNumOfUser != limit) {

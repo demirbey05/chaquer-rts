@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
-import { Position } from "../codegen/Tables.sol";
+import { Position } from "../codegen/index.sol";
 
 library LibMath {
   function manhattan(

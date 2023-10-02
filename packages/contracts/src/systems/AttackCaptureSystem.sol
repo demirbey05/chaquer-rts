@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
-import { ArmyOwnable, ClashResult, FleetOwnable, FleetConfigData, FleetConfig, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, ResourceOwnable, Players, NumberOfUsers, DockOwnable, AddressToUsername, ColorOwnable } from "../codegen/index.sol";
+import { ArmyOwnable, ClashResult, FleetOwnable, FleetConfigData, FleetConfig, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, ResourceOwnable, Players, GameMetaData, DockOwnable, AddressToUsername, ColorOwnable } from "../codegen/index.sol";
 import { LibMath, LibAttack, BattleScore, LibUtils, LibQueries, LibNaval } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
@@ -19,10 +19,11 @@ contract AttackCaptureSystem is System {
     (address ownerTwo, uint256 gameIDArmyTwo) = ArmyOwnable.get(armyTwo);
     ArmyConfigData memory armyOneConfig = ArmyConfig.get(armyOne);
     ArmyConfigData memory armyTwoConfig = ArmyConfig.get(armyTwo);
+    {
     address sender = _msgSender();
-
     if ((owner != sender) || (gameIDArmy != gameID)) {
       revert AttackSystem__ArmyNotBelongYou();
+    }
     }
     if (ArmyOwnable.getOwner(armyTwo) == address(0)) {
       revert AttackSystem__NoArmy();
@@ -56,7 +57,8 @@ contract AttackCaptureSystem is System {
         owner,
         ownerTwo,
         false,
-        ClashType.Battle
+        ClashType.Battle,
+        gameID
       );
       return 1;
     } else if (battleScore.scoreArmyOne < battleScore.scoreArmyTwo) {
@@ -74,7 +76,8 @@ contract AttackCaptureSystem is System {
         ownerTwo,
         owner,
         false,
-        ClashType.Battle
+        ClashType.Battle,
+        gameID
       );
       return 2;
     } else {
@@ -86,7 +89,8 @@ contract AttackCaptureSystem is System {
         ownerTwo,
         owner,
         true,
-        ClashType.Battle
+        ClashType.Battle,
+        gameID
       );
       return 0;
     }
@@ -102,7 +106,7 @@ contract AttackCaptureSystem is System {
     LibUtils.takeOwnershipOfMines(IStore(_world()), castleOwner, MineType.Wood, gameID);
     LibUtils.takeOwnershipOfMines(IStore(_world()), castleOwner, MineType.Gold, gameID);
     LibUtils.takeOwnershipOfDocks(IStore(_world()), castleOwner, gameID, castleOwner);
-    NumberOfUsers.set(gameID, NumberOfUsers.get(gameID) - 1);
+    GameMetaData.setNumberOfPlayer(gameID, GameMetaData.getNumberOfPlayer(gameID) - 1);
     Players.set(gameID, castleOwner, false);
     AddressToUsername.deleteRecord(castleOwner, gameID);
   }
