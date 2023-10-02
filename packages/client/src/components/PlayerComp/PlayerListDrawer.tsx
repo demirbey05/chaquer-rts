@@ -3,7 +3,7 @@ import { FaUsers } from 'react-icons/fa'
 import { useUsernameWithColors } from '../../hooks/IdentityHooks/useUsernamesWithColors';
 import { colorPath } from '../../utils/constants/constants';
 
-export const PlayerListDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
+export const PlayerListDrawer = () => {
     const [isOpen, setIsOpen] = useState(true);
 
     const users = useUsernameWithColors();
@@ -21,13 +21,11 @@ export const PlayerListDrawer = ({ isInputFocused }: { isInputFocused: boolean }
     };
 
     useEffect(() => {
-        if (!isInputFocused) {
-            window.addEventListener('keydown', handleKeyPress);
-        }
+        window.addEventListener('keydown', handleKeyPress);
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [isOpen, isInputFocused]);
+    }, [isOpen]);
 
     return (
         <>

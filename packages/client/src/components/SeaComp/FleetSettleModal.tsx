@@ -56,16 +56,14 @@ export const FleetSettleModal = () => {
             setLargeShipCount("0")
         }
 
-        if (smallShipCount.length === 0 && mediumShipCount.length === 0 && largeShipCount.length === 0 || Number(smallShipCount) + Number(mediumShipCount) + Number(largeShipCount) === 0) {
+        if (smallShipCount.length === 0 && mediumShipCount.length === 0 && largeShipCount.length === 0) {
             setIsDisabled(true);
-            setEnoughCredit(true);
-            setEnoughWood(true);
             return;
         }
 
-        const parsedSmallShipCount = Number(smallShipCount);
-        const parsedMediumShipCount = Number(mediumShipCount);
-        const parsedLargeShipCount = Number(largeShipCount);
+        const parsedSmallShipCount = parseInt(smallShipCount);
+        const parsedMediumShipCount = parseInt(mediumShipCount);
+        const parsedLargeShipCount = parseInt(largeShipCount);
 
         const totalTroops = parsedSmallShipCount + parsedMediumShipCount + parsedLargeShipCount;
 
@@ -84,15 +82,11 @@ export const FleetSettleModal = () => {
             setTotalWoodCharge(totalWoodCharge)
         } else if (!myCredit || !myResources) {
             setIsDisabled(true);
+            setEnoughCredit(false);
+            setTotalCreditCharge(totalCharge);
+            setTotalWoodCharge(totalWoodCharge)
         } else {
-            if (totalWoodCharge >= myResources.numOfWood && totalCharge >= Number(getNumberFromBigInt(myCredit))) {
-                setIsDisabled(true);
-                setEnoughWood(false);
-                setEnoughCredit(false)
-                setTotalWoodCharge(totalWoodCharge)
-                setTotalCreditCharge(totalCreditCharge)
-            }
-            else if (totalCharge >= Number(getNumberFromBigInt(myCredit))) {
+            if (totalCharge >= parseInt(getNumberFromBigInt(myCredit))) {
                 setIsDisabled(true);
                 setEnoughCredit(false);
                 setEnoughWood(true)
@@ -103,6 +97,12 @@ export const FleetSettleModal = () => {
                 setEnoughWood(false);
                 setEnoughCredit(true)
                 setTotalWoodCharge(totalWoodCharge)
+            } else if (totalWoodCharge >= myResources.numOfWood && totalCharge >= parseInt(getNumberFromBigInt(myCredit))) {
+                setIsDisabled(true);
+                setEnoughWood(false);
+                setEnoughCredit(false)
+                setTotalWoodCharge(totalWoodCharge)
+                setTotalCreditCharge(totalCreditCharge)
             }
             else {
                 setIsDisabled(false);

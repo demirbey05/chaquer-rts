@@ -42,11 +42,7 @@ export const ArmyUpdateModal = () => {
 
     useEffect(() => {
         if (armyPositionUpdate && myArmyPositions && isArmyUpdateStage) {
-            if (getMyArmyConfigByPosition({ x: armyPositionUpdate.x, y: armyPositionUpdate.y }, myArmyPositions)) {
-                setArmyConfig(getMyArmyConfigByPosition({ x: armyPositionUpdate.x, y: armyPositionUpdate.y }, myArmyPositions).myArmyConfig)
-            } else {
-                setArmyConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 })
-            }
+            setArmyConfig(getMyArmyConfigByPosition({ x: armyPositionUpdate.x, y: armyPositionUpdate.y }, myArmyPositions).myArmyConfig)
         }
     }, [armyPositionUpdate, myArmyPositions, isArmyUpdateStage])
 
@@ -78,21 +74,21 @@ export const ArmyUpdateModal = () => {
             if (Number(swordsmanCount) + Number(archerCount) + Number(cavalryCount) < armyConfig.numSwordsman + armyConfig.numCavalry + armyConfig.numArcher) {
                 setIsDisabled(true);
                 setLessThenPrevArmySize(false)
+                return;
             } else {
                 setIsDisabled(false);
                 setLessThenPrevArmySize(true)
             }
         }
 
-        if (swordsmanCount.length === 0 && archerCount.length === 0 && cavalryCount.length === 0 || Number(swordsmanCount) + Number(archerCount) + Number(cavalryCount) === 0) {
+        if (swordsmanCount.length === 0 && archerCount.length === 0 && cavalryCount.length === 0) {
             setIsDisabled(true);
-            setEnoughCredit(true);
             return;
         }
 
-        const parsedSwordsmanCount = Number(swordsmanCount);
-        const parsedArcherCount = Number(archerCount);
-        const parsedCavalryCount = Number(cavalryCount);
+        const parsedSwordsmanCount = parseInt(swordsmanCount);
+        const parsedArcherCount = parseInt(archerCount);
+        const parsedCavalryCount = parseInt(cavalryCount);
 
         const totalTroops = parsedSwordsmanCount + parsedArcherCount + parsedCavalryCount;
 
@@ -107,13 +103,17 @@ export const ArmyUpdateModal = () => {
                 setTotalCharge(totalCharge);
             } else if (!armyPrices || !myCredit) {
                 setIsDisabled(true);
-            } else if (totalCharge > Number(getNumberFromBigInt(myCredit))) {
-                setIsDisabled(true);
                 setEnoughCredit(false);
                 setTotalCharge(totalCharge);
             } else {
-                setIsDisabled(false);
-                setEnoughCredit(true);
+                if (totalCharge > parseInt(getNumberFromBigInt(myCredit))) {
+                    setIsDisabled(true);
+                    setEnoughCredit(false);
+                    setTotalCharge(totalCharge);
+                } else {
+                    setIsDisabled(false);
+                    setEnoughCredit(true);
+                }
             }
         }
     }, [swordsmanCount, archerCount, cavalryCount, armyPrices, myCredit, armyConfig]);

@@ -47,9 +47,8 @@ export const ArmySettleModal = () => {
       setCavalryCount("0")
     }
 
-    if (swordsmanCount.length === 0 && archerCount.length === 0 && cavalryCount.length === 0 || Number(swordsmanCount) + Number(archerCount) + Number(cavalryCount) === 0) {
+    if (swordsmanCount.length === 0 && archerCount.length === 0 && cavalryCount.length === 0) {
       setIsDisabled(true);
-      setEnoughCredit(true);
       return;
     }
 
@@ -70,13 +69,17 @@ export const ArmySettleModal = () => {
         setTotalCharge(totalCharge);
       } else if (!armyPrices || !myCredit) {
         setIsDisabled(true);
-      } else if (totalCharge > Number(getNumberFromBigInt(myCredit))) {
-        setIsDisabled(true);
         setEnoughCredit(false);
         setTotalCharge(totalCharge);
       } else {
-        setIsDisabled(false);
-        setEnoughCredit(true);
+        if (totalCharge > Number(getNumberFromBigInt(myCredit))) {
+          setIsDisabled(true);
+          setEnoughCredit(false);
+          setTotalCharge(totalCharge);
+        } else {
+          setIsDisabled(false);
+          setEnoughCredit(true);
+        }
       }
     }
   }, [swordsmanCount, archerCount, cavalryCount, armyPrices, myCredit]);

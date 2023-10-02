@@ -27,7 +27,6 @@ export const ShortCutTips = () => {
                         <ListItem>🚢 Fleet Info {"->"} Press "F"</ListItem>
                         <ListItem>🛒 Market {"->"} Press "M"</ListItem>
                         <ListItem>🎮 Players {"->"} Press "U"</ListItem>
-                        <ListItem>💬 Chat {"->"} Press "C"</ListItem>
                         <ListItem>💥 War Results {"->"} Press "W"</ListItem>
                         <ListItem>＄ Prices {"->"} Press "P"</ListItem>
                         <ListItem>🔎 Zoom In (+) {"->"} Press "I"</ListItem>

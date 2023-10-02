@@ -3,10 +3,10 @@ import { SetupNetworkResult } from "./setupNetwork";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
-export function createSystemCalls({
-  worldContract,
-  waitForTransaction,
-}: SetupNetworkResult) {
+export function createSystemCalls(
+  { worldContract, waitForTransaction, publicClient }: SetupNetworkResult,
+  { Position }: ClientComponents
+) {
   const initMapDataSystem = async (
     gameID: number,
     width: number,
@@ -392,20 +392,6 @@ export function createSystemCalls({
     }
   };
 
-  const sendMessage = async (gameID: number, message: string) => {
-    try {
-      const tx = await worldContract.write.sendMessage([
-        BigInt(gameID),
-        message,
-      ]);
-      await waitForTransaction(tx);
-      return tx;
-    } catch (e) {
-      console.log(e);
-      return null;
-    }
-  };
-
   return {
     initMapDataSystem,
     settleCastle,
@@ -430,6 +416,5 @@ export function createSystemCalls({
     exitGame,
     updateArmy,
     mergeArmy,
-    sendMessage,
   };
 }

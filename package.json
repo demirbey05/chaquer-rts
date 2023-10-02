@@ -26,7 +26,7 @@
     "pnpm": "8.x"
   },
   "dependencies": {
-   "@latticexyz/config": "2.0.0-main-c049c23f",
+    "@latticexyz/config": "2.0.0-main-c049c23f",
     "snapsync": "link:@latticexyz/world/snapsync"
   }
 }
