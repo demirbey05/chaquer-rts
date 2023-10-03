@@ -3,15 +3,14 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import {MapConfig,GameMetaData,AddressToUsername} from "../codegen/index.sol";
+import { MapConfig, GameMetaData, AddressToUsername, LatestGameID } from "../codegen/index.sol";
 import "./Errors.sol";
-import {State} from "../codegen/common.sol";
-
+import { State } from "../codegen/common.sol";
 
 error InitSystem__UsernameAlreadyInitialized();
 
 contract GameInitSystem is System {
-    uint256 constant capacityLowerBound = 1;
+  uint256 constant capacityLowerBound = 1;
 
   function initMapData(
     uint256 gameID,
@@ -50,17 +49,25 @@ contract GameInitSystem is System {
     GameMetaData.setState(gameID, State.Waiting);
   }
 
-  //@dev founder user go into game 
-  function InitGame(uint256 gameID,uint256 capacity,uint32 width,uint32 height,bytes calldata terrain,string memory name,uint8 mapId) public {
-    initMapData(gameID,width,height,terrain);
-    InitNumberOfGamer(gameID,capacity);
-    GameMetaData.setName(gameID,name);
-    GameMetaData.setMapId(gameID,mapId);
-    GameMetaData.setMirror(gameID,gameID);
-
+  //@dev founder user go into game
+  function InitGame(
+    uint256 capacity,
+    uint32 width,
+    uint32 height,
+    bytes calldata terrain,
+    string memory name,
+    uint8 mapId
+  ) public {
+    uint256 gameID = LatestGameID.get(keccak256("gameID")) + 1;
+    initMapData(gameID, width, height, terrain);
+    InitNumberOfGamer(gameID, capacity);
+    GameMetaData.setName(gameID, name);
+    GameMetaData.setMapId(gameID, mapId);
+    GameMetaData.setMirror(gameID, gameID);
+    LatestGameID.set(keccak256("gameID"), gameID);
   }
 
-  function initUsername(string memory userName) public{
+  function initUsername(string memory userName) public {
     address sender = _msgSender();
 
     if (bytes(userName).length > 32) {

@@ -15,7 +15,6 @@ interface IGameInitSystem {
   function InitNumberOfGamer(uint256 gameID, uint256 capacity) external;
 
   function InitGame(
-    uint256 gameID,
     uint256 capacity,
     uint32 width,
     uint32 height,
