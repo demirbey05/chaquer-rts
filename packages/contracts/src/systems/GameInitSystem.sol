@@ -59,7 +59,7 @@ contract GameInitSystem is System {
     bytes calldata terrain,
     string memory name,
     uint8 mapId
-  ) public {
+  ) public returns (uint256) {
     uint256 gameID = LatestGameID.get(keccak256("gameID")) + 1;
     initMapData(gameID, width, height, terrain);
     InitNumberOfGamer(gameID, capacity);
@@ -68,6 +68,7 @@ contract GameInitSystem is System {
     GameMetaData.setMirror(gameID, gameID);
     joinGame(gameID);
     LatestGameID.set(keccak256("gameID"), gameID);
+    return gameID;
   }
 
   function initUsername(string memory userName) public {
