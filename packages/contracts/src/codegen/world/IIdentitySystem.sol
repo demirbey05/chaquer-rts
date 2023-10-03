@@ -8,7 +8,5 @@ pragma solidity >=0.8.21;
  * @dev This interface is automatically generated from the corresponding system contract. Do not edit manually.
  */
 interface IIdentitySystem {
-  function joinGame(uint256 gameID) external;
-
   function exitGame(uint256 gameID) external;
 }

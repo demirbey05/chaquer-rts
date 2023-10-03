@@ -24,4 +24,6 @@ interface IGameInitSystem {
   ) external;
 
   function initUsername(string memory userName) external;
+
+  function joinGame(uint256 gameID) external;
 }
