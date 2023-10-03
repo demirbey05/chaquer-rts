@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Players, AddressToColorIndex, MapConfig, GameMetaData, CreditOwn } from "../codegen/index.sol";
+import { Players, AddressToColorIndex, MapConfig, GameMetaData, CreditOwn, AddressToUsername } from "../codegen/index.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { LibMath } from "../libraries/LibMath.sol";
@@ -12,6 +12,7 @@ import { State } from "../codegen/common.sol";
 import { initialCredit } from "./Constants.sol";
 
 contract IdentitySystem is System {
+  //@dev - if user has not username
   function joinGame(uint256 gameID) public {
     address sender = _msgSender();
     uint256 limit = GameMetaData.getLimitOfPlayer(gameID);
@@ -35,7 +36,7 @@ contract IdentitySystem is System {
     }
     {
       uint256 colorCursor = GameMetaData.getColorCursor(gameID);
-      AddressToColorIndex.set(sender, gameID, gameID,colorCursor + 1);
+      AddressToColorIndex.set(sender, gameID, gameID, colorCursor + 1, AddressToUsername.get(sender));
       GameMetaData.setColorCursor(gameID, colorCursor + 1);
     }
 

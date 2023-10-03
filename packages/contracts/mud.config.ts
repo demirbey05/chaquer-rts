@@ -88,7 +88,8 @@ export default mudConfig({
       },
       valueSchema:{
         mirror:"uint256",
-        colorIndex:"uint256",      
+        colorIndex:"uint256",
+        userName:"string"    
       }
     },
 
