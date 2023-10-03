@@ -9,17 +9,19 @@ import { useResources } from "../../hooks/ResourceHooks/useResources";
 import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
 import { getResourceTypeByPosition } from "../../utils/helperFunctions/ResourceFuntions/getResourceTypeByPosition";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { useGame } from "../../context/GameContext";
 
 export const MineCaptureDrawer = () => {
     const { components, systemCalls } = useMUD();
     const { targetMinePosition, setIsMineStage, attackerArmyPosition } = useMine();
     const { setMyArmyConfig, setEnemyArmyConfig, myArmyConfig } = useAttack();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
+    const { gameID } = useGame();
 
     const [mineArmy, setMineArmy] = useState<any>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const resources = useResources();
+    const resources = useResources(gameID);
 
     const handleCaptureLater = () => {
         setIsMineStage(false);

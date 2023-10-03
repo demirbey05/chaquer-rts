@@ -9,6 +9,7 @@ import { useError } from "../../context/ErrorContext";
 import { usePlayer } from "../../context/PlayerContext";
 import { useMUD } from "../../context/MUDContext";
 import { useCastle } from "../../context/CastleContext";
+import { useGame } from "../../context/GameContext";
 import { useArmyPrices } from '../../hooks/EconomyHooks/useArmyPrices';
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
@@ -22,6 +23,7 @@ export const ArmyUpdateModal = () => {
     const { setIsArmyUpdateStage, armyPositionUpdate, setIsArmySettleStage, setArmyPositionUpdate, isArmyUpdateStage } = useArmy();
     const { setErrorMessage, setErrorTitle, setShowError } = useError();
     const { setCastlePosition, castlePosition } = useCastle();
+    const { gameID } = useGame();
 
     const [swordsmanCount, setSwordsmanCount] = useState<string>("");
     const [archerCount, setArcherCount] = useState<string>("");
@@ -36,9 +38,9 @@ export const ArmyUpdateModal = () => {
 
     const [armyConfig, setArmyConfig] = useState<any>({ numSwordsman: 0, numArcher: 0, numCavalry: 0 });
 
-    const armyPrices = useArmyPrices(1);
-    const myCredit = useCredit(1, userWallet);
-    const myArmyPositions = useMyArmy(userWallet);
+    const armyPrices = useArmyPrices(gameID);
+    const myCredit = useCredit(gameID, userWallet);
+    const myArmyPositions = useMyArmy(userWallet, gameID);
 
     useEffect(() => {
         if (armyPositionUpdate && myArmyPositions && isArmyUpdateStage) {
@@ -169,7 +171,7 @@ export const ArmyUpdateModal = () => {
                 Number(archerCount),
                 Number(cavalryCount),
                 castleID.toString(),
-                1
+                gameID
             );
 
             if (tx) {

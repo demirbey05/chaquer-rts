@@ -3,10 +3,10 @@ import { useMUD } from "../../context/MUDContext";
 import { HasValue, getComponentValue } from "@latticexyz/recs";
 import { useState, useEffect } from "react";
 
-export function useMyDockPositions(address: any) {
+export function useMyDockPositions(address: any, gameID: number) {
     const { components } = useMUD();
 
-    const dockEntity = useEntityQuery([HasValue(components.DockOwnable, { owner: address, gameID: BigInt(1) })]);
+    const dockEntity = useEntityQuery([HasValue(components.DockOwnable, { owner: address, gameID: BigInt(gameID) })]);
     const valueOwn = useObservableValue(components.DockOwnable.update$);
     const valueCol = useObservableValue(components.ColorOwnable.update$);
 

@@ -3,10 +3,10 @@ import { useMUD } from "../../context/MUDContext";
 import { HasValue, getComponentValue } from "@latticexyz/recs";
 import { useState, useEffect } from "react";
 
-export function useMyFleetPositions(address: any) {
+export function useMyFleetPositions(address: any, gameID: number) {
     const { components } = useMUD();
 
-    const fleetEntity = useEntityQuery([HasValue(components.FleetOwnable, { owner: address, gameID: BigInt(1) })]);
+    const fleetEntity = useEntityQuery([HasValue(components.FleetOwnable, { owner: address, gameID: BigInt(gameID) })]);
     const valuePos = useObservableValue(components.Position.update$);
     const valueCfg = useObservableValue(components.FleetConfig.update$);
     const valueCol = useObservableValue(components.ColorOwnable.update$);

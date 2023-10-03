@@ -9,17 +9,19 @@ import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/
 import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
 import { getResourceTypeByPosition } from "../../utils/helperFunctions/ResourceFuntions/getResourceTypeByPosition";
 import { useResources } from "../../hooks/ResourceHooks/useResources";
+import { useGame } from "../../context/GameContext";
 
 export const SeaMineCaptureDrawer = () => {
     const { components, systemCalls } = useMUD();
     const { targetSeaMinePosition, setSeaMineStage, seaMineAttackerFleetPosition } = useSea();
     const { setMyFleetConfig, setEnemyFleetConfig, myFleetConfig } = useFleet();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
+    const { gameID } = useGame();
 
     const [mineFleet, setMineFleet] = useState<any>();
     const [isLoading, setIsLoading] = useState<any>(false);
 
-    const resources = useResources();
+    const resources = useResources(gameID);
 
     const handleCaptureLater = () => {
         setSeaMineStage(false);

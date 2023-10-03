@@ -5,6 +5,7 @@ import { useMUD } from "../../context/MUDContext";
 import { useCastle } from "../../context/CastleContext";
 import { useError } from "../../context/ErrorContext";
 import { usePlayer } from "../../context/PlayerContext";
+import { useGame } from "../../context/GameContext";
 import { usePlayerIsValid } from "../../hooks/IdentityHooks/usePlayerIsValid";
 
 export const CastleSettleModal = () => {
@@ -12,10 +13,11 @@ export const CastleSettleModal = () => {
   const { isCastleSettled, tempCastle, setCastle, setIsCastleSettled } = useCastle();
   const { setShowError, setErrorMessage, setErrorTitle } = useError();
   const { userWallet } = usePlayer();
+  const { gameID } = useGame();
 
   const [isLoadingJoin, setIsLoadingJoin] = useState<boolean>(false);
 
-  const userValid = usePlayerIsValid(1, userWallet);
+  const userValid = usePlayerIsValid(gameID, userWallet);
 
   useEffect(() => {
     if (!(userValid && userValid === true)) {
@@ -30,7 +32,7 @@ export const CastleSettleModal = () => {
     setIsCastleSettled(true);
     try {
       const tx = !isCastleSettled &&
-        (await systemCalls.settleCastle(tempCastle.x, tempCastle.y, 1));
+        (await systemCalls.settleCastle(tempCastle.x, tempCastle.y, gameID));
 
       if (tx) {
         setCastle({ x: tempCastle.x, y: tempCastle.y });

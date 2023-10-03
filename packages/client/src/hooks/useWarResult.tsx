@@ -1,12 +1,14 @@
 import { useMUD } from "../context/MUDContext";
 import { useEffect, useState } from "react";
 import { useEntityQuery, useObservableValue } from "@latticexyz/react";
-import { Has, getComponentValueStrict } from "@latticexyz/recs";
+import { HasValue, getComponentValueStrict } from "@latticexyz/recs";
 
-export function useWarResult(maxElementSize: number) {
+export function useWarResult(maxElementSize: number, gameID: number) {
     const { components } = useMUD()
 
-    const warEntity = useEntityQuery([Has(components.ClashResult)]);
+    const warEntity = useEntityQuery([
+        HasValue(components.ClashResult, { gameID: BigInt(gameID) }),
+    ]);
     const value = useObservableValue(components.ClashResult.update$);
 
     const [warResults, setWarResults] = useState<any[]>([]);

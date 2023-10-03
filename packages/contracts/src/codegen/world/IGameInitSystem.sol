@@ -21,7 +21,7 @@ interface IGameInitSystem {
     bytes calldata terrain,
     string memory name,
     uint8 mapId
-  ) external;
+  ) external returns (uint256);
 
   function initUsername(string memory userName) external;
 

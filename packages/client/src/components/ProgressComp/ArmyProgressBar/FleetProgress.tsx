@@ -3,11 +3,13 @@ import { Tooltip, Progress, ProgressLabel } from '@chakra-ui/react'
 import { usePlayer } from '../../../context/PlayerContext';
 import { useMyDockPositions } from '../../../hooks/SeaHooks/useMyDockPositions';
 import { useMyFleetPositions } from '../../../hooks/SeaHooks/useMyFleetPositions';
+import { useGame } from '../../../context/GameContext';
 
 export const FleetProgress = () => {
     const { userWallet } = usePlayer();
-    const myFleetPositions = useMyFleetPositions(userWallet);
-    const myDockPositions = useMyDockPositions(userWallet);
+    const { gameID } = useGame();
+    const myFleetPositions = useMyFleetPositions(userWallet, gameID);
+    const myDockPositions = useMyDockPositions(userWallet, gameID);
     return (
         <Tooltip label='Your fleet size is full. Deploy or Capture a dock to increase fleet capacity!' fontSize='md' bg='red.500' closeDelay={2000} isDisabled={myDockPositions && myFleetPositions && (myDockPositions.length !== myFleetPositions.length)}>
             <div className='col-md-6 ms-1'>

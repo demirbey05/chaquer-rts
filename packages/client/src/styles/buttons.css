@@ -155,3 +155,21 @@
     font-weight: bolder;
     border: none;
 }
+
+.menu-join-button {
+    width: 100px;
+    color: dark;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    font-weight: bolder;
+    border: none;
+}
+
+.menu-spectate-button {
+    width: 100px;
+    color: dark;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    font-weight: bolder;
+    border: none;
+}

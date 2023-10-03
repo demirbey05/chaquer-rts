@@ -5,19 +5,21 @@ import { useError } from '../../context/ErrorContext';
 import { useGameState } from "../../hooks/useGameState";
 import { useSeedInited } from "../../hooks/IdentityHooks/useSeedInited";
 import { usePlayer } from "../../context/PlayerContext";
+import { useGame } from '../../context/GameContext';
 
 export const PlayerSeedStage = () => {
     const { systemCalls } = useMUD()
     const { userWallet } = usePlayer();
+    const { gameID } = useGame();
 
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
 
-    const gameState = useGameState(1);
-    const seedEntered = useSeedInited(1, userWallet);
+    const gameState = useGameState(gameID);
+    const seedEntered = useSeedInited(gameID, userWallet);
 
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-            systemCalls.exitGame(1)
+            systemCalls.exitGame(gameID)
             event.preventDefault();
             event.returnValue = 'If you leave the page, you will leave the game.';
         }
@@ -34,7 +36,7 @@ export const PlayerSeedStage = () => {
                 var buf = new Uint8Array(1);
                 crypto.getRandomValues(buf);
 
-                const tx = await systemCalls.commitSeed(1, buf[0]);
+                const tx = await systemCalls.commitSeed(gameID, buf[0]);
                 if (tx === null) {
                     setErrorMessage("An error occurred while trying to enter player seed.");
                     setErrorTitle("Player Seed Error");

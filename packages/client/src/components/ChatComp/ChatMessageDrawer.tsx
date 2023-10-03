@@ -1,10 +1,11 @@
 import badWordsData from "../../../badWords.json";
 import { useState, useEffect, useRef } from 'react';
 import { useMUD } from '../../context/MUDContext';
+import { useError } from '../../context/ErrorContext';
+import { useGame } from "../../context/GameContext";
 import { BsFillChatDotsFill } from 'react-icons/bs'
 import { AiOutlineSend } from 'react-icons/ai'
 import { useChatMessages } from "../../hooks/useChatMessages"
-import { useError } from '../../context/ErrorContext';
 
 const badWordsList = badWordsData.badWords;
 
@@ -20,7 +21,8 @@ function censorMessage(inputMessage: string, badWordsList: string[]) {
 export const ChatMessageDrawer = ({ isInputFocused, setIsInputFocused, isSpectator }: { isInputFocused: boolean, setIsInputFocused: (value: boolean) => void, isSpectator: boolean }) => {
     const { systemCalls } = useMUD();
     const { setErrorMessage, setErrorTitle, setShowError } = useError();
-    const messages = useChatMessages(25);
+    const { gameID } = useGame();
+    const messages = useChatMessages(25, gameID);
 
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState<string>("");
@@ -77,7 +79,7 @@ export const ChatMessageDrawer = ({ isInputFocused, setIsInputFocused, isSpectat
 
             const censoredMessage = censorMessage(message, badWordsList);
 
-            const tx = await systemCalls.sendMessage(1, censoredMessage);
+            const tx = await systemCalls.sendMessage(gameID, censoredMessage);
             if (tx) {
                 document.getElementById("message-input")!.value = "";
                 setMessage("");

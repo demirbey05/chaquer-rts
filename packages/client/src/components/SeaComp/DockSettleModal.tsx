@@ -12,6 +12,7 @@ import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions
 import { useMyDockPositions } from "../../hooks/SeaHooks/useMyDockPositions";
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { useNumberOfResource } from "../../hooks/ResourceHooks/useNumberOfResource";
+import { useGame } from "../../context/GameContext";
 
 export const DockSettleModal = () => {
     const { systemCalls, components } = useMUD();
@@ -19,15 +20,16 @@ export const DockSettleModal = () => {
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { userWallet } = usePlayer();
     const { setIsArmyMoveStage } = useArmy();
+    const { gameID } = useGame();
 
     const movingArmyId = useRef<Entity>("0" as Entity);
     const [isDisabled, setIsDisabled] = useState<boolean>(true);
     const [isLoadingDock, setIsLoadingDock] = useState<boolean>(false);
     const [isLoadingMove, setIsLoadingMove] = useState<boolean>(false);
 
-    const myDockPositions = useMyDockPositions(userWallet);
-    const myCredit = useCredit(1, userWallet);
-    const myResources = useNumberOfResource(userWallet, 1);
+    const myDockPositions = useMyDockPositions(userWallet, gameID);
+    const myCredit = useCredit(gameID, userWallet);
+    const myResources = useNumberOfResource(userWallet, gameID);
 
     useEffect(() => {
         if (myDockPositions && myCredit && myResources) {
@@ -100,7 +102,7 @@ export const DockSettleModal = () => {
             targetDiv?.classList.add("animate-border-army-move");
 
             try {
-                await systemCalls.moveArmy(movingArmyId.current, dockPosition.x, dockPosition.y, 1)
+                await systemCalls.moveArmy(movingArmyId.current, dockPosition.x, dockPosition.y, gameID)
 
                 document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.innerHTML = "";
                 document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";

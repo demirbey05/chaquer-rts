@@ -7,6 +7,7 @@ import { MdLocationPin } from 'react-icons/md'
 import { Button } from "@chakra-ui/react";
 import { usePlayer } from "../../context/PlayerContext";
 import { useMyFleetPositions } from '../../hooks/SeaHooks/useMyFleetPositions';
+import { useGame } from '../../context/GameContext';
 
 // Scroll to div by id as middle of the screen
 const scrollToDiv = (targetId: any) => {
@@ -24,9 +25,11 @@ const scrollToDiv = (targetId: any) => {
 
 export const FleetInfoDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const { userWallet } = usePlayer()
+    const { gameID } = useGame();
+
     const [isOpen, setIsOpen] = useState(false);
 
-    const myFleetPositions = useMyFleetPositions(userWallet);
+    const myFleetPositions = useMyFleetPositions(userWallet, gameID);
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen);

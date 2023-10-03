@@ -1,19 +1,21 @@
 import { useMUD } from "../../context/MUDContext";
 import { useEntityQuery, useObservableValue } from "@latticexyz/react";
-import { Has, getComponentValueStrict } from "@latticexyz/recs";
+import { HasValue, getComponentValueStrict } from "@latticexyz/recs";
 import { useState, useEffect } from "react";
 
-export function useUsernameWithColors() {
+export function useUsernameWithColors(gameID: number) {
     const { components } = useMUD();
 
-    const userEntity = useEntityQuery([Has(components.AddressToUsername)]);
-    const value = useObservableValue(components.AddressToUsername.update$);
+    const userEntity = useEntityQuery([
+        HasValue(components.AddressToColorIndex, { mirror: BigInt(gameID) }),
+    ]);
+    const value = useObservableValue(components.AddressToColorIndex.update$);
 
     const [userData, setUserData] = useState<any>();
 
     useEffect(() => {
         const userNames = userEntity.map((entityIndex) => {
-            const username = getComponentValueStrict(components.AddressToUsername, entityIndex);
+            const username = getComponentValueStrict(components.AddressToColorIndex, entityIndex);
             return username;
         });
         setUserData(userNames)

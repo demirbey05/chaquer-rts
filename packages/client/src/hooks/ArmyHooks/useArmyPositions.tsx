@@ -3,11 +3,11 @@ import { useEntityQuery, useObservableValue } from "@latticexyz/react";
 import { getComponentValue, HasValue } from "@latticexyz/recs";
 import { useState, useEffect } from "react";
 
-export function useArmyPositions() {
+export function useArmyPositions(gameID: number) {
   const { components } = useMUD();
 
   const armyEntities = useEntityQuery([
-    HasValue(components.ArmyOwnable, { gameID: BigInt(1) }),
+    HasValue(components.ArmyOwnable, { gameID: BigInt(gameID) }),
   ]);
   const valuePos = useObservableValue(components.Position.update$);
   const valueCfg = useObservableValue(components.ArmyConfig.update$);

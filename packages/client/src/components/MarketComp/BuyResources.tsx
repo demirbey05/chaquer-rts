@@ -7,6 +7,7 @@ import { useResourcePrices } from "../../hooks/EconomyHooks/useResourcePrices";
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { usePlayer } from "../../context/PlayerContext";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
+import { useGame } from "../../context/GameContext";
 
 interface BuyResourcesPropTypes {
     setIsLoading: (value: boolean) => void,
@@ -17,6 +18,7 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
     const { systemCalls } = useMUD();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { userWallet } = usePlayer();
+    const { gameID } = useGame();
 
     const [numWood, setNumWood] = useState<string>("");
     const [numFood, setNumFood] = useState<string>("");
@@ -38,9 +40,9 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
     const [is500FoodDisabled, setIs500FoodDisabled] = useState<boolean>(true);
     const [is500GoldDisabled, setIs500GoldDisabled] = useState<boolean>(true);
 
-    const resourceInStock = useResourcesInStoke(1);
-    const resourcePrices = useResourcePrices(1);
-    const myCredit = useCredit(1, userWallet);
+    const resourceInStock = useResourcesInStoke(gameID);
+    const resourcePrices = useResourcePrices(gameID);
+    const myCredit = useCredit(gameID, userWallet);
 
     useEffect(() => {
         if (resourceInStock && resourcePrices && myCredit) {
@@ -151,7 +153,7 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
     const handleFoodBuy = async () => {
         if (numFood.length > 0) {
             props.setIsLoading(true)
-            const tx = await systemCalls.buyResource(1, parseInt(numFood), 0);
+            const tx = await systemCalls.buyResource(gameID, parseInt(numFood), 0);
             if (tx) {
                 setNumFood('');
                 (document.getElementById('BuyFood') as HTMLInputElement).value = '';
@@ -168,7 +170,7 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
     const handleWoodBuy = async () => {
         if (numWood.length > 0) {
             props.setIsLoading(true)
-            const tx = await systemCalls.buyResource(1, parseInt(numWood), 1);
+            const tx = await systemCalls.buyResource(gameID, parseInt(numWood), 1);
             if (tx) {
                 setNumWood('');
                 (document.getElementById('BuyWood') as HTMLInputElement).value = '';
@@ -185,7 +187,7 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
     const handleGoldBuy = async () => {
         if (numGold.length > 0) {
             props.setIsLoading(true)
-            const tx = await systemCalls.buyResource(1, parseInt(numGold), 2);
+            const tx = await systemCalls.buyResource(gameID, parseInt(numGold), 2);
             if (tx) {
                 setNumGold('');
                 (document.getElementById('BuyGold') as HTMLInputElement).value = '';
@@ -202,7 +204,7 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
     const handle30ResourceBuy = async ({ resourceType }: any) => {
         if (resourceType !== undefined) {
             props.setIsLoading(true)
-            const tx = await systemCalls.buyResource(1, 30, resourceType);
+            const tx = await systemCalls.buyResource(gameID, 30, resourceType);
             if (tx === null) {
                 setErrorMessage("You have enough credit.")
                 setErrorTitle("Resource Buying Error");
@@ -215,7 +217,7 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
     const handle100ResourceBuy = async ({ resourceType }: any) => {
         if (resourceType !== undefined) {
             props.setIsLoading(true)
-            const tx = await systemCalls.buyResource(1, 100, resourceType);
+            const tx = await systemCalls.buyResource(gameID, 100, resourceType);
             if (tx === null) {
                 setErrorMessage("You have enough credit.")
                 setErrorTitle("Resource Buying Error");
@@ -228,7 +230,7 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
     const handle500ResourceBuy = async ({ resourceType }: any) => {
         if (resourceType !== undefined) {
             props.setIsLoading(true)
-            const tx = await systemCalls.buyResource(1, 500, resourceType);
+            const tx = await systemCalls.buyResource(gameID, 500, resourceType);
             if (tx === null) {
                 setErrorMessage("You have enough credit.")
                 setErrorTitle("Resource Buying Error");

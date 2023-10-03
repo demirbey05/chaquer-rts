@@ -4,6 +4,7 @@ import { useMUD } from "../../context/MUDContext";
 import { usePlayer } from '../../context/PlayerContext';
 import { useError } from "../../context/ErrorContext";
 import { useNumberOfResource } from '../../hooks/ResourceHooks/useNumberOfResource';
+import { useGame } from "../../context/GameContext";
 
 interface SellResourcesPropTypes {
     setIsLoading: (value: boolean) => void,
@@ -13,6 +14,7 @@ interface SellResourcesPropTypes {
 export const SellResources = (props: SellResourcesPropTypes) => {
     const { systemCalls } = useMUD();
     const { userWallet } = usePlayer();
+    const { gameID } = useGame();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
 
     const [numWood, setNumWood] = useState<string>("");
@@ -35,7 +37,7 @@ export const SellResources = (props: SellResourcesPropTypes) => {
     const [is500FoodDisabled, setIs500FoodDisabled] = useState<boolean>(true);
     const [is500GoldDisabled, setIs500GoldDisabled] = useState<boolean>(true);
 
-    const numberOfResource: any = useNumberOfResource(userWallet, 1);
+    const numberOfResource: any = useNumberOfResource(userWallet, gameID);
 
     useEffect(() => {
         // Food
@@ -145,7 +147,7 @@ export const SellResources = (props: SellResourcesPropTypes) => {
     const handleFoodSell = async () => {
         props.setIsLoading(true);
         if (numFood.length > 0) {
-            const tx = await systemCalls.sellResource(1, parseInt(numFood), 0);
+            const tx = await systemCalls.sellResource(gameID, parseInt(numFood), 0);
             if (tx) {
                 setNumFood('');
                 (document.getElementById('Food') as HTMLInputElement).value = '';
@@ -161,7 +163,7 @@ export const SellResources = (props: SellResourcesPropTypes) => {
     const handleWoodSell = async () => {
         props.setIsLoading(true);
         if (numWood.length > 0) {
-            const tx = await systemCalls.sellResource(1, parseInt(numWood), 1);
+            const tx = await systemCalls.sellResource(gameID, parseInt(numWood), 1);
             if (tx) {
                 setNumWood('');
                 (document.getElementById('Wood') as HTMLInputElement).value = '';
@@ -177,7 +179,7 @@ export const SellResources = (props: SellResourcesPropTypes) => {
     const handleGoldSell = async () => {
         props.setIsLoading(true);
         if (numGold.length > 0) {
-            const tx = await systemCalls.sellResource(1, parseInt(numGold), 2);
+            const tx = await systemCalls.sellResource(gameID, parseInt(numGold), 2);
             if (tx) {
                 setNumGold('');
                 (document.getElementById('Gold') as HTMLInputElement).value = '';
@@ -194,7 +196,7 @@ export const SellResources = (props: SellResourcesPropTypes) => {
     const handle30ResourceSell = async ({ resourceType }: any) => {
         if (resourceType !== undefined) {
             props.setIsLoading(true)
-            const tx = await systemCalls.sellResource(1, 30, resourceType);
+            const tx = await systemCalls.sellResource(gameID, 30, resourceType);
             if (tx === null) {
                 setErrorMessage("You have no 30 resources.")
                 setErrorTitle("Resource Selling Error");
@@ -207,7 +209,7 @@ export const SellResources = (props: SellResourcesPropTypes) => {
     const handle100ResourceSell = async ({ resourceType }: any) => {
         if (resourceType !== undefined) {
             props.setIsLoading(true)
-            const tx = await systemCalls.sellResource(1, 100, resourceType);
+            const tx = await systemCalls.sellResource(gameID, 100, resourceType);
             if (tx === null) {
                 setErrorMessage("You have no 100 resources.")
                 setErrorTitle("Resource Selling Error");
@@ -220,7 +222,7 @@ export const SellResources = (props: SellResourcesPropTypes) => {
     const handle500ResourceSell = async ({ resourceType }: any) => {
         if (resourceType !== undefined) {
             props.setIsLoading(true)
-            const tx = await systemCalls.sellResource(1, 500, resourceType);
+            const tx = await systemCalls.sellResource(gameID, 500, resourceType);
             if (tx === null) {
                 setErrorMessage("You have no 500 resources.")
                 setErrorTitle("Resource Selling Error");

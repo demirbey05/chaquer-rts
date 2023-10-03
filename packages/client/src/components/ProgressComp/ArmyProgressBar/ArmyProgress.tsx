@@ -1,13 +1,15 @@
 import { Tooltip, Progress, ProgressLabel } from '@chakra-ui/react'
 import { useState, useEffect } from 'react';
 import { useArmy } from '../../../context/ArmyContext';
+import { useGame } from '../../../context/GameContext';
 import { usePlayer } from '../../../context/PlayerContext';
 import { useMyCastlePositions } from '../../../hooks/CastleHooks/useMyCastlePositions';
 
 export const ArmyProgress = () => {
     const { userWallet } = usePlayer();
     const { numberOfArmy } = useArmy();
-    const myCastlePositions = useMyCastlePositions(userWallet);
+    const { gameID } = useGame();
+    const myCastlePositions = useMyCastlePositions(userWallet, gameID);
 
     const [maxArmySize, setMaxArmySize] = useState<number>(5);
 

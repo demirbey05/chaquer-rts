@@ -7,12 +7,12 @@ export function useNumberOfUsers(gameID: number) {
     const { components } = useMUD();
     const [numberOfUsers, setNumberOfUsers] = useState(0);
 
-    const value = useComponentValue(components.NumberOfUsers,
-        encodeEntity(components.NumberOfUsers.metadata.keySchema, { gameId: BigInt(gameID) }));
+    const value = useComponentValue(components.GameMetaData,
+        encodeEntity(components.GameMetaData.metadata.keySchema, { gameID: BigInt(gameID) }));
 
     useEffect(() => {
         if (value) {
-            setNumberOfUsers(Number(value.numOfUsers));
+            setNumberOfUsers(Number(value.numberOfPlayer));
         }
     }, [value])
     return numberOfUsers;

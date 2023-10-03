@@ -3,14 +3,16 @@ import { useState, useEffect } from "react";
 import { usePlayer } from '../../context/PlayerContext';
 import { useWarResult } from '../../hooks/useWarResult';
 import { useMyUsername } from "../../hooks/IdentityHooks/useMyUsername";
+import { useGame } from '../../context/GameContext';
 
 export const WarResultDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const [isOpen, setIsOpen] = useState(true);
 
     const { userWallet } = usePlayer();
+    const { gameID } = useGame();
 
-    const warResults = useWarResult(4);
-    const username = useMyUsername(1, userWallet)
+    const warResults = useWarResult(4, gameID);
+    const username = useMyUsername(gameID, userWallet)
 
     const toggleOffcanvas = () => {
         setIsOpen(!isOpen);

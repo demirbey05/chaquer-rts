@@ -8,10 +8,12 @@ import { useArmy } from "../../context/ArmyContext";
 import { getMyArmyConfigByPosition } from "../../utils/helperFunctions/ArmyFunctions/getArmyConfigByPosition";
 import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
 import { usePlayer } from "../../context/PlayerContext";
+import { useGame } from "../../context/GameContext";
 
 export const ArmyMergeDrawer = () => {
     const { components, systemCalls } = useMUD();
     const { userWallet } = usePlayer();
+    const { gameID } = useGame();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { setIsArmyMergeStage,
         mergeTargetArmyPosition,
@@ -25,7 +27,7 @@ export const ArmyMergeDrawer = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [totalArmy, setTotalArmy] = useState<number>(0);
 
-    const myArmyPositions = useMyArmy(userWallet);
+    const myArmyPositions = useMyArmy(userWallet, gameID);
 
     useEffect(() => {
         if (armyOneConfig && armyTwoConfig) {
@@ -81,7 +83,7 @@ export const ArmyMergeDrawer = () => {
         try {
             setIsArmyMergeStage(false);
             setIsLoading(true);
-            await systemCalls.mergeArmy(armyOneID[0] as string, armyTwoID[0] as string, 1);
+            await systemCalls.mergeArmy(armyOneID[0] as string, armyTwoID[0] as string, gameID);
         } catch (error) {
             setErrorMessage("An error occurred while trying to merge the armies.");
             setErrorTitle("Army Merge Error");

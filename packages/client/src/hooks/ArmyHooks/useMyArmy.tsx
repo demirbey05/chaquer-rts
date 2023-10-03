@@ -3,11 +3,11 @@ import { useEntityQuery, useObservableValue } from "@latticexyz/react";
 import { getComponentValue, HasValue } from "@latticexyz/recs";
 import { useState, useEffect } from "react";
 
-export function useMyArmy(address: any) {
+export function useMyArmy(address: any, gameID: number) {
   const { components } = useMUD();
 
   const armyEntities = useEntityQuery([
-    HasValue(components.ArmyOwnable, { owner: address, gameID: BigInt(1) }),
+    HasValue(components.ArmyOwnable, { owner: address, gameID: BigInt(gameID) }),
   ]);
 
   const [myArmy, setMyArmy] = useState<any[]>([]);

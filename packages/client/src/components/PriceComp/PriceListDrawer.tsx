@@ -7,14 +7,16 @@ import { ResourcePrices } from "./ResourcePrices";
 import { FleetPrices } from "./FleetPrices";
 import { useGameState } from "../../hooks/useGameState";
 import { ResourceBuyPrices } from "./ResourceBuyPrices";
+import { useGame } from "../../context/GameContext";
 
 export const PriceListDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const [isOpen, setIsOpen] = useState(true);
 
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { systemCalls } = useMUD();
+    const { gameID } = useGame();
 
-    const gameState = useGameState(1);
+    const gameState = useGameState(gameID);
 
     useEffect(() => {
         if (gameState === 3) {

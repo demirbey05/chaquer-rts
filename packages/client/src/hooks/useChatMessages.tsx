@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import { useEntityQuery, useObservableValue } from "@latticexyz/react";
 import { HasValue, getComponentValueStrict } from "@latticexyz/recs";
 
-export function useChatMessages(maxElementSize: number) {
+export function useChatMessages(maxElementSize: number, gameID: number) {
     const { components } = useMUD();
 
     const chatEntity = useEntityQuery([
-        HasValue(components.ChatMessages, { gameID: BigInt(1) }),
+        HasValue(components.ChatMessages, { gameID: BigInt(gameID) }),
     ]);
     const value = useObservableValue(components.ChatMessages.update$);
 

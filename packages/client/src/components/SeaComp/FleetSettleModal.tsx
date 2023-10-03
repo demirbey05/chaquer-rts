@@ -12,12 +12,14 @@ import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { useNumberOfResource } from "../../hooks/ResourceHooks/useNumberOfResource";
+import { useGame } from "../../context/GameContext";
 
 export const FleetSettleModal = () => {
     const { systemCalls, components } = useMUD();
     const { userWallet } = usePlayer();
     const { fleetPosition, setFleetSettleStage, dockPositionForFleetSettlement } = useFleet();
     const { setErrorMessage, setErrorTitle, setShowError } = useError();
+    const { gameID } = useGame();
 
     const [smallShipCount, setSmallShipCount] = useState<string>("");
     const [mediumShipCount, setMediumShipCount] = useState<string>("");
@@ -40,8 +42,8 @@ export const FleetSettleModal = () => {
         bigShipWood: 300
     }
 
-    const myCredit = useCredit(1, userWallet);
-    const myResources = useNumberOfResource(userWallet, 1);
+    const myCredit = useCredit(gameID, userWallet);
+    const myResources = useNumberOfResource(userWallet, gameID);
 
     useEffect(() => {
         if (Number.isNaN(parseInt(smallShipCount))) {
@@ -137,7 +139,7 @@ export const FleetSettleModal = () => {
                 parseInt(smallShipCount),
                 parseInt(mediumShipCount),
                 parseInt(largeShipCount),
-                1
+                gameID
             );
             if (tx) {
                 setSmallShipCount('');

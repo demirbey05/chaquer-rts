@@ -1,8 +1,10 @@
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { useResourcePrices } from "../../hooks/EconomyHooks/useResourcePrices";
+import { useGame } from "../../context/GameContext";
 
 export const ResourceBuyPrices = () => {
-    const resourcePrices = useResourcePrices(1);
+    const { gameID } = useGame();
+    const resourcePrices = useResourcePrices(gameID);
 
     return (
         <div>

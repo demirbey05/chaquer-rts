@@ -3,11 +3,11 @@ import { useEntityQuery, useObservableValue } from "@latticexyz/react";
 import { HasValue, getComponentValue } from "@latticexyz/recs";
 import { useState, useEffect } from "react";
 
-export function useFleetPositions() {
+export function useFleetPositions(gameID: number) {
     const { components } = useMUD();
 
     const fleetEntites = useEntityQuery([
-        HasValue(components.FleetOwnable, { gameID: BigInt(1) }),
+        HasValue(components.FleetOwnable, { gameID: BigInt(gameID) }),
     ]);
     const valuePos = useObservableValue(components.Position.update$);
     const valueCfg = useObservableValue(components.FleetConfig.update$);

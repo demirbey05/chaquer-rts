@@ -4,14 +4,16 @@ import { BuyResources } from "./BuyResources";
 import { SellResources } from "./SellResources";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useResourcesInStoke } from "../../hooks/ResourceHooks/useResourcesInStoke";
+import { useGame } from "../../context/GameContext";
 
 export const MarketDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
+    const { gameID } = useGame();
     const [isOpen, setIsOpen] = useState(false);
 
     const [isLoadingSell, setIsLoadingSell] = useState<boolean>(false);
     const [isLoadingBuy, setIsLoadingBuy] = useState<boolean>(false);
 
-    const resourcesInStock = useResourcesInStoke(1);
+    const resourcesInStock = useResourcesInStoke(gameID);
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen);

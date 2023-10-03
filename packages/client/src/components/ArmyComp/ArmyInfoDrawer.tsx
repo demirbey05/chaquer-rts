@@ -6,6 +6,7 @@ import { MdLocationPin } from 'react-icons/md'
 import { Button } from "@chakra-ui/react";
 import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
 import { usePlayer } from "../../context/PlayerContext";
+import { useGame } from "../../context/GameContext";
 
 // Scroll to div by id as middle of the screen
 const scrollToDiv = (targetId: any) => {
@@ -23,9 +24,10 @@ const scrollToDiv = (targetId: any) => {
 
 export const ArmyInfoDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const { userWallet } = usePlayer()
+    const { gameID } = useGame();
     const [isOpen, setIsOpen] = useState(false);
 
-    const myArmyPosition = useMyArmy(userWallet);
+    const myArmyPosition = useMyArmy(userWallet, gameID);
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen);

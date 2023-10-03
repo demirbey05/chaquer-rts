@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 
 export function useMyUsername(gameID: number, address: string) {
     const { components } = useMUD();
-    const [username, setUsername] = useState<any>(0);
-    const value = useComponentValue(components.AddressToUsername, encodeEntity(components.AddressToUsername.metadata.keySchema, { ownerAddress: address, gameId: BigInt(gameID) }));
+    const [username, setUsername] = useState<any>();
+    const value = useComponentValue(components.AddressToUsername, encodeEntity(components.AddressToUsername.metadata.keySchema, { ownerAddress: address }));
 
     useEffect(() => {
         if (value) {

@@ -9,6 +9,7 @@ import { useArmy } from "../../context/ArmyContext";
 import { useError } from "../../context/ErrorContext";
 import { usePlayer } from "../../context/PlayerContext";
 import { useCastle } from "../../context/CastleContext";
+import { useGame } from "../../context/GameContext";
 import { useArmyPrices } from '../../hooks/EconomyHooks/useArmyPrices';
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
@@ -20,6 +21,7 @@ export const ArmySettleModal = () => {
   const { armyPosition, setIsArmySettleStage, setIsArmyUpdateStage } = useArmy();
   const { setErrorMessage, setErrorTitle, setShowError } = useError();
   const { castlePosition } = useCastle();
+  const { gameID } = useGame();
 
   const [swordsmanCount, setSwordsmanCount] = useState<string>("");
   const [archerCount, setArcherCount] = useState<string>("");
@@ -31,8 +33,8 @@ export const ArmySettleModal = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const armyPrices = useArmyPrices(1);
-  const myCredit = useCredit(1, userWallet);
+  const armyPrices = useArmyPrices(gameID);
+  const myCredit = useCredit(gameID, userWallet);
 
   useEffect(() => {
     if (Number.isNaN(parseInt(swordsmanCount))) {
@@ -121,7 +123,7 @@ export const ArmySettleModal = () => {
         Number(swordsmanCount),
         Number(archerCount),
         Number(cavalryCount),
-        1,
+        gameID,
         castleID.toString()
       );
 

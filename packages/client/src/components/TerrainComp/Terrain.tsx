@@ -15,6 +15,7 @@ import { useFleet } from "../../context/FleetContext";
 import { useTerrain } from "../../context/TerrainContext";
 import { useError } from "../../context/ErrorContext";
 import { useMUD } from "../../context/MUDContext";
+import { useGame } from '../../context/GameContext';
 import { useCastlePositions } from "../../hooks/CastleHooks/useCastlePositions";
 import { useMyCastlePositions } from "../../hooks/CastleHooks/useMyCastlePositions";
 import { useArmyPositions } from "../../hooks/ArmyHooks/useArmyPositions";
@@ -69,6 +70,8 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
   const values: Array<Array<TerrainType>> = map;
   const rows = Array.from({ length: height }, (v, i) => i);
   const columns = Array.from({ length: width }, (v, i) => i);
+
+  const { gameID } = useGame();
 
   const { setAttackFromArmyPositionToArmy,
     setAttackToArmyPositionToArmy,
@@ -150,16 +153,16 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
   const [isLoadingArmy, setIsLoadingArmy] = useState<boolean>(false);
   const [isLoadingFleet, setIsLoadingFleet] = useState<boolean>(false);
 
-  const castlePositions = useCastlePositions();
-  const myCastlePosition = useMyCastlePositions(userWallet);
-  const armyPositions = useArmyPositions();
-  const myArmyPosition = useMyArmy(userWallet);
-  const resources = useResources();
-  const myResourcePositions = useMyResourcePositions(userWallet);
-  const dockPositions = useDockPositions();
-  const myDockPositions = useMyDockPositions(userWallet)
-  const fleetPositions = useFleetPositions();
-  const myFleetPositions = useMyFleetPositions(userWallet);
+  const castlePositions = useCastlePositions(gameID);
+  const myCastlePosition = useMyCastlePositions(userWallet, gameID);
+  const armyPositions = useArmyPositions(gameID);
+  const myArmyPosition = useMyArmy(userWallet, gameID);
+  const resources = useResources(gameID);
+  const myResourcePositions = useMyResourcePositions(userWallet, gameID);
+  const dockPositions = useDockPositions(gameID);
+  const myDockPositions = useMyDockPositions(userWallet, gameID)
+  const fleetPositions = useFleetPositions(gameID);
+  const myFleetPositions = useMyFleetPositions(userWallet, gameID);
 
   const handleClick = async (e: any) => {
     // Toggle orange tiles for army settlement

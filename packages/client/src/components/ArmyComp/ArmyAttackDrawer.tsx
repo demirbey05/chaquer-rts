@@ -5,9 +5,11 @@ import { useMUD } from "../../context/MUDContext";
 import { useAttack } from "../../context/AttackContext";
 import { useError } from "../../context/ErrorContext";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { useGame } from "../../context/GameContext";
 
 export const ArmyAttackDrawer = () => {
   const { components, systemCalls } = useMUD();
+  const { gameID } = useGame();
   const { setShowError, setErrorMessage, setErrorTitle } = useError();
   const { setMyArmyConfig,
     myArmyConfig,
@@ -45,7 +47,7 @@ export const ArmyAttackDrawer = () => {
 
     try {
       setIsLoading(true);
-      await systemCalls.attackToArmy(attackFromArmyId[0] as string, attackToArmyId[0] as string, 1);
+      await systemCalls.attackToArmy(attackFromArmyId[0] as string, attackToArmyId[0] as string, gameID);
     } catch (error) {
       setErrorMessage("An error occurred while attacking to army.");
       setErrorTitle("Army Attack Error");

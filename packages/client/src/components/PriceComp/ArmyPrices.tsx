@@ -1,8 +1,10 @@
+import { useGame } from "../../context/GameContext";
 import { useArmyPrices } from "../../hooks/EconomyHooks/useArmyPrices";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 
 export const ArmyPrices = () => {
-    const armyPrices = useArmyPrices(1);
+    const { gameID } = useGame();
+    const armyPrices = useArmyPrices(gameID);
 
     return (
         <div className="mt-2">

@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { FaUsers } from 'react-icons/fa'
+import { useGame } from '../../context/GameContext';
 import { useUsernameWithColors } from '../../hooks/IdentityHooks/useUsernamesWithColors';
 import { colorPath } from '../../utils/constants/constants';
 
 export const PlayerListDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
+    const { gameID } = useGame();
     const [isOpen, setIsOpen] = useState(true);
 
-    const users = useUsernameWithColors();
+    const users = useUsernameWithColors(gameID);
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen);

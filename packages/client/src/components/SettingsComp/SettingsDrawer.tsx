@@ -1,5 +1,6 @@
 import soundTrack from '../../sounds/chaquerSoundTrack.mp3'
 import { useState, useEffect, useRef } from 'react'
+import { useHistory } from 'react-router-dom';
 import { Button, Slider, SliderTrack, SliderFilledTrack, SliderThumb } from "@chakra-ui/react";
 import { SettingsIcon } from '@chakra-ui/icons'
 import { FaPlay, FaStop } from 'react-icons/fa'
@@ -12,6 +13,8 @@ export const SettingsDrawer = ({ isInputFocused }: { isInputFocused: boolean }) 
     const [isOpen, setIsOpen] = useState(false);
 
     const audioRef = useRef<any>();
+
+    let history = useHistory();
 
     useEffect(() => {
         const audioElement = audioRef.current;
@@ -103,7 +106,7 @@ export const SettingsDrawer = ({ isInputFocused }: { isInputFocused: boolean }) 
                     </Slider>
                     <hr className='mt-2 mb-2' />
                     <h5 className="mb-2 mt-2">Back to Menu</h5>
-                    <BackToMenuButton toggleDrawer={toggleDrawer} />
+                    <BackToMenuButton toggleDrawer={toggleDrawer} history={history} />
                 </div>
             </div>
             <audio ref={audioRef} autoPlay muted={isPlaying} >
@@ -113,34 +116,26 @@ export const SettingsDrawer = ({ isInputFocused }: { isInputFocused: boolean }) 
     );
 }
 
-interface AudioControlCompHeaderPropTypes {
-    toggleDrawer: () => void
-}
-
-const AudioControlCompHeader = (props: AudioControlCompHeaderPropTypes) => {
+const AudioControlCompHeader = ({ toggleDrawer }: { toggleDrawer: () => void }) => {
     return (
         <div className='d-flex justify-between border-bottom mb-2 p-2'>
             <h5 className="font-extrabold">Settings</h5>
-            <button type="button" onClick={props.toggleDrawer}>&#10008;</button>
+            <button type="button" onClick={toggleDrawer}>&#10008;</button>
         </div>
     )
 }
 
-interface BackToMenuButtonPropTypes {
-    toggleDrawer: () => void
-}
-
-const BackToMenuButton = (props: BackToMenuButtonPropTypes) => {
+const BackToMenuButton = ({ toggleDrawer, history }: { toggleDrawer: () => void, history: any }) => {
     return (
-        <Link to='/'>
-            <Button colorScheme='blue'
-                variant='outline'
-                style={{ height: "40px" }}
-                onClick={props.toggleDrawer}
-                aria-label="Close">
-                <RiArrowGoBackFill />
-            </Button>
-        </Link>
+        <Button colorScheme='blue'
+            variant='outline'
+            style={{ height: "40px" }}
+            onClick={() => {
+                history.go(0)
+            }}
+            aria-label="Close">
+            <RiArrowGoBackFill />
+        </Button>
     )
 }
 

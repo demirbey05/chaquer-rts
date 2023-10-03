@@ -1,4 +1,3 @@
-import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
@@ -6,20 +5,46 @@ export type SystemCalls = ReturnType<typeof createSystemCalls>;
 export function createSystemCalls({
   worldContract,
   waitForTransaction,
+  publicClient,
 }: SetupNetworkResult) {
-  const initMapDataSystem = async (
-    gameID: number,
+  const initGame = async (
+    capacity: number,
     width: number,
     height: number,
-    terrain: string
+    terrain: string,
+    gameName: string,
+    mapID: number
   ) => {
     try {
-      const tx = await worldContract.write.initMapData([
-        BigInt(gameID),
+      const txSimulated = await worldContract.simulate.InitGame([
+        BigInt(capacity),
         width,
         height,
         terrain,
+        gameName,
+        mapID,
       ]);
+
+      const tx = await worldContract.write.InitGame([
+        BigInt(capacity),
+        width,
+        height,
+        terrain,
+        gameName,
+        mapID,
+      ]);
+      await waitForTransaction(tx);
+
+      return txSimulated;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
+  const initUsername = async (username: string) => {
+    try {
+      const tx = await worldContract.write.initUsername([username]);
       await waitForTransaction(tx);
       return tx;
     } catch (e) {
@@ -114,23 +139,9 @@ export function createSystemCalls({
     }
   };
 
-  const joinGame = async (userName: string, gameID: number) => {
+  const joinGame = async (gameID: number) => {
     try {
-      const tx = await worldContract.write.joinGame([BigInt(gameID), userName]);
-      await waitForTransaction(tx);
-      return tx;
-    } catch (e) {
-      console.log(e);
-      return null;
-    }
-  };
-
-  const InitNumberOfGamer = async (gameID: number, limit: number) => {
-    try {
-      const tx = await worldContract.write.InitNumberOfGamer([
-        BigInt(gameID),
-        BigInt(limit),
-      ]);
+      const tx = await worldContract.write.joinGame([BigInt(gameID)]);
       await waitForTransaction(tx);
       return tx;
     } catch (e) {
@@ -407,7 +418,8 @@ export function createSystemCalls({
   };
 
   return {
-    initMapDataSystem,
+    initGame,
+    initUsername,
     settleCastle,
     settleArmy,
     moveArmy,
@@ -417,7 +429,6 @@ export function createSystemCalls({
     commitSeed,
     resourceSystemInit,
     captureMine,
-    InitNumberOfGamer,
     sellResource,
     updateEconomyData,
     claimWinner,

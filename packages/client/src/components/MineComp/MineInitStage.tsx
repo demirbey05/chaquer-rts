@@ -2,16 +2,18 @@ import { useEffect } from 'react';
 import { Progress } from '@chakra-ui/react'
 import { useMUD } from '../../context/MUDContext';
 import { useIsMineInitialized } from '../../hooks/ResourceHooks/useIsMineInitialized';
+import { useGame } from '../../context/GameContext';
 
 export const MineInitStage = () => {
     const { systemCalls } = useMUD();
+    const { gameID } = useGame();
 
-    const isMineInited = useIsMineInitialized(1);
+    const isMineInited = useIsMineInitialized(gameID);
 
     useEffect(() => {
         const initResource = async () => {
             if (!isMineInited) {
-                await systemCalls.resourceSystemInit(1);
+                await systemCalls.resourceSystemInit(gameID);
             }
         };
 

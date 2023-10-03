@@ -3,11 +3,11 @@ import { useEntityQuery, useObservableValue } from "@latticexyz/react";
 import { HasValue, getComponentValue } from "@latticexyz/recs";
 import { useState, useEffect } from "react";
 
-export function useDockPositions() {
+export function useDockPositions(gameID: number) {
     const { components } = useMUD();
 
     const dockEntites = useEntityQuery([
-        HasValue(components.DockOwnable, { gameID: BigInt(1) }),
+        HasValue(components.DockOwnable, { gameID: BigInt(gameID) }),
     ]);
 
     const valueOwn = useObservableValue(components.DockOwnable.update$);

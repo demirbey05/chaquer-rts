@@ -22,6 +22,7 @@ import { MineProvider } from "./context/MineContext";
 import { ErrorProvider } from "./context/ErrorContext";
 import { SeaProvider } from "./context/SeaContext";
 import { FleetProvider } from './context/FleetContext';
+import { GameProvider } from "./context/GameContext";
 
 const rootElement = document.getElementById("react-root");
 if (!rootElement) throw new Error("React root not found");
@@ -33,23 +34,25 @@ setup().then(async (result) => {
     <MUDProvider value={result}>
       <ChakraProvider>
         <ErrorProvider>
-          <TerrainProvider>
-            <AttackProvider>
-              <SeaProvider>
-                <FleetProvider>
-                  <MineProvider>
-                    <ArmyProvider>
-                      <CastleProvider>
-                        <PlayerProvider>
-                          <App />
-                        </PlayerProvider>
-                      </CastleProvider>
-                    </ArmyProvider>
-                  </MineProvider>
-                </FleetProvider>
-              </SeaProvider>
-            </AttackProvider>
-          </TerrainProvider>
+          <GameProvider>
+            <TerrainProvider>
+              <AttackProvider>
+                <SeaProvider>
+                  <FleetProvider>
+                    <MineProvider>
+                      <ArmyProvider>
+                        <CastleProvider>
+                          <PlayerProvider>
+                            <App />
+                          </PlayerProvider>
+                        </CastleProvider>
+                      </ArmyProvider>
+                    </MineProvider>
+                  </FleetProvider>
+                </SeaProvider>
+              </AttackProvider>
+            </TerrainProvider>
+          </GameProvider>
         </ErrorProvider>
       </ChakraProvider>
     </MUDProvider >

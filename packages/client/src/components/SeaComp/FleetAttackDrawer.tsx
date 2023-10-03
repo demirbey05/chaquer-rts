@@ -5,9 +5,11 @@ import { useMUD } from "../../context/MUDContext";
 import { useError } from "../../context/ErrorContext";
 import { useFleet } from "../../context/FleetContext";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { useGame } from "../../context/GameContext";
 
 export const FleetAttackDrawer = () => {
     const { components, systemCalls } = useMUD();
+    const { gameID } = useGame();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
     const { myFleetConfig,
         setMyFleetConfig,
@@ -45,7 +47,7 @@ export const FleetAttackDrawer = () => {
 
         try {
             setIsLoading(true)
-            await systemCalls.attackFleet(attackFromArmyId[0] as string, attackToArmyId[0] as string, 1)
+            await systemCalls.attackFleet(attackFromArmyId[0] as string, attackToArmyId[0] as string, gameID)
 
             document.getElementById(`${targetFleetPosition.y},${targetFleetPosition.x}`)!.setAttribute("data-bs-toggle", "");
             document.getElementById(`${targetFleetPosition.y},${targetFleetPosition.x}`)!.setAttribute("data-bs-target", "");

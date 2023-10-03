@@ -6,19 +6,19 @@ import { Spectator } from "./pages/spectator";
 import { useGameState } from "./hooks/useGameState";
 import { usePlayer } from "./context/PlayerContext";
 import { usePlayerIsValid } from "./hooks/IdentityHooks/usePlayerIsValid";
+import { useGame } from "./context/GameContext";
 
 export const App = () => {
-  const gameState = useGameState(1);
   const { userWallet } = usePlayer();
-  const isUserValid = usePlayerIsValid(1, userWallet);
+  const { gameID } = useGame();
+  const isUserValid = usePlayerIsValid(gameID, userWallet);
+
   return (
     <>
       <Router>
         <Switch>
-          <ProtectedRoutes isUserValid={isUserValid} component={Game} exact path="/game" />
-          {
-            gameState && (gameState === 3 || gameState === 4) && <Route component={Spectator} path="/game/spectator" />
-          }
+          <ProtectedRoutes isUserValid={isUserValid} component={Game} path="/game/:gameID" />
+          <Route component={Spectator} path="/game/spectator" />
           <Route component={Menu} path="/" />
         </Switch>
       </Router >

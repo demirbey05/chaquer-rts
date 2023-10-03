@@ -6,16 +6,19 @@ import { useGameState } from '../../hooks/useGameState';
 import { GameTips } from '../TipsComp/GameTips';
 import { useMUD } from '../../context/MUDContext';
 import { useCastle } from '../../context/CastleContext';
+import { useGame } from '../../context/GameContext';
 
 export const PlayerWaitingStage = () => {
     const { systemCalls } = useMUD();
-    const numberOfUser = useNumberOfUsers(1);
-    const gameState = useGameState(1);
+    const { gameID } = useGame();
+
+    const numberOfUser = useNumberOfUsers(gameID);
+    const gameState = useGameState(gameID);
     const { isCastleSettled } = useCastle();
 
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-            systemCalls.exitGame(1)
+            systemCalls.exitGame(gameID)
             event.preventDefault();
             event.returnValue = 'If you leave the page, you will leave the game.';
         }

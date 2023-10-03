@@ -3,11 +3,11 @@ import { useMUD } from "../../context/MUDContext";
 import { HasValue, getComponentValue } from "@latticexyz/recs";
 import { useState, useEffect } from "react";
 
-export function useMyResourcePositions(address: any) {
+export function useMyResourcePositions(address: any, gameID: number) {
     const { components } = useMUD();
 
     const resourceEntity = useEntityQuery([
-        HasValue(components.ResourceOwnable, { gameID: BigInt(1), owner: address }),
+        HasValue(components.ResourceOwnable, { gameID: BigInt(gameID), owner: address }),
     ]);
 
     const [resources, setResources] = useState<any>();

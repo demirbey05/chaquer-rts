@@ -3,11 +3,11 @@ import { useEntityQuery, useObservableValue } from "@latticexyz/react";
 import { HasValue, getComponentValue } from "@latticexyz/recs";
 import { useState, useEffect } from "react";
 
-export function useResources() {
+export function useResources(gameID: number) {
     const { components } = useMUD();
 
     const resourceEntites = useEntityQuery([
-        HasValue(components.ResourceOwnable, { gameID: BigInt(1) }),
+        HasValue(components.ResourceOwnable, { gameID: BigInt(gameID) }),
     ]);
     const valueOwn = useObservableValue(components.ResourceOwnable.update$);
     const valueCol = useObservableValue(components.ColorOwnable.update$);

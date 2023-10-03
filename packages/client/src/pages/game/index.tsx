@@ -1,6 +1,7 @@
 import "../../styles/globals.css"
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { usePlayer } from "../../context/PlayerContext";
+import { useGame } from "../../context/GameContext";
 import { useGameState } from "../../hooks/useGameState";
 import { useCountOfPlayerSeed } from "../../hooks/IdentityHooks/useCountOfPlayerSeed";
 import { useIsMineInitialized } from "../../hooks/ResourceHooks/useIsMineInitialized";
@@ -44,13 +45,14 @@ import { ArmyMergeDrawer } from "../../components/ArmyComp/ArmyMergeDrawer";
 import { ChatMessageDrawer } from "../../components/ChatComp/ChatMessageDrawer";
 
 export const Game = () => {
+  const { gameID } = useGame();
   const { isPlayerLost, isPlayerWinner } = usePlayer();
   const [zoomLevel, setZoomLevel] = useState(1);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const gameState = useGameState(1);
-  const playerSeedCount = useCountOfPlayerSeed(1);
-  const mineInited = useIsMineInitialized(1);
+  const gameState = useGameState(gameID);
+  const playerSeedCount = useCountOfPlayerSeed(gameID);
+  const mineInited = useIsMineInitialized(gameID);
 
   return (
     <>
