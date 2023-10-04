@@ -102,10 +102,10 @@ export const ChatMessageDrawer = ({ isInputFocused, setIsInputFocused, isSpectat
 
     return (
         <>
-            <button className="chat-button" onClick={toggleOffcanvas}>
+            <button className="chat-button" style={isSpectator ? { marginTop: "155px" } : {}} onClick={toggleOffcanvas}>
                 <BsFillChatDotsFill />
             </button>
-            <div id="chatDrawer" className={`chat-drawer ${isOpen ? "open" : ""}`}>
+            <div id="chatDrawer" className={`chat-drawer ${isOpen ? "open" : ""}`} style={isSpectator ? { marginTop: "225px" } : {}}>
                 <h4 className="text-center p-2 mb-2 border-bottom">Chat</h4>
                 <div className='row'>
                     <div className='chat-body' ref={chatBodyRef}>

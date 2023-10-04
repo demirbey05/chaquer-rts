@@ -86,12 +86,12 @@ export const Game = () => {
       {gameData && gameData.state === 3 && !isPlayerLost && mineInited && <FleetMoveWarning />}
       {gameData && gameData.state === 3 && !isPlayerLost && mineInited && <FleetAttackDrawer />}
       {gameData && gameData.state === 3 && !isPlayerLost && mineInited && <SeaMineCaptureDrawer />}
-      {gameData && gameData.state === 3 && mineInited && <PriceListDrawer isInputFocused={isInputFocused} />}
+      {gameData && gameData.state === 3 && mineInited && <PriceListDrawer isInputFocused={isInputFocused} isSpectator={false} />}
       {isPlayerLost && <PlayerLostWarning />}
       {gameData && gameData.state === 4 && isPlayerWinner && <PlayerWonAnimation />}
 
       <SettingsDrawer isInputFocused={isInputFocused} />
-      <PlayerListDrawer isInputFocused={isInputFocused} />
+      <PlayerListDrawer isInputFocused={isInputFocused} isSpectator={false} />
       <ZoomHandler isInputFocused={isInputFocused} zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />
       <Terrain isBorder={false} zoomLevel={zoomLevel} tileSize={40} fontSize={20} isSpectator={false} />
     </>

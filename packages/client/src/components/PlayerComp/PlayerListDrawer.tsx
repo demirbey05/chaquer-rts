@@ -4,7 +4,7 @@ import { useGame } from '../../context/GameContext';
 import { useUsernameWithColors } from '../../hooks/IdentityHooks/useUsernamesWithColors';
 import { colorPath } from '../../utils/constants/constants';
 
-export const PlayerListDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
+export const PlayerListDrawer = ({ isInputFocused, isSpectator }: { isInputFocused: boolean, isSpectator: boolean }) => {
     const { gameID } = useGame();
     const [isOpen, setIsOpen] = useState(true);
 
@@ -33,7 +33,7 @@ export const PlayerListDrawer = ({ isInputFocused }: { isInputFocused: boolean }
 
     return (
         <>
-            <button className='players-list-button' onClick={toggleDrawer}>
+            <button className='players-list-button' style={isSpectator ? { marginTop: "90px" } : {}} onClick={toggleDrawer}>
                 <FaUsers />
             </button>
             <div id="players-in-game-drawer" className={`players-in-game-drawer ${isOpen ? "open" : ""}`}>

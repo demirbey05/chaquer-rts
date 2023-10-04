@@ -1,6 +1,5 @@
-export const limitOfUser = import.meta.env.NUMBER_OF_USERS || 3;
-
 export const colorPath = [
+  "#ffffff", // beyaz
   "#F21E13", // kırmızı
   "#35F213", // yeşil
   "#132BF2", // koyu mavi

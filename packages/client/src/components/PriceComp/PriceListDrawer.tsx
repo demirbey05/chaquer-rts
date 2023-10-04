@@ -9,7 +9,7 @@ import { FleetPrices } from "./FleetPrices";
 import { ResourceBuyPrices } from "./ResourceBuyPrices";
 import { useGameData } from "../../hooks/useGameData";
 
-export const PriceListDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
+export const PriceListDrawer = ({ isInputFocused, isSpectator }: { isInputFocused: boolean, isSpectator: boolean }) => {
     const { gameID } = useGame();
 
     const [isOpen, setIsOpen] = useState(true);
@@ -57,10 +57,10 @@ export const PriceListDrawer = ({ isInputFocused }: { isInputFocused: boolean })
 
     return (
         <div>
-            <button className={"price-list-button"} onClick={toggleDrawer}>
+            <button className={"price-list-button"} style={isSpectator ? { marginTop: "25px" } : {}} onClick={toggleDrawer}>
                 $
             </button>
-            <div id="prices-drawer-body" className={`prices-drawer ${isOpen ? "open" : ""}`}>
+            <div id="prices-drawer-body" className={`prices-drawer ${isOpen ? "open" : ""}`} style={isSpectator ? { marginTop: "95px" } : {}}>
                 <h4 className="text-center p-2 mb-2 mt-2 border-bottom font-extrabold">Current Prices</h4>
                 <Tabs isFitted variant='enclosed'>
                     <TabList>
