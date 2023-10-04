@@ -1,11 +1,11 @@
-import { useMUD } from "../../context/MUDContext";
+import { useMUD } from "../context/MUDContext";
 import { useComponentValue } from "@latticexyz/react";
 import { encodeEntity } from "@latticexyz/store-sync/recs";
 import { useState, useEffect } from "react";
 
-export const useWinnerAddress = (gameID: number) => {
+export const useGameData = (gameID: number) => {
     const { components } = useMUD();
-    const [winner, setWinner] = useState<string>();
+    const [gameData, setGameData] = useState<any>();
     const value = useComponentValue(
         components.GameMetaData,
         encodeEntity(components.GameMetaData.metadata.keySchema, {
@@ -15,9 +15,9 @@ export const useWinnerAddress = (gameID: number) => {
 
     useEffect(() => {
         if (value) {
-            setWinner(value.winner);
+            setGameData(value);
         }
     }, [value]);
 
-    return winner;
+    return gameData;
 };

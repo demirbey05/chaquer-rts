@@ -96,11 +96,12 @@
     z-index: 9999;
 }
 
-.menu-user-info-modal {
+/* Player Card Info Modal */
+.player-card-info-modal {
     background-color: rgba(0, 0, 0, 0.8);
     border-radius: 10px;
     color: white;
-    padding: 20px;
+    padding: 10px;
     width: 30%;
 }
 

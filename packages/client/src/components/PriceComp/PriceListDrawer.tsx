@@ -5,9 +5,9 @@ import { useError } from '../../context/ErrorContext';
 import { ArmyPrices } from "./ArmyPrices";
 import { ResourcePrices } from "./ResourcePrices";
 import { FleetPrices } from "./FleetPrices";
-import { useGameState } from "../../hooks/useGameState";
 import { ResourceBuyPrices } from "./ResourceBuyPrices";
 import { useGame } from "../../context/GameContext";
+import { useGameData } from "../../hooks/useGameData";
 
 export const PriceListDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const [isOpen, setIsOpen] = useState(true);
@@ -16,10 +16,10 @@ export const PriceListDrawer = ({ isInputFocused }: { isInputFocused: boolean })
     const { systemCalls } = useMUD();
     const { gameID } = useGame();
 
-    const gameState = useGameState(gameID);
+    const gameData = useGameData(gameID);
 
     useEffect(() => {
-        if (gameState === 3) {
+        if (gameData && gameData.state === 3) {
             const interval = setInterval(async () => {
                 const tx = await systemCalls.updateEconomyData(1);
                 if (tx == null) {
@@ -31,7 +31,7 @@ export const PriceListDrawer = ({ isInputFocused }: { isInputFocused: boolean })
 
             return () => clearInterval(interval);
         }
-    }, [gameState])
+    }, [gameData])
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen);

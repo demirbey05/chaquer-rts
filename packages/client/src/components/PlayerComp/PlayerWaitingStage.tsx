@@ -1,20 +1,17 @@
 import { useEffect } from 'react';
 import { Progress, CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
-import { useNumberOfUsers } from '../../hooks/IdentityHooks/useNumberOfUsers';
-import { limitOfUser } from '../../utils/constants/constants';
-import { useGameState } from '../../hooks/useGameState';
-import { GameTips } from '../TipsComp/GameTips';
 import { useMUD } from '../../context/MUDContext';
 import { useCastle } from '../../context/CastleContext';
 import { useGame } from '../../context/GameContext';
+import { GameTips } from '../TipsComp/GameTips';
+import { useGameData } from '../../hooks/useGameData';
 
 export const PlayerWaitingStage = () => {
     const { systemCalls } = useMUD();
     const { gameID } = useGame();
-
-    const numberOfUser = useNumberOfUsers(gameID);
-    const gameState = useGameState(gameID);
     const { isCastleSettled } = useCastle();
+
+    const gameData = useGameData(gameID)
 
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -34,12 +31,12 @@ export const PlayerWaitingStage = () => {
             <div id="overlay" className="waiting-for-players-fade-overlay">
                 <div className="waiting-for-players-message-container">
                     {
-                        (gameState && gameState === 1) &&
+                        (gameData.state && gameData.state === 1) &&
                         <>
                             <span className="waiting-for-players-info-message">
                                 Waiting for the other players...
-                                <CircularProgress className='ms-4' value={(Number(numberOfUser) / Number(limitOfUser)) * 100} color='green.400' thickness='12px'>
-                                    <CircularProgressLabel>({numberOfUser}/{limitOfUser})</CircularProgressLabel>
+                                <CircularProgress className='ms-4' value={(Number(gameData.numberOfPlayer) / Number(gameData.limitOfPlayer)) * 100} color='green.400' thickness='12px'>
+                                    <CircularProgressLabel>({Number(gameData.numberOfPlayer)}/{Number(gameData.limitOfPlayer)})</CircularProgressLabel>
                                 </CircularProgress>
                             </span>
                             <Progress size='sm' colorScheme={"whatsapp"} isIndeterminate />

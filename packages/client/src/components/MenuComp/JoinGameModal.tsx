@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { Button } from "@chakra-ui/react";
+import { Button, Alert, AlertIcon } from "@chakra-ui/react";
 import { useGame } from "../../context/GameContext";
 import { usePlayerIsValid } from "../../hooks/IdentityHooks/usePlayerIsValid";
+import { useGameData } from "../../hooks/useGameData";
 import { usePlayer } from "../../context/PlayerContext";
 import { useMUD } from "../../context/MUDContext";
 
@@ -10,16 +11,31 @@ export const JoinGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
     const { systemCalls } = useMUD();
     const { gameID, setGameID } = useGame();
     const { userWallet } = usePlayer();
+
     const userValid = usePlayerIsValid(gameID, userWallet);
+    const gameData = useGameData(gameID)
 
     let history = useHistory();
 
-    const [isLoading, setIsLoading] = useState<boolean>();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
     const [joinButtonClicked, setJoinButtonClicked] = useState<boolean>(false);
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen)
     }
+
+    useEffect(() => {
+        if (userValid === undefined && gameData) {
+            if (gameData.state === 2 || gameData.state === 3 || gameData.state === 4) {
+                setIsButtonDisabled(true)
+            } else {
+                setIsButtonDisabled(false)
+            }
+        } else {
+            setIsButtonDisabled(false)
+        }
+    }, [gameData])
 
     useEffect(() => {
         const joinGame = async () => {
@@ -57,12 +73,22 @@ export const JoinGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
                                 Join Game
                             </h1>
                         </div>
-                        <div className="modal-header justify-center mb-2">
-                            <p>Click to Join Game button to join game.</p>
-                        </div>
+                        {
+                            userValid === undefined && gameData && (gameData.state === 2 || gameData.state === 3 || gameData.state === 4) &&
+                            <Alert textColor={"black"} status='warning'>
+                                <AlertIcon />
+                                Seems game is full. You cannot join.
+                            </Alert>
+                        }
+                        {
+                            gameData && (gameData.state === 0 || gameData.state === 1) &&
+                            <div className="modal-header justify-center mb-2">
+                                <p>Click to Join Game button to join game.</p>
+                            </div>
+                        }
                         <div className="modal-footer justify-content-around mt-3">
                             <BackMapButton toggleDrawer={toggleDrawer} isLoading={isLoading} setGameID={setGameID} />
-                            <JoinToGameButton onClick={() => setJoinButtonClicked(true)} isLoading={isLoading} disable={isLoading} />
+                            <JoinToGameButton onClick={() => setJoinButtonClicked(true)} isLoading={isLoading} disable={isButtonDisabled} />
                         </div>
                     </div>
                 </div>

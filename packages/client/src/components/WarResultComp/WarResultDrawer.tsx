@@ -12,7 +12,7 @@ export const WarResultDrawer = ({ isInputFocused }: { isInputFocused: boolean })
     const { gameID } = useGame();
 
     const warResults = useWarResult(4, gameID);
-    const username = useMyUsername(gameID, userWallet)
+    const username = useMyUsername(userWallet)
 
     const toggleOffcanvas = () => {
         setIsOpen(!isOpen);

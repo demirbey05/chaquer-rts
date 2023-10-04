@@ -76,7 +76,7 @@ input::-webkit-inner-spin-button {
     width: 600px;
     text-align: center;
     background-color: rgba(0, 0, 0, 0.3);
-    margin-top: 100px;
+    margin-top: 50px;
 }
 
 #menu-items {
@@ -97,19 +97,6 @@ input::-webkit-inner-spin-button {
     margin-top: 50px;
 }
 
-.menu-footer {
-    display: block;
-    color: rgb(255, 255, 255);
-    font-size: 25px;
-    font-weight: bolder;
-    border-top: 1px solid rgb(255, 255, 255);
-    border-bottom: 1px solid rgb(255, 255, 255);
-    width: 400px;
-    text-align: center;
-    margin-top: 100px;
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
 @media (min-width: 1000px) {
     .menu-row {
         flex-direction: row;
@@ -128,4 +115,5 @@ input::-webkit-inner-spin-button {
     margin-top: 100px;
     margin-bottom: 50px;
     background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
 }

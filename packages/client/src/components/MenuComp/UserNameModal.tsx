@@ -3,24 +3,15 @@ import { Button } from "@chakra-ui/react";
 import { usePlayer } from '../../context/PlayerContext';
 import { useMUD } from '../../context/MUDContext';
 import { useError } from '../../context/ErrorContext';
-import { usePlayerIsValid } from "../../hooks/IdentityHooks/usePlayerIsValid";
-import { useNumberOfUsers } from "../../hooks/IdentityHooks/useNumberOfUsers";
-import { useGameState } from '../../hooks/useGameState';
-import { limitOfUser } from "../../utils/constants/constants";
 
 export const UserNameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (value: boolean) => void }) => {
     const { systemCalls } = useMUD()
 
-    const { userWallet, setUserName, userName } = usePlayer();
+    const { setUserName, userName } = usePlayer();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
 
     const [disable, setDisable] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
-    const userValid = usePlayerIsValid(1, userWallet);
-    const gameState = useGameState(1);
-    const numberOfUsers = useNumberOfUsers(1);
-
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen);
@@ -33,7 +24,7 @@ export const UserNameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
         else {
             setDisable(true)
         }
-    }, [gameState, userValid, numberOfUsers, limitOfUser, userName]);
+    }, [userName]);
 
     const handleInput = (e: any) => {
         setUserName(e.target.value)

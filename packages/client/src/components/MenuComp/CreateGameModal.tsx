@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { Button } from "@chakra-ui/react";
 import { useMUD } from "../../context/MUDContext";
 import { useTerrain } from "../../context/TerrainContext";
+import { useGame } from "../../context/GameContext";
 import { ethers } from "ethers";
 import { flatten2D } from "../../utils/terrainArray";
-import { useGame } from "../../context/GameContext";
 
 export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: boolean, setIsOpen: (value: boolean) => void, setIsJoinOpen: (value: boolean) => void }) => {
     const { systemCalls } = useMUD();
@@ -32,20 +32,15 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
 
     const handleCreateGame = async () => {
         setIsLoading(true)
-        try {
-            const data: string = ethers.utils.hexlify(flatten2D(map));
-            const initGameTx = await systemCalls.initGame(numberOfPlayer, width, height, data, gameName, 1);
-            if (initGameTx) {
-                setGameID(Number(initGameTx.result))
-                setIsLoading(false)
-                toggleDrawer();
-                setIsJoinOpen(true)
-            }
-        } catch (error) {
-
-        } finally {
+        const data: string = ethers.utils.hexlify(flatten2D(map));
+        const initGameTx = await systemCalls.initGame(numberOfPlayer, width, height, data, gameName, 1);
+        if (initGameTx) {
+            setGameID(Number(initGameTx.result))
             setIsLoading(false)
+            toggleDrawer();
+            setIsJoinOpen(true)
         }
+        setIsLoading(false)
     }
 
     if (isOpen) {
@@ -62,12 +57,12 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
                             type="text"
                             className="form-control dark-input bg-dark text-white mb-3"
                             id="gameNameInput"
-                            placeholder="Game Name" required />
-                        <input onChange={(e) => setNumberOfPlayer(e.target.value)}
+                            placeholder="Game Name (Required)" required />
+                        <input onChange={(e) => setNumberOfPlayer(Number(e.target.value))}
                             type="number"
                             className="form-control dark-input bg-dark text-white"
                             id="numberOfPlayerInput"
-                            placeholder="Number of Player" required />
+                            placeholder="Number of Player (Min: 3 - Max: 8)" required />
                         <div className="modal-footer justify-content-around mt-3">
                             <BackMapButton toggleDrawer={toggleDrawer} isLoading={isLoading} />
                             <CreateGameButton onClick={() => handleCreateGame()} isLoading={isLoading} disable={disable || isLoading} />

@@ -3,7 +3,6 @@ import { ProtectedRoutes } from "./pages/ProtectedRoutes";
 import { Menu } from "./pages/menu/index";
 import { Game } from "./pages/game/index";
 import { Spectator } from "./pages/spectator";
-import { useGameState } from "./hooks/useGameState";
 import { usePlayer } from "./context/PlayerContext";
 import { usePlayerIsValid } from "./hooks/IdentityHooks/usePlayerIsValid";
 import { useGame } from "./context/GameContext";
@@ -18,7 +17,7 @@ export const App = () => {
       <Router>
         <Switch>
           <ProtectedRoutes isUserValid={isUserValid} component={Game} path="/game/:gameID" />
-          <Route component={Spectator} path="/game/spectator" />
+          <ProtectedRoutes isUserValid={isUserValid} component={Spectator} path="/spectator/:gameID" />
           <Route component={Menu} path="/" />
         </Switch>
       </Router >

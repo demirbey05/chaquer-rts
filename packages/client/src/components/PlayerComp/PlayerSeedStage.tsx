@@ -2,10 +2,10 @@ import { Progress } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useMUD } from '../../context/MUDContext';
 import { useError } from '../../context/ErrorContext';
-import { useGameState } from "../../hooks/useGameState";
 import { useSeedInited } from "../../hooks/IdentityHooks/useSeedInited";
 import { usePlayer } from "../../context/PlayerContext";
 import { useGame } from '../../context/GameContext';
+import { useGameData } from '../../hooks/useGameData';
 
 export const PlayerSeedStage = () => {
     const { systemCalls } = useMUD()
@@ -14,7 +14,7 @@ export const PlayerSeedStage = () => {
 
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
 
-    const gameState = useGameState(gameID);
+    const gameData = useGameData(gameID)
     const seedEntered = useSeedInited(gameID, userWallet);
 
     useEffect(() => {
@@ -32,7 +32,7 @@ export const PlayerSeedStage = () => {
 
     useEffect(() => {
         const sendSeed = async () => {
-            if (gameState === 2 && !seedEntered) {
+            if (gameData.state === 2 && !seedEntered) {
                 var buf = new Uint8Array(1);
                 crypto.getRandomValues(buf);
 
@@ -51,7 +51,7 @@ export const PlayerSeedStage = () => {
         return () => {
             clearInterval(intervalId);
         };
-    }, [gameState, seedEntered]);
+    }, [gameData, seedEntered]);
 
     return (
         <div id="overlay" className="waiting-for-players-fade-overlay">

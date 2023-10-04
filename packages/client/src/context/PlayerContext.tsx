@@ -2,10 +2,9 @@ import { useRef, useState, useEffect, useContext, createContext, ReactNode } fro
 import { getBurnerPrivateKey } from "@latticexyz/common";
 import { Wallet } from "ethers";
 import { useMUD } from "./MUDContext";
-import { useNumberOfUsers } from "../hooks/IdentityHooks/useNumberOfUsers";
 import { usePlayerIsValid } from "../hooks/IdentityHooks/usePlayerIsValid";
-import { useGameState } from "../hooks/useGameState";
-import { useWinnerAddress } from "../hooks/IdentityHooks/useWinnerAddress";
+import { useGame } from "./GameContext";
+import { useGameData } from "../hooks/useGameData";
 
 type PlayerContextType = {
   userWallet: string | undefined
@@ -37,25 +36,25 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
   const [playerSeed, setPlayerSeed] = useState<number>();
 
   const { systemCalls } = useMUD();
-
-  const numberOfUser = useNumberOfUsers(1);
-  const userValid = usePlayerIsValid(1, userWallet);
-  const gameState = useGameState(1);
-  const winnerAddress = useWinnerAddress(1);
+  const { gameID } = useGame();
+  const gameData = useGameData(gameID)
+  const userValid = usePlayerIsValid(gameID, userWallet);
 
   useEffect(() => {
-    if (!userValid && (gameState === 3 || gameState === 4)) {
+    if (!userValid && gameData && (gameData.state === 3 || gameData.state === 4)) {
       setIsPlayerLost(true)
     }
-  }, [userValid, gameState])
+  }, [userValid, gameData])
 
   useEffect(() => {
     const fetchData = async () => {
-      if (userValid && numberOfUser === 1 && (gameState === 3 || gameState === 4)) {
-        if (winnerAddress && (winnerAddress === userWallet)) {
+      if (userValid && gameData && Number(gameData.numberOfPlayer) === 1 && (gameData.state === 3 || gameData.state === 4)) {
+
+        if (gameData.winner && (gameData.winner === userWallet)) {
           setIsPlayerWinner(true);
         } else {
-          const tx = await systemCalls.claimWinner(1, userWallet);
+
+          const tx = await systemCalls.claimWinner(gameID, userWallet);
           if (tx) {
             setIsPlayerWinner(true);
           }
@@ -65,7 +64,7 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
 
     fetchData();
 
-  }, [userValid, numberOfUser, gameState, winnerAddress]);
+  }, [userValid, gameData]);
 
   const results: PlayerContextType = {
     userWallet,
