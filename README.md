@@ -7,3 +7,9 @@ Afterwards, run the following commands to install the dependencies and start up 
 `cd chaquer-v2 && pnpm install`
 To start in dev mode:
 `pnpm run dev`
+
+## Team
+
+- Huseyin Okan Demir @demirbey05
+- Ismail Altay @altayismail
+- Arda Sevinc @ardasevinc
