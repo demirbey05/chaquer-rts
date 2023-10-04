@@ -135,15 +135,25 @@
 }
 
 /*Zoom Buttons*/
-.zoom-buttons {
+.zoom-in-button {
     width: 35px;
     height: 35px;
     color: white;
     font-size: 30px;
-    border: none;
-    cursor: pointer;
     position: absolute;
     bottom: 25px;
+    right: 45%;
+    z-index: 1;
+}
+
+.zoom-out-button {
+    width: 35px;
+    height: 35px;
+    color: white;
+    font-size: 30px;
+    position: absolute;
+    bottom: 25px;
+    left: 45%;
     z-index: 1;
 }
 
@@ -156,16 +166,7 @@
     border: none;
 }
 
-.menu-join-button {
-    width: 100px;
-    color: dark;
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
-    font-weight: bolder;
-    border: none;
-}
-
-.menu-spectate-button {
+.menu-game-list-button {
     width: 100px;
     color: dark;
     padding: 10px;

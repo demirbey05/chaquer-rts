@@ -9,7 +9,7 @@ export const WoodCount = () => {
 
     return (
         <div className="col-4 mine-progress-bar-col">
-            🪓: {numberOfResource ? Number(numberOfResource.numOfWood) : 100}
+            🪵: {numberOfResource ? Number(numberOfResource.numOfWood) : 100}
         </div>
     )
 }

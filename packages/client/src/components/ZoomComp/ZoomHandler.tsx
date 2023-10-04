@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai';
 
-export const ZoomHandler = ({ isInputFocused, zoomLevel, setZoomLevel }: { isInputFocused: boolean, zoomLevel: number, setZoomLevel: React.Dispatch<React.SetStateAction<number>> }) => {
+export const ZoomHandler = ({ isInputFocused, zoomLevel, setZoomLevel }:
+    { isInputFocused: boolean, zoomLevel: number, setZoomLevel: (value: number) => void }) => {
     const handleZoomIn = () => {
         if (zoomLevel < 1.3) {
             setZoomLevel(zoomLevel + 0.1);
@@ -34,8 +35,12 @@ export const ZoomHandler = ({ isInputFocused, zoomLevel, setZoomLevel }: { isInp
 
     return (
         <>
-            <button className="zoom-buttons" style={{ right: "45%" }} onClick={handleZoomIn}><AiOutlineZoomIn /></button>
-            <button className="zoom-buttons" style={{ left: "45%" }} onClick={handleZoomOut}><AiOutlineZoomOut /></button>
+            <button className="zoom-in-button" onClick={handleZoomIn}>
+                <AiOutlineZoomIn />
+            </button>
+            <button className="zoom-out-button" onClick={handleZoomOut}>
+                <AiOutlineZoomOut />
+            </button>
         </>
     );
 };

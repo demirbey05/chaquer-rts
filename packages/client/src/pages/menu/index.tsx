@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Accordion, useClipboard } from '@chakra-ui/react'
+import { Accordion, useClipboard, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { useTerrain } from "../../context/TerrainContext"
 import { usePlayer } from "../../context/PlayerContext"
 import { useSyncProgress } from "../../hooks/useSyncProgress";
@@ -11,8 +11,9 @@ import { JoinGameModal } from '../../components/MenuComp/JoinGameModal';
 import { GameNameFilter } from '../../components/MenuComp/GameNameFilter';
 import { UserNumberFilter } from '../../components/MenuComp/UserNumberFilter';
 import { DataFetchProgress } from '../../components/MenuComp/DataFetchProgress';
-import { GameListTable } from '../../components/MenuComp/GameListTable';
+import { LiveGameTable } from '../../components/MenuComp/LiveGameTable';
 import { SpectateGameModal } from '../../components/MenuComp/SpectateGameModal';
+import { CompletedGameTable } from '../../components/MenuComp/CompletedGameTable';
 
 export const Menu = () => {
   const { userWallet } = usePlayer();
@@ -65,12 +66,26 @@ export const Menu = () => {
                 setIsUserModalOpen={setIsUserModalOpen} />
               <div className='menu-row mt-5'>
                 <div className='col-8'>
-                  <GameListTable
-                    selectedPlayers={selectedPlayersFilter}
-                    gameNameFilter={gameNameFilter}
-                    setIsJoinGameModalOpen={setIsJoinGameModalOpen}
-                    setIsSpectateGameModalOpen={setIsSpectateGameModalOpen}
-                    username={username} />
+                  <Tabs isFitted variant='enclosed'>
+                    <TabList backgroundColor={"rgba(0,0,0,0.8)"} textColor={'white'}>
+                      <Tab _selected={{ color: 'white', bg: 'green.500' }}>Live Games</Tab>
+                      <Tab _selected={{ color: 'white', bg: 'blue.500' }}>Completed Games</Tab>
+                    </TabList>
+                    <TabPanels>
+                      <TabPanel p={0}>
+                        <LiveGameTable
+                          selectedPlayers={selectedPlayersFilter}
+                          gameNameFilter={gameNameFilter}
+                          setIsJoinGameModalOpen={setIsJoinGameModalOpen}
+                          setIsSpectateGameModalOpen={setIsSpectateGameModalOpen}
+                          username={username} />
+                      </TabPanel>
+                      <TabPanel p={0}>
+                        <CompletedGameTable
+                          gameNameFilter={gameNameFilter} />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
                 </div>
                 <div className='col-4'>
                   <div id="menu-items">

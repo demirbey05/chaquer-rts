@@ -220,13 +220,47 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
       fromFleetPositionRef.current = { x: fromFleetPosition.x.toString(), y: fromFleetPosition.y.toString() };
 
       if (canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y]) && isEnemyFleet({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, myFleetPositions, fleetPositions)) {
-        FleetAttackEvent(setIsFleetMoveStage, setSeaMineStage, setFromFleetPosition, setAttackerFleetPosition, setTargetFleetPosition, fromFleetPositionRef, toFleetPositionRef, setMyFleetConfig, setEnemyFleetConfig, myFleetPositions, fleetPositions);
+        FleetAttackEvent(setIsFleetMoveStage,
+          setSeaMineStage,
+          setFromFleetPosition,
+          setAttackerFleetPosition,
+          setTargetFleetPosition,
+          fromFleetPositionRef,
+          toFleetPositionRef,
+          setMyFleetConfig,
+          setEnemyFleetConfig,
+          myFleetPositions,
+          fleetPositions);
       }
       if (isUserClickedMine(toFleetPositionRef.current.x, toFleetPositionRef.current.y, resources)) {
-        SeaMineCaptureEvent(setIsFleetMoveStage, setFleetSettleStage, setIsFleetAttackStage, setFromFleetPosition, setSeaMineAttackerFleetPosition, fromFleetPositionRef, setTargetSeaMinePosition, toFleetPositionRef, setMyFleetConfig, myFleetPositions)
+        SeaMineCaptureEvent(setIsFleetMoveStage,
+          setFleetSettleStage,
+          setIsFleetAttackStage,
+          setFromFleetPosition,
+          setSeaMineAttackerFleetPosition,
+          fromFleetPositionRef,
+          setTargetSeaMinePosition,
+          toFleetPositionRef,
+          setMyFleetConfig,
+          myFleetPositions)
       }
       else if (canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y])) { //Buraya toFleetPosition ın, kendi fleetine ait olup olmadgını check etmek lazım
-        await FleetMoveEvent(setIsFleetMoveStage, setSeaMineStage, setIsFleetAttackStage, fromFleetPositionRef, toFleetPositionRef, isFleetMoveStage, fromFleetPosition, setFromFleetPosition, components, movingFleetId, systemCalls, setErrorMessage, setErrorTitle, setShowError, setIsLoadingFleet);
+        await FleetMoveEvent(setIsFleetMoveStage,
+          setSeaMineStage,
+          setIsFleetAttackStage,
+          fromFleetPositionRef,
+          toFleetPositionRef,
+          isFleetMoveStage,
+          fromFleetPosition,
+          setFromFleetPosition,
+          components,
+          movingFleetId,
+          systemCalls,
+          setErrorMessage,
+          setErrorTitle,
+          setShowError,
+          setIsLoadingFleet,
+          gameID);
       }
     }
     else {
@@ -350,7 +384,8 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
           setErrorMessage,
           setErrorTitle,
           setShowError,
-          setIsLoadingArmy);
+          setIsLoadingArmy,
+          gameID);
       }
     }
     else {

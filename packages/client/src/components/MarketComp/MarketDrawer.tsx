@@ -75,7 +75,7 @@ export const MarketDrawer = ({ isInputFocused }: { isInputFocused: boolean }) =>
                         </div>
                         <div className="col align-items-center ms-4">
                             <div className="row justify-content-center w-100">
-                                🪓
+                                🪵
                             </div>
                             <div className="row justify-content-center text-center w-100 border-1 mt-2">
                                 {resourcesInStock && Number(resourcesInStock.woodSold)}
@@ -83,7 +83,7 @@ export const MarketDrawer = ({ isInputFocused }: { isInputFocused: boolean }) =>
                         </div>
                         <div className="col align-items-center ms-4">
                             <div className="row justify-content-center w-100">
-                                ⛏️
+                                💎
                             </div>
                             <div className="row justify-content-center text-center w-100 border-1 mt-2">
                                 {resourcesInStock && Number(resourcesInStock.goldSold)}

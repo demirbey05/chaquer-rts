@@ -31,14 +31,14 @@ export const ResourceEffects = (values: number[][],
                     }
                 }
                 else if (data.resource.sourceType === 1) {
-                    document.getElementById(`${data.positions.y},${data.positions.x}`)!.innerHTML = "🪓";
+                    document.getElementById(`${data.positions.y},${data.positions.x}`)!.innerHTML = "🪵";
                     if (Number(data.color.colorIndex) !== 0) {
                         document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.border = "2px solid";
                         document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.borderColor = colorPath[data.color.colorIndex];
                     }
                 }
                 else {
-                    document.getElementById(`${data.positions.y},${data.positions.x}`)!.innerHTML = "⛏️";
+                    document.getElementById(`${data.positions.y},${data.positions.x}`)!.innerHTML = "💎";
                     if (Number(data.color.colorIndex) !== 0) {
                         document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.border = "2px solid";
                         document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.borderColor = colorPath[data.color.colorIndex];

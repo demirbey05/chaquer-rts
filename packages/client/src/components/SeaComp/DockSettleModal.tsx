@@ -69,7 +69,7 @@ export const DockSettleModal = () => {
             dockPosition.x,
             dockPosition.y,
             movingArmyId.current,
-            1
+            gameID
         )
 
         if (tx == null) {
@@ -146,7 +146,7 @@ export const DockSettleModal = () => {
                     </div>
                     <div className="modal-body font-bold">
                         <span>{"You are going to deploy a dock ⚓. Price of this dock ⚓ is "}</span>
-                        {myDockPositions && (100 * (myDockPositions.length + 1))} 💰 + {myDockPositions && (1500 * (myDockPositions.length + 1))} 🪓 ,
+                        {myDockPositions && (100 * (myDockPositions.length + 1))} 💰 + {myDockPositions && (1500 * (myDockPositions.length + 1))} 🪵 ,
                         <span>{" are you sure?"}</span>
                     </div>
                     <div className="modal-footer d-flex justify-between">

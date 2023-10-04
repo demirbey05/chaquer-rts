@@ -18,7 +18,8 @@ export const ArmyMoveEvent = async (
     setErrorMessage: any,
     setErrorTitle: any,
     setShowError: any,
-    setIsLoading: (value: boolean) => void
+    setIsLoading: (value: boolean) => void,
+    gameID: number
 ) => {
     setIsArmyMoveStage(false);
     setIsAttackStage(false);
@@ -46,7 +47,7 @@ export const ArmyMoveEvent = async (
                 movingArmyId.current,
                 toArmyPositionRef.current.x,
                 toArmyPositionRef.current.y,
-                1
+                gameID
             );
 
             if (tx) {

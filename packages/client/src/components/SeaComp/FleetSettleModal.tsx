@@ -188,7 +188,7 @@ export const FleetSettleModal = () => {
                                 !enoughWood &&
                                 <Alert status='warning' color={"black"}>
                                     <AlertIcon />
-                                    <AlertTitle>You have no enough wood, capture some wood resource! Total Wood Charge: {totalWoodCharge} 💰</AlertTitle>
+                                    <AlertTitle>You have no enough wood, capture some wood resource! Total Wood Charge: {totalWoodCharge} 🪵</AlertTitle>
                                 </Alert>
                             }
                             <div className="row mt-2">

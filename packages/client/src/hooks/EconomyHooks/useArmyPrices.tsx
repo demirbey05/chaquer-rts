@@ -1,7 +1,7 @@
-import { useMUD } from "../../context/MUDContext";
-import { useComponentValue } from "@latticexyz/react";
-import { encodeEntity } from "@latticexyz/store-sync/recs";
 import { useState, useEffect } from "react";
+import { useMUD } from "../../context/MUDContext";
+import { encodeEntity } from "@latticexyz/store-sync/recs";
+import { useComponentValue } from "@latticexyz/react";
 
 export function useArmyPrices(gameID: number) {
     const { components } = useMUD();

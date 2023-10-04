@@ -15,7 +15,8 @@ export const FleetMoveEvent = async (
     setErrorMessage: any,
     setErrorTitle: any,
     setShowError: any,
-    setIsLoading: (value: boolean) => void
+    setIsLoading: (value: boolean) => void,
+    gameID: number
 ) => {
     setSeaMineStage(false)
     setIsFleetAttackStage(false)

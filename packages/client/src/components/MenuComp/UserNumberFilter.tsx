@@ -1,4 +1,4 @@
-import { AccordionItem, AccordionIcon, AccordionButton, AccordionPanel, Box, Checkbox } from '@chakra-ui/react'
+import { AccordionItem, AccordionIcon, AccordionButton, AccordionPanel, Box, Checkbox, Stack } from '@chakra-ui/react'
 
 export const UserNumberFilter = ({ selectedPlayers, setSelectedPlayers }: { selectedPlayers: number[], setSelectedPlayers: (value: number[]) => void }) => {
 
@@ -19,9 +19,10 @@ export const UserNumberFilter = ({ selectedPlayers, setSelectedPlayers }: { sele
                 <AccordionIcon color={"white"} />
             </AccordionButton>
             <AccordionPanel>
-                {Array.from({ length: 6 }, (_, i) => i + 3).map((numPlayers) => (
-                    <div key={numPlayers}>
+                <Stack spacing={2} direction={"row"}>
+                    {Array.from({ length: 6 }, (_, i) => i + 3).map((numPlayers) => (
                         <Checkbox
+                            key={numPlayers}
                             size='md'
                             colorScheme='green'
                             color={"white"}
@@ -29,8 +30,8 @@ export const UserNumberFilter = ({ selectedPlayers, setSelectedPlayers }: { sele
                             onChange={() => togglePlayerFilter(numPlayers)}>
                             {numPlayers}
                         </Checkbox>
-                    </div>
-                ))}
+                    ))}
+                </Stack>
             </AccordionPanel>
         </AccordionItem>
     )
