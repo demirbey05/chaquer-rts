@@ -5,7 +5,6 @@ import { useGame } from "../../context/GameContext";
 import { useCountOfPlayerSeed } from "../../hooks/IdentityHooks/useCountOfPlayerSeed";
 import { useIsMineInitialized } from "../../hooks/ResourceHooks/useIsMineInitialized";
 import { useGameData } from "../../hooks/useGameData";
-import { limitOfUser } from "../../utils/constants/constants";
 import { Terrain } from "../../components/TerrainComp/Terrain";
 import { ArmyInfoDrawer } from "../../components/ArmyComp/ArmyInfoDrawer";
 import { ArmyProgressBar } from "../../components/ProgressComp/ArmyProgressBar/ArmyProgressBar";
@@ -59,8 +58,8 @@ export const Game = () => {
       {!isPlayerLost && <CastleSettleWarning />}
       {!isPlayerLost && <CastleSettleModal />}
       {gameData && gameData.state === 1 && !isPlayerLost && <PlayerWaitingStage />}
-      {!(playerSeedCount >= limitOfUser - 2) && gameData && gameData.state === 2 && !isPlayerLost && <PlayerSeedStage />}
-      {(playerSeedCount >= limitOfUser - 2) && !mineInited && <MineInitStage />}
+      {gameData && !(playerSeedCount >= gameData.limitOfPlayer - 2) && gameData && gameData.state === 2 && !isPlayerLost && <PlayerSeedStage />}
+      {gameData && (playerSeedCount >= gameData.limitOfPlayer - 2) && !mineInited && <MineInitStage />}
       {gameData && gameData.state === 3 && !isPlayerLost && mineInited && <ArmySettleWarning />}
       {gameData && gameData.state === 3 && !isPlayerLost && mineInited && <ArmyUpdateWarning />}
       {gameData && gameData.state === 3 && !isPlayerLost && mineInited && <ArmyMoveWarning />}
