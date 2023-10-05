@@ -41,27 +41,27 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
     const [is500GoldDisabled, setIs500GoldDisabled] = useState<boolean>(true);
 
     const resourceInStock = useResourcesInStoke(gameID);
-    const resourcePrices = useResourcePrices(gameID);
+    const resourcePrices = useResourcePrices();
     const myCredit = useCredit(gameID, userWallet);
 
     useEffect(() => {
         if (resourceInStock && resourcePrices && myCredit) {
             // Food
-            if (Number(resourceInStock!.foodSold) >= 30 && (Number(getNumberFromBigInt(resourcePrices.priceFood)) * 30) <= Number(getNumberFromBigInt(myCredit))) {
+            if (Number(resourceInStock!.foodSold) >= 30 && resourcePrices.foodPrice * 30 <= Number(getNumberFromBigInt(myCredit))) {
                 setIs30FoodDisabled(false);
             }
             else {
                 setIs30FoodDisabled(true);
             }
 
-            if (Number(resourceInStock!.foodSold) >= 100 && (Number(getNumberFromBigInt(resourcePrices.priceFood)) * 100) <= Number(getNumberFromBigInt(myCredit))) {
+            if (Number(resourceInStock!.foodSold) >= 100 && resourcePrices.foodPrice * 100 <= Number(getNumberFromBigInt(myCredit))) {
                 setIs100FoodDisabled(false);
             }
             else {
                 setIs100FoodDisabled(true);
             }
 
-            if (Number(resourceInStock!.foodSold) >= 500 && (Number(getNumberFromBigInt(resourcePrices.priceFood)) * 500) <= Number(getNumberFromBigInt(myCredit))) {
+            if (Number(resourceInStock!.foodSold) >= 500 && resourcePrices.foodPrice * 500 <= Number(getNumberFromBigInt(myCredit))) {
                 setIs500FoodDisabled(false);
             }
             else {
@@ -69,21 +69,21 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
             }
 
             // Wood
-            if (Number(resourceInStock!.woodSold) >= 30 && (Number(getNumberFromBigInt(resourcePrices.priceWood)) * 30) <= Number(getNumberFromBigInt(myCredit))) {
+            if (Number(resourceInStock!.woodSold) >= 30 && resourcePrices.woodPrice * 30 <= Number(getNumberFromBigInt(myCredit))) {
                 setIs30WoodDisabled(false);
             }
             else {
                 setIs30WoodDisabled(true);
             }
 
-            if (Number(resourceInStock!.woodSold) >= 100 && (Number(getNumberFromBigInt(resourcePrices.priceWood)) * 100) <= Number(getNumberFromBigInt(myCredit))) {
+            if (Number(resourceInStock!.woodSold) >= 100 && resourcePrices.woodPrice * 100 <= Number(getNumberFromBigInt(myCredit))) {
                 setIs100WoodDisabled(false);
             }
             else {
                 setIs100WoodDisabled(true);
             }
 
-            if (Number(resourceInStock!.woodSold) >= 500 && (Number(getNumberFromBigInt(resourcePrices.priceWood)) * 500) <= Number(getNumberFromBigInt(myCredit))) {
+            if (Number(resourceInStock!.woodSold) >= 500 && resourcePrices.woodPrice * 500 <= Number(getNumberFromBigInt(myCredit))) {
                 setIs500WoodDisabled(false);
             }
             else {
@@ -91,21 +91,21 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
             }
 
             // Gold
-            if (Number(resourceInStock!.goldSold) >= 30 && (Number(getNumberFromBigInt(resourcePrices.priceGold)) * 30) <= Number(getNumberFromBigInt(myCredit))) {
+            if (Number(resourceInStock!.goldSold) >= 30 && resourcePrices.goldPrice * 30 <= Number(getNumberFromBigInt(myCredit))) {
                 setIs30GoldDisabled(false);
             }
             else {
                 setIs30GoldDisabled(true);
             }
 
-            if (Number(resourceInStock!.goldSold) >= 100 && (Number(getNumberFromBigInt(resourcePrices.priceGold)) * 100) <= Number(getNumberFromBigInt(myCredit))) {
+            if (Number(resourceInStock!.goldSold) >= 100 && resourcePrices.goldPrice * 100 <= Number(getNumberFromBigInt(myCredit))) {
                 setIs100GoldDisabled(false);
             }
             else {
                 setIs100GoldDisabled(true);
             }
 
-            if (Number(resourceInStock!.goldSold) >= 500 && (Number(getNumberFromBigInt(resourcePrices.priceGold)) * 500) <= Number(getNumberFromBigInt(myCredit))) {
+            if (Number(resourceInStock!.goldSold) >= 500 && resourcePrices.goldPrice * 500 <= Number(getNumberFromBigInt(myCredit))) {
                 setIs500GoldDisabled(false);
             }
             else {

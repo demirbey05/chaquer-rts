@@ -212,17 +212,6 @@ export function createSystemCalls({
     }
   };
 
-  const updateEconomyData = async (gameID: number) => {
-    try {
-      const tx = await worldContract.write.updateEconomyData([BigInt(gameID)]);
-      await waitForTransaction(tx);
-      return tx;
-    } catch (e) {
-      console.log(e);
-      return null;
-    }
-  };
-
   const claimWinner = async (gameID: number, address: string) => {
     try {
       const tx = await worldContract.write.claimWinner([
@@ -416,6 +405,17 @@ export function createSystemCalls({
     }
   };
 
+  const collectResource = async (gameID: number) => {
+    try {
+      const tx = await worldContract.write.collectResource([BigInt(gameID)]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
   return {
     initGame,
     initUsername,
@@ -429,7 +429,6 @@ export function createSystemCalls({
     resourceSystemInit,
     captureMine,
     sellResource,
-    updateEconomyData,
     claimWinner,
     buildDock,
     captureDock,
@@ -441,5 +440,6 @@ export function createSystemCalls({
     updateArmy,
     mergeArmy,
     sendMessage,
+    collectResource,
   };
 }

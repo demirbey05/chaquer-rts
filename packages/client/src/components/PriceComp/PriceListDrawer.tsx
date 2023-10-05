@@ -1,43 +1,12 @@
 import { useState, useEffect } from "react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
-import { useGame } from "../../context/GameContext";
-import { useMUD } from "../../context/MUDContext";
-import { useError } from '../../context/ErrorContext';
 import { ArmyPrices } from "./ArmyPrices";
 import { ResourcePrices } from "./ResourcePrices";
 import { FleetPrices } from "./FleetPrices";
 import { ResourceBuyPrices } from "./ResourceBuyPrices";
-import { useGameData } from "../../hooks/useGameData";
 
 export const PriceListDrawer = ({ isInputFocused, isSpectator }: { isInputFocused: boolean, isSpectator: boolean }) => {
-    //const { gameID } = useGame();
-
     const [isOpen, setIsOpen] = useState(true);
-
-    //const { setShowError, setErrorMessage, setErrorTitle } = useError();
-    //const { systemCalls } = useMUD();
-
-    //const gameData = useGameData(gameID);
-
-    /*useEffect(() => {
-        const updateEconomy = async () => {
-            if (gameData && gameData.state === 3) {
-                const tx = await systemCalls.updateEconomyData(gameID);
-
-                if (tx == null) {
-                    setErrorMessage("An error occurred during updating army prices.")
-                    setErrorTitle("Price Updating Error")
-                    setShowError(true)
-                }
-            }
-        }
-
-
-        const intervalId = setInterval(updateEconomy, 3000);
-        return () => {
-            clearInterval(intervalId);
-        };
-    }, [gameData])*/
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen);

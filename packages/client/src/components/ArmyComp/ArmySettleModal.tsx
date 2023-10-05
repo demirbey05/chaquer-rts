@@ -33,7 +33,7 @@ export const ArmySettleModal = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const armyPrices = useArmyPrices(gameID);
+  const armyPrices = useArmyPrices();
   const myCredit = useCredit(gameID, userWallet);
 
   useEffect(() => {
@@ -63,9 +63,9 @@ export const ArmySettleModal = () => {
 
     if (armyPrices) {
       const totalCharge =
-        parsedSwordsmanCount * Number(getNumberFromBigInt(armyPrices.priceSwordsman)) +
-        parsedArcherCount * Number(getNumberFromBigInt(armyPrices.priceArcher)) +
-        parsedCavalryCount * Number(getNumberFromBigInt(armyPrices.priceCavalry));
+        parsedSwordsmanCount * armyPrices.swordsmanPrice +
+        parsedArcherCount * armyPrices.archerPrice +
+        parsedCavalryCount * armyPrices.cavalryPrice;
 
       if (totalTroops <= 0 || totalTroops > 500) {
         setIsDisabled(true);

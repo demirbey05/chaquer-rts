@@ -8,7 +8,7 @@ export const FoodCount = () => {
     const numberOfResource = useNumberOfResource(userWallet, gameID);
 
     return (
-        <div className="col-4 mine-progress-bar-col">
+        <div className="col-3 mine-progress-bar-col">
             🌽: {numberOfResource ? Number(numberOfResource.numOfFood) : 300}
         </div>
     )
