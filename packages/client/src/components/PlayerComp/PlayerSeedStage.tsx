@@ -15,9 +15,8 @@ export const PlayerSeedStage = () => {
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
 
     const gameData = useGameData(gameID)
-    console.log(gameData)
     const seedEntered = useSeedInited(gameID, userWallet);
-    console.log(seedEntered)
+
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
             systemCalls.exitGame(gameID)
