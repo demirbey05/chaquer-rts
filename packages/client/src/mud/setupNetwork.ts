@@ -81,7 +81,6 @@ export async function setupNetwork() {
     walletClient: burnerWalletClient,
 
     onWrite: (write) => write$.next(write),
-
   });
 
   /*

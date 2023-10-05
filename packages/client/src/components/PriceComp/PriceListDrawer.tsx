@@ -10,16 +10,16 @@ import { ResourceBuyPrices } from "./ResourceBuyPrices";
 import { useGameData } from "../../hooks/useGameData";
 
 export const PriceListDrawer = ({ isInputFocused, isSpectator }: { isInputFocused: boolean, isSpectator: boolean }) => {
-    const { gameID } = useGame();
+    //const { gameID } = useGame();
 
     const [isOpen, setIsOpen] = useState(true);
 
-    const { setShowError, setErrorMessage, setErrorTitle } = useError();
-    const { systemCalls } = useMUD();
+    //const { setShowError, setErrorMessage, setErrorTitle } = useError();
+    //const { systemCalls } = useMUD();
 
-    const gameData = useGameData(gameID);
+    //const gameData = useGameData(gameID);
 
-    useEffect(() => {
+    /*useEffect(() => {
         const updateEconomy = async () => {
             if (gameData && gameData.state === 3) {
                 const tx = await systemCalls.updateEconomyData(gameID);
@@ -37,7 +37,7 @@ export const PriceListDrawer = ({ isInputFocused, isSpectator }: { isInputFocuse
         return () => {
             clearInterval(intervalId);
         };
-    }, [gameData])
+    }, [gameData])*/
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen);

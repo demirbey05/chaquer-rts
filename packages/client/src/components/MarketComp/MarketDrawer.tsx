@@ -3,7 +3,7 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { BuyResources } from "./BuyResources";
 import { SellResources } from "./SellResources";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
-import { useResourcesInStoke } from "../../hooks/ResourceHooks/useResourcesInStoke";
+import { useResourcesInStoke } from "../../hooks/EconomyHooks/useResourcesInStoke";
 import { useGame } from "../../context/GameContext";
 
 export const MarketDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {

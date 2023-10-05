@@ -5,7 +5,6 @@ export type SystemCalls = ReturnType<typeof createSystemCalls>;
 export function createSystemCalls({
   worldContract,
   waitForTransaction,
-  publicClient,
 }: SetupNetworkResult) {
   const initGame = async (
     capacity: number,

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from '@chakra-ui/react';
 import { useError } from "../../context/ErrorContext";
 import { useMUD } from "../../context/MUDContext";
-import { useResourcesInStoke } from "../../hooks/ResourceHooks/useResourcesInStoke";
+import { useResourcesInStoke } from "../../hooks/EconomyHooks/useResourcesInStoke";
 import { useResourcePrices } from "../../hooks/EconomyHooks/useResourcePrices";
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { usePlayer } from "../../context/PlayerContext";

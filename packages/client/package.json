@@ -29,6 +29,7 @@
     "@latticexyz/world": "2.0.0-main-12a9eb1a",
     "@types/react-router-dom": "^5.3.3",
     "@wagmi/chains": "^0.2.22",
+    "@wagmi/core": "^1.4.3",
     "buffer": "^6.0.3",
     "contracts": "workspace:*",
     "ethers": "^5.7.2",
@@ -40,7 +41,8 @@
     "react-router-dom": "5.3.4",
     "rxjs": "7.5.5",
     "tailwind-merge": "^1.8.1",
-    "viem": "1.6.0"
+    "viem": "1.6.0",
+    "wagmi": "^1.4.3"
   },
   "devDependencies": {
     "@babel/core": "^7.22.8",
