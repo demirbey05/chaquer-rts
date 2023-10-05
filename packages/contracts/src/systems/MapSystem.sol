@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { wadMul, toWadUnsafe } from "solmate/src/utils/SignedWadMath.sol";
-import { MapConfig, Position, ResourceOwn, ResourceOwnData, ColorOwnable, AddressToColorIndex, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, Players, GameMetaData} from "../codegen/index.sol";
+import { MapConfig, Position, ResourceOwn, ResourceOwnData, ColorOwnable, AddressToColorIndex, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, Players, GameMetaData } from "../codegen/index.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
@@ -18,7 +18,6 @@ error MoveArmy__UnsufficientFood();
 error MoveArmy__UnsufficientGold();
 
 contract MapSystem is System {
-
   function settleCastle(
     uint32 x,
     uint32 y,
@@ -81,9 +80,6 @@ contract MapSystem is System {
     uint32 width = MapConfig.getWidth(IStore(_world()), config.gameID);
     uint32 height = MapConfig.getHeight(IStore(_world()), config.gameID);
 
-    if (!(x < height && y < width && x >= 0 && y >= 0)) {
-      revert ArmySettle__CoordinatesOutOfBound();
-    }
     if (MapConfig.getItemTerrain(config.gameID, x * width + y)[0] != hex"01") {
       revert ArmySettle__WrongTerrainType();
     }

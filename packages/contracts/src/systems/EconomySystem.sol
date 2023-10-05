@@ -20,7 +20,7 @@ contract EconomySystem is System {
   //@dev maybe game state check should be applied in the further
   //@dev last collect time should have initial value and initialized with map system
 
-  function collectResource(uint256 gameID) internal {
+  function collectResource(uint256 gameID) public {
     address owner = _msgSender();
     bytes32[] memory foodMines = LibQueries.getMines(IStore(_world()), owner, gameID, MineType.Food);
     bytes32[] memory woodMines = LibQueries.getMines(IStore(_world()), owner, gameID, MineType.Wood);
@@ -45,25 +45,5 @@ contract EconomySystem is System {
     data.numOfWood += mineRate * woodMines.length * difference + blockRate * difference;
     data.numOfGold += mineRate * goldMines.length * difference + blockRate * difference;
     ResourceOwn.set(owner, gameID, data);
-  }
-
-  function updateEconomyData(uint256 gameID) public {
-    uint256 startBlock = GameMetaData.getStartBlock(gameID);
-    uint256 priceFood = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Food, block.number - startBlock);
-    uint256 priceWood = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Wood, block.number - startBlock);
-    uint256 priceGold = LibVRGDA.getResourcePrice(IWorld(_world()), gameID, MineType.Gold, block.number - startBlock);
-    uint256 swordsmanPrice = LibVRGDA.getArmyPrice(IWorld(_world()), gameID, 0, block.number - startBlock);
-    uint256 archerPrice = LibVRGDA.getArmyPrice(IWorld(_world()), gameID, 1, block.number - startBlock);
-    uint256 cavalryPrice = LibVRGDA.getArmyPrice(IWorld(_world()), gameID, 2, block.number - startBlock);
-
-    ResourcePrices.setPriceFood(gameID, priceFood);
-    ResourcePrices.setPriceWood(gameID, priceWood);
-    ResourcePrices.setPriceGold(gameID, priceGold);
-
-    ArmyPrices.setPriceSwordsman(gameID, swordsmanPrice);
-    ArmyPrices.setPriceArcher(gameID, archerPrice);
-    ArmyPrices.setPriceCavalry(gameID, cavalryPrice);
-
-    collectResource(gameID);
   }
 }
