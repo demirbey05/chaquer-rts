@@ -8,5 +8,5 @@ pragma solidity >=0.8.21;
  * @dev This interface is automatically generated from the corresponding system contract. Do not edit manually.
  */
 interface IEconomySystem {
-  function updateEconomyData(uint256 gameID) external;
+  function collectResource(uint256 gameID) external;
 }

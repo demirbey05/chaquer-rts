@@ -19,5 +19,5 @@ function getTargetSaleTimeResource(sold:number,numberOfPlayers:number):number {
   return sold / (0.5 * (minePerResource* 3 *mineRate + blockRate * numberOfPlayers))
 }
 function getTargetSaleTimeArmy(sold:number,numberOfPlayers:number):number {
-  return sold / 0.5 * numberOfPlayers * 500;
+  return sold / (0.5 * numberOfPlayers * 500);
 }
