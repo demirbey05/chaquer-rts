@@ -20,18 +20,23 @@ export const PriceListDrawer = ({ isInputFocused, isSpectator }: { isInputFocuse
     const gameData = useGameData(gameID);
 
     useEffect(() => {
-        if (gameData && gameData.state === 3) {
-            const interval = setInterval(async () => {
+        const updateEconomy = async () => {
+            if (gameData && gameData.state === 3) {
                 const tx = await systemCalls.updateEconomyData(gameID);
+
                 if (tx == null) {
                     setErrorMessage("An error occurred during updating army prices.")
                     setErrorTitle("Price Updating Error")
                     setShowError(true)
                 }
-            }, 3000);
-
-            return () => clearInterval(interval);
+            }
         }
+
+
+        const intervalId = setInterval(updateEconomy, 3000);
+        return () => {
+            clearInterval(intervalId);
+        };
     }, [gameData])
 
     const toggleDrawer = () => {

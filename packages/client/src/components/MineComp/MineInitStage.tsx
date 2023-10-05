@@ -17,9 +17,7 @@ export const MineInitStage = () => {
             }
         };
 
-        initResource();
-
-        const intervalId = setInterval(initResource, 10000);
+        const intervalId = setInterval(initResource, 5000);
         return () => {
             clearInterval(intervalId);
         };

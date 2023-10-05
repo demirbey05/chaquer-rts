@@ -15,8 +15,9 @@ export const PlayerSeedStage = () => {
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
 
     const gameData = useGameData(gameID)
+    console.log(gameData)
     const seedEntered = useSeedInited(gameID, userWallet);
-
+    console.log(seedEntered)
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
             systemCalls.exitGame(gameID)
@@ -32,7 +33,7 @@ export const PlayerSeedStage = () => {
 
     useEffect(() => {
         const sendSeed = async () => {
-            if (gameData.state === 2 && !seedEntered) {
+            if (gameData && gameData.state === 2 && !seedEntered) {
                 var buf = new Uint8Array(1);
                 crypto.getRandomValues(buf);
 
@@ -45,9 +46,7 @@ export const PlayerSeedStage = () => {
             }
         };
 
-        sendSeed();
-
-        const intervalId = setInterval(sendSeed, 10000);
+        const intervalId = setInterval(sendSeed, 5000);
         return () => {
             clearInterval(intervalId);
         };
