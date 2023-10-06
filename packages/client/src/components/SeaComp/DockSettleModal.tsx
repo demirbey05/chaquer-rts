@@ -52,7 +52,8 @@ export const DockSettleModal = () => {
     const handleSettle = async () => {
         const movingArmyIdMap = findIDFromPosition(
             armyPositionToSettleDock,
-            components.Position
+            components.Position,
+            gameID
         );
 
         if (movingArmyIdMap !== null) {
@@ -89,7 +90,8 @@ export const DockSettleModal = () => {
     const handleMove = async () => {
         const movingArmyIdMap = findIDFromPosition(
             armyPositionToSettleDock,
-            components.Position
+            components.Position,
+            gameID
         );
 
         if (movingArmyIdMap !== null) {

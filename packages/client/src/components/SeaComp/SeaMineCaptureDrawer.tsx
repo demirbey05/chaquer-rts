@@ -34,9 +34,10 @@ export const SeaMineCaptureDrawer = () => {
             const mineId = [...findIDFromPosition(
                 targetSeaMinePosition,
                 components.Position,
+                gameID
             )];
 
-            setMineFleet(findCastleCloseArmies(mineId[0], components.Position, components.ResourceOwnable, components.FleetOwnable, components.FleetConfig))
+            setMineFleet(findCastleCloseArmies(mineId[0], components.Position, components.ResourceOwnable, components.FleetOwnable, components.FleetConfig, gameID))
         }
     }, [targetSeaMinePosition])
 
@@ -44,14 +45,16 @@ export const SeaMineCaptureDrawer = () => {
         const attackFromFleetId = [...findIDFromPosition(
             seaMineAttackerFleetPosition,
             components.Position,
+            gameID
         )];
 
         const attackToMineId = [...findIDFromPosition(
             targetSeaMinePosition,
             components.Position,
+            gameID
         )];
 
-        findCastleCloseArmies(attackToMineId[0], components.Position, components.ResourceOwnable, components.FleetOwnable, components.ArmyConfig)
+        findCastleCloseArmies(attackToMineId[0], components.Position, components.ResourceOwnable, components.FleetOwnable, components.ArmyConfig, gameID)
 
         if (attackFromFleetId.length != 1 || attackToMineId.length != 1) {
             setErrorMessage("An error occurred while trying to capture a sea mine.")
@@ -62,7 +65,7 @@ export const SeaMineCaptureDrawer = () => {
 
         try {
             setIsLoading(true)
-            const tx = await systemCalls.captureMine(attackFromFleetId[0], attackToMineId[0], 1)
+            await systemCalls.captureMine(attackFromFleetId[0], attackToMineId[0], 1)
         } catch (error) {
             setErrorMessage("An error occurred while trying to capture a sea mine.")
             setErrorTitle("Sea Mine Capture Error")

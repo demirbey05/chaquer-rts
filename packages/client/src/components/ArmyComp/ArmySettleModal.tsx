@@ -95,6 +95,7 @@ export const ArmySettleModal = () => {
     const castleID = [...findIDFromPosition(
       castlePosition,
       components.Position,
+      gameID
     )];
 
     if (castleID.length != 1) {

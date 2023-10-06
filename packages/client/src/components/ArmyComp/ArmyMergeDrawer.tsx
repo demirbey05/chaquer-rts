@@ -66,11 +66,13 @@ export const ArmyMergeDrawer = () => {
         const armyOneID = [...findIDFromPosition(
             mergeFromArmyPosition,
             components.Position,
+            gameID
         )];
 
         const armyTwoID = [...findIDFromPosition(
             mergeTargetArmyPosition,
             components.Position,
+            gameID
         )];
 
         if (armyOneID.length != 1 || armyTwoID.length != 1) {

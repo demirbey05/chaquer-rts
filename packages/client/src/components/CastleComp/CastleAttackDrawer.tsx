@@ -4,11 +4,13 @@ import { Button } from "@chakra-ui/react";
 import { useMUD } from "../../context/MUDContext";
 import { useAttack } from "../../context/AttackContext";
 import { useError } from "../../context/ErrorContext";
+import { useGame } from "../../context/GameContext";
 import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
 import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
 
 export const CastleAttackDrawer = () => {
   const { components, systemCalls } = useMUD();
+  const { gameID } = useGame();
   const { setShowError, setErrorMessage, setErrorTitle } = useError();
   const { setMyArmyConfig,
     setEnemyArmyConfig,
@@ -31,9 +33,10 @@ export const CastleAttackDrawer = () => {
       const castleId = [...findIDFromPosition(
         attackToArmyPositionToCastle,
         components.Position,
+        gameID
       )];
 
-      setCastleArmy(findCastleCloseArmies(castleId[0], components.Position, components.CastleOwnable, components.ArmyOwnable, components.ArmyConfig))
+      setCastleArmy(findCastleCloseArmies(castleId[0], components.Position, components.CastleOwnable, components.ArmyOwnable, components.ArmyConfig, gameID))
     }
   }, [attackToArmyPositionToCastle])
 
@@ -41,14 +44,16 @@ export const CastleAttackDrawer = () => {
     const attackFromArmyId = [...findIDFromPosition(
       attackFromArmyPositionToCastle,
       components.Position,
+      gameID
     )];
 
     const attackToCastleId = [...findIDFromPosition(
       attackToArmyPositionToCastle,
       components.Position,
+      gameID
     )];
 
-    findCastleCloseArmies(attackToCastleId[0], components.Position, components.CastleOwnable, components.ArmyOwnable, components.ArmyConfig)
+    findCastleCloseArmies(attackToCastleId[0], components.Position, components.CastleOwnable, components.ArmyOwnable, components.ArmyConfig, gameID)
 
     if (attackFromArmyId.length != 1 || attackToCastleId.length != 1) {
       setErrorMessage("An error occurred while trying to attack to castle.")

@@ -30,7 +30,8 @@ export const ArmyMoveEvent = async (
 
     const movingArmyIdMap = findIDFromPosition(
         fromArmyPositionRef.current,
-        components.Position
+        components.Position,
+        gameID
     );
 
     if (movingArmyIdMap !== null) {

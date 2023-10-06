@@ -31,11 +31,13 @@ export const FleetAttackDrawer = () => {
         const attackFromArmyId = [...findIDFromPosition(
             attackerFleetPosition,
             components.Position,
+            gameID
         )];
 
         const attackToArmyId = [...findIDFromPosition(
             targetFleetPosition,
             components.Position,
+            gameID
         )];
 
         if (attackFromArmyId.length != 1 || attackToArmyId.length != 1) {

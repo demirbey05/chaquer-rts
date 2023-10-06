@@ -23,7 +23,8 @@ export const FleetMoveEvent = async (
 
     const _fleetID = findIDFromPosition(
         fromFleetPositionRef.current,
-        components.Position
+        components.Position,
+        gameID
     );
 
     if (_fleetID !== null) {

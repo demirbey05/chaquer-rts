@@ -137,11 +137,13 @@ export const ArmyUpdateModal = () => {
         const castleID = [...findIDFromPosition(
             castlePosition,
             components.Position,
+            gameID
         )];
 
         const armyID = [...findIDFromPosition(
             armyPositionUpdate,
             components.Position,
+            gameID
         )];
 
         if (castleID.length != 1 || armyID.length != 1) {

@@ -34,9 +34,10 @@ export const MineCaptureDrawer = () => {
             const mineId = [...findIDFromPosition(
                 targetMinePosition,
                 components.Position,
+                gameID
             )];
 
-            setMineArmy(findCastleCloseArmies(mineId[0], components.Position, components.ResourceOwnable, components.ArmyOwnable, components.ArmyConfig))
+            setMineArmy(findCastleCloseArmies(mineId[0], components.Position, components.ResourceOwnable, components.ArmyOwnable, components.ArmyConfig, gameID))
         }
     }, [targetMinePosition])
 
@@ -44,14 +45,16 @@ export const MineCaptureDrawer = () => {
         const attackFromArmyId = [...findIDFromPosition(
             attackerArmyPosition,
             components.Position,
+            gameID
         )];
 
         const attackToMineId = [...findIDFromPosition(
             targetMinePosition,
             components.Position,
+            gameID
         )];
 
-        findCastleCloseArmies(attackToMineId[0], components.Position, components.ResourceOwnable, components.ArmyOwnable, components.ArmyConfig)
+        findCastleCloseArmies(attackToMineId[0], components.Position, components.ResourceOwnable, components.ArmyOwnable, components.ArmyConfig, gameID)
 
         if (attackFromArmyId.length != 1 || attackToMineId.length != 1) {
             setErrorMessage("An error occurred while trying to capture a mine.")
