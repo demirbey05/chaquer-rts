@@ -2,13 +2,10 @@ import { useEffect, useState } from 'react';
 import { Button } from "@chakra-ui/react";
 import { usePlayer } from '../../context/PlayerContext';
 import { useMUD } from '../../context/MUDContext';
-import { useError } from '../../context/ErrorContext';
 
 export const UserNameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (value: boolean) => void }) => {
     const { systemCalls } = useMUD()
-
     const { setUserName, userName } = usePlayer();
-    const { setShowError, setErrorMessage, setErrorTitle } = useError();
 
     const [disable, setDisable] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -32,17 +29,8 @@ export const UserNameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
 
     const onClick = async () => {
         setIsLoading(true)
-        const userNameTx = await systemCalls.initUsername(userName!);
-
-        if (userNameTx == null) {
-            setErrorMessage("An error occurred while trying to join to the game.")
-            setErrorTitle("Username Error")
-            setShowError(true)
-            setIsLoading(false)
-        } else {
-            setIsLoading(false)
-        }
-
+        await systemCalls.initUsername(userName!);
+        setIsLoading(false)
         toggleDrawer();
     }
 
@@ -60,7 +48,7 @@ export const UserNameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
                             type="text"
                             className="form-control dark-input bg-dark text-white"
                             id="usernameinput"
-                            placeholder="Please enter your username" />
+                            placeholder="Min 3 Char - Max 32 Char" />
                         <div className="modal-footer justify-content-around mt-3">
                             <BackMapButton toggleDrawer={toggleDrawer} isLoading={isLoading} />
                             <JoinToGameButton onClick={() => onClick()} isLoading={isLoading} disable={disable || isLoading} />
@@ -85,7 +73,7 @@ const JoinToGameButton = ({ disable, onClick, isLoading }: any) => {
         loadingText='Assigning'
         onClick={() => onClick()}
     >
-        Assign Username
+        Assign
     </Button>
 }
 

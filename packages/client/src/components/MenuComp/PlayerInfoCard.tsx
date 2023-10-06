@@ -13,11 +13,26 @@ export const PlayerInfoCard = ({ username, publicWallet, onCopy, hasCopied, setI
                     </WrapItem>
                 </div>
                 <div className='d-flex justify-content-center mt-2 mb-2'>
-                    <p className='d-flex justify-content-center'>Public Wallet: {truncatedPublicWallet}<Button ms={2} size={"xs"} colorScheme={"whiteAlpha"} onClick={onCopy}>{hasCopied ? "Copied!" : "Copy"}</Button></p>
+                    <p className='d-flex justify-content-center'>
+                        Public Wallet: {truncatedPublicWallet}
+                        <Button
+                            ms={2}
+                            size={"xs"}
+                            colorScheme={"whiteAlpha"}
+                            onClick={onCopy}>
+                            {hasCopied ? "Copied!" : "Copy"}
+                        </Button>
+                    </p>
                 </div>
                 <div className='d-flex justify-content-center'>
-                    {username && <p>Username: {username}</p>}
-                    {!username &&
+                    {
+                        username &&
+                        <p className='d-flex justify-content-center'>
+                            Username: {username}
+                        </p>
+                    }
+                    {
+                        !username &&
                         <div className='d-flex justify-content-center'>
                             <Button colorScheme={"blackAlpha"} onClick={() => setIsUserModalOpen(true)}>
                                 Enter Username
@@ -25,6 +40,14 @@ export const PlayerInfoCard = ({ username, publicWallet, onCopy, hasCopied, setI
                         </div>
                     }
                 </div>
+                {
+                    !username &&
+                    <div className='mt-2 p-2 bg-warning text-dark rounded'>
+                        <p className='d-flex justify-content-center'>
+                            You cannot create or join game without username!
+                        </p>
+                    </div>
+                }
             </div>
         </div>
     )

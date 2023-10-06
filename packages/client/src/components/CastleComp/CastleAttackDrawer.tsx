@@ -59,6 +59,7 @@ export const CastleAttackDrawer = () => {
 
     try {
       setIsLoading(true)
+      console.log("Tx atıldı")
       await systemCalls.castleCapture(attackFromArmyId[0], attackToCastleId[0])
     } catch (error) {
       setErrorMessage("An error occurred while trying to attack to castle.")

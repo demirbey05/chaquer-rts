@@ -12,6 +12,9 @@ export const PlayerWaitingStage = () => {
     const { isCastleSettled } = useCastle();
 
     const gameData = useGameData(gameID)
+    const gameState = gameData ? gameData.state : null;
+    const numberOfPlayer = gameData ? Number(gameData.numberOfPlayer) : 0;
+    const limitOfPlayer = gameData ? Number(Number(gameData.limitOfPlayer)) : 0;
 
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -31,12 +34,18 @@ export const PlayerWaitingStage = () => {
             <div id="overlay" className="waiting-for-players-fade-overlay">
                 <div className="waiting-for-players-message-container">
                     {
-                        (gameData.state && gameData.state === 1) &&
+                        (gameState && gameData.state === 1) &&
                         <>
                             <span className="waiting-for-players-info-message">
                                 Waiting for the other players...
-                                <CircularProgress className='ms-4' value={(Number(gameData.numberOfPlayer) / Number(gameData.limitOfPlayer)) * 100} color='green.400' thickness='12px'>
-                                    <CircularProgressLabel>({Number(gameData.numberOfPlayer)}/{Number(gameData.limitOfPlayer)})</CircularProgressLabel>
+                                <CircularProgress
+                                    className='ms-4'
+                                    value={(numberOfPlayer / limitOfPlayer) * 100}
+                                    color='green.400'
+                                    thickness='12px'>
+                                    <CircularProgressLabel>
+                                        ({numberOfPlayer}/{limitOfPlayer})
+                                    </CircularProgressLabel>
                                 </CircularProgress>
                             </span>
                             <Progress size='sm' colorScheme={"whatsapp"} isIndeterminate />
