@@ -87,8 +87,14 @@ export const JoinGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
                             </div>
                         }
                         <div className="modal-footer justify-content-around mt-3">
-                            <BackMapButton toggleDrawer={toggleDrawer} isLoading={isLoading} setGameID={setGameID} />
-                            <JoinToGameButton onClick={() => setJoinButtonClicked(true)} isLoading={isLoading} disable={isButtonDisabled} />
+                            <BackMapButton
+                                toggleDrawer={toggleDrawer}
+                                isLoading={isLoading}
+                                setGameID={setGameID} />
+                            <JoinToGameButton
+                                onClick={() => setJoinButtonClicked(true)}
+                                isLoading={isLoading}
+                                disable={isButtonDisabled} />
                         </div>
                     </div>
                 </div>

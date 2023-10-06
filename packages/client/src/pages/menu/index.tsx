@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Accordion, useClipboard, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
+import { useState } from 'react';
+import { Accordion, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { useTerrain } from "../../context/TerrainContext"
 import { usePlayer } from "../../context/PlayerContext"
 import { useSyncProgress } from "../../hooks/useSyncProgress";
@@ -17,8 +17,9 @@ import { CompletedGameTable } from '../../components/MenuComp/CompletedGameTable
 
 export const Menu = () => {
   const { userWallet } = usePlayer();
-  const { setIsLoading, setRefresh, refresh } = useTerrain();
-  const { onCopy, setValue, hasCopied } = useClipboard("");
+  const { refresh } = useTerrain();
+
+  const username = useMyUsername(userWallet);
 
   const [isUserModalOpen, setIsUserModalOpen] = useState<boolean>(false);
   const [isCreateGameModalOpen, setIsCreateGameModalOpen] = useState<boolean>(false);
@@ -27,20 +28,6 @@ export const Menu = () => {
 
   const [gameNameFilter, setGameNameFilter] = useState('');
   const [selectedPlayersFilter, setSelectedPlayersFilter] = useState<number[]>([]);
-
-  const progress = useSyncProgress();
-  const username = useMyUsername(userWallet);
-
-  useEffect(() => {
-    if (userWallet) {
-      setValue(userWallet.toString())
-    }
-  }, [userWallet])
-
-  const handleRefresh = (event: any) => {
-    setIsLoading(true);
-    setRefresh(refresh + 1);
-  };
 
   return (
     <>
@@ -51,8 +38,8 @@ export const Menu = () => {
           {
             refresh === 0 &&
             <div id="menu-items">
-              {refresh === 0 && <DataFetchProgress progress={progress} />}
-              {refresh === 0 && <EnterGameButton handleRefresh={handleRefresh} percentage={progress && progress.percentage} />}
+              {refresh === 0 && <DataFetchProgress />}
+              {refresh === 0 && <EnterGameButton />}
             </div>
           }
           {
@@ -60,9 +47,6 @@ export const Menu = () => {
             <div className='col'>
               <PlayerInfoCard
                 username={username}
-                publicWallet={userWallet}
-                onCopy={onCopy}
-                hasCopied={hasCopied}
                 setIsUserModalOpen={setIsUserModalOpen} />
               <div className='menu-row mt-5'>
                 <div className='col-8'>
@@ -134,12 +118,19 @@ const CreateGameButton = ({ setIsCreateGameModalOpen, username }: { setIsCreateG
   )
 }
 
-const EnterGameButton = ({ handleRefresh, percentage }: { handleRefresh: (event: any) => void, percentage: number }) => {
+const EnterGameButton = () => {
+  const { setRefresh, refresh } = useTerrain();
+  const progress = useSyncProgress();
+  const progressPercentage = progress ? progress.percentage : 0;
+
+  const handleRefresh = (event: any) => {
+    setRefresh(refresh + 1);
+  };
   return (
     <button
       className='btn btn-dark menu-buttons mb-4'
       onClick={handleRefresh}
-      disabled={percentage !== 100}>
+      disabled={progressPercentage !== 100}>
       Enter the Game
     </button>
   )
