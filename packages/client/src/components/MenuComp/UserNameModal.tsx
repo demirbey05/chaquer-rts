@@ -50,8 +50,13 @@ export const UserNameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
                             id="usernameinput"
                             placeholder="Min 3 Char - Max 32 Char" />
                         <div className="modal-footer justify-content-around mt-3">
-                            <BackMapButton toggleDrawer={toggleDrawer} isLoading={isLoading} />
-                            <JoinToGameButton onClick={() => onClick()} isLoading={isLoading} disable={disable || isLoading} />
+                            <BackMapButton
+                                toggleDrawer={toggleDrawer}
+                                isLoading={isLoading} />
+                            <JoinToGameButton
+                                onClick={() => onClick()}
+                                isLoading={isLoading}
+                                disable={disable || isLoading} />
                         </div>
                     </div>
                 </div>
@@ -73,7 +78,7 @@ const JoinToGameButton = ({ disable, onClick, isLoading }: any) => {
         loadingText='Assigning'
         onClick={() => onClick()}
     >
-        Assign
+        Assign Username
     </Button>
 }
 
