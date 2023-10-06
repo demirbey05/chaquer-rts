@@ -10,14 +10,15 @@ export function findCastleCloseArmies(
   Position: any,
   CastleOwnable: any,
   ArmyOwnable: any,
-  ArmyConfig: any
+  ArmyConfig: any,gameID:number,
+  gameID:number
 ) {
   const acc = { numSwordsman: 0, numArcher: 0, numCavalry: 0 };
 
   const castlePosition = getComponentValueStrict(Position, castleID);
   const castleOwner = getComponentValueStrict(CastleOwnable, castleID);
   const allArmies = runQuery([
-    HasValue(ArmyOwnable, { owner: castleOwner.owner }),
+    HasValue(ArmyOwnable, { owner: castleOwner.owner,gameID:gameID }),
   ]);
   allArmies.forEach((element) => {
     const positionOfArmy = getComponentValueStrict(Position, element);
