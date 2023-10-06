@@ -10,8 +10,7 @@ export function findCastleCloseArmies(
   Position: any,
   CastleOwnable: any,
   ArmyOwnable: any,
-  ArmyConfig: any,gameID:number,
-  gameID:number
+  ArmyConfig: any,gameID:number
 ) {
   const acc = { numSwordsman: 0, numArcher: 0, numCavalry: 0 };
 
