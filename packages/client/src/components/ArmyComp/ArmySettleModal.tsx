@@ -13,7 +13,7 @@ import { useGame } from "../../context/GameContext";
 import { useArmyPrices } from '../../hooks/EconomyHooks/useArmyPrices';
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
-import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 
 export const ArmySettleModal = () => {
   const { systemCalls, components } = useMUD();
@@ -49,7 +49,10 @@ export const ArmySettleModal = () => {
       setCavalryCount("0")
     }
 
-    if (swordsmanCount.length === 0 && archerCount.length === 0 && cavalryCount.length === 0 || Number(swordsmanCount) + Number(archerCount) + Number(cavalryCount) === 0) {
+    if (swordsmanCount.length === 0 &&
+      archerCount.length === 0 &&
+      cavalryCount.length === 0 ||
+      Number(swordsmanCount) + Number(archerCount) + Number(cavalryCount) === 0) {
       setIsDisabled(true);
       setEnoughCredit(true);
       return;
@@ -92,7 +95,7 @@ export const ArmySettleModal = () => {
     var targetDiv = document.getElementById(`${armyPosition.y},${armyPosition.x}`);
     targetDiv?.classList.add("animate-border-settle");
 
-    const castleID = [...findIDFromPosition(
+    const castleID = [...getIDFromPosition(
       castlePosition,
       components.Position,
       gameID

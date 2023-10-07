@@ -11,7 +11,7 @@ import { useFleet } from "../../context/FleetContext";
 import { useGame } from "../../context/GameContext";
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
-import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 import { useNumberOfResource } from "../../hooks/ResourceHooks/useNumberOfResource";
 
 export const FleetSettleModal = () => {
@@ -116,7 +116,7 @@ export const FleetSettleModal = () => {
 
 
     const handleClick = async () => {
-        const _dockID = [...findIDFromPosition(
+        const _dockID = [...getIDFromPosition(
             dockPositionForFleetSettlement,
             components.Position,
             gameID

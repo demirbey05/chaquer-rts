@@ -5,8 +5,8 @@ import { useMUD } from "../../context/MUDContext";
 import { useAttack } from "../../context/AttackContext";
 import { useError } from "../../context/ErrorContext";
 import { useGame } from "../../context/GameContext";
-import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
-import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
+import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
+import { getDefenderArmyConfig } from "../../utils/helperFunctions/CustomFunctions/getDefenderArmyConfig";
 
 export const CastleAttackDrawer = () => {
   const { components, systemCalls } = useMUD();
@@ -30,30 +30,28 @@ export const CastleAttackDrawer = () => {
 
   useEffect(() => {
     if (attackToArmyPositionToCastle) {
-      const castleId = [...findIDFromPosition(
+      const castleId = [...getIDFromPosition(
         attackToArmyPositionToCastle,
         components.Position,
         gameID
       )];
 
-      setCastleArmy(findCastleCloseArmies(castleId[0], components.Position, components.CastleOwnable, components.ArmyOwnable, components.ArmyConfig, gameID))
+      setCastleArmy(getDefenderArmyConfig(castleId[0], components.Position, components.CastleOwnable, components.ArmyOwnable, components.ArmyConfig, gameID))
     }
   }, [attackToArmyPositionToCastle])
 
   const handleAttack = async () => {
-    const attackFromArmyId = [...findIDFromPosition(
+    const attackFromArmyId = [...getIDFromPosition(
       attackFromArmyPositionToCastle,
       components.Position,
       gameID
     )];
 
-    const attackToCastleId = [...findIDFromPosition(
+    const attackToCastleId = [...getIDFromPosition(
       attackToArmyPositionToCastle,
       components.Position,
       gameID
     )];
-
-    findCastleCloseArmies(attackToCastleId[0], components.Position, components.CastleOwnable, components.ArmyOwnable, components.ArmyConfig, gameID)
 
     if (attackFromArmyId.length != 1 || attackToCastleId.length != 1) {
       setErrorMessage("An error occurred while trying to attack to castle.")
@@ -64,17 +62,18 @@ export const CastleAttackDrawer = () => {
 
     try {
       setIsLoading(true)
-      console.log("Tx atıldı")
       await systemCalls.castleCapture(attackFromArmyId[0], attackToCastleId[0])
     } catch (error) {
       setErrorMessage("An error occurred while trying to attack to castle.")
       setErrorTitle("Castle Attack Error")
       setShowError(true)
     } finally {
+      setIsLoading(false)
       setIsAttackStage(false);
       setMyArmyConfig(undefined);
       setEnemyArmyConfig(undefined);
-      setIsLoading(false)
+      attackToArmyPositionToCastle(undefined)
+      attackFromArmyPositionToCastle(undefined)
     }
   };
 

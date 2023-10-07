@@ -1,4 +1,4 @@
-import { findIDFromPosition } from "../../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { getIDFromPosition } from "../../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 
 export const FleetMoveEvent = async (
     setIsFleetMoveStage: (value: boolean) => void,
@@ -21,7 +21,7 @@ export const FleetMoveEvent = async (
     setSeaMineStage(false)
     setIsFleetAttackStage(false)
 
-    const _fleetID = findIDFromPosition(
+    const _fleetID = getIDFromPosition(
         fromFleetPositionRef.current,
         components.Position,
         gameID

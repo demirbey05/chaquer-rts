@@ -7,7 +7,7 @@ import { useArmy } from "../../context/ArmyContext";
 import { useError } from "../../context/ErrorContext";
 import { useSea } from "../../context/SeaContext";
 import { usePlayer } from "../../context/PlayerContext";
-import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { useMyDockPositions } from "../../hooks/SeaHooks/useMyDockPositions";
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
@@ -50,7 +50,7 @@ export const DockSettleModal = () => {
     }
 
     const handleSettle = async () => {
-        const movingArmyIdMap = findIDFromPosition(
+        const movingArmyIdMap = getIDFromPosition(
             armyPositionToSettleDock,
             components.Position,
             gameID
@@ -88,7 +88,7 @@ export const DockSettleModal = () => {
     };
 
     const handleMove = async () => {
-        const movingArmyIdMap = findIDFromPosition(
+        const movingArmyIdMap = getIDFromPosition(
             armyPositionToSettleDock,
             components.Position,
             gameID
@@ -113,12 +113,12 @@ export const DockSettleModal = () => {
                 setErrorTitle("Army Move Error")
                 setShowError(true)
             } finally {
+                setIsLoadingMove(false)
                 targetDiv?.classList.remove("animate-border-army-move");
                 setDockSettleStage(false);
                 setIsArmyMoveStage(false)
                 setArmyPositionToSettleDock(undefined);
                 setDockPosition(undefined);
-                setIsLoadingMove(false)
             }
         };
     }

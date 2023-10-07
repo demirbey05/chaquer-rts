@@ -6,16 +6,14 @@ import { useSea } from "../../context/SeaContext";
 import { useMUD } from "../../context/MUDContext";
 import { useAttack } from "../../context/AttackContext";
 import { useGame } from "../../context/GameContext";
-import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
-import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { getDefenderArmyConfig } from "../../utils/helperFunctions/CustomFunctions/getDefenderArmyConfig";
+import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 
 export const DockCaptureDrawer = () => {
     const { components, systemCalls } = useMUD();
     const { gameID } = useGame();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
-    const { setMyArmyConfig,
-        setEnemyArmyConfig,
-        myArmyConfig } = useAttack();
+    const { setMyArmyConfig, setEnemyArmyConfig, myArmyConfig } = useAttack();
     const { targetDockPosition, dockAttackerArmyPosition, setDockCaptureStage } = useSea();
 
     const [dockArmy, setDockArmy] = useState<any>();
@@ -29,30 +27,28 @@ export const DockCaptureDrawer = () => {
 
     useEffect(() => {
         if (targetDockPosition) {
-            const dockId = [...findIDFromPosition(
+            const dockId = [...getIDFromPosition(
                 targetDockPosition,
                 components.Position,
                 gameID
             )];
 
-            setDockArmy(findCastleCloseArmies(dockId[0], components.Position, components.DockOwnable, components.ArmyOwnable, components.ArmyConfig, gameID))
+            setDockArmy(getDefenderArmyConfig(dockId[0], components.Position, components.DockOwnable, components.ArmyOwnable, components.ArmyConfig, gameID))
         }
     }, [targetDockPosition])
 
     const handleAttack = async () => {
-        const attackFromArmyId = [...findIDFromPosition(
+        const attackFromArmyId = [...getIDFromPosition(
             dockAttackerArmyPosition,
             components.Position,
             gameID
         )];
 
-        const attackToDockID = [...findIDFromPosition(
+        const attackToDockID = [...getIDFromPosition(
             targetDockPosition,
             components.Position,
             gameID
         )];
-
-        findCastleCloseArmies(attackToDockID[0], components.Position, components.DockOwnable, components.ArmyOwnable, components.ArmyConfig, gameID)
 
         if (attackFromArmyId.length != 1 || attackToDockID.length != 1) {
             setErrorMessage("An error occurred while trying to capture the dock.")
@@ -69,10 +65,10 @@ export const DockCaptureDrawer = () => {
             setErrorTitle("Dock Capture Error")
             setShowError(true)
         } finally {
+            setIsLoading(false)
             setDockCaptureStage(false);
             setMyArmyConfig(undefined);
             setEnemyArmyConfig(undefined);
-            setIsLoading(false)
         }
     };
 

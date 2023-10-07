@@ -5,8 +5,8 @@ import { useError } from "../../context/ErrorContext";
 import { useSea } from "../../context/SeaContext";
 import { useFleet } from "../../context/FleetContext";
 import { useMUD } from "../../context/MUDContext";
-import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
-import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
+import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
+import { getDefenderArmyConfig } from "../../utils/helperFunctions/CustomFunctions/getDefenderArmyConfig";
 import { getResourceTypeByPosition } from "../../utils/helperFunctions/ResourceFuntions/getResourceTypeByPosition";
 import { useResources } from "../../hooks/ResourceHooks/useResources";
 import { useGame } from "../../context/GameContext";
@@ -31,30 +31,28 @@ export const SeaMineCaptureDrawer = () => {
 
     useEffect(() => {
         if (targetSeaMinePosition) {
-            const mineId = [...findIDFromPosition(
+            const mineId = [...getIDFromPosition(
                 targetSeaMinePosition,
                 components.Position,
                 gameID
             )];
 
-            setMineFleet(findCastleCloseArmies(mineId[0], components.Position, components.ResourceOwnable, components.FleetOwnable, components.FleetConfig, gameID))
+            setMineFleet(getDefenderArmyConfig(mineId[0], components.Position, components.ResourceOwnable, components.FleetOwnable, components.FleetConfig, gameID))
         }
     }, [targetSeaMinePosition])
 
     const handleCapture = async () => {
-        const attackFromFleetId = [...findIDFromPosition(
+        const attackFromFleetId = [...getIDFromPosition(
             seaMineAttackerFleetPosition,
             components.Position,
             gameID
         )];
 
-        const attackToMineId = [...findIDFromPosition(
+        const attackToMineId = [...getIDFromPosition(
             targetSeaMinePosition,
             components.Position,
             gameID
         )];
-
-        findCastleCloseArmies(attackToMineId[0], components.Position, components.ResourceOwnable, components.FleetOwnable, components.ArmyConfig, gameID)
 
         if (attackFromFleetId.length != 1 || attackToMineId.length != 1) {
             setErrorMessage("An error occurred while trying to capture a sea mine.")
@@ -71,10 +69,10 @@ export const SeaMineCaptureDrawer = () => {
             setErrorTitle("Sea Mine Capture Error")
             setShowError(true)
         } finally {
+            setIsLoading(false)
             setSeaMineStage(false);
             setMyFleetConfig(undefined);
             setEnemyFleetConfig(undefined);
-            setIsLoading(false)
         }
     };
 

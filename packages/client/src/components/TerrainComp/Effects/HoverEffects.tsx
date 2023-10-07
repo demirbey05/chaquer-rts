@@ -3,7 +3,7 @@ import { getManhattanPositions } from '../../../utils/helperFunctions/CustomFunc
 import { canCastleBeSettle } from '../../../utils/helperFunctions/CastleFunctions/canCastleBeSettle';
 import { isResourcePosition } from '../../../utils/helperFunctions/ResourceFuntions/isResourcePosition';
 import { isArmyPosition } from '../../../utils/helperFunctions/ArmyFunctions/isArmyPosition';
-import { armySettlePositions } from '../../../utils/helperFunctions/ArmyFunctions/armySettlePositions';
+import { getArmySettlePositions } from '../../../utils/helperFunctions/ArmyFunctions/getArmySettlePositions';
 import { canFleetBeSettled } from '../../../utils/helperFunctions/SeaFunctions/canFleetBeSettled';
 import { isMyCastle } from '../../../utils/helperFunctions/CastleFunctions/isMyCastle';
 import { isEnemyCastle } from '../../../utils/helperFunctions/CastleFunctions/isEnemyCastle';
@@ -87,7 +87,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                                 !isArmyPosition(data.x, data.y, armyPositions) &&
                                 !isMyDock(data.x, data.y, myDockPositions) &&
                                 !isEnemyDock({ x: data.x, y: data.y }, dockPositions, myDockPositions) &&
-                                armySettlePositions(data.x, data.y, myCastlePosition)
+                                getArmySettlePositions(data.x, data.y, myCastlePosition)
                             ) {
                                 const element = document.getElementById(`${data.y},${data.x}`)!;
                                 if (element) {
@@ -105,7 +105,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                 getManhattanPositions(position.myCastlePosition).map(
                     (data) => {
                         if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
-                            if (armySettlePositions(data.x, data.y, myCastlePosition)) {
+                            if (getArmySettlePositions(data.x, data.y, myCastlePosition)) {
                                 document.getElementById(`${data.y},${data.x}`)?.classList.remove("orangeTileEffect")
                                 document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-toggle", "");
                                 document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-target", "");

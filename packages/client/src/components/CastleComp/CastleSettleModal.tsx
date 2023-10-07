@@ -10,7 +10,7 @@ import { usePlayerIsValid } from "../../hooks/IdentityHooks/usePlayerIsValid";
 
 export const CastleSettleModal = () => {
   const { systemCalls } = useMUD();
-  const { isCastleSettled, tempCastle, setCastle, setIsCastleSettled } = useCastle();
+  const { isCastleSettled, tempCastle, setIsCastleSettled } = useCastle();
   const { setShowError, setErrorMessage, setErrorTitle } = useError();
   const { userWallet } = usePlayer();
   const { gameID } = useGame();
@@ -31,12 +31,7 @@ export const CastleSettleModal = () => {
   const handleClick = async () => {
     setIsCastleSettled(true);
     try {
-      const tx = !isCastleSettled &&
-        (await systemCalls.settleCastle(tempCastle.x, tempCastle.y, gameID));
-
-      if (tx) {
-        setCastle({ x: tempCastle.x, y: tempCastle.y });
-      }
+      await systemCalls.settleCastle(tempCastle.x, tempCastle.y, gameID)
     } catch (error) {
       setErrorMessage("An error occurred during castle settlement.");
       setErrorTitle("Castle Settlement Error");

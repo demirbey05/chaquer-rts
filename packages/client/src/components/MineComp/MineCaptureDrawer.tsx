@@ -6,9 +6,9 @@ import { useMine } from "../../context/MineContext";
 import { useAttack } from "../../context/AttackContext";
 import { useError } from "../../context/ErrorContext";
 import { useResources } from "../../hooks/ResourceHooks/useResources";
-import { findCastleCloseArmies } from "../../utils/helperFunctions/CastleFunctions/findCastleCloseArmies";
+import { getDefenderArmyConfig } from "../../utils/helperFunctions/CustomFunctions/getDefenderArmyConfig";
 import { getResourceTypeByPosition } from "../../utils/helperFunctions/ResourceFuntions/getResourceTypeByPosition";
-import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 import { useGame } from "../../context/GameContext";
 
 export const MineCaptureDrawer = () => {
@@ -31,34 +31,33 @@ export const MineCaptureDrawer = () => {
 
     useEffect(() => {
         if (targetMinePosition) {
-            const mineId = [...findIDFromPosition(
+            const mineId = [...getIDFromPosition(
                 targetMinePosition,
                 components.Position,
                 gameID
             )];
 
-            setMineArmy(findCastleCloseArmies(mineId[0], components.Position, components.ResourceOwnable, components.ArmyOwnable, components.ArmyConfig, gameID))
+            setMineArmy(getDefenderArmyConfig(mineId[0], components.Position, components.ResourceOwnable, components.ArmyOwnable, components.ArmyConfig, gameID))
         }
     }, [targetMinePosition])
 
     const handleCapture = async () => {
-        const attackFromArmyId = [...findIDFromPosition(
+        const attackFromArmyId = [...getIDFromPosition(
             attackerArmyPosition,
             components.Position,
             gameID
         )];
 
-        const attackToMineId = [...findIDFromPosition(
+        const attackToMineId = [...getIDFromPosition(
             targetMinePosition,
             components.Position,
             gameID
         )];
 
-        findCastleCloseArmies(attackToMineId[0], components.Position, components.ResourceOwnable, components.ArmyOwnable, components.ArmyConfig, gameID)
-
         if (attackFromArmyId.length != 1 || attackToMineId.length != 1) {
             setErrorMessage("An error occurred while trying to capture a mine.")
             setErrorTitle("Mine Capture Error")
+            setShowError(true)
             return
         }
 
@@ -70,10 +69,10 @@ export const MineCaptureDrawer = () => {
             setErrorTitle("Mine Capture Error")
             setShowError(true)
         } finally {
+            setIsLoading(false)
             setIsMineStage(false);
             setMyArmyConfig(undefined);
             setEnemyArmyConfig(undefined);
-            setIsLoading(false)
         }
     };
 

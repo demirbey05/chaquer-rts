@@ -26,7 +26,7 @@ import { useDockPositions } from "../../hooks/SeaHooks/useDockPositions";
 import { useMyDockPositions } from "../../hooks/SeaHooks/useMyDockPositions";
 import { useFleetPositions } from "../../hooks/SeaHooks/useFleetPositions";
 import { useMyFleetPositions } from "../../hooks/SeaHooks/useMyFleetPositions";
-import { Coord } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { Coord } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 import { getNumberOfSoldierInArmy } from "../../utils/helperFunctions/ArmyFunctions/getNumberOfSoliderInArmy";
 import { getTerrainAsset } from '../../utils/helperFunctions/CustomFunctions/getTerrainAsset';
 import { isMyCastle } from '../../utils/helperFunctions/CastleFunctions/isMyCastle';

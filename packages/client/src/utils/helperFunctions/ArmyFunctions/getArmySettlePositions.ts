@@ -1,12 +1,12 @@
 import { getManhattanPositions } from "../CustomFunctions/getManhattanPositions";
 
-export const fleetSettlePositions = (
+export const getArmySettlePositions = (
   x: number,
   y: number,
-  myDockPositions: any[]
+  myCastlePosition: any[]
 ): boolean => {
-  return myDockPositions.some((position: any) => {
-    return getManhattanPositions(position).some(
+  return myCastlePosition.some((position: any) => {
+    return getManhattanPositions(position.myCastlePosition).some(
       (item) => item.x === x && item.y === y
     );
   });

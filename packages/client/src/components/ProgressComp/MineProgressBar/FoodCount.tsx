@@ -9,7 +9,7 @@ export const FoodCount = () => {
 
     return (
         <div className="col-3 mine-progress-bar-col">
-            🌽: {numberOfResource ? Number(numberOfResource.numOfFood) : 300}
+            🌽: {numberOfResource ? Number(numberOfResource.numOfFood) : 0}
         </div>
     )
 }

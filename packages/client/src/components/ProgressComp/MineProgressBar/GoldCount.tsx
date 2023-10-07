@@ -9,7 +9,7 @@ export const GoldCount = () => {
 
     return (
         <div className="col-3 mine-progress-bar-col">
-            💎: {numberOfResource ? Number(numberOfResource.numOfGold) : 300}
+            💎: {numberOfResource ? Number(numberOfResource.numOfGold) : 0}
         </div>
     )
 }

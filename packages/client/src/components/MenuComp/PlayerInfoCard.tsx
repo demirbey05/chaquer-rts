@@ -1,9 +1,11 @@
-import { useEffect } from 'react'
-import { Avatar, WrapItem, Button, Tag, useClipboard } from '@chakra-ui/react'
-import { usePlayer } from '../../context/PlayerContext'
-import { WarningTwoIcon } from "@chakra-ui/icons"
+import { useEffect } from 'react';
+import { Avatar, WrapItem, Button, Tag, useClipboard } from '@chakra-ui/react';
+import { usePlayer } from '../../context/PlayerContext';
+import { WarningTwoIcon } from "@chakra-ui/icons";
 
 export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: string, setIsUserModalOpen: (value: boolean) => void }) => {
+    const showUsername = !!username;
+
     return (
         <div className='row d-flex justify-center'>
             <div className="player-card-info-modal">
@@ -16,54 +18,52 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                     <PublicWallet />
                 </div>
                 <div className='d-flex justify-content-center'>
-                    {
-                        username &&
+                    {showUsername ? (
                         <Tag
                             size='lg'
                             backgroundColor={"CaptionText"}
                             borderRadius='full'>
                             Username: {username}
                         </Tag>
-
-                    }
-                    {
-                        !username &&
+                    ) : (
                         <div className='d-flex justify-content-center'>
                             <Button
                                 size={"sm"}
                                 border={"solid"}
-                                colorScheme={"yellow"}
+                                borderColor={"white"}
+                                backgroundColor={"black"}
+                                colorScheme={"whiteAlpha"}
                                 onClick={() => setIsUserModalOpen(true)}>
                                 Assign Username
                             </Button>
                         </div>
-                    }
+                    )}
                 </div>
-                {
-                    !username &&
-                    <div className='mt-2 p-1 bg-warning text-dark rounded'>
-                        <p className='d-flex justify-content-left align-items-center'>
-                            <WarningTwoIcon me={3} />
-                            Assign your username
+                {!showUsername && (
+                    <div className='mt-2 p-1 border rounded'>
+                        <p className='d-flex justify-content-center align-items-center'>
+                            <WarningTwoIcon me={3} textColor={"red.500"} />
+                            You must assign username to play the game
                         </p>
                     </div>
-                }
+                )}
             </div>
         </div>
-    )
-}
+    );
+};
 
 const PublicWallet = () => {
     const { userWallet } = usePlayer();
     const { onCopy, setValue, hasCopied } = useClipboard("");
 
-    const truncatedPublicWallet = userWallet!.length > 10 ? userWallet!.substring(0, 10) + '...' : userWallet;
+    const truncatedPublicWallet = userWallet ? (userWallet.length > 10 ? userWallet.substring(0, 10) + '...' : userWallet) : "";
 
     useEffect(() => {
         if (userWallet) {
-            setValue(userWallet.toString())
+            setValue(userWallet.toString());
         }
-    }, [userWallet])
+    }, [userWallet]);
+
     return (
         <Tag size='lg' backgroundColor={"CaptionText"} borderRadius='full'>
             Public Wallet: {truncatedPublicWallet}
@@ -75,5 +75,5 @@ const PublicWallet = () => {
                 {hasCopied ? "Copied!" : "Copy"}
             </Button>
         </Tag>
-    )
-}
+    );
+};

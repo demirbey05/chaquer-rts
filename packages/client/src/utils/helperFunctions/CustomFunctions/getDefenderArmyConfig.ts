@@ -5,20 +5,23 @@ import {
   runQuery,
 } from "@latticexyz/recs";
 
-export function findCastleCloseArmies(
-  castleID: Entity,
+export function getDefenderArmyConfig(
+  EntityID: Entity,
   Position: any,
-  CastleOwnable: any,
+  DefenderOwnable: any,
   ArmyOwnable: any,
   ArmyConfig: any,
   gameID: number
 ) {
   const acc = { numSwordsman: 0, numArcher: 0, numCavalry: 0 };
 
-  const castlePosition = getComponentValueStrict(Position, castleID);
-  const castleOwner = getComponentValueStrict(CastleOwnable, castleID);
+  const castlePosition = getComponentValueStrict(Position, EntityID);
+  const defenderOwnable = getComponentValueStrict(DefenderOwnable, EntityID);
   const allArmies = runQuery([
-    HasValue(ArmyOwnable, { owner: castleOwner.owner, gameID: gameID }),
+    HasValue(ArmyOwnable, {
+      owner: defenderOwnable.owner,
+      gameID: BigInt(gameID),
+    }),
   ]);
   allArmies.forEach((element) => {
     const positionOfArmy = getComponentValueStrict(Position, element);

@@ -3,7 +3,7 @@ import { Button, Alert, AlertIcon } from "@chakra-ui/react";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useMUD } from "../../context/MUDContext";
 import { useError } from "../../context/ErrorContext";
-import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 import { useArmy } from "../../context/ArmyContext";
 import { getMyArmyConfigByPosition } from "../../utils/helperFunctions/ArmyFunctions/getArmyConfigByPosition";
 import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
@@ -54,7 +54,7 @@ export const ArmyMergeDrawer = () => {
         else {
             setArmyOneConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 })
         }
-    }, [mergeTargetArmyPosition, mergeFromArmyPosition])
+    }, [mergeTargetArmyPosition, mergeFromArmyPosition, myArmyPositions])
 
     const handleMergeLater = () => {
         setIsArmyMergeStage(false);
@@ -63,13 +63,13 @@ export const ArmyMergeDrawer = () => {
     };
 
     const handleMerge = async () => {
-        const armyOneID = [...findIDFromPosition(
+        const armyOneID = [...getIDFromPosition(
             mergeFromArmyPosition,
             components.Position,
             gameID
         )];
 
-        const armyTwoID = [...findIDFromPosition(
+        const armyTwoID = [...getIDFromPosition(
             mergeTargetArmyPosition,
             components.Position,
             gameID
@@ -83,7 +83,6 @@ export const ArmyMergeDrawer = () => {
         }
 
         try {
-            setIsArmyMergeStage(false);
             setIsLoading(true);
             await systemCalls.mergeArmy(armyOneID[0] as string, armyTwoID[0] as string, gameID);
         } catch (error) {
@@ -91,11 +90,12 @@ export const ArmyMergeDrawer = () => {
             setErrorTitle("Army Merge Error");
             setShowError(true);
         } finally {
+            setIsLoading(false);
+            setIsArmyMergeStage(false);
             setMergeTargetArmyPosition(undefined)
             setMergeFromArmyPosition(undefined);
             setArmyOneConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 });
             setArmyTwoConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 });
-            setIsLoading(false);
         }
     };
 

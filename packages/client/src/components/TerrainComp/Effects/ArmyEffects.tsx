@@ -2,11 +2,11 @@ import { useEffect } from "react"
 import { colorPath } from "../../../utils/constants/constants";
 import { getManhattanPositions } from "../../../utils/helperFunctions/CustomFunctions/getManhattanPositions";
 import { canCastleBeSettle } from "../../../utils/helperFunctions/CastleFunctions/canCastleBeSettle";
-import { armySettlePositions } from "../../../utils/helperFunctions/ArmyFunctions/armySettlePositions";
+import { getArmySettlePositions } from "../../../utils/helperFunctions/ArmyFunctions/getArmySettlePositions";
 import { isMyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isMyArmy";
 import { isEnemyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isEnemyArmy";
-import { getArmyMergePositions } from "../../../utils/helperFunctions/CustomFunctions/getArmyMergePositions";
-import { isArmyMergePosition } from "../../../utils/helperFunctions/CustomFunctions/isArmyMergePositions";
+import { getArmyMergePositions } from "../../../utils/helperFunctions/ArmyFunctions/getArmyMergePositions";
+import { isArmyMergePosition } from "../../../utils/helperFunctions/ArmyFunctions/isArmyMergePositions";
 
 export const ArmyEffects = (isArmyUpdateStage: boolean,
     values: number[][],
@@ -124,7 +124,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                 getManhattanPositions(position.myCastlePosition).map(
                     (data) => {
                         if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
-                            if (armySettlePositions(data.x, data.y, myCastlePosition)) {
+                            if (getArmySettlePositions(data.x, data.y, myCastlePosition)) {
                                 document.getElementById(`${data.y},${data.x}`)?.classList.remove("orangeTileEffect");
                                 document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-toggle", "");
                                 document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-target", "");

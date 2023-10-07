@@ -1,4 +1,4 @@
-import { findIDFromPosition } from "../../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { getIDFromPosition } from "../../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 
 export const ArmyMoveEvent = async (
     setIsArmyMergeStage: (value: boolean) => void,
@@ -28,7 +28,7 @@ export const ArmyMoveEvent = async (
     setDockCaptureStage(false);
     setIsArmyMergeStage(false)
 
-    const movingArmyIdMap = findIDFromPosition(
+    const movingArmyIdMap = getIDFromPosition(
         fromArmyPositionRef.current,
         components.Position,
         gameID

@@ -14,7 +14,7 @@ import { useArmyPrices } from '../../hooks/EconomyHooks/useArmyPrices';
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
-import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 import { getMyArmyConfigByPosition } from "../../utils/helperFunctions/ArmyFunctions/getArmyConfigByPosition";
 
 export const ArmyUpdateModal = () => {
@@ -134,13 +134,13 @@ export const ArmyUpdateModal = () => {
         var targetDiv = document.getElementById(`${armyPositionUpdate.y},${armyPositionUpdate.x}`);
         targetDiv?.classList.add("animate-border-settle");
 
-        const castleID = [...findIDFromPosition(
+        const castleID = [...getIDFromPosition(
             castlePosition,
             components.Position,
             gameID
         )];
 
-        const armyID = [...findIDFromPosition(
+        const armyID = [...getIDFromPosition(
             armyPositionUpdate,
             components.Position,
             gameID

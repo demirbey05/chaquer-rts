@@ -4,7 +4,7 @@ import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useMUD } from "../../context/MUDContext";
 import { useAttack } from "../../context/AttackContext";
 import { useError } from "../../context/ErrorContext";
-import { findIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/findIDFromPosition";
+import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 import { useGame } from "../../context/GameContext";
 
 export const ArmyAttackDrawer = () => {
@@ -25,16 +25,18 @@ export const ArmyAttackDrawer = () => {
     setIsAttackStage(false);
     setMyArmyConfig(undefined);
     setEnemyArmyConfig(undefined);
+    attackToArmyPositionToArmy(undefined);
+    attackFromArmyPositionToArmy(undefined);
   };
 
   const handleAttack = async () => {
-    const attackFromArmyId = [...findIDFromPosition(
+    const attackFromArmyId = [...getIDFromPosition(
       attackFromArmyPositionToArmy,
       components.Position,
       gameID
     )];
 
-    const attackToArmyId = [...findIDFromPosition(
+    const attackToArmyId = [...getIDFromPosition(
       attackToArmyPositionToArmy,
       components.Position,
       gameID
@@ -55,6 +57,8 @@ export const ArmyAttackDrawer = () => {
       setErrorTitle("Army Attack Error");
       setShowError(true);
     } finally {
+      setIsLoading(false);
+
       const element = document.getElementById(`${attackToArmyPositionToArmy.y},${attackToArmyPositionToArmy.x}`);
       if (element) {
         element.removeAttribute("data-bs-toggle");
@@ -62,10 +66,12 @@ export const ArmyAttackDrawer = () => {
       }
 
       setIsAttackStage(false);
+      attackToArmyPositionToArmy(undefined);
+      attackFromArmyPositionToArmy(undefined);
       setMyArmyConfig(undefined);
       setEnemyArmyConfig(undefined);
-      setIsLoading(false);
     }
+
   };
 
   if (isLoading) {
