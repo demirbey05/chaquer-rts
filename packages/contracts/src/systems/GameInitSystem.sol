@@ -74,7 +74,7 @@ contract GameInitSystem is System {
   function initUsername(string memory userName) public {
     address sender = _msgSender();
 
-    if (bytes(userName).length > 32) {
+    if (bytes(userName).length > 32 || bytes(userName).length < 3) {
       revert IdentitySystem__InvalidUserName();
     }
     AddressToUsername.setUserName(sender, userName);

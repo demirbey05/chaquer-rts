@@ -19,3 +19,4 @@ uint256 constant fleetMoveGoldCost = 50;
 uint256 constant fleetMoveFoodCost = 50;
 uint256 constant initialMarketSupply = 1000;
 uint256 constant initialCredit = 10 * 1e18;
+uint256 constant collectBlockDifference = 5;

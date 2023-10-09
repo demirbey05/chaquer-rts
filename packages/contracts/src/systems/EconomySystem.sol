@@ -9,6 +9,7 @@ import "./Errors.sol";
 import { MineType } from "../codegen/common.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
+import { collectBlockDifference } from "./Constants.sol";
 
 uint256 constant mineRate = 10;
 uint256 constant blockRate = 1;
@@ -37,7 +38,7 @@ contract EconomySystem is System {
     uint256 difference = block.number - LastCollectTime.get(owner, gameID);
     ResourceOwnData memory data = ResourceOwn.get(owner, gameID);
 
-    if (difference < 0) {
+    if (difference < collectBlockDifference) {
       revert EconomySystem__DifferenceIsLess();
     }
     LastCollectTime.set(owner, gameID, block.number);
