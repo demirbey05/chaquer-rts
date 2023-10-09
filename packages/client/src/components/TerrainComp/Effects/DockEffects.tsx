@@ -4,7 +4,7 @@ import { isResourcePosition } from "../../../utils/helperFunctions/ResourceFunti
 import { isCastlePosition } from "../../../utils/helperFunctions/CastleFunctions/isCastlePosition";
 import { isMyDock } from "../../../utils/helperFunctions/SeaFunctions/isMyDock";
 import { isManhattanPosition } from "../../../utils/helperFunctions/CustomFunctions/isManhattanPosition";
-import { colorPath } from "../../../utils/constants/constants";
+import { getBorderColor } from "../../../utils/constants/getBorderColors";
 import { isArmyPosition } from "../../../utils/helperFunctions/ArmyFunctions/isArmyPosition";
 import { getNumberOfSoldierInArmy } from "../../../utils/helperFunctions/ArmyFunctions/getNumberOfSoliderInArmy";
 
@@ -30,7 +30,7 @@ export const DockEffects = (isArmySettleStage: boolean | undefined,
                     document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.innerHTML = "⚓";
                     if (Number(data.dockColor.colorIndex) !== 0) {
                         document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.border = "4px solid";
-                        document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.borderColor = colorPath[Number(data.dockColor.colorIndex)];
+                        document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.borderColor = getBorderColor(Number(data.dockColor.colorIndex));
                     }
 
                 }
@@ -44,7 +44,7 @@ export const DockEffects = (isArmySettleStage: boolean | undefined,
             myDockPositions.map((position: any) => {
                 if (Number(position.myDockColor.colorIndex) !== 0) {
                     document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.border = "4px solid";
-                    document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.borderColor = colorPath[Number(position.myDockColor.colorIndex)];
+                    document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.borderColor = getBorderColor(Number(position.myDockColor.colorIndex));
                 }
             });
         }

@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { colorPath } from "../../../utils/constants/constants";
+import { getBorderColor } from "../../../utils/constants/getBorderColors";
 import { canCastleBeSettle } from "../../../utils/helperFunctions/CastleFunctions/canCastleBeSettle";
 import { isManhattanPosition } from "../../../utils/helperFunctions/CustomFunctions/isManhattanPosition";
 import { isMyResource } from "../../../utils/helperFunctions/ResourceFuntions/isMyResource";
@@ -17,7 +17,7 @@ export const ResourceEffects = (values: number[][],
         if (myResourcePositions) {
             myResourcePositions.map((position: any) => {
                 document.getElementById(`${position.myResourcePosition.y},${position.myResourcePosition.x}`)!.style.border = "2px solid";
-                document.getElementById(`${position.myResourcePosition.y},${position.myResourcePosition.x}`)!.style.borderColor = colorPath[Number(position.myResourceColor.colorIndex)];
+                document.getElementById(`${position.myResourcePosition.y},${position.myResourcePosition.x}`)!.style.borderColor = getBorderColor(Number(position.myResourceColor.colorIndex));
             })
         }
 
@@ -27,21 +27,21 @@ export const ResourceEffects = (values: number[][],
                     document.getElementById(`${data.positions.y},${data.positions.x}`)!.innerHTML = "🌽";
                     if (Number(data.color.colorIndex) !== 0) {
                         document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.border = "2px solid";
-                        document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.borderColor = colorPath[data.color.colorIndex];
+                        document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.borderColor = getBorderColor(Number(data.color.colorIndex));
                     }
                 }
                 else if (data.resource.sourceType === 1) {
                     document.getElementById(`${data.positions.y},${data.positions.x}`)!.innerHTML = "🪵";
                     if (Number(data.color.colorIndex) !== 0) {
                         document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.border = "2px solid";
-                        document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.borderColor = colorPath[data.color.colorIndex];
+                        document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.borderColor = getBorderColor(Number(data.color.colorIndex));
                     }
                 }
                 else {
                     document.getElementById(`${data.positions.y},${data.positions.x}`)!.innerHTML = "💎";
                     if (Number(data.color.colorIndex) !== 0) {
                         document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.border = "2px solid";
-                        document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.borderColor = colorPath[data.color.colorIndex];
+                        document.getElementById(`${data.positions.y},${data.positions.x}`)!.style.borderColor = getBorderColor(Number(data.color.colorIndex));
                     }
                 }
             })

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useBeforeUnload } from "react-router-dom";
 import { Button } from "@chakra-ui/react";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useMUD } from "../../context/MUDContext";
@@ -18,6 +19,15 @@ export const CastleSettleModal = () => {
   const [isLoadingJoin, setIsLoadingJoin] = useState<boolean>(false);
 
   const userValid = usePlayerIsValid(gameID, userWallet);
+
+  useBeforeUnload(
+    useCallback((e) => {
+      const handleExit = async () => {
+        await systemCalls.exitGame(gameID)
+      }
+      handleExit();
+    }, [])
+  );
 
   useEffect(() => {
     if (!(userValid && userValid === true)) {

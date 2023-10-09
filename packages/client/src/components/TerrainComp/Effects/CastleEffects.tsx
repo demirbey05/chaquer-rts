@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { colorPath } from "../../../utils/constants/constants";
+import { getBorderColor } from "../../../utils/constants/getBorderColors";
 
 export const CastleEffects = (fleetSettleStage: boolean,
     myCastlePosition: any[],
@@ -13,7 +13,7 @@ export const CastleEffects = (fleetSettleStage: boolean,
         if (myCastlePosition && myCastlePosition.length > 0) {
             myCastlePosition.map((position: any) => {
                 document.getElementById(`${position.myCastlePosition.y},${position.myCastlePosition.x}`)!.style.border = "4px solid";
-                document.getElementById(`${position.myCastlePosition.y},${position.myCastlePosition.x}`)!.style.borderColor = colorPath[Number(position.myCastleColor.colorIndex)];
+                document.getElementById(`${position.myCastlePosition.y},${position.myCastlePosition.x}`)!.style.borderColor = getBorderColor(Number(position.myCastleColor.colorIndex));
             });
             setIsCastleSettled(true);
         }
@@ -32,16 +32,29 @@ export const CastleEffects = (fleetSettleStage: boolean,
     //Puts the castle emojis to castle positions
     useEffect(() => {
         if (castlePositions) {
-            castlePositions.map(
-                (data) => {
-                    document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.innerHTML = "🏰";
-                    document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.style.border = "4px solid";
-                    document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.style.borderColor = colorPath[Number(data.castleColor.colorIndex)];
-                    document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.style.pointerEvents = "none";
+            castlePositions.forEach((data) => {
+                const element = document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`);
+                if (element) {
+                    element.innerHTML = "🏰";
+                    element.style.border = "4px solid";
+                    element.style.borderColor = getBorderColor(Number(data.castleColor.colorIndex));
+                    element.style.pointerEvents = "none";
                 }
-            );
+            });
         }
-    }, [castlePositions])
+
+        return () => {
+            if (castlePositions && castlePositions.length > 0) {
+                castlePositions.forEach((position) => {
+                    const elementToClear = document.getElementById(`${position.castlePosition.y},${position.castlePosition.x}`);
+                    if (elementToClear) {
+                        elementToClear.innerHTML = "";
+                        elementToClear.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
+                    }
+                });
+            }
+        };
+    }, [castlePositions]);
 
     // Make castles unclickable during army settlement
     useEffect(() => {

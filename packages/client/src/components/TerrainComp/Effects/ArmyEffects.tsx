@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { colorPath } from "../../../utils/constants/constants";
+import { getBorderColor } from "../../../utils/constants/getBorderColors";
 import { getManhattanPositions } from "../../../utils/helperFunctions/CustomFunctions/getManhattanPositions";
 import { canCastleBeSettle } from "../../../utils/helperFunctions/CastleFunctions/canCastleBeSettle";
 import { getArmySettlePositions } from "../../../utils/helperFunctions/ArmyFunctions/getArmySettlePositions";
@@ -80,7 +80,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                 )!;
                 element.innerHTML = "⚔️";
                 element.style.border = "2px solid";
-                element.style.borderColor = colorPath[Number(data.myArmyColor.colorIndex)];
+                element.style.borderColor = getBorderColor(Number(data.myArmyColor.colorIndex));
             });
         }
 
@@ -91,7 +91,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
             const element = document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!;
             element.innerHTML = "⚔️";
             element.style.border = "2px solid";
-            element.style.borderColor = colorPath[Number(data.armyColor.colorIndex)]
+            element.style.borderColor = getBorderColor(Number(data.armyColor.colorIndex));
             element.classList.add("army-emoji");
         });
     }, [armyPositions, myArmyPosition, myArmyNumber]);

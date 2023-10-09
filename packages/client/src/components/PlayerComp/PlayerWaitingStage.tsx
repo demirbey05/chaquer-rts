@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useCallback } from 'react';
+import { useBeforeUnload } from "react-router-dom";
 import { Progress, CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
 import { useMUD } from '../../context/MUDContext';
 import { useCastle } from '../../context/CastleContext';
@@ -16,18 +17,14 @@ export const PlayerWaitingStage = () => {
     const numberOfPlayer = gameData ? Number(gameData.numberOfPlayer) : 0;
     const limitOfPlayer = gameData ? Number(Number(gameData.limitOfPlayer)) : 0;
 
-    useEffect(() => {
-        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-            systemCalls.exitGame(gameID)
-            event.preventDefault();
-            event.returnValue = 'If you leave the page, you will leave the game.';
-        }
-
-        window.addEventListener('beforeunload', handleBeforeUnload)
-        return (() => {
-            window.removeEventListener('beforeunload', handleBeforeUnload)
-        })
-    }, [])
+    useBeforeUnload(
+        useCallback((e) => {
+            const handleExit = async () => {
+                await systemCalls.exitGame(gameID)
+            }
+            handleExit();
+        }, [])
+    );
 
     if (isCastleSettled) {
         return (

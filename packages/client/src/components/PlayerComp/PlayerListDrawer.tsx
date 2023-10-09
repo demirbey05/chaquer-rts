@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { FaUsers } from 'react-icons/fa'
 import { useGame } from '../../context/GameContext';
 import { useUsernameWithColors } from '../../hooks/IdentityHooks/useUsernamesWithColors';
-import { colorPath } from '../../utils/constants/constants';
+import { getBorderColor } from '../../utils/constants/getBorderColors';
 
 export const PlayerListDrawer = ({ isInputFocused, isSpectator }: { isInputFocused: boolean, isSpectator: boolean }) => {
     const { gameID } = useGame();
@@ -42,7 +42,7 @@ export const PlayerListDrawer = ({ isInputFocused, isSpectator }: { isInputFocus
                     {
                         users ?
                             users.map((user: any, key: number) => {
-                                return <UserInfoRow key={key} username={user.userName} color={colorPath[Number(user.colorIndex)]} />
+                                return <UserInfoRow key={key} username={user.userName} color={getBorderColor(Number(user.colorIndex))} />
                             }) :
                             "No available user"
                     }
