@@ -1,11 +1,10 @@
 import soundTrack from '../../sounds/chaquerSoundTrack.mp3'
 import { useState, useEffect, useRef } from 'react'
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button, Slider, SliderTrack, SliderFilledTrack, SliderThumb } from "@chakra-ui/react";
 import { SettingsIcon } from '@chakra-ui/icons'
 import { FaPlay, FaStop } from 'react-icons/fa'
 import { RiArrowGoBackFill } from 'react-icons/ri'
-import { Link } from 'react-router-dom';
 
 export const SettingsDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -13,8 +12,6 @@ export const SettingsDrawer = ({ isInputFocused }: { isInputFocused: boolean }) 
     const [isOpen, setIsOpen] = useState(false);
 
     const audioRef = useRef<any>();
-
-    let history = useHistory();
 
     useEffect(() => {
         const audioElement = audioRef.current;
@@ -98,7 +95,15 @@ export const SettingsDrawer = ({ isInputFocused }: { isInputFocused: boolean }) 
                     <PauseMusicButton handleStop={handleStop} closeDrawer={toggleDrawer} />
                     <hr className='mt-2 mb-2' />
                     <h5 className='mb-2'>Music Volume</h5>
-                    <Slider aria-label='slider-ex-1' step={0.05} defaultValue={volume} min={0} max={0.5} colorScheme='whatsapp' width={"75%"} onChange={handleVolumeChange}>
+                    <Slider
+                        aria-label='slider-ex-1'
+                        step={0.05}
+                        defaultValue={volume}
+                        min={0}
+                        max={0.5}
+                        colorScheme='whatsapp'
+                        width={"75%"}
+                        onChange={handleVolumeChange}>
                         <SliderTrack>
                             <SliderFilledTrack />
                         </SliderTrack>
@@ -106,7 +111,7 @@ export const SettingsDrawer = ({ isInputFocused }: { isInputFocused: boolean }) 
                     </Slider>
                     <hr className='mt-2 mb-2' />
                     <h5 className="mb-2 mt-2">Back to Menu</h5>
-                    <BackToMenuButton toggleDrawer={toggleDrawer} history={history} />
+                    <BackToMenuButton />
                 </div>
             </div>
             <audio ref={audioRef} autoPlay muted={isPlaying} >
@@ -125,13 +130,14 @@ const AudioControlCompHeader = ({ toggleDrawer }: { toggleDrawer: () => void }) 
     )
 }
 
-const BackToMenuButton = ({ toggleDrawer, history }: { toggleDrawer: () => void, history: any }) => {
+const BackToMenuButton = () => {
+    const navigate = useNavigate();
     return (
         <Button colorScheme='blue'
             variant='outline'
             style={{ height: "40px" }}
             onClick={() => {
-                history.go(0)
+                navigate(0)
             }}
             aria-label="Close">
             <RiArrowGoBackFill />

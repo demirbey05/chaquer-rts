@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button, Alert, AlertIcon } from "@chakra-ui/react";
 import { useGame } from "../../context/GameContext";
 import { usePlayerIsValid } from "../../hooks/IdentityHooks/usePlayerIsValid";
@@ -15,7 +15,7 @@ export const JoinGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
     const userValid = usePlayerIsValid(gameID, userWallet);
     const gameData = useGameData(gameID)
 
-    let history = useHistory();
+    const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
@@ -42,14 +42,14 @@ export const JoinGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
             if (joinButtonClicked) {
                 setIsLoading(true)
                 if (userValid === true || userValid === false) {
-                    history.push(`/game/${gameID}`);
+                    navigate(`/game/${gameID}`);
                 } else {
                     const tx = await systemCalls.joinGame(gameID);
                     if (tx) {
                         const interval = setInterval(() => {
                             if (userValid === true || userValid === false) {
                                 clearInterval(interval);
-                                history.push(`/game/${gameID}`);
+                                navigate(`/game/${gameID}`);
                                 setIsLoading(false)
                             }
                         }, 1000);
@@ -74,17 +74,14 @@ export const JoinGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
                             </h1>
                         </div>
                         {
-                            userValid === undefined && gameData && (gameData.state === 2 || gameData.state === 3 || gameData.state === 4) &&
-                            <Alert textColor={"black"} status='warning'>
-                                <AlertIcon />
-                                Seems game is full. You cannot join.
-                            </Alert>
-                        }
-                        {
-                            gameData && (gameData.state === 0 || gameData.state === 1) &&
-                            <div className="modal-header justify-center mb-2">
-                                <p>Click to Join Game button to join game.</p>
-                            </div>
+                            userValid === undefined && gameData && (gameData.state === 2 || gameData.state === 3 || gameData.state === 4) ?
+                                <Alert textColor={"black"} status='warning'>
+                                    <AlertIcon />
+                                    Seems game is full. You cannot join.
+                                </Alert> :
+                                <div className="modal-header justify-center mb-2">
+                                    <p>Click to Join Game button to join game.</p>
+                                </div>
                         }
                         <div className="modal-footer justify-content-around mt-3">
                             <BackMapButton

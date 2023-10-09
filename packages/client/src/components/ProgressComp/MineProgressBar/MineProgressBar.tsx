@@ -28,7 +28,6 @@ const CollectButton = () => {
     const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
     const lastCollectBlock = useLastResourceCollectBlock(gameID, userWallet);
-    console.log(lastCollectBlock)
 
     useEffect(() => {
         if (lastCollectBlock >= 5) {

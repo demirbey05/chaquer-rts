@@ -27,7 +27,6 @@
     "@latticexyz/store-sync": "2.0.0-main-9ff4f451",
     "@latticexyz/utils": "2.0.0-main-9ff4f451",
     "@latticexyz/world": "2.0.0-main-9ff4f451",
-    "@types/react-router-dom": "^5.3.3",
     "@wagmi/chains": "^0.2.22",
     "buffer": "^6.0.3",
     "contracts": "workspace:*",
@@ -37,7 +36,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
     "react-indiana-drag-scroll": "2.2.0",
-    "react-router-dom": "5.3.4",
+    "react-router-dom": "6.16.0",
     "rxjs": "7.5.5",
     "tailwind-merge": "^1.8.1",
     "viem": "1.14.0"

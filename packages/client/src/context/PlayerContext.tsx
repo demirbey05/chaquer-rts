@@ -30,15 +30,16 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
   const userValid = usePlayerIsValid(gameID, userWallet);
 
   useEffect(() => {
-    if (!userValid && gameData && (gameData.state === 3 || gameData.state === 4)) {
+    if (!userValid && userValid === false && gameData && (gameData.state === 3 || gameData.state === 4)) {
       setIsPlayerLost(true)
+    } else {
+      setIsPlayerLost(false)
     }
-  }, [userValid, gameData])
+  }, [userValid, gameData, gameID])
 
   useEffect(() => {
     const fetchData = async () => {
       if (userValid && gameData && Number(gameData.numberOfPlayer) === 1 && (gameData.state === 3 || gameData.state === 4)) {
-
         if (gameData.winner && (gameData.winner === userWallet)) {
           setIsPlayerWinner(true);
         } else {

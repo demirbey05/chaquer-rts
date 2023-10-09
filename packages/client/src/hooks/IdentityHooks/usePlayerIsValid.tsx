@@ -11,6 +11,8 @@ export function usePlayerIsValid(gameID: number, address: string) {
     useEffect(() => {
         if (value) {
             setIsPlayer(value.userValid)
+        } else {
+            setIsPlayer(undefined)
         }
     }, [value])
 

@@ -1,18 +1,18 @@
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@chakra-ui/react";
 import { useGame } from "../../context/GameContext";
 
 export const SpectateGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (value: boolean) => void }) => {
     const { gameID, setGameID } = useGame();
 
-    let history = useHistory();
+    const navigate = useNavigate();
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen)
     }
 
     const handleSpectate = () => {
-        history.push(`/spectator/${gameID}`)
+        navigate(`/spectator/${gameID}`)
     }
 
     if (isOpen) {
