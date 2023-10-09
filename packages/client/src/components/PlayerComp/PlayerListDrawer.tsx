@@ -41,7 +41,7 @@ export const PlayerListDrawer = ({ isInputFocused, isSpectator }: { isInputFocus
                 <div className='ms-2'>
                     {
                         users ?
-                            users.map((user: any, key) => {
+                            users.map((user: any, key: number) => {
                                 return <UserInfoRow key={key} username={user.userName} color={colorPath[Number(user.colorIndex)]} />
                             }) :
                             "No available user"

@@ -7,33 +7,22 @@ import { useGame } from "./GameContext";
 import { useGameData } from "../hooks/useGameData";
 
 type PlayerContextType = {
-  userWallet: string | undefined
-  userName: string | null | undefined;
-  setUserName: (value: string) => void;
-  playerSeed: number | undefined;
-  setPlayerSeed: (value: number) => void;
+  userWallet: string | undefined;
   isPlayerLost: boolean | undefined;
   isPlayerWinner: boolean | undefined;
 };
 
 const PlayerContext = createContext<PlayerContextType>({
   userWallet: undefined,
-  userName: null,
-  setUserName: () => { },
-  playerSeed: undefined,
-  setPlayerSeed: () => { },
   isPlayerLost: false,
   isPlayerWinner: false,
 });
 
 const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { children: ReactNode; }) => {
   const { current: userWallet } = useRef(new Wallet(getBurnerPrivateKey()).address)
-  const [userName, setUserName] = useState<string | null | undefined>();
 
   const [isPlayerLost, setIsPlayerLost] = useState<boolean>(false);
   const [isPlayerWinner, setIsPlayerWinner] = useState<boolean>(false);
-
-  const [playerSeed, setPlayerSeed] = useState<number>();
 
   const { systemCalls } = useMUD();
   const { gameID } = useGame();
@@ -68,10 +57,6 @@ const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { chil
 
   const results: PlayerContextType = {
     userWallet,
-    userName,
-    setUserName,
-    playerSeed,
-    setPlayerSeed,
     isPlayerLost,
     isPlayerWinner
   };

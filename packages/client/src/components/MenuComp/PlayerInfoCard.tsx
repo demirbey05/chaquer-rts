@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Avatar, WrapItem, Button, Tag, useClipboard } from '@chakra-ui/react';
 import { usePlayer } from '../../context/PlayerContext';
-import { WarningTwoIcon } from "@chakra-ui/icons";
+import { WarningTwoIcon, EditIcon } from "@chakra-ui/icons";
 
 export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: string, setIsUserModalOpen: (value: boolean) => void }) => {
     const showUsername = !!username;
@@ -14,23 +14,29 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                         <Avatar name={username} />
                     </WrapItem>
                 </div>
-                <div className='d-flex justify-content-center mt-2 mb-2'>
+                <div className='d-flex justify-content-center align-items-center mt-2 mb-2'>
                     <PublicWallet />
                 </div>
-                <div className='d-flex justify-content-center'>
+                <div className='d-flex justify-content-center align-items-center'>
                     {showUsername ? (
-                        <Tag
-                            size='lg'
-                            backgroundColor={"CaptionText"}
-                            borderRadius='full'>
-                            Username: {username}
-                        </Tag>
+                        <>
+                            <Tag
+                                size='lg'
+                                backgroundColor={"CaptionText"}
+                                borderRadius='full'>
+                                Username: {username}
+                            </Tag>
+                            <Button
+                                size={"sm"}
+                                ms={2}
+                                colorScheme={"facebook"}
+                                onClick={() => setIsUserModalOpen(true)}>
+                                <EditIcon />
+                            </Button>
+                        </>
                     ) : (
                         <div className='d-flex justify-content-center'>
                             <Button
-                                size={"sm"}
-                                border={"solid"}
-                                borderColor={"white"}
                                 backgroundColor={"black"}
                                 colorScheme={"whiteAlpha"}
                                 onClick={() => setIsUserModalOpen(true)}>
@@ -65,15 +71,18 @@ const PublicWallet = () => {
     }, [userWallet]);
 
     return (
-        <Tag size='lg' backgroundColor={"CaptionText"} borderRadius='full'>
-            Public Wallet: {truncatedPublicWallet}
+        <>
+            <Tag size='lg' backgroundColor={"CaptionText"} borderRadius='full'>
+                Public Wallet: {truncatedPublicWallet}
+
+            </Tag>
             <Button
                 ms={2}
-                size={"xs"}
+                size={"sm"}
                 colorScheme={"facebook"}
                 onClick={onCopy}>
                 {hasCopied ? "Copied!" : "Copy"}
             </Button>
-        </Tag>
+        </>
     );
 };

@@ -11,7 +11,11 @@ export const FleetProgress = () => {
     const myFleetPositions = useMyFleetPositions(userWallet, gameID);
     const myDockPositions = useMyDockPositions(userWallet, gameID);
     return (
-        <Tooltip label='Your fleet size is full. Deploy or Capture a dock to increase fleet capacity!' fontSize='md' bg='red.500' closeDelay={2000} isDisabled={myDockPositions && myFleetPositions && (myDockPositions.length !== myFleetPositions.length)}>
+        <Tooltip
+            label='Your fleet size is full. Deploy or Capture a dock to increase fleet capacity!'
+            fontSize='md'
+            bg='red.500'
+            isDisabled={myDockPositions && myFleetPositions && (myDockPositions.length !== myFleetPositions.length)}>
             <div className='col-md-6 ms-1'>
                 <Progress border={"2px"} bgColor={"transparent"} hasStripe isAnimated height={"32px"} value={myFleetPositions ? myFleetPositions.length : 0} max={(myDockPositions && myDockPositions!.length !== 0) ? myDockPositions?.length : 1} borderRadius="10px">
                     <ProgressLabel fontSize="15px" className='text-dark d-flex justify-center align-items-center'>

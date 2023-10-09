@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Button } from "@chakra-ui/react";
-import { usePlayer } from '../../context/PlayerContext';
 import { useMUD } from '../../context/MUDContext';
 
 export const UserNameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (value: boolean) => void }) => {
     const { systemCalls } = useMUD()
-    const { setUserName, userName } = usePlayer();
+
+    const [username, setUsername] = useState<string>("");
 
     const [disable, setDisable] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -15,22 +15,23 @@ export const UserNameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
     };
 
     useEffect(() => {
-        if (userName && userName.length >= 3 && userName.length < 32) {
+        if (username && username.length >= 3 && username.length < 32) {
             setDisable(false);
         }
         else {
             setDisable(true)
         }
-    }, [userName]);
+    }, [username]);
 
     const handleInput = (e: any) => {
-        setUserName(e.target.value)
+        setUsername(e.target.value)
     }
 
     const onClick = async () => {
         setIsLoading(true)
-        await systemCalls.initUsername(userName!);
+        await systemCalls.initUsername(username);
         setIsLoading(false)
+        setUsername("")
         toggleDrawer();
     }
 
