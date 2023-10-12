@@ -159,8 +159,8 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
                 (document.getElementById('BuyFood') as HTMLInputElement).value = '';
             }
             else {
-                setErrorMessage("You have no enough wood!")
-                setErrorTitle("You have enough credit");
+                setErrorMessage("You have enough credit.")
+                setErrorTitle("Food Buy Error");
                 setShowError(true);
             }
         }
@@ -176,8 +176,8 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
                 (document.getElementById('BuyWood') as HTMLInputElement).value = '';
             }
             else {
-                setErrorMessage("You have no enough wood!")
-                setErrorTitle("You have enough credit");
+                setErrorMessage("You have enough credit.")
+                setErrorTitle("Wood Buy Error");
                 setShowError(true);
             }
         }
@@ -190,11 +190,11 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
             const tx = await systemCalls.buyResource(gameID, parseInt(numGold), 2);
             if (tx) {
                 setNumGold('');
-                (document.getElementById('BuyGold') as HTMLInputElement).value = '';
+                (document.getElementById('BuyDiomand') as HTMLInputElement).value = '';
             }
             else {
-                setErrorMessage("You have no enough gold!")
-                setErrorTitle("You have enough credit");
+                setErrorMessage("You have enough credit.")
+                setErrorTitle("Diomand Buy Error");
                 setShowError(true);
             }
         }
@@ -319,10 +319,33 @@ const ResourceCard = (props: ResourceCardPropTypes) => {
                     onChange={(e: any) => props.setResourceCount(e.target.value)}
                     onClick={(e: any) => e.target.select()} />
             </div>
-            <ManualButton isLoading={props.isLoading} isDisabled={props.isDisabled} handleSell={props.handleBuy} numOfResource={""} resourceEmoji={props.resourceEmoji} />
-            <AutoButton isLoading={props.isLoading} isDisabled={props.is30Disabled} resourceType={props.resourceType} handleSell={props.handle30ResourceBuy} numOfResource={"30"} resourceEmoji={props.resourceEmoji} />
-            <AutoButton isLoading={props.isLoading} isDisabled={props.is100Disabled} resourceType={props.resourceType} handleSell={props.handle100ResourceBuy} numOfResource={"100"} resourceEmoji={props.resourceEmoji} />
-            <AutoButton isLoading={props.isLoading} isDisabled={props.is500Disabled} resourceType={props.resourceType} handleSell={props.handle500ResourceBuy} numOfResource={"500"} resourceEmoji={props.resourceEmoji} />
+            <ManualButton
+                isLoading={props.isLoading}
+                isDisabled={props.isDisabled}
+                handleSell={props.handleBuy}
+                numOfResource={""}
+                resourceEmoji={props.resourceEmoji} />
+            <AutoButton
+                isLoading={props.isLoading}
+                isDisabled={props.is30Disabled}
+                resourceType={props.resourceType}
+                handleSell={props.handle30ResourceBuy}
+                numOfResource={"30"}
+                resourceEmoji={props.resourceEmoji} />
+            <AutoButton
+                isLoading={props.isLoading}
+                isDisabled={props.is100Disabled}
+                resourceType={props.resourceType}
+                handleSell={props.handle100ResourceBuy}
+                numOfResource={"100"}
+                resourceEmoji={props.resourceEmoji} />
+            <AutoButton
+                isLoading={props.isLoading}
+                isDisabled={props.is500Disabled}
+                resourceType={props.resourceType}
+                handleSell={props.handle500ResourceBuy}
+                numOfResource={"500"}
+                resourceEmoji={props.resourceEmoji} />
         </div>
     )
 }

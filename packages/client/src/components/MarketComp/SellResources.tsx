@@ -182,10 +182,10 @@ export const SellResources = (props: SellResourcesPropTypes) => {
             const tx = await systemCalls.sellResource(gameID, parseInt(numGold), 2);
             if (tx) {
                 setNumGold('');
-                (document.getElementById('Gold') as HTMLInputElement).value = '';
+                (document.getElementById('Diomand') as HTMLInputElement).value = '';
             } else {
-                setErrorMessage("You have no enough gold!");
-                setErrorTitle("Gold Selling Error");
+                setErrorMessage("You have no enough diomand!");
+                setErrorTitle("Diomand Selling Error");
                 setShowError(true);
             }
         }
@@ -311,10 +311,33 @@ const ResourceCard = (props: ResourceCardPropTypes) => {
                     onChange={(e: any) => props.setResourceCount(e.target.value)}
                     onClick={(e: any) => e.target.select()} />
             </div>
-            <ManualButton isLoading={props.isLoading} isDisabled={props.isDisabled} handleSell={props.handleSell} numOfResource={""} resourceEmoji={props.resourceEmoji} />
-            <AutoButton isLoading={props.isLoading} isDisabled={props.is30Disabled} resourceType={props.resourceType} handleSell={props.handle30ResourceSell} numOfResource={"30"} resourceEmoji={props.resourceEmoji} />
-            <AutoButton isLoading={props.isLoading} isDisabled={props.is100Disabled} resourceType={props.resourceType} handleSell={props.handle100ResourceSell} numOfResource={"100"} resourceEmoji={props.resourceEmoji} />
-            <AutoButton isLoading={props.isLoading} isDisabled={props.is500Disabled} resourceType={props.resourceType} handleSell={props.handle500ResourceSell} numOfResource={"500"} resourceEmoji={props.resourceEmoji} />
+            <ManualButton
+                isLoading={props.isLoading}
+                isDisabled={props.isDisabled}
+                handleSell={props.handleSell}
+                numOfResource={""}
+                resourceEmoji={props.resourceEmoji} />
+            <AutoButton
+                isLoading={props.isLoading}
+                isDisabled={props.is30Disabled}
+                resourceType={props.resourceType}
+                handleSell={props.handle30ResourceSell}
+                numOfResource={"30"}
+                resourceEmoji={props.resourceEmoji} />
+            <AutoButton
+                isLoading={props.isLoading}
+                isDisabled={props.is100Disabled}
+                resourceType={props.resourceType}
+                handleSell={props.handle100ResourceSell}
+                numOfResource={"100"}
+                resourceEmoji={props.resourceEmoji} />
+            <AutoButton
+                isLoading={props.isLoading}
+                isDisabled={props.is500Disabled}
+                resourceType={props.resourceType}
+                handleSell={props.handle500ResourceSell}
+                numOfResource={"500"}
+                resourceEmoji={props.resourceEmoji} />
         </div>
     )
 }
