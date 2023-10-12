@@ -137,7 +137,7 @@ const BackToMenuButton = () => {
             variant='outline'
             style={{ height: "40px" }}
             onClick={() => {
-                navigate(0)
+                navigate("/")
             }}
             aria-label="Close">
             <RiArrowGoBackFill />

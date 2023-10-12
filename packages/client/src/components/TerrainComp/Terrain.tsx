@@ -62,6 +62,7 @@ import { isEnemyFleet } from "../../utils/helperFunctions/SeaFunctions/isEnemyFl
 import { SeaMineCaptureEvent } from "./Events/SeaMineCaptureEvent";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { ArmyMergeEvent } from './Events/ArmyMergeEvent';
+import { usePlayerIsValid } from '../../hooks/IdentityHooks/usePlayerIsValid';
 
 export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }: { isBorder: boolean, zoomLevel: number, tileSize: number, fontSize: number, isSpectator: boolean }) => {
   const { components, systemCalls } = useMUD();
@@ -163,6 +164,7 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
   const myDockPositions = useMyDockPositions(userWallet, gameID)
   const fleetPositions = useFleetPositions(gameID);
   const myFleetPositions = useMyFleetPositions(userWallet, gameID);
+  const userValid = usePlayerIsValid(gameID, userWallet);
 
   const handleClick = async (e: any) => {
     // Toggle orange tiles for army settlement
@@ -216,6 +218,7 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
       setIsFleetAttackStage(true)
       setSeaMineStage(true)
     } else if (fromFleetPosition && isUserClickedManhattanPosition(fromFleetPosition, getDataAtrX(e), getDataAtrY(e))) {
+
       toFleetPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
       fromFleetPositionRef.current = { x: fromFleetPosition.x.toString(), y: fromFleetPosition.y.toString() };
 
@@ -232,7 +235,7 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
           myFleetPositions,
           fleetPositions);
       }
-      if (isUserClickedMine(toFleetPositionRef.current.x, toFleetPositionRef.current.y, resources)) {
+      else if (isUserClickedMine(toFleetPositionRef.current.x, toFleetPositionRef.current.y, resources)) {
         SeaMineCaptureEvent(setIsFleetMoveStage,
           setFleetSettleStage,
           setIsFleetAttackStage,
@@ -405,7 +408,8 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
     myCastlePosition,
     setIsCastleSettled,
     castlePositions,
-    isCastleSettled);
+    isCastleSettled,
+    userValid);
   ResourceEffects(values,
     fromFleetPosition,
     seaMineStage,

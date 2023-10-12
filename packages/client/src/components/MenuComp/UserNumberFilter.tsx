@@ -23,6 +23,7 @@ export const UserNumberFilter = ({ selectedPlayers, setSelectedPlayers }: { sele
                     {Array.from({ length: 6 }, (_, i) => i + 3).map((numPlayers) => (
                         <Checkbox
                             key={numPlayers}
+                            id={`filterCheckbox${numPlayers}`}
                             size='md'
                             colorScheme='green'
                             color={"white"}

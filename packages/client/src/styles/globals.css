@@ -55,6 +55,18 @@ input::-webkit-inner-spin-button {
     color: white;
 }
 
+.version-tag {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    text-align: center;
+    font-size: 12px;
+    z-index: 999;
+}
+
 .menu-background {
     background-image: url("../images/backgrounds/chaquer_bg.jpg");
     background-size: cover;

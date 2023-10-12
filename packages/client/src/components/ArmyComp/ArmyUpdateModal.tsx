@@ -57,9 +57,18 @@ export const ArmyUpdateModal = () => {
             setSwordsmanCount(`${armyConfig.numSwordsman}`);
             setArcherCount(`${armyConfig.numArcher}`);
             setCavalryCount(`${armyConfig.numCavalry}`);
-            (document.getElementById('SwordsmanUpdate') as HTMLInputElement).value = `${armyConfig.numSwordsman}`;
-            (document.getElementById('CavalryUpdate') as HTMLInputElement).value = `${armyConfig.numCavalry}`;
-            (document.getElementById('ArcherUpdate') as HTMLInputElement).value = `${armyConfig.numArcher}`;
+
+            if (document.getElementById('SwordsmanUpdate')) {
+                (document.getElementById('SwordsmanUpdate') as HTMLInputElement).value = `${armyConfig.numSwordsman}`;
+            }
+
+            if (document.getElementById('CavalryUpdate')) {
+                (document.getElementById('CavalryUpdate') as HTMLInputElement).value = `${armyConfig.numCavalry}`;
+            }
+
+            if (document.getElementById('ArcherUpdate')) {
+                (document.getElementById('ArcherUpdate') as HTMLInputElement).value = `${armyConfig.numArcher}`;
+            }
         }
     }, [armyConfig, isArmyUpdateStage])
 

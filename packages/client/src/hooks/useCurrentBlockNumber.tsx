@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import { createPublicClient, http } from 'viem'
 import { foundry } from 'viem/chains'
+import { latticeTestnet } from "@latticexyz/common/chains";
 
 export function useCurrentBlockNumber() {
+    const isProduction = process.env.NODE_ENV === "production";
+    const chain = isProduction ? latticeTestnet : foundry;
+
     const publicClient = createPublicClient({
-        chain: foundry,
+        chain: chain,
         transport: http()
     })
 

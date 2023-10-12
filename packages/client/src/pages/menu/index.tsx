@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Accordion, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
+import { FaCirclePlus, FaEnvelopeOpenText } from 'react-icons/fa6'
 import { useTerrain } from "../../context/TerrainContext"
 import { usePlayer } from "../../context/PlayerContext"
 import { useSyncProgress } from "../../hooks/useSyncProgress";
@@ -114,6 +115,7 @@ const CreateGameButton = ({ setIsCreateGameModalOpen, username }: { setIsCreateG
       onClick={() => setIsCreateGameModalOpen(true)}
       disabled={!username}>
       Create a Game
+      <FaCirclePlus className='inline align-text-bottom ms-2 text-xl' />
     </button>
   )
 }
@@ -142,6 +144,7 @@ const GameTutorialButton = () => {
       <button
         className='btn btn-dark menu-buttons mt-2'>
         Game Tutorial
+        <FaEnvelopeOpenText className='inline align-text-bottom ms-2 text-xl' />
       </button>
     </a>
   )

@@ -11,6 +11,7 @@ export const GameNameFilter = ({ setFilter }: { setFilter: (value: string) => vo
             </AccordionButton>
             <AccordionPanel>
                 <input className='form-control bg-transparent text-white dark-input'
+                    id="gameNameFilter"
                     type="text"
                     onChange={(e) => setFilter(e.target.value)}
                     placeholder='Game Name' />

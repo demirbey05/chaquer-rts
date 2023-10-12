@@ -28,7 +28,6 @@ const CastleProvider: React.FC<{ children: ReactNode }> = ({ children }: { child
     const [tempCastle, setTempCastle] = useState<any>();
     const [castlePosition, setCastlePosition] = useState<any>();
 
-
     const results: CastleContextType = {
         setCastle,
         castle,

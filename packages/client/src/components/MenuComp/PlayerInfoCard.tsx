@@ -37,8 +37,8 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                     ) : (
                         <div className='d-flex justify-content-center'>
                             <Button
-                                backgroundColor={"black"}
-                                colorScheme={"whiteAlpha"}
+                                size={"sm"}
+                                colorScheme={"facebook"}
                                 onClick={() => setIsUserModalOpen(true)}>
                                 Assign Username
                             </Button>
@@ -46,7 +46,7 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                     )}
                 </div>
                 {!showUsername && (
-                    <div className='mt-2 p-1 border rounded'>
+                    <div className='mt-2'>
                         <p className='d-flex justify-content-center align-items-center'>
                             <WarningTwoIcon me={3} textColor={"red.500"} />
                             You must assign username to play the game
