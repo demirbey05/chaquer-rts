@@ -140,7 +140,7 @@ const EnterGameButton = () => {
 
 const GameTutorialButton = () => {
   return (
-    <a href="https://www.notion.so/psiket-comm/Chaquer-Game-Tutorial-680ce3a3fcf345fbb9a2bcc458e3b21b" target={"_blank"}>
+    <a href="https://docs.chaquer.xyz/" target={"_blank"}>
       <button
         className='btn btn-dark menu-buttons mt-2'>
         Game Tutorial
