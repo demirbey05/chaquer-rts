@@ -174,31 +174,29 @@ export const ArmyUpdateModal = () => {
             setArcherCount("0");
         }
 
-        try {
-            setIsLoading(true);
-            const tx = await systemCalls.updateArmy(
-                armyID.toString(),
-                Number(swordsmanCount),
-                Number(archerCount),
-                Number(cavalryCount),
-                castleID.toString(),
-                gameID
-            );
+        setIsLoading(true);
+        const tx = await systemCalls.updateArmy(
+            armyID.toString(),
+            Number(swordsmanCount),
+            Number(archerCount),
+            Number(cavalryCount),
+            castleID.toString(),
+            gameID
+        );
 
-            if (tx) {
-                setArmyConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 })
-                document.getElementById(`${castlePosition.y},${castlePosition.x}`)!.style.pointerEvents = "auto";
-                setArmyPositionUpdate(undefined)
-                setCastlePosition(undefined)
-            }
-        } catch (error) {
+        if (tx) {
+            setArmyConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 })
+            document.getElementById(`${castlePosition.y},${castlePosition.x}`)!.style.pointerEvents = "auto";
+            setArmyPositionUpdate(undefined)
+            setCastlePosition(undefined)
+        } else {
             setErrorMessage("An error occurred during army update.");
             setErrorTitle("Army Update Error");
             setShowError(true);
-        } finally {
-            setIsLoading(false);
-            targetDiv?.classList.remove("animate-border-settle");
         }
+
+        setIsLoading(false);
+        targetDiv?.classList.remove("animate-border-settle");
     };
 
     if (isLoading) {

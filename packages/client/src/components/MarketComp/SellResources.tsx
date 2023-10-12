@@ -247,7 +247,7 @@ export const SellResources = (props: SellResourcesPropTypes) => {
                 handle100ResourceSell={handle100ResourceSell}
                 handle500ResourceSell={handle500ResourceSell}
                 handleSell={handleFoodSell} />
-            <ResourceCard resourceEmoji={"🪵"}
+            <ResourceCard resourceEmoji={"🪓"}
                 resourceName={"Wood"}
                 setResourceCount={setNumWood}
                 resourceType={1}
@@ -261,7 +261,7 @@ export const SellResources = (props: SellResourcesPropTypes) => {
                 handle500ResourceSell={handle500ResourceSell}
                 handleSell={handleWoodSell} />
             <ResourceCard resourceEmoji={"💎"}
-                resourceName={"Gold"}
+                resourceName={"Diomand"}
                 setResourceCount={setNumGold}
                 resourceType={2}
                 isDisabled={isGoldDisabled}

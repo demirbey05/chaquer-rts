@@ -5,9 +5,9 @@ export const ResourcePrices = () => {
 
     return (
         <div>
-            <PriceListItem name={"Food/per"} isFleetPrices={false} price={resourcePrices.foodPrice} />
-            <PriceListItem name={"Wood/per"} isFleetPrices={false} price={resourcePrices.woodPrice} />
-            <PriceListItem name={"Gold/per"} isFleetPrices={false} price={resourcePrices.goldPrice} />
+            <PriceListItem name={"🌽/per"} isFleetPrices={false} price={resourcePrices.foodPrice} />
+            <PriceListItem name={"🪓/per"} isFleetPrices={false} price={resourcePrices.woodPrice} />
+            <PriceListItem name={"💎/per"} isFleetPrices={false} price={resourcePrices.goldPrice} />
         </div>
     )
 }

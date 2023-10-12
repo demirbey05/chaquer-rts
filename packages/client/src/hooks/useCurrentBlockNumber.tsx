@@ -4,8 +4,7 @@ import { foundry } from 'viem/chains'
 import { latticeTestnet } from "@latticexyz/common/chains";
 
 export function useCurrentBlockNumber() {
-    const isProduction = process.env.NODE_ENV === "production";
-    const chain = isProduction ? latticeTestnet : foundry;
+    const chain = import.meta.env.PROD ? latticeTestnet : foundry;
 
     const publicClient = createPublicClient({
         chain: chain,

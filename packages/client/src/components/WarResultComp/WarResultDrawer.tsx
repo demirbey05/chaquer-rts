@@ -1,4 +1,3 @@
-import warResultIcon from '../../images/customAssets/warResult.png';
 import { useState, useEffect } from "react";
 import { usePlayer } from '../../context/PlayerContext';
 import { useWarResult } from '../../hooks/useWarResult';
@@ -38,7 +37,7 @@ export const WarResultDrawer = ({ isInputFocused }: { isInputFocused: boolean })
     return (
         <>
             <button className="war-result-button" onClick={toggleOffcanvas}>
-                <img src={warResultIcon} width={"30px"} height={"30px"}></img>
+                💥
             </button>
             <div id="warResultDrawer" className={`my-war-result-drawer ${isOpen ? "open" : ""}`}>
                 <h4 className="text-center text-white p-2 mb-3 border-bottom">War Results</h4>

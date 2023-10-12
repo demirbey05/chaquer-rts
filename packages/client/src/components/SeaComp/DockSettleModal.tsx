@@ -103,23 +103,23 @@ export const DockSettleModal = () => {
             var targetDiv = document.getElementById(`${dockPosition.y},${dockPosition.x}`);
             targetDiv?.classList.add("animate-border-army-move");
 
-            try {
-                await systemCalls.moveArmy(movingArmyId.current, dockPosition.x, dockPosition.y, gameID)
+            const tx = await systemCalls.moveArmy(movingArmyId.current, dockPosition.x, dockPosition.y, gameID)
 
+            if (tx) {
                 document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.innerHTML = "";
                 document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
-            } catch (error) {
+            } else {
                 setErrorMessage("You need 30 food + 30 gold to move your army.")
                 setErrorTitle("Army Move Error")
                 setShowError(true)
-            } finally {
-                setIsLoadingMove(false)
-                targetDiv?.classList.remove("animate-border-army-move");
-                setDockSettleStage(false);
-                setIsArmyMoveStage(false)
-                setArmyPositionToSettleDock(undefined);
-                setDockPosition(undefined);
             }
+
+            setIsLoadingMove(false)
+            targetDiv?.classList.remove("animate-border-army-move");
+            setDockSettleStage(false);
+            setIsArmyMoveStage(false)
+            setArmyPositionToSettleDock(undefined);
+            setDockPosition(undefined);
         };
     }
 

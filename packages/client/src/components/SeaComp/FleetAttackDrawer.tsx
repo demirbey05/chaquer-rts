@@ -47,22 +47,22 @@ export const FleetAttackDrawer = () => {
             return
         }
 
-        try {
-            setIsLoading(true)
-            await systemCalls.attackFleet(attackFromArmyId[0] as string, attackToArmyId[0] as string, gameID)
+        setIsLoading(true)
+        const tx = await systemCalls.attackFleet(attackFromArmyId[0] as string, attackToArmyId[0] as string, gameID)
 
+        if (tx) {
             document.getElementById(`${targetFleetPosition.y},${targetFleetPosition.x}`)!.setAttribute("data-bs-toggle", "");
             document.getElementById(`${targetFleetPosition.y},${targetFleetPosition.x}`)!.setAttribute("data-bs-target", "");
-        } catch (error) {
+        } else {
             setErrorMessage("An error occurred while trying to attack to fleet.")
             setErrorTitle("Fleet Attack Error")
             setShowError(true)
-        } finally {
-            setIsLoading(false)
-            setIsFleetAttackStage(false);
-            setMyFleetConfig(undefined);
-            setEnemyFleetConfig(undefined);
         }
+
+        setIsLoading(false)
+        setIsFleetAttackStage(false);
+        setMyFleetConfig(undefined);
+        setEnemyFleetConfig(undefined);
     };
 
     if (isLoading) {

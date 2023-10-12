@@ -40,9 +40,8 @@ export const CastleSettleModal = () => {
 
   const handleClick = async () => {
     setIsCastleSettled(true);
-    try {
-      await systemCalls.settleCastle(tempCastle.x, tempCastle.y, gameID)
-    } catch (error) {
+    const tx = await systemCalls.settleCastle(tempCastle.x, tempCastle.y, gameID)
+    if (tx === null) {
       setErrorMessage("An error occurred during castle settlement.");
       setErrorTitle("Castle Settlement Error");
       setShowError(true);

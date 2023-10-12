@@ -120,30 +120,28 @@ export const ArmySettleModal = () => {
       setArcherCount("0");
     }
 
-    try {
-      const tx = await systemCalls.settleArmy(
-        armyPosition.x,
-        armyPosition.y,
-        Number(swordsmanCount),
-        Number(archerCount),
-        Number(cavalryCount),
-        gameID,
-        castleID.toString()
-      );
+    const tx = await systemCalls.settleArmy(
+      armyPosition.x,
+      armyPosition.y,
+      Number(swordsmanCount),
+      Number(archerCount),
+      Number(cavalryCount),
+      gameID,
+      castleID.toString()
+    );
 
-      if (tx) {
-        setSwordsmanCount('');
-        setArcherCount('');
-        setCavalryCount('');
-      }
-    } catch (error) {
+    if (tx) {
+      setSwordsmanCount('');
+      setArcherCount('');
+      setCavalryCount('');
+    } else {
       setErrorMessage("An error occurred during army settlement.");
       setErrorTitle("Army Settlement Error");
       setShowError(true);
-    } finally {
-      setIsLoading(false);
-      targetDiv?.classList.remove("animate-border-settle");
     }
+
+    setIsLoading(false);
+    targetDiv?.classList.remove("animate-border-settle");
   };
 
   if (isLoading) {

@@ -82,21 +82,21 @@ export const ArmyMergeDrawer = () => {
             return
         }
 
-        try {
-            setIsLoading(true);
-            await systemCalls.mergeArmy(armyOneID[0] as string, armyTwoID[0] as string, gameID);
-        } catch (error) {
+        setIsLoading(true);
+        const tx = await systemCalls.mergeArmy(armyOneID[0] as string, armyTwoID[0] as string, gameID);
+
+        if (tx === null) {
             setErrorMessage("An error occurred while trying to merge the armies.");
             setErrorTitle("Army Merge Error");
             setShowError(true);
-        } finally {
-            setIsLoading(false);
-            setIsArmyMergeStage(false);
-            setMergeTargetArmyPosition(undefined)
-            setMergeFromArmyPosition(undefined);
-            setArmyOneConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 });
-            setArmyTwoConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 });
         }
+
+        setIsLoading(false);
+        setIsArmyMergeStage(false);
+        setMergeTargetArmyPosition(undefined)
+        setMergeFromArmyPosition(undefined);
+        setArmyOneConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 });
+        setArmyTwoConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 });
     };
 
     if (isLoading) {

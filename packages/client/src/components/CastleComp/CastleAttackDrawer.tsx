@@ -60,21 +60,21 @@ export const CastleAttackDrawer = () => {
       return
     }
 
-    try {
-      setIsLoading(true)
-      await systemCalls.castleCapture(attackFromArmyId[0], attackToCastleId[0])
-    } catch (error) {
+    setIsLoading(true)
+    const tx = await systemCalls.castleCapture(attackFromArmyId[0], attackToCastleId[0])
+
+    if (tx === null) {
       setErrorMessage("An error occurred while trying to attack to castle.")
       setErrorTitle("Castle Attack Error")
       setShowError(true)
-    } finally {
-      setIsLoading(false)
-      setIsAttackStage(false);
-      setMyArmyConfig(undefined);
-      setEnemyArmyConfig(undefined);
-      attackToArmyPositionToCastle(undefined)
-      attackFromArmyPositionToCastle(undefined)
     }
+
+    setIsLoading(false)
+    setIsAttackStage(false);
+    setMyArmyConfig(undefined);
+    setEnemyArmyConfig(undefined);
+    attackToArmyPositionToCastle(undefined)
+    attackFromArmyPositionToCastle(undefined)
   };
 
   if (isLoading) {

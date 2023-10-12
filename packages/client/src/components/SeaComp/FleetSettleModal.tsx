@@ -130,31 +130,29 @@ export const FleetSettleModal = () => {
         var targetDiv = document.getElementById(`${fleetPosition.y},${fleetPosition.x}`);
         targetDiv?.classList.add("animate-border-settle");
 
-        try {
-            setIsLoading(true)
+        setIsLoading(true)
 
-            const tx = await systemCalls.settleFleet(
-                fleetPosition.x,
-                fleetPosition.y,
-                dockID.current,
-                parseInt(smallShipCount),
-                parseInt(mediumShipCount),
-                parseInt(largeShipCount),
-                gameID
-            );
-            if (tx) {
-                setSmallShipCount('');
-                setMediumShipCount('');
-                setLargeShipCount('');
-            }
-        } catch (error) {
+        const tx = await systemCalls.settleFleet(
+            fleetPosition.x,
+            fleetPosition.y,
+            dockID.current,
+            parseInt(smallShipCount),
+            parseInt(mediumShipCount),
+            parseInt(largeShipCount),
+            gameID
+        );
+        if (tx) {
+            setSmallShipCount('');
+            setMediumShipCount('');
+            setLargeShipCount('');
+        } else {
             setErrorMessage("You have no enough credit!")
             setErrorTitle("Fleet Settlement Error")
             setShowError(true)
-        } finally {
-            setIsLoading(false)
-            targetDiv?.classList.remove("animate-border-settle");
         }
+
+        setIsLoading(false)
+        targetDiv?.classList.remove("animate-border-settle");
     };
 
     if (isLoading) {

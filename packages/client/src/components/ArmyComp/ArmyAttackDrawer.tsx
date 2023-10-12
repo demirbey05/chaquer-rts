@@ -49,29 +49,28 @@ export const ArmyAttackDrawer = () => {
       return
     }
 
-    try {
-      setIsLoading(true);
-      await systemCalls.attackToArmy(attackFromArmyId[0] as string, attackToArmyId[0] as string, gameID);
-    } catch (error) {
+    setIsLoading(true);
+    const tx = await systemCalls.attackToArmy(attackFromArmyId[0] as string, attackToArmyId[0] as string, gameID);
+
+    if (tx === null) {
       setErrorMessage("An error occurred while attacking to army.");
       setErrorTitle("Army Attack Error");
       setShowError(true);
-    } finally {
-      setIsLoading(false);
-
-      const element = document.getElementById(`${attackToArmyPositionToArmy.y},${attackToArmyPositionToArmy.x}`);
-      if (element) {
-        element.removeAttribute("data-bs-toggle");
-        element.removeAttribute("data-bs-target");
-      }
-
-      setIsAttackStage(false);
-      attackToArmyPositionToArmy(undefined);
-      attackFromArmyPositionToArmy(undefined);
-      setMyArmyConfig(undefined);
-      setEnemyArmyConfig(undefined);
     }
 
+    setIsLoading(false);
+
+    const element = document.getElementById(`${attackToArmyPositionToArmy.y},${attackToArmyPositionToArmy.x}`);
+    if (element) {
+      element.removeAttribute("data-bs-toggle");
+      element.removeAttribute("data-bs-target");
+    }
+
+    setIsAttackStage(false);
+    attackToArmyPositionToArmy(undefined);
+    attackFromArmyPositionToArmy(undefined);
+    setMyArmyConfig(undefined);
+    setEnemyArmyConfig(undefined);
   };
 
   if (isLoading) {

@@ -43,31 +43,27 @@ export const ArmyMoveEvent = async (
         var targetDiv = document.getElementById(`${toArmyPositionRef.current.y},${toArmyPositionRef.current.x}`);
         targetDiv?.classList.add("animate-border-army-move");
 
-        try {
-            const tx = await systemCalls.moveArmy(
-                movingArmyId.current,
-                toArmyPositionRef.current.x,
-                toArmyPositionRef.current.y,
-                gameID
-            );
+        const tx = await systemCalls.moveArmy(
+            movingArmyId.current,
+            toArmyPositionRef.current.x,
+            toArmyPositionRef.current.y,
+            gameID
+        );
 
-            if (tx) {
-                document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
-                document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
-            } else {
-                setErrorMessage("You need 30 food + 30 gold to move your army.");
-                setErrorTitle("Army Move Error");
-                setShowError(true);
-            }
+        if (tx) {
+            document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
+            document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
 
             setFromArmyPosition(undefined);
             toArmyPositionRef.current = { x: -1, y: -1 };
             fromArmyPositionRef.current = { x: "-1", y: "-1" };
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setIsLoading(false);
-            targetDiv?.classList.remove("animate-border-army-move");
+        } else {
+            setErrorMessage("You need 30 food + 30 gold to move your army.");
+            setErrorTitle("Army Move Error");
+            setShowError(true);
         }
+
+        setIsLoading(false);
+        targetDiv?.classList.remove("animate-border-army-move");
     }
 };
