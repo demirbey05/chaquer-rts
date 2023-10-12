@@ -16,6 +16,7 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
                     <Tr>
                         <Th className='text-white'>Map Preview</Th>
                         <Th className='text-white'>Game Name</Th>
+                        <Th className='text-white'>Game State</Th>
                         <Th className='text-white'>Players</Th>
                         <Th className='text-white'>Join / Spectate</Th>
                     </Tr>
@@ -33,6 +34,7 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
                                 <Tr key={key}>
                                     <Td><img src={mapImg} alt="Map Image" width={"75"} height={"75"} /></Td>
                                     <Td>{game.name}</Td>
+                                    <Td>{getGameState(game.state)}</Td>
                                     <Td>{Number(game.numberOfPlayer)} / {Number(game.limitOfPlayer)}</Td>
                                     <Td>
                                         <JoinGameButtom
@@ -80,5 +82,15 @@ const SpectatorButton = ({ gameState, setIsSpectateGameModalOpen, setGameID, gam
             Spectate
         </button>
     )
+}
 
+const getGameState = (gameState: number) => {
+    if (gameState === 1) {
+        return "Waiting for Players"
+    }
+    else if (gameState === 2 || gameState === 3) {
+        return "Game Started"
+    } else {
+        return null
+    }
 }
