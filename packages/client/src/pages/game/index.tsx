@@ -41,6 +41,7 @@ import { ArmyUpdateWarning } from "../../components/ArmyComp/ArmyUpdateWarning";
 import { FleetInfoDrawer } from "../../components/SeaComp/FleetInfoDrawer";
 import { ArmyMergeDrawer } from "../../components/ArmyComp/ArmyMergeDrawer";
 import { ChatMessageDrawer } from "../../components/ChatComp/ChatMessageDrawer";
+import { VersionInfo } from "../../components/TipsComp/VersionInfo";
 
 export const Game = () => {
   const { gameID } = useGame();
@@ -87,6 +88,7 @@ export const Game = () => {
       {isPlayerLost && <PlayerLostWarning />}
       {gameData && gameData.state === 4 && isPlayerWinner && <PlayerWonAnimation />}
 
+      <VersionInfo />
       <SettingsDrawer isInputFocused={isInputFocused} />
       <PlayerListDrawer isInputFocused={isInputFocused} isSpectator={false} />
       <ZoomHandler isInputFocused={isInputFocused} zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />

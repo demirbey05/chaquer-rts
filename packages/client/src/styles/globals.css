@@ -58,8 +58,8 @@ input::-webkit-inner-spin-button {
 .version-tag {
     position: fixed;
     bottom: 0;
-    right: 0;
-    padding: 5px;
+    left: 0;
+    padding: 2px;
     background-color: rgba(0, 0, 0, 0.3);
     color: white;
     text-align: center;

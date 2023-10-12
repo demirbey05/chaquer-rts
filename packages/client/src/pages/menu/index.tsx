@@ -15,6 +15,7 @@ import { DataFetchProgress } from '../../components/MenuComp/DataFetchProgress';
 import { LiveGameTable } from '../../components/MenuComp/LiveGameTable';
 import { SpectateGameModal } from '../../components/MenuComp/SpectateGameModal';
 import { CompletedGameTable } from '../../components/MenuComp/CompletedGameTable';
+import { VersionInfo } from '../../components/TipsComp/VersionInfo';
 
 export const Menu = () => {
   const { userWallet } = usePlayer();
@@ -35,6 +36,7 @@ export const Menu = () => {
       <div className='menu-background'></div>
       <>
         <MenuTitle />
+        <VersionInfo />
         <div className="menu-row" style={refresh === 0 ? { justifyContent: "center" } : { justifyContent: "space-evenly", padding: "0 15%" }}>
           {
             refresh === 0 &&
