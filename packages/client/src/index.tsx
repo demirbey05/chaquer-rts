@@ -58,7 +58,7 @@ setup().then(async (result) => {
     </MUDProvider >
   );
 
-  if (import.meta.env.DEV) {
+  if (localStorage.getItem("mud-dev-tool") === "ismail") {
     const { mount: mountDevTools } = await import("@latticexyz/dev-tools");
     mountDevTools({
       config: mudConfig,

@@ -1,7 +1,5 @@
 import { SetupNetworkResult } from "./setupNetwork";
-
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
-
 export function createSystemCalls({
   worldContract,
   waitForTransaction,
@@ -23,7 +21,6 @@ export function createSystemCalls({
         gameName,
         mapID,
       ]);
-
       const tx = await worldContract.write.InitGame([
         BigInt(capacity),
         width,
@@ -33,40 +30,32 @@ export function createSystemCalls({
         mapID,
       ]);
       await waitForTransaction(tx);
-
       return txSimulated;
     } catch (e) {
       console.log(e);
       return null;
     }
   };
-
   const initUsername = async (username: string) => {
-    await worldContract.write
-      .initUsername([username])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.initUsername([username]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const settleCastle = async (x: number, y: number, gameID: number) => {
-    await worldContract.write
-      .settleCastle([x, y, BigInt(gameID)])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.settleCastle([x, y, BigInt(gameID)]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const settleArmy = async (
     x: number,
     y: number,
@@ -76,188 +65,180 @@ export function createSystemCalls({
     gameID: number,
     castleID: string
   ) => {
-    await worldContract.write
-      .settleArmy([
+    try {
+      const tx = await worldContract.write.settleArmy([
         x,
         y,
         { numSwordsman, numArcher, numCavalry, gameID },
         castleID,
-      ])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const moveArmy = async (
     armyID: string,
     x: number,
     y: number,
     gameID: number
   ) => {
-    await worldContract.write
-      .armyMove([armyID, x, y, BigInt(gameID)])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.armyMove([
+        armyID,
+        x,
+        y,
+        BigInt(gameID),
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const attackToArmy = async (
     armyOne: string,
     armyTwo: string,
     gameID: number
   ) => {
-    await worldContract.write
-      .attackToArmy([armyOne, armyTwo, BigInt(gameID)])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.attackToArmy([
+        armyOne,
+        armyTwo,
+        BigInt(gameID),
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const castleCapture = async (armyID: string, castleID: string) => {
-    await worldContract.write
-      .captureCastle([armyID, castleID])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.captureCastle([armyID, castleID]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const joinGame = async (gameID: number) => {
-    await worldContract.write
-      .joinGame([BigInt(gameID)])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.joinGame([BigInt(gameID)]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const commitSeed = async (gameID: number, seed: number) => {
-    await worldContract.write
-      .commitSeed([BigInt(gameID), BigInt(seed)])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.commitSeed([
+        BigInt(gameID),
+        BigInt(seed),
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const resourceSystemInit = async (gameID: number) => {
-    await worldContract.write
-      .resourceSystemInit([BigInt(gameID)])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.resourceSystemInit([BigInt(gameID)]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const captureMine = async (
     armyID: string,
     mineID: string,
     attackerType: number
   ) => {
-    await worldContract.write
-      .captureMine([armyID, mineID, attackerType])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.captureMine([
+        armyID,
+        mineID,
+        attackerType,
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const sellResource = async (
     gameID: number,
     amount: number,
     mineType: number
   ) => {
-    await worldContract.write
-      .sellResource([BigInt(gameID), BigInt(amount), mineType])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.sellResource([
+        BigInt(gameID),
+        BigInt(amount),
+        mineType,
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const claimWinner = async (gameID: number, address: string) => {
-    await worldContract.write
-      .claimWinner([address, BigInt(gameID)])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.claimWinner([
+        address,
+        BigInt(gameID),
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const buildDock = async (
     x: number,
     y: number,
     armyID: string,
     gameID: number
   ) => {
-    await worldContract.write
-      .buildDock([x, y, armyID, BigInt(gameID)])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.buildDock([
+        x,
+        y,
+        armyID,
+        BigInt(gameID),
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const captureDock = async (armyID: string, dockID: string) => {
-    await worldContract.write
-      .captureDock([armyID, dockID])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.captureDock([armyID, dockID]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const settleFleet = async (
     x: number,
     y: number,
@@ -267,8 +248,8 @@ export function createSystemCalls({
     numBig: number,
     gameID: number
   ) => {
-    await worldContract.write
-      .settleFleet([
+    try {
+      const tx = await worldContract.write.settleFleet([
         x,
         y,
         dockID,
@@ -278,75 +259,70 @@ export function createSystemCalls({
           numBig,
           gameID,
         },
-      ])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const moveFleet = async (fleetID: string, x: number, y: number) => {
-    await worldContract.write
-      .moveFleet([fleetID, x, y])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.moveFleet([fleetID, x, y]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const attackFleet = async (
     fleetOne: string,
     fleetTwo: string,
     gameID: number
   ) => {
-    await worldContract.write
-      .attackFleet([fleetOne, fleetTwo, BigInt(gameID)])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.attackFleet([
+        fleetOne,
+        fleetTwo,
+        BigInt(gameID),
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const buyResource = async (
     gameID: number,
     amount: number,
     mineType: number
   ) => {
-    await worldContract.write
-      .buyResource([BigInt(gameID), BigInt(amount), mineType])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.buyResource([
+        BigInt(gameID),
+        BigInt(amount),
+        mineType,
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
 
   const exitGame = async (gameID: number) => {
-    await worldContract.write
-      .exitGame([BigInt(gameID)])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.exitGame([BigInt(gameID)]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
 
   const updateArmy = async (
@@ -357,8 +333,8 @@ export function createSystemCalls({
     castleID: string,
     gameID: number
   ) => {
-    await worldContract.write
-      .updateArmy([
+    try {
+      const tx = await worldContract.write.updateArmy([
         armyID,
         {
           numSwordsman,
@@ -367,60 +343,55 @@ export function createSystemCalls({
           gameID: BigInt(gameID),
         },
         castleID,
-      ])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const mergeArmy = async (
     armyOneID: string,
     armyTwoID: string,
     gameID: number
   ) => {
-    await worldContract.write
-      .mergeArmy([armyOneID, armyTwoID, BigInt(gameID)])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.mergeArmy([
+        armyOneID,
+        armyTwoID,
+        BigInt(gameID),
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const sendMessage = async (gameID: number, message: string) => {
-    await worldContract.write
-      .sendMessage([BigInt(gameID), message])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.sendMessage([
+        BigInt(gameID),
+        message,
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   const collectResource = async (gameID: number) => {
-    await worldContract.write
-      .collectResource([BigInt(gameID)])
-      .then(async (tx) => {
-        await waitForTransaction(tx);
-        return tx;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    try {
+      const tx = await worldContract.write.collectResource([BigInt(gameID)]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
-
   return {
     initGame,
     initUsername,
