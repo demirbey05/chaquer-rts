@@ -58,16 +58,18 @@ setup().then(async (result) => {
     </MUDProvider >
   );
 
-  const { mount: mountDevTools } = await import("@latticexyz/dev-tools");
-  mountDevTools({
-    config: mudConfig,
-    publicClient: result.network.publicClient,
-    walletClient: result.network.walletClient,
-    latestBlock$: result.network.latestBlock$,
-    storedBlockLogs$: result.network.storedBlockLogs$,
-    worldAddress: result.network.worldContract.address,
-    worldAbi: result.network.worldContract.abi,
-    write$: result.network.write$,
-    recsWorld: result.network.world,
-  });
+  if (import.meta.env.DEV) {
+    const { mount: mountDevTools } = await import("@latticexyz/dev-tools");
+    mountDevTools({
+      config: mudConfig,
+      publicClient: result.network.publicClient,
+      walletClient: result.network.walletClient,
+      latestBlock$: result.network.latestBlock$,
+      storedBlockLogs$: result.network.storedBlockLogs$,
+      worldAddress: result.network.worldContract.address,
+      worldAbi: result.network.worldContract.abi,
+      write$: result.network.write$,
+      recsWorld: result.network.world,
+    });
+  }
 });
