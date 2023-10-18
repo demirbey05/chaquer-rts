@@ -90,6 +90,7 @@ export async function setupNetwork() {
    */
   const { components, latestBlock$, storedBlockLogs$, waitForTransaction } =
     await syncToRecs({
+      indexerUrl: "https://chaquer-indexer.dash.ardasevinc.xyz/trpc",
       world,
       config: mudConfig,
       address: networkConfig.worldAddress as Hex,
