@@ -16,7 +16,9 @@ export const CastleAttackDrawer = () => {
     setEnemyArmyConfig,
     myArmyConfig,
     attackToArmyPositionToCastle,
+    setAttackToArmyPositionToCastle,
     attackFromArmyPositionToCastle,
+    setAttackFromArmyPositionToCastle,
     setIsAttackStage } = useAttack();
 
   const [castleArmy, setCastleArmy] = useState<any>();
@@ -73,8 +75,8 @@ export const CastleAttackDrawer = () => {
     setIsAttackStage(false);
     setMyArmyConfig(undefined);
     setEnemyArmyConfig(undefined);
-    attackToArmyPositionToCastle(undefined)
-    attackFromArmyPositionToCastle(undefined)
+    setAttackToArmyPositionToCastle(undefined)
+    setAttackFromArmyPositionToCastle(undefined)
   };
 
   if (isLoading) {

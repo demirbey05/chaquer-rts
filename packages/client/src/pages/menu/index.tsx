@@ -37,7 +37,7 @@ export const Menu = () => {
       <>
         <MenuTitle />
         <VersionInfo />
-        <div className="menu-row" style={refresh === 0 ? { justifyContent: "center" } : { justifyContent: "space-evenly", padding: "0 15%" }}>
+        <div className='container' style={refresh === 0 ? { justifyContent: "center" } : {}}>
           {
             refresh === 0 &&
             <div id="menu-items">
@@ -47,47 +47,45 @@ export const Menu = () => {
           }
           {
             refresh !== 0 &&
-            <div className='col'>
-              <PlayerInfoCard
-                username={username}
-                setIsUserModalOpen={setIsUserModalOpen} />
-              <div className='menu-row mt-5'>
-                <div className='col-8'>
-                  <Tabs isFitted variant='enclosed'>
-                    <TabList backgroundColor={"rgba(0,0,0,0.8)"} textColor={'white'}>
-                      <Tab _selected={{ color: 'white', bg: 'green.500' }}>Live Games</Tab>
-                      <Tab _selected={{ color: 'white', bg: 'blue.500' }}>Completed Games</Tab>
-                    </TabList>
-                    <TabPanels>
-                      <TabPanel p={0}>
-                        <LiveGameTable
-                          selectedPlayers={selectedPlayersFilter}
-                          gameNameFilter={gameNameFilter}
-                          setIsJoinGameModalOpen={setIsJoinGameModalOpen}
-                          setIsSpectateGameModalOpen={setIsSpectateGameModalOpen}
-                          username={username} />
-                      </TabPanel>
-                      <TabPanel p={0}>
-                        <CompletedGameTable
-                          gameNameFilter={gameNameFilter} />
-                      </TabPanel>
-                    </TabPanels>
-                  </Tabs>
-                </div>
-                <div className='col-4'>
-                  <div id="menu-items">
-                    <span className='text-white'>QUICK FILTER</span>
-                    <Accordion defaultIndex={[0]} allowMultiple>
-                      <GameNameFilter setFilter={setGameNameFilter} />
-                      <UserNumberFilter
-                        setSelectedPlayers={setSelectedPlayersFilter}
-                        selectedPlayers={selectedPlayersFilter} />
-                    </Accordion>
-                    <CreateGameButton
-                      setIsCreateGameModalOpen={setIsCreateGameModalOpen}
-                      username={username} />
-                    <GameTutorialButton />
-                  </div>
+            <div className='menu-row'>
+              <div className='col-8 pe-4 ps-4'>
+                <Tabs isFitted variant='enclosed'>
+                  <TabList backgroundColor={"rgba(0,0,0,0.8)"} textColor={'white'}>
+                    <Tab _selected={{ color: 'white', bg: 'green.500' }}>Live Games</Tab>
+                    <Tab _selected={{ color: 'white', bg: 'blue.500' }}>Completed Games</Tab>
+                  </TabList>
+                  <TabPanels>
+                    <TabPanel p={0}>
+                      <LiveGameTable
+                        selectedPlayers={selectedPlayersFilter}
+                        gameNameFilter={gameNameFilter}
+                        setIsJoinGameModalOpen={setIsJoinGameModalOpen}
+                        setIsSpectateGameModalOpen={setIsSpectateGameModalOpen}
+                        username={username} />
+                    </TabPanel>
+                    <TabPanel p={0}>
+                      <CompletedGameTable
+                        gameNameFilter={gameNameFilter} />
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </div>
+              <div className='col-4 pe-4'>
+                <PlayerInfoCard
+                  username={username}
+                  setIsUserModalOpen={setIsUserModalOpen} />
+                <div id="menu-items">
+                  <span className='text-white mt-3'>QUICK FILTER</span>
+                  <Accordion defaultIndex={[0]} allowMultiple>
+                    <GameNameFilter setFilter={setGameNameFilter} />
+                    <UserNumberFilter
+                      setSelectedPlayers={setSelectedPlayersFilter}
+                      selectedPlayers={selectedPlayersFilter} />
+                  </Accordion>
+                  <CreateGameButton
+                    setIsCreateGameModalOpen={setIsCreateGameModalOpen}
+                    username={username} />
+                  <GameTutorialButton />
                 </div>
               </div>
             </div>
@@ -154,7 +152,7 @@ const GameTutorialButton = () => {
 
 const MenuTitle = () => {
   return (
-    <div className='row d-flex justify-content-center'>
+    <div className='row justify-content-center'>
       <h2 className="menu-title">
         Chaquer
       </h2>

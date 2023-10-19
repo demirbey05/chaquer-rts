@@ -10,8 +10,8 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
     const gameList = useGameList();
 
     return (
-        <TableContainer textColor={"white"} overflowY="scroll" backgroundColor={"rgba(0,0,0,0.8)"} height={"375px"}>
-            <Table variant='simple' layout={"responsive"}>
+        <TableContainer textColor={"white"} overflowY={"auto"} backgroundColor={"rgba(0,0,0,0.8)"} height={"525px"}>
+            <Table variant='simple'>
                 <Thead position="sticky" top={0} zIndex="10" backgroundColor={"black"}>
                     <Tr>
                         <Th className='text-white'>Map Preview</Th>
@@ -38,7 +38,7 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
                                     <Td>{Number(game.numberOfPlayer)} / {Number(game.limitOfPlayer)}</Td>
                                     <Td>
                                         <JoinGameButtom
-                                            isDisabled={!username}
+                                            isDisabled={!username || game.state === 3 || Number(game.numberOfPlayer) === Number(game.limitOfPlayer)}
                                             setIsJoinGameModalOpen={setIsJoinGameModalOpen}
                                             setGameID={setGameID}
                                             gameID={Number(game.mirror)} />

@@ -77,7 +77,7 @@ export const JoinGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
                             userValid === undefined && gameData && (gameData.state === 2 || gameData.state === 3 || gameData.state === 4) ?
                                 <Alert textColor={"black"} status='warning'>
                                     <AlertIcon />
-                                    Seems game is full. You cannot join.
+                                    Seems game is full or started. You cannot join.
                                 </Alert> :
                                 <div className="modal-header justify-center mb-2">
                                     <p>Click to Join Game button to join game.</p>

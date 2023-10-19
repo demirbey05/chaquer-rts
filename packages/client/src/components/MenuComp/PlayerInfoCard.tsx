@@ -4,10 +4,10 @@ import { usePlayer } from '../../context/PlayerContext';
 import { WarningTwoIcon, EditIcon } from "@chakra-ui/icons";
 
 export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: string, setIsUserModalOpen: (value: boolean) => void }) => {
-    const showUsername = !!username;
+    const showUsername = username;
 
     return (
-        <div className='row d-flex justify-center'>
+        <div className='row d-flex justify-center playerCardMargin'>
             <div className="player-card-info-modal">
                 <div className='d-flex justify-content-center mb-2'>
                     <WrapItem>
