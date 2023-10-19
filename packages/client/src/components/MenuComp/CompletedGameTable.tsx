@@ -29,7 +29,7 @@ export const CompletedGameTable = ({ gameNameFilter }: { gameNameFilter: string 
                             .map((game, key) => (
                                 <Tr key={key}>
                                     <Td><img src={mapImg} alt="Map Image" width={"75"} height={"75"} /></Td>
-                                    <Td>{game.name && game.name.length > 20 ? `${game.name.slice(0, 15)}...` : game.name}</Td>
+                                    <Td>{game.name && game.name.length > 15 ? `${game.name.slice(0, 15)}...` : game.name}</Td>
                                     <Td>{getComponentValueStrict(components.AddressToUsername,
                                         encodeEntity(components.AddressToUsername.metadata.keySchema, { ownerAddress: game.winner }))!.userName}
                                     </Td>

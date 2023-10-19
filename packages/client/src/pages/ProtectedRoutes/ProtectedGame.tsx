@@ -8,7 +8,7 @@ export const ProtectedGame = ({ isUserValid }: { isUserValid: boolean | undefine
 
     const progress = useSyncProgress();
 
-    if (progress && progress.percentage !== 100) {
+    if (progress && progress.step !== "live") {
         return <Navigate to="/" />
     }
 

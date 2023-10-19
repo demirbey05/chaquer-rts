@@ -125,7 +125,7 @@ const CreateGameButton = ({ setIsCreateGameModalOpen, username }: { setIsCreateG
 const EnterGameButton = () => {
   const { setRefresh, refresh } = useTerrain();
   const progress = useSyncProgress();
-  const progressPercentage = progress ? progress.percentage : 0;
+  const progressStep = progress ? progress.step : "";
 
   const handleRefresh = (event: any) => {
     setRefresh(refresh + 1);
@@ -134,7 +134,7 @@ const EnterGameButton = () => {
     <button
       className='btn btn-dark menu-buttons mb-4'
       onClick={handleRefresh}
-      disabled={progressPercentage !== 100}>
+      disabled={progressStep !== "live"}>
       Enter the Game
     </button>
   )

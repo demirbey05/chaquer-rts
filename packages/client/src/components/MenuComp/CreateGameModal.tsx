@@ -42,6 +42,7 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    content: "<@&1146814229312188477>",
                     embeds: [
                         {
                             fields: [
