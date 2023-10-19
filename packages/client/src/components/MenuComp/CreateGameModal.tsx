@@ -1,6 +1,6 @@
 import map from "../../../map.json";
 import { useEffect, useState } from "react";
-import { Button } from "@chakra-ui/react";
+import { Button, Alert, AlertIcon } from "@chakra-ui/react";
 import { useMUD } from "../../context/MUDContext";
 import { useTerrain } from "../../context/TerrainContext";
 import { useGame } from "../../context/GameContext";
@@ -15,11 +15,13 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
     const [numberOfPlayer, setNumberOfPlayer] = useState<number>(0);
     const [gameName, setGameName] = useState<string>("");
 
+    const [isCreateGameModalOpen, setIsCreateGameModelOpen] = useState<boolean>(false);
+
     const [disable, setDisable] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const toggleDrawer = () => {
-        setIsOpen(!isOpen);
+        setIsCreateGameModelOpen(!isCreateGameModalOpen)
     };
 
     useEffect(() => {
@@ -36,6 +38,30 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
         const initGameTx = await systemCalls.initGame(numberOfPlayer, width, height, data, gameName, 1);
         if (initGameTx) {
             setGameID(Number(initGameTx.result))
+            const options = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    embeds: [
+                        {
+                            fields: [
+                                { name: "Game Name", value: `${gameName}`, inline: true },
+                                { name: "Player Limit", value: `${numberOfPlayer}`, inline: true },
+                            ],
+                            title: "New Game Created!",
+                            description: "[Go to game](https://go.chaquer.xyz)",
+                            color: 10025880,
+                        },
+                    ],
+                }),
+            };
+
+            try {
+                await fetch('https://discord.com/api/webhooks/1164497192879411211/hXwMgsEiM-ldEx28QJo5Oqoj1rgeV3_R6DjnvmRAKZKsT7Q3dKMAGKPbY-fg8qrwAqvM', options)
+            } catch (e) {
+                console.log(e)
+            }
+
             setIsLoading(false)
             toggleDrawer();
             setIsJoinOpen(true)
@@ -43,7 +69,7 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
         setIsLoading(false)
     }
 
-    if (isOpen) {
+    if (isCreateGameModalOpen) {
         return (
             <div className='menu-create-game-overlay'>
                 <div className='menu-create-game-container'>
@@ -71,6 +97,14 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
                 </div>
             </div>
         )
+    } else if (isOpen) {
+        return <div className='menu-create-game-overlay'>
+            <div className='menu-create-game-container'>
+                <div className="menu-create-game-modal">
+                    <CreateGameWarning setIsCreateGameModalOpen={setIsCreateGameModelOpen} setIsOpen={setIsOpen} />
+                </div>
+            </div>
+        </div>
     } else {
         return null;
     }
@@ -103,3 +137,22 @@ const BackMapButton = ({ toggleDrawer, isLoading }: { toggleDrawer: () => void, 
         </Button>
     )
 }
+
+const CreateGameWarning = ({ setIsCreateGameModalOpen, setIsOpen }: { setIsCreateGameModalOpen: (value: boolean) => void, setIsOpen: (value: boolean) => void }) => {
+    return (
+        <>
+            <div className="modal-header justify-center mb-2">
+                <h1 className="modal-title text-2xl" id="userNameModalLabel">
+                    Warning about Creating Game
+                </h1>
+            </div>
+            <Alert status='info' textAlign={"left"} textColor={"black"}>
+                <AlertIcon />
+                Info: Remember, you have the authority to determine the number of players for the game.
+                When initiating a game, it is crucial to ensure that you can assemble a sufficient number of participants for the game to commence.
+                Failure to do so may result in the game not being able to start
+            </Alert>
+            <Button onClick={() => { setIsCreateGameModalOpen(true); setIsOpen(false) }} colorScheme={"facebook"} mt={3}>I Understood</Button>
+        </>
+    )
+} 

@@ -33,7 +33,7 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
                             .map((game, key) => (
                                 <Tr key={key}>
                                     <Td><img src={mapImg} alt="Map Image" width={"75"} height={"75"} /></Td>
-                                    <Td>{game.name}</Td>
+                                    <Td>{game.name && game.name.length > 20 ? `${game.name.slice(0, 15)}...` : game.name}</Td>
                                     <Td>{getGameState(game.state)}</Td>
                                     <Td>{Number(game.numberOfPlayer)} / {Number(game.limitOfPlayer)}</Td>
                                     <Td>
