@@ -38,7 +38,7 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
                                     <Td>{Number(game.numberOfPlayer)} / {Number(game.limitOfPlayer)}</Td>
                                     <Td>
                                         <JoinGameButtom
-                                            isDisabled={!username || game.state === 3 || Number(game.numberOfPlayer) === Number(game.limitOfPlayer)}
+                                            isDisabled={!username}
                                             setIsJoinGameModalOpen={setIsJoinGameModalOpen}
                                             setGameID={setGameID}
                                             gameID={Number(game.mirror)} />
