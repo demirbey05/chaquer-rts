@@ -290,9 +290,9 @@ library LibUtils {
   ) internal {
     uint256 startBlock = GameMetaData.getStartBlock(config.gameID);
     uint256 ownerBalance = CreditOwn.get(config.gameID, owner);
-    uint256 swordsmanPrice = LibVRGDA.getArmyPrice(world, config.gameID, 0, block.number - startBlock);
-    uint256 archerPrice = LibVRGDA.getArmyPrice(world, config.gameID, 1, block.number - startBlock);
-    uint256 cavalryPrice = LibVRGDA.getArmyPrice(world, config.gameID, 2, block.number - startBlock);
+    uint256 swordsmanPrice = LibVRGDA.getArmyPrice(config.gameID, 0, block.number - startBlock);
+    uint256 archerPrice = LibVRGDA.getArmyPrice(config.gameID, 1, block.number - startBlock);
+    uint256 cavalryPrice = LibVRGDA.getArmyPrice(config.gameID, 2, block.number - startBlock);
 
     uint256 costSwordsman = swordsmanPrice * config.numSwordsman;
     uint256 costArcher = archerPrice * config.numArcher;

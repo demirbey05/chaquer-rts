@@ -77,8 +77,8 @@ contract MapSystem is System {
     // Get control parameters
 
     address ownerCandidate = _msgSender();
-    uint32 width = MapConfig.getWidth(IStore(_world()), config.gameID);
-    uint32 height = MapConfig.getHeight(IStore(_world()), config.gameID);
+    uint32 width = MapConfig.getWidth(config.gameID);
+    uint32 height = MapConfig.getHeight(config.gameID);
 
     if (MapConfig.getItemTerrain(config.gameID, x * width + y)[0] != hex"01") {
       revert ArmySettle__WrongTerrainType();
@@ -130,7 +130,7 @@ contract MapSystem is System {
     uint256 gameID
   ) public {
     address ownerCandidate = _msgSender();
-    uint32 width = MapConfig.getWidth(IStore(_world()), gameID);
+    uint32 width = MapConfig.getWidth(gameID);
     (address armyOwner, uint256 gameIDArmy) = ArmyOwnable.get(armyID);
     (uint32 xArmy, uint32 yArmy, ) = Position.get(armyID);
     ResourceOwnData memory resourcesOfUser = ResourceOwn.get(ownerCandidate, gameID);

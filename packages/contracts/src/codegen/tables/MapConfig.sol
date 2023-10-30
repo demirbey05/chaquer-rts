@@ -97,13 +97,6 @@ library MapConfig {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Get width.
    */
   function getWidth(uint256 gameID) internal view returns (uint32 width) {
@@ -126,17 +119,6 @@ library MapConfig {
   }
 
   /**
-   * @notice Get width (using the specified store).
-   */
-  function getWidth(IStore _store, uint256 gameID) internal view returns (uint32 width) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (uint32(bytes4(_blob)));
-  }
-
-  /**
    * @notice Set width.
    */
   function setWidth(uint256 gameID, uint32 width) internal {
@@ -154,16 +136,6 @@ library MapConfig {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((width)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set width (using the specified store).
-   */
-  function setWidth(IStore _store, uint256 gameID, uint32 width) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((width)), _fieldLayout);
   }
 
   /**
@@ -189,17 +161,6 @@ library MapConfig {
   }
 
   /**
-   * @notice Get height (using the specified store).
-   */
-  function getHeight(IStore _store, uint256 gameID) internal view returns (uint32 height) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 1, _fieldLayout);
-    return (uint32(bytes4(_blob)));
-  }
-
-  /**
    * @notice Set height.
    */
   function setHeight(uint256 gameID, uint32 height) internal {
@@ -217,16 +178,6 @@ library MapConfig {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((height)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set height (using the specified store).
-   */
-  function setHeight(IStore _store, uint256 gameID, uint32 height) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((height)), _fieldLayout);
   }
 
   /**
@@ -252,17 +203,6 @@ library MapConfig {
   }
 
   /**
-   * @notice Get terrain (using the specified store).
-   */
-  function getTerrain(IStore _store, uint256 gameID) internal view returns (bytes memory terrain) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    bytes memory _blob = _store.getDynamicField(_tableId, _keyTuple, 0);
-    return (bytes(_blob));
-  }
-
-  /**
    * @notice Set terrain.
    */
   function setTerrain(uint256 gameID, bytes memory terrain) internal {
@@ -280,16 +220,6 @@ library MapConfig {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((terrain)));
-  }
-
-  /**
-   * @notice Set terrain (using the specified store).
-   */
-  function setTerrain(IStore _store, uint256 gameID, bytes memory terrain) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setDynamicField(_tableId, _keyTuple, 0, bytes((terrain)));
   }
 
   /**
@@ -313,19 +243,6 @@ library MapConfig {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     uint256 _byteLength = StoreCore.getDynamicFieldLength(_tableId, _keyTuple, 0);
-    unchecked {
-      return _byteLength / 1;
-    }
-  }
-
-  /**
-   * @notice Get the length of terrain (using the specified store).
-   */
-  function lengthTerrain(IStore _store, uint256 gameID) internal view returns (uint256) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    uint256 _byteLength = _store.getDynamicFieldLength(_tableId, _keyTuple, 0);
     unchecked {
       return _byteLength / 1;
     }
@@ -360,20 +277,6 @@ library MapConfig {
   }
 
   /**
-   * @notice Get an item of terrain (using the specified store).
-   * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
-   */
-  function getItemTerrain(IStore _store, uint256 gameID, uint256 _index) internal view returns (bytes memory) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    unchecked {
-      bytes memory _blob = _store.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
-      return (bytes(_blob));
-    }
-  }
-
-  /**
    * @notice Push a slice to terrain.
    */
   function pushTerrain(uint256 gameID, bytes memory _slice) internal {
@@ -394,16 +297,6 @@ library MapConfig {
   }
 
   /**
-   * @notice Push a slice to terrain (using the specified store).
-   */
-  function pushTerrain(IStore _store, uint256 gameID, bytes memory _slice) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.pushToDynamicField(_tableId, _keyTuple, 0, bytes((_slice)));
-  }
-
-  /**
    * @notice Pop a slice from terrain.
    */
   function popTerrain(uint256 gameID) internal {
@@ -421,16 +314,6 @@ library MapConfig {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.popFromDynamicField(_tableId, _keyTuple, 0, 1);
-  }
-
-  /**
-   * @notice Pop a slice from terrain (using the specified store).
-   */
-  function popTerrain(IStore _store, uint256 gameID) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.popFromDynamicField(_tableId, _keyTuple, 0, 1);
   }
 
   /**
@@ -460,19 +343,6 @@ library MapConfig {
   }
 
   /**
-   * @notice Update a slice of terrain (using the specified store) at `_index`.
-   */
-  function updateTerrain(IStore _store, uint256 gameID, uint256 _index, bytes memory _slice) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    unchecked {
-      bytes memory _encoded = bytes((_slice));
-      _store.spliceDynamicData(_tableId, _keyTuple, 0, uint40(_index * 1), uint40(_encoded.length), _encoded);
-    }
-  }
-
-  /**
    * @notice Get the full data.
    */
   function get(uint256 gameID) internal view returns (uint32 width, uint32 height, bytes memory terrain) {
@@ -495,24 +365,6 @@ library MapConfig {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = StoreCore.getRecord(
-      _tableId,
-      _keyTuple,
-      _fieldLayout
-    );
-    return decode(_staticData, _encodedLengths, _dynamicData);
-  }
-
-  /**
-   * @notice Get the full data (using the specified store).
-   */
-  function get(
-    IStore _store,
-    uint256 gameID
-  ) internal view returns (uint32 width, uint32 height, bytes memory terrain) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = _store.getRecord(
       _tableId,
       _keyTuple,
       _fieldLayout
@@ -548,21 +400,6 @@ library MapConfig {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData, _fieldLayout);
-  }
-
-  /**
-   * @notice Set the full data using individual values (using the specified store).
-   */
-  function set(IStore _store, uint256 gameID, uint32 width, uint32 height, bytes memory terrain) internal {
-    bytes memory _staticData = encodeStatic(width, height);
-
-    PackedCounter _encodedLengths = encodeLengths(terrain);
-    bytes memory _dynamicData = encodeDynamic(terrain);
-
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
   }
 
   /**
@@ -623,16 +460,6 @@ library MapConfig {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store, uint256 gameID) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**
