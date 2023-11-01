@@ -18,6 +18,5 @@ eth_rpc_url = "https://follower.testnet-chain.linfra.xyz"
 [profile.hackathon-testnet]
 eth_rpc_url = "https://lattice-goerli-sequencer.optimism.io"
 
-
 [profile.loot-chain]
 eth_rpc_url = "https://testnet.rpc.lootchain.com/http"
