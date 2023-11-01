@@ -120,7 +120,7 @@ contract NavalSystem is System {
     FleetConfigData memory fleet
   ) public returns (bytes32) {
     address ownerCandidate = _msgSender();
-    uint32 width = MapConfig.getWidth(IStore(_world()), fleet.gameID);
+    uint32 width = MapConfig.getWidth(fleet.gameID);
     uint256 costCredit = fleet.numSmall *
       smallCreditCost +
       fleet.numMedium *

@@ -106,13 +106,6 @@ library ChatMessages {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Set time.
    */
   function setTime(bytes32 key, uint256 time) internal {
@@ -133,16 +126,6 @@ library ChatMessages {
   }
 
   /**
-   * @notice Set time (using the specified store).
-   */
-  function setTime(IStore _store, bytes32 key, uint256 time) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((time)), _fieldLayout);
-  }
-
-  /**
    * @notice Set gameID.
    */
   function setGameID(bytes32 key, uint256 gameID) internal {
@@ -160,16 +143,6 @@ library ChatMessages {
     _keyTuple[0] = key;
 
     StoreCore.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((gameID)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set gameID (using the specified store).
-   */
-  function setGameID(IStore _store, bytes32 key, uint256 gameID) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((gameID)), _fieldLayout);
   }
 
   /**
@@ -203,28 +176,6 @@ library ChatMessages {
   }
 
   /**
-   * @notice Set the full data using individual values (using the specified store).
-   */
-  function set(
-    IStore _store,
-    bytes32 key,
-    uint256 time,
-    uint256 gameID,
-    string memory userName,
-    string memory message
-  ) internal {
-    bytes memory _staticData = encodeStatic(time, gameID);
-
-    PackedCounter _encodedLengths = encodeLengths(userName, message);
-    bytes memory _dynamicData = encodeDynamic(userName, message);
-
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
-  }
-
-  /**
    * @notice Set the full data using the data struct.
    */
   function set(bytes32 key, ChatMessagesData memory _table) internal {
@@ -252,21 +203,6 @@ library ChatMessages {
     _keyTuple[0] = key;
 
     StoreCore.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData, _fieldLayout);
-  }
-
-  /**
-   * @notice Set the full data using the data struct (using the specified store).
-   */
-  function set(IStore _store, bytes32 key, ChatMessagesData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.time, _table.gameID);
-
-    PackedCounter _encodedLengths = encodeLengths(_table.userName, _table.message);
-    bytes memory _dynamicData = encodeDynamic(_table.userName, _table.message);
-
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
   }
 
   /**
@@ -333,16 +269,6 @@ library ChatMessages {
     _keyTuple[0] = key;
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store, bytes32 key) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**

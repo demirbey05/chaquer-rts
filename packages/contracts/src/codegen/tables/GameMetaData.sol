@@ -127,13 +127,6 @@ library GameMetaData {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Get mirror.
    */
   function getMirror(uint256 gameID) internal view returns (uint256 mirror) {
@@ -156,17 +149,6 @@ library GameMetaData {
   }
 
   /**
-   * @notice Get mirror (using the specified store).
-   */
-  function getMirror(IStore _store, uint256 gameID) internal view returns (uint256 mirror) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
    * @notice Set mirror.
    */
   function setMirror(uint256 gameID, uint256 mirror) internal {
@@ -184,16 +166,6 @@ library GameMetaData {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((mirror)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set mirror (using the specified store).
-   */
-  function setMirror(IStore _store, uint256 gameID, uint256 mirror) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((mirror)), _fieldLayout);
   }
 
   /**
@@ -219,17 +191,6 @@ library GameMetaData {
   }
 
   /**
-   * @notice Get state (using the specified store).
-   */
-  function getState(IStore _store, uint256 gameID) internal view returns (State state) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 1, _fieldLayout);
-    return State(uint8(bytes1(_blob)));
-  }
-
-  /**
    * @notice Set state.
    */
   function setState(uint256 gameID, State state) internal {
@@ -247,16 +208,6 @@ library GameMetaData {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked(uint8(state)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set state (using the specified store).
-   */
-  function setState(IStore _store, uint256 gameID, State state) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked(uint8(state)), _fieldLayout);
   }
 
   /**
@@ -282,17 +233,6 @@ library GameMetaData {
   }
 
   /**
-   * @notice Get mapId (using the specified store).
-   */
-  function getMapId(IStore _store, uint256 gameID) internal view returns (uint8 mapId) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 2, _fieldLayout);
-    return (uint8(bytes1(_blob)));
-  }
-
-  /**
    * @notice Set mapId.
    */
   function setMapId(uint256 gameID, uint8 mapId) internal {
@@ -310,16 +250,6 @@ library GameMetaData {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((mapId)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set mapId (using the specified store).
-   */
-  function setMapId(IStore _store, uint256 gameID, uint8 mapId) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((mapId)), _fieldLayout);
   }
 
   /**
@@ -345,17 +275,6 @@ library GameMetaData {
   }
 
   /**
-   * @notice Get startBlock (using the specified store).
-   */
-  function getStartBlock(IStore _store, uint256 gameID) internal view returns (uint256 startBlock) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 3, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
    * @notice Set startBlock.
    */
   function setStartBlock(uint256 gameID, uint256 startBlock) internal {
@@ -373,16 +292,6 @@ library GameMetaData {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((startBlock)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set startBlock (using the specified store).
-   */
-  function setStartBlock(IStore _store, uint256 gameID, uint256 startBlock) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((startBlock)), _fieldLayout);
   }
 
   /**
@@ -408,17 +317,6 @@ library GameMetaData {
   }
 
   /**
-   * @notice Get winner (using the specified store).
-   */
-  function getWinner(IStore _store, uint256 gameID) internal view returns (address winner) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 4, _fieldLayout);
-    return (address(bytes20(_blob)));
-  }
-
-  /**
    * @notice Set winner.
    */
   function setWinner(uint256 gameID, address winner) internal {
@@ -436,16 +334,6 @@ library GameMetaData {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 4, abi.encodePacked((winner)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set winner (using the specified store).
-   */
-  function setWinner(IStore _store, uint256 gameID, address winner) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setStaticField(_tableId, _keyTuple, 4, abi.encodePacked((winner)), _fieldLayout);
   }
 
   /**
@@ -471,17 +359,6 @@ library GameMetaData {
   }
 
   /**
-   * @notice Get numberOfCastle (using the specified store).
-   */
-  function getNumberOfCastle(IStore _store, uint256 gameID) internal view returns (uint256 numberOfCastle) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 5, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
    * @notice Set numberOfCastle.
    */
   function setNumberOfCastle(uint256 gameID, uint256 numberOfCastle) internal {
@@ -499,16 +376,6 @@ library GameMetaData {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 5, abi.encodePacked((numberOfCastle)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set numberOfCastle (using the specified store).
-   */
-  function setNumberOfCastle(IStore _store, uint256 gameID, uint256 numberOfCastle) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setStaticField(_tableId, _keyTuple, 5, abi.encodePacked((numberOfCastle)), _fieldLayout);
   }
 
   /**
@@ -534,17 +401,6 @@ library GameMetaData {
   }
 
   /**
-   * @notice Get colorCursor (using the specified store).
-   */
-  function getColorCursor(IStore _store, uint256 gameID) internal view returns (uint256 colorCursor) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 6, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
    * @notice Set colorCursor.
    */
   function setColorCursor(uint256 gameID, uint256 colorCursor) internal {
@@ -562,16 +418,6 @@ library GameMetaData {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 6, abi.encodePacked((colorCursor)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set colorCursor (using the specified store).
-   */
-  function setColorCursor(IStore _store, uint256 gameID, uint256 colorCursor) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setStaticField(_tableId, _keyTuple, 6, abi.encodePacked((colorCursor)), _fieldLayout);
   }
 
   /**
@@ -597,17 +443,6 @@ library GameMetaData {
   }
 
   /**
-   * @notice Get numberOfPlayer (using the specified store).
-   */
-  function getNumberOfPlayer(IStore _store, uint256 gameID) internal view returns (uint256 numberOfPlayer) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 7, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
    * @notice Set numberOfPlayer.
    */
   function setNumberOfPlayer(uint256 gameID, uint256 numberOfPlayer) internal {
@@ -625,16 +460,6 @@ library GameMetaData {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 7, abi.encodePacked((numberOfPlayer)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set numberOfPlayer (using the specified store).
-   */
-  function setNumberOfPlayer(IStore _store, uint256 gameID, uint256 numberOfPlayer) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setStaticField(_tableId, _keyTuple, 7, abi.encodePacked((numberOfPlayer)), _fieldLayout);
   }
 
   /**
@@ -660,17 +485,6 @@ library GameMetaData {
   }
 
   /**
-   * @notice Get limitOfPlayer (using the specified store).
-   */
-  function getLimitOfPlayer(IStore _store, uint256 gameID) internal view returns (uint256 limitOfPlayer) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 8, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
    * @notice Set limitOfPlayer.
    */
   function setLimitOfPlayer(uint256 gameID, uint256 limitOfPlayer) internal {
@@ -688,16 +502,6 @@ library GameMetaData {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 8, abi.encodePacked((limitOfPlayer)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set limitOfPlayer (using the specified store).
-   */
-  function setLimitOfPlayer(IStore _store, uint256 gameID, uint256 limitOfPlayer) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setStaticField(_tableId, _keyTuple, 8, abi.encodePacked((limitOfPlayer)), _fieldLayout);
   }
 
   /**
@@ -723,17 +527,6 @@ library GameMetaData {
   }
 
   /**
-   * @notice Get name (using the specified store).
-   */
-  function getName(IStore _store, uint256 gameID) internal view returns (string memory name) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    bytes memory _blob = _store.getDynamicField(_tableId, _keyTuple, 0);
-    return (string(_blob));
-  }
-
-  /**
    * @notice Set name.
    */
   function setName(uint256 gameID, string memory name) internal {
@@ -751,16 +544,6 @@ library GameMetaData {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((name)));
-  }
-
-  /**
-   * @notice Set name (using the specified store).
-   */
-  function setName(IStore _store, uint256 gameID, string memory name) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setDynamicField(_tableId, _keyTuple, 0, bytes((name)));
   }
 
   /**
@@ -784,19 +567,6 @@ library GameMetaData {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     uint256 _byteLength = StoreCore.getDynamicFieldLength(_tableId, _keyTuple, 0);
-    unchecked {
-      return _byteLength / 1;
-    }
-  }
-
-  /**
-   * @notice Get the length of name (using the specified store).
-   */
-  function lengthName(IStore _store, uint256 gameID) internal view returns (uint256) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    uint256 _byteLength = _store.getDynamicFieldLength(_tableId, _keyTuple, 0);
     unchecked {
       return _byteLength / 1;
     }
@@ -831,20 +601,6 @@ library GameMetaData {
   }
 
   /**
-   * @notice Get an item of name (using the specified store).
-   * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
-   */
-  function getItemName(IStore _store, uint256 gameID, uint256 _index) internal view returns (string memory) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    unchecked {
-      bytes memory _blob = _store.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
-      return (string(_blob));
-    }
-  }
-
-  /**
    * @notice Push a slice to name.
    */
   function pushName(uint256 gameID, string memory _slice) internal {
@@ -865,16 +621,6 @@ library GameMetaData {
   }
 
   /**
-   * @notice Push a slice to name (using the specified store).
-   */
-  function pushName(IStore _store, uint256 gameID, string memory _slice) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.pushToDynamicField(_tableId, _keyTuple, 0, bytes((_slice)));
-  }
-
-  /**
    * @notice Pop a slice from name.
    */
   function popName(uint256 gameID) internal {
@@ -892,16 +638,6 @@ library GameMetaData {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.popFromDynamicField(_tableId, _keyTuple, 0, 1);
-  }
-
-  /**
-   * @notice Pop a slice from name (using the specified store).
-   */
-  function popName(IStore _store, uint256 gameID) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.popFromDynamicField(_tableId, _keyTuple, 0, 1);
   }
 
   /**
@@ -931,19 +667,6 @@ library GameMetaData {
   }
 
   /**
-   * @notice Update a slice of name (using the specified store) at `_index`.
-   */
-  function updateName(IStore _store, uint256 gameID, uint256 _index, string memory _slice) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    unchecked {
-      bytes memory _encoded = bytes((_slice));
-      _store.spliceDynamicData(_tableId, _keyTuple, 0, uint40(_index * 1), uint40(_encoded.length), _encoded);
-    }
-  }
-
-  /**
    * @notice Get the full data.
    */
   function get(uint256 gameID) internal view returns (GameMetaDataData memory _table) {
@@ -966,21 +689,6 @@ library GameMetaData {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = StoreCore.getRecord(
-      _tableId,
-      _keyTuple,
-      _fieldLayout
-    );
-    return decode(_staticData, _encodedLengths, _dynamicData);
-  }
-
-  /**
-   * @notice Get the full data (using the specified store).
-   */
-  function get(IStore _store, uint256 gameID) internal view returns (GameMetaDataData memory _table) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = _store.getRecord(
       _tableId,
       _keyTuple,
       _fieldLayout
@@ -1063,44 +771,6 @@ library GameMetaData {
   }
 
   /**
-   * @notice Set the full data using individual values (using the specified store).
-   */
-  function set(
-    IStore _store,
-    uint256 gameID,
-    uint256 mirror,
-    State state,
-    uint8 mapId,
-    uint256 startBlock,
-    address winner,
-    uint256 numberOfCastle,
-    uint256 colorCursor,
-    uint256 numberOfPlayer,
-    uint256 limitOfPlayer,
-    string memory name
-  ) internal {
-    bytes memory _staticData = encodeStatic(
-      mirror,
-      state,
-      mapId,
-      startBlock,
-      winner,
-      numberOfCastle,
-      colorCursor,
-      numberOfPlayer,
-      limitOfPlayer
-    );
-
-    PackedCounter _encodedLengths = encodeLengths(name);
-    bytes memory _dynamicData = encodeDynamic(name);
-
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
-  }
-
-  /**
    * @notice Set the full data using the data struct.
    */
   function set(uint256 gameID, GameMetaDataData memory _table) internal {
@@ -1148,31 +818,6 @@ library GameMetaData {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData, _fieldLayout);
-  }
-
-  /**
-   * @notice Set the full data using the data struct (using the specified store).
-   */
-  function set(IStore _store, uint256 gameID, GameMetaDataData memory _table) internal {
-    bytes memory _staticData = encodeStatic(
-      _table.mirror,
-      _table.state,
-      _table.mapId,
-      _table.startBlock,
-      _table.winner,
-      _table.numberOfCastle,
-      _table.colorCursor,
-      _table.numberOfPlayer,
-      _table.limitOfPlayer
-    );
-
-    PackedCounter _encodedLengths = encodeLengths(_table.name);
-    bytes memory _dynamicData = encodeDynamic(_table.name);
-
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
   }
 
   /**
@@ -1270,16 +915,6 @@ library GameMetaData {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store, uint256 gameID) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**

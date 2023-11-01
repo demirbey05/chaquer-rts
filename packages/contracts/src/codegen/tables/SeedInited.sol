@@ -95,13 +95,6 @@ library SeedInited {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Get seedInit.
    */
   function getSeedInit(uint256 gameId, address user) internal view returns (bool seedInit) {
@@ -122,18 +115,6 @@ library SeedInited {
     _keyTuple[1] = bytes32(uint256(uint160(user)));
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (_toBool(uint8(bytes1(_blob))));
-  }
-
-  /**
-   * @notice Get seedInit (using the specified store).
-   */
-  function getSeedInit(IStore _store, uint256 gameId, address user) internal view returns (bool seedInit) {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameId));
-    _keyTuple[1] = bytes32(uint256(uint160(user)));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
     return (_toBool(uint8(bytes1(_blob))));
   }
 
@@ -162,18 +143,6 @@ library SeedInited {
   }
 
   /**
-   * @notice Get seedInit (using the specified store).
-   */
-  function get(IStore _store, uint256 gameId, address user) internal view returns (bool seedInit) {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameId));
-    _keyTuple[1] = bytes32(uint256(uint160(user)));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (_toBool(uint8(bytes1(_blob))));
-  }
-
-  /**
    * @notice Set seedInit.
    */
   function setSeedInit(uint256 gameId, address user, bool seedInit) internal {
@@ -193,17 +162,6 @@ library SeedInited {
     _keyTuple[1] = bytes32(uint256(uint160(user)));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((seedInit)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set seedInit (using the specified store).
-   */
-  function setSeedInit(IStore _store, uint256 gameId, address user, bool seedInit) internal {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameId));
-    _keyTuple[1] = bytes32(uint256(uint160(user)));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((seedInit)), _fieldLayout);
   }
 
   /**
@@ -229,17 +187,6 @@ library SeedInited {
   }
 
   /**
-   * @notice Set seedInit (using the specified store).
-   */
-  function set(IStore _store, uint256 gameId, address user, bool seedInit) internal {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameId));
-    _keyTuple[1] = bytes32(uint256(uint160(user)));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((seedInit)), _fieldLayout);
-  }
-
-  /**
    * @notice Delete all data for given keys.
    */
   function deleteRecord(uint256 gameId, address user) internal {
@@ -259,17 +206,6 @@ library SeedInited {
     _keyTuple[1] = bytes32(uint256(uint160(user)));
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store, uint256 gameId, address user) internal {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameId));
-    _keyTuple[1] = bytes32(uint256(uint160(user)));
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**

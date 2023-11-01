@@ -95,13 +95,6 @@ library Players {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Get userValid.
    */
   function getUserValid(uint256 gameId, address userAddress) internal view returns (bool userValid) {
@@ -122,18 +115,6 @@ library Players {
     _keyTuple[1] = bytes32(uint256(uint160(userAddress)));
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (_toBool(uint8(bytes1(_blob))));
-  }
-
-  /**
-   * @notice Get userValid (using the specified store).
-   */
-  function getUserValid(IStore _store, uint256 gameId, address userAddress) internal view returns (bool userValid) {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameId));
-    _keyTuple[1] = bytes32(uint256(uint160(userAddress)));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
     return (_toBool(uint8(bytes1(_blob))));
   }
 
@@ -162,18 +143,6 @@ library Players {
   }
 
   /**
-   * @notice Get userValid (using the specified store).
-   */
-  function get(IStore _store, uint256 gameId, address userAddress) internal view returns (bool userValid) {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameId));
-    _keyTuple[1] = bytes32(uint256(uint160(userAddress)));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (_toBool(uint8(bytes1(_blob))));
-  }
-
-  /**
    * @notice Set userValid.
    */
   function setUserValid(uint256 gameId, address userAddress, bool userValid) internal {
@@ -193,17 +162,6 @@ library Players {
     _keyTuple[1] = bytes32(uint256(uint160(userAddress)));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((userValid)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set userValid (using the specified store).
-   */
-  function setUserValid(IStore _store, uint256 gameId, address userAddress, bool userValid) internal {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameId));
-    _keyTuple[1] = bytes32(uint256(uint160(userAddress)));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((userValid)), _fieldLayout);
   }
 
   /**
@@ -229,17 +187,6 @@ library Players {
   }
 
   /**
-   * @notice Set userValid (using the specified store).
-   */
-  function set(IStore _store, uint256 gameId, address userAddress, bool userValid) internal {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameId));
-    _keyTuple[1] = bytes32(uint256(uint160(userAddress)));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((userValid)), _fieldLayout);
-  }
-
-  /**
    * @notice Delete all data for given keys.
    */
   function deleteRecord(uint256 gameId, address userAddress) internal {
@@ -259,17 +206,6 @@ library Players {
     _keyTuple[1] = bytes32(uint256(uint160(userAddress)));
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store, uint256 gameId, address userAddress) internal {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameId));
-    _keyTuple[1] = bytes32(uint256(uint160(userAddress)));
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**

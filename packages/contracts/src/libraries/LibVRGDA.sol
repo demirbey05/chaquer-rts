@@ -11,7 +11,6 @@ int256 constant basePriceResource = 0.1e18;
 
 library LibVRGDA {
   function getResourcePrice(
-    IWorld world,
     uint256 gameID,
     MineType mineType,
     uint256 time
@@ -19,60 +18,49 @@ library LibVRGDA {
     int256 decayConstant = wadLn(1e18 + 0.00005e18);
     int256 timeScaled = toWadUnsafe(time);
     if (mineType == MineType.Food) {
-      uint256 sold = ResourcesSold.getFoodSold(world, gameID);
+      uint256 sold = ResourcesSold.getFoodSold(gameID);
       unchecked {
         return
           uint256(
             wadMul(
               basePriceResource,
-              wadExp(
-                unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeResource(world, toWadUnsafe(sold), gameID))
-              )
+              wadExp(unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeResource(toWadUnsafe(sold), gameID)))
             )
           );
       }
     } else if (mineType == MineType.Wood) {
-      uint256 sold = ResourcesSold.getWoodSold(world, gameID);
+      uint256 sold = ResourcesSold.getWoodSold(gameID);
       unchecked {
         return
           uint256(
             wadMul(
               basePriceResource,
-              wadExp(
-                unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeResource(world, toWadUnsafe(sold), gameID))
-              )
+              wadExp(unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeResource(toWadUnsafe(sold), gameID)))
             )
           );
       }
     } else if (mineType == MineType.Gold) {
-      uint256 sold = ResourcesSold.getGoldSold(world, gameID);
+      uint256 sold = ResourcesSold.getGoldSold(gameID);
       unchecked {
         return
           uint256(
             wadMul(
               basePriceResource,
-              wadExp(
-                unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeResource(world, toWadUnsafe(sold), gameID))
-              )
+              wadExp(unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeResource(toWadUnsafe(sold), gameID)))
             )
           );
       }
     }
   }
 
-  function getTargetSaleTimeResource(
-    IWorld world,
-    int256 sold,
-    uint256 gameID
-  ) internal view returns (int256) {
-    uint256 numPlayers = GameMetaData.getNumberOfPlayer(world, gameID);
+  function getTargetSaleTimeResource(int256 sold, uint256 gameID) internal view returns (int256) {
+    uint256 numPlayers = GameMetaData.getNumberOfPlayer(gameID);
     //@dev minePerResource
     int256 perTimeUnit = wadMul(0.5e18, (int256((minePerResource * 3) * mineRate + blockRate * numPlayers)) * 1e18);
     return unsafeWadDiv(sold, perTimeUnit);
   }
 
   function getArmyPrice(
-    IWorld world,
     uint256 gameID,
     uint256 armyTypeID,
     uint256 time
@@ -80,47 +68,43 @@ library LibVRGDA {
     int256 decayConstant = wadLn(1e18 - 0.00005e18);
     int256 timeScaled = toWadUnsafe(time);
     if (armyTypeID == 0) {
-      uint256 sold = SoldierCreated.getNumOfSwordsman(world, gameID);
+      uint256 sold = SoldierCreated.getNumOfSwordsman(gameID);
       unchecked {
         return
           uint256(
             wadMul(
               1e18,
-              wadExp(unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeArmy(world, toWadUnsafe(sold), gameID)))
+              wadExp(unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeArmy(toWadUnsafe(sold), gameID)))
             )
           );
       }
     } else if (armyTypeID == 1) {
-      uint256 sold = SoldierCreated.getNumOfArcher(world, gameID);
+      uint256 sold = SoldierCreated.getNumOfArcher(gameID);
       unchecked {
         return
           uint256(
             wadMul(
               1e18,
-              wadExp(unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeArmy(world, toWadUnsafe(sold), gameID)))
+              wadExp(unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeArmy(toWadUnsafe(sold), gameID)))
             )
           );
       }
     } else if (armyTypeID == 2) {
-      uint256 sold = SoldierCreated.getNumOfCavalry(world, gameID);
+      uint256 sold = SoldierCreated.getNumOfCavalry(gameID);
       unchecked {
         return
           uint256(
             wadMul(
               1e18,
-              wadExp(unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeArmy(world, toWadUnsafe(sold), gameID)))
+              wadExp(unsafeWadMul(decayConstant, timeScaled - getTargetSaleTimeArmy(toWadUnsafe(sold), gameID)))
             )
           );
       }
     }
   }
 
-  function getTargetSaleTimeArmy(
-    IWorld world,
-    int256 sold,
-    uint256 gameID
-  ) internal view returns (int256) {
-    uint256 numPlayers = GameMetaData.getNumberOfPlayer(world, gameID);
+  function getTargetSaleTimeArmy(int256 sold, uint256 gameID) internal view returns (int256) {
+    uint256 numPlayers = GameMetaData.getNumberOfPlayer(gameID);
     int256 perTimeUnit = wadMul(0.5e18, (int256(500 * numPlayers)) * 1e18);
     return unsafeWadDiv(sold, perTimeUnit);
   }

@@ -95,13 +95,6 @@ library LastMessageTime {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Get time.
    */
   function getTime(uint256 gameID, address user) internal view returns (uint256 time) {
@@ -122,18 +115,6 @@ library LastMessageTime {
     _keyTuple[1] = bytes32(uint256(uint160(user)));
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
-   * @notice Get time (using the specified store).
-   */
-  function getTime(IStore _store, uint256 gameID, address user) internal view returns (uint256 time) {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameID));
-    _keyTuple[1] = bytes32(uint256(uint160(user)));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
     return (uint256(bytes32(_blob)));
   }
 
@@ -162,18 +143,6 @@ library LastMessageTime {
   }
 
   /**
-   * @notice Get time (using the specified store).
-   */
-  function get(IStore _store, uint256 gameID, address user) internal view returns (uint256 time) {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameID));
-    _keyTuple[1] = bytes32(uint256(uint160(user)));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
    * @notice Set time.
    */
   function setTime(uint256 gameID, address user, uint256 time) internal {
@@ -193,17 +162,6 @@ library LastMessageTime {
     _keyTuple[1] = bytes32(uint256(uint160(user)));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((time)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set time (using the specified store).
-   */
-  function setTime(IStore _store, uint256 gameID, address user, uint256 time) internal {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameID));
-    _keyTuple[1] = bytes32(uint256(uint160(user)));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((time)), _fieldLayout);
   }
 
   /**
@@ -229,17 +187,6 @@ library LastMessageTime {
   }
 
   /**
-   * @notice Set time (using the specified store).
-   */
-  function set(IStore _store, uint256 gameID, address user, uint256 time) internal {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameID));
-    _keyTuple[1] = bytes32(uint256(uint160(user)));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((time)), _fieldLayout);
-  }
-
-  /**
    * @notice Delete all data for given keys.
    */
   function deleteRecord(uint256 gameID, address user) internal {
@@ -259,17 +206,6 @@ library LastMessageTime {
     _keyTuple[1] = bytes32(uint256(uint160(user)));
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store, uint256 gameID, address user) internal {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameID));
-    _keyTuple[1] = bytes32(uint256(uint160(user)));
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**

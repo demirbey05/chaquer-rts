@@ -95,13 +95,6 @@ library CreditOwn {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Get amount.
    */
   function getAmount(uint256 gameID, address owner) internal view returns (uint256 amount) {
@@ -122,18 +115,6 @@ library CreditOwn {
     _keyTuple[1] = bytes32(uint256(uint160(owner)));
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
-   * @notice Get amount (using the specified store).
-   */
-  function getAmount(IStore _store, uint256 gameID, address owner) internal view returns (uint256 amount) {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameID));
-    _keyTuple[1] = bytes32(uint256(uint160(owner)));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
     return (uint256(bytes32(_blob)));
   }
 
@@ -162,18 +143,6 @@ library CreditOwn {
   }
 
   /**
-   * @notice Get amount (using the specified store).
-   */
-  function get(IStore _store, uint256 gameID, address owner) internal view returns (uint256 amount) {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameID));
-    _keyTuple[1] = bytes32(uint256(uint160(owner)));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
    * @notice Set amount.
    */
   function setAmount(uint256 gameID, address owner, uint256 amount) internal {
@@ -193,17 +162,6 @@ library CreditOwn {
     _keyTuple[1] = bytes32(uint256(uint160(owner)));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((amount)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set amount (using the specified store).
-   */
-  function setAmount(IStore _store, uint256 gameID, address owner, uint256 amount) internal {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameID));
-    _keyTuple[1] = bytes32(uint256(uint160(owner)));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((amount)), _fieldLayout);
   }
 
   /**
@@ -229,17 +187,6 @@ library CreditOwn {
   }
 
   /**
-   * @notice Set amount (using the specified store).
-   */
-  function set(IStore _store, uint256 gameID, address owner, uint256 amount) internal {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameID));
-    _keyTuple[1] = bytes32(uint256(uint160(owner)));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((amount)), _fieldLayout);
-  }
-
-  /**
    * @notice Delete all data for given keys.
    */
   function deleteRecord(uint256 gameID, address owner) internal {
@@ -259,17 +206,6 @@ library CreditOwn {
     _keyTuple[1] = bytes32(uint256(uint160(owner)));
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store, uint256 gameID, address owner) internal {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(gameID));
-    _keyTuple[1] = bytes32(uint256(uint160(owner)));
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**

@@ -103,13 +103,6 @@ library ResourcePrices {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Get priceFood.
    */
   function getPriceFood(uint256 gameID) internal view returns (uint256 priceFood) {
@@ -132,17 +125,6 @@ library ResourcePrices {
   }
 
   /**
-   * @notice Get priceFood (using the specified store).
-   */
-  function getPriceFood(IStore _store, uint256 gameID) internal view returns (uint256 priceFood) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
    * @notice Set priceFood.
    */
   function setPriceFood(uint256 gameID, uint256 priceFood) internal {
@@ -160,16 +142,6 @@ library ResourcePrices {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((priceFood)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set priceFood (using the specified store).
-   */
-  function setPriceFood(IStore _store, uint256 gameID, uint256 priceFood) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((priceFood)), _fieldLayout);
   }
 
   /**
@@ -195,17 +167,6 @@ library ResourcePrices {
   }
 
   /**
-   * @notice Get priceWood (using the specified store).
-   */
-  function getPriceWood(IStore _store, uint256 gameID) internal view returns (uint256 priceWood) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 1, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
    * @notice Set priceWood.
    */
   function setPriceWood(uint256 gameID, uint256 priceWood) internal {
@@ -223,16 +184,6 @@ library ResourcePrices {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((priceWood)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set priceWood (using the specified store).
-   */
-  function setPriceWood(IStore _store, uint256 gameID, uint256 priceWood) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((priceWood)), _fieldLayout);
   }
 
   /**
@@ -258,17 +209,6 @@ library ResourcePrices {
   }
 
   /**
-   * @notice Get priceGold (using the specified store).
-   */
-  function getPriceGold(IStore _store, uint256 gameID) internal view returns (uint256 priceGold) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 2, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
    * @notice Set priceGold.
    */
   function setPriceGold(uint256 gameID, uint256 priceGold) internal {
@@ -286,16 +226,6 @@ library ResourcePrices {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((priceGold)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set priceGold (using the specified store).
-   */
-  function setPriceGold(IStore _store, uint256 gameID, uint256 priceGold) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((priceGold)), _fieldLayout);
   }
 
   /**
@@ -321,21 +251,6 @@ library ResourcePrices {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = StoreCore.getRecord(
-      _tableId,
-      _keyTuple,
-      _fieldLayout
-    );
-    return decode(_staticData, _encodedLengths, _dynamicData);
-  }
-
-  /**
-   * @notice Get the full data (using the specified store).
-   */
-  function get(IStore _store, uint256 gameID) internal view returns (ResourcePricesData memory _table) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = _store.getRecord(
       _tableId,
       _keyTuple,
       _fieldLayout
@@ -374,21 +289,6 @@ library ResourcePrices {
   }
 
   /**
-   * @notice Set the full data using individual values (using the specified store).
-   */
-  function set(IStore _store, uint256 gameID, uint256 priceFood, uint256 priceWood, uint256 priceGold) internal {
-    bytes memory _staticData = encodeStatic(priceFood, priceWood, priceGold);
-
-    PackedCounter _encodedLengths;
-    bytes memory _dynamicData;
-
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
-  }
-
-  /**
    * @notice Set the full data using the data struct.
    */
   function set(uint256 gameID, ResourcePricesData memory _table) internal {
@@ -416,21 +316,6 @@ library ResourcePrices {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData, _fieldLayout);
-  }
-
-  /**
-   * @notice Set the full data using the data struct (using the specified store).
-   */
-  function set(IStore _store, uint256 gameID, ResourcePricesData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.priceFood, _table.priceWood, _table.priceGold);
-
-    PackedCounter _encodedLengths;
-    bytes memory _dynamicData;
-
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
   }
 
   /**
@@ -478,16 +363,6 @@ library ResourcePrices {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store, uint256 gameID) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameID));
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**

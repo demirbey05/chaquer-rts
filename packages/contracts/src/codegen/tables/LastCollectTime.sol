@@ -95,13 +95,6 @@ library LastCollectTime {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Get lastCollect.
    */
   function getLastCollect(address owner, uint256 gameID) internal view returns (uint256 lastCollect) {
@@ -122,18 +115,6 @@ library LastCollectTime {
     _keyTuple[1] = bytes32(uint256(gameID));
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
-   * @notice Get lastCollect (using the specified store).
-   */
-  function getLastCollect(IStore _store, address owner, uint256 gameID) internal view returns (uint256 lastCollect) {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(uint160(owner)));
-    _keyTuple[1] = bytes32(uint256(gameID));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
     return (uint256(bytes32(_blob)));
   }
 
@@ -162,18 +143,6 @@ library LastCollectTime {
   }
 
   /**
-   * @notice Get lastCollect (using the specified store).
-   */
-  function get(IStore _store, address owner, uint256 gameID) internal view returns (uint256 lastCollect) {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(uint160(owner)));
-    _keyTuple[1] = bytes32(uint256(gameID));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
    * @notice Set lastCollect.
    */
   function setLastCollect(address owner, uint256 gameID, uint256 lastCollect) internal {
@@ -193,17 +162,6 @@ library LastCollectTime {
     _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((lastCollect)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set lastCollect (using the specified store).
-   */
-  function setLastCollect(IStore _store, address owner, uint256 gameID, uint256 lastCollect) internal {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(uint160(owner)));
-    _keyTuple[1] = bytes32(uint256(gameID));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((lastCollect)), _fieldLayout);
   }
 
   /**
@@ -229,17 +187,6 @@ library LastCollectTime {
   }
 
   /**
-   * @notice Set lastCollect (using the specified store).
-   */
-  function set(IStore _store, address owner, uint256 gameID, uint256 lastCollect) internal {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(uint160(owner)));
-    _keyTuple[1] = bytes32(uint256(gameID));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((lastCollect)), _fieldLayout);
-  }
-
-  /**
    * @notice Delete all data for given keys.
    */
   function deleteRecord(address owner, uint256 gameID) internal {
@@ -259,17 +206,6 @@ library LastCollectTime {
     _keyTuple[1] = bytes32(uint256(gameID));
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store, address owner, uint256 gameID) internal {
-    bytes32[] memory _keyTuple = new bytes32[](2);
-    _keyTuple[0] = bytes32(uint256(uint160(owner)));
-    _keyTuple[1] = bytes32(uint256(gameID));
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**

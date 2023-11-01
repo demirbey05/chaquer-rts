@@ -112,13 +112,6 @@ library ClashResult {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Set winner.
    */
   function setWinner(bytes32 key, address winner) internal {
@@ -136,16 +129,6 @@ library ClashResult {
     _keyTuple[0] = key;
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((winner)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set winner (using the specified store).
-   */
-  function setWinner(IStore _store, bytes32 key, address winner) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((winner)), _fieldLayout);
   }
 
   /**
@@ -169,16 +152,6 @@ library ClashResult {
   }
 
   /**
-   * @notice Set loser (using the specified store).
-   */
-  function setLoser(IStore _store, bytes32 key, address loser) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((loser)), _fieldLayout);
-  }
-
-  /**
    * @notice Set isDraw.
    */
   function setIsDraw(bytes32 key, bool isDraw) internal {
@@ -196,16 +169,6 @@ library ClashResult {
     _keyTuple[0] = key;
 
     StoreCore.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((isDraw)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set isDraw (using the specified store).
-   */
-  function setIsDraw(IStore _store, bytes32 key, bool isDraw) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((isDraw)), _fieldLayout);
   }
 
   /**
@@ -229,16 +192,6 @@ library ClashResult {
   }
 
   /**
-   * @notice Set clashType (using the specified store).
-   */
-  function setClashType(IStore _store, bytes32 key, ClashType clashType) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked(uint8(clashType)), _fieldLayout);
-  }
-
-  /**
    * @notice Set gameID.
    */
   function setGameID(bytes32 key, uint256 gameID) internal {
@@ -256,16 +209,6 @@ library ClashResult {
     _keyTuple[0] = key;
 
     StoreCore.setStaticField(_tableId, _keyTuple, 4, abi.encodePacked((gameID)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set gameID (using the specified store).
-   */
-  function setGameID(IStore _store, bytes32 key, uint256 gameID) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.setStaticField(_tableId, _keyTuple, 4, abi.encodePacked((gameID)), _fieldLayout);
   }
 
   /**
@@ -296,29 +239,6 @@ library ClashResult {
     _keyTuple[0] = key;
 
     StoreCore.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData, _fieldLayout);
-  }
-
-  /**
-   * @notice Set the full data using individual values (using the specified store).
-   */
-  function set(
-    IStore _store,
-    bytes32 key,
-    address winner,
-    address loser,
-    bool isDraw,
-    ClashType clashType,
-    uint256 gameID
-  ) internal {
-    bytes memory _staticData = encodeStatic(winner, loser, isDraw, clashType, gameID);
-
-    PackedCounter _encodedLengths;
-    bytes memory _dynamicData;
-
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
   }
 
   /**
@@ -361,27 +281,6 @@ library ClashResult {
     _keyTuple[0] = key;
 
     StoreCore.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData, _fieldLayout);
-  }
-
-  /**
-   * @notice Set the full data using the data struct (using the specified store).
-   */
-  function set(IStore _store, bytes32 key, ClashResultData memory _table) internal {
-    bytes memory _staticData = encodeStatic(
-      _table.winner,
-      _table.loser,
-      _table.isDraw,
-      _table.clashType,
-      _table.gameID
-    );
-
-    PackedCounter _encodedLengths;
-    bytes memory _dynamicData;
-
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
   }
 
   /**
@@ -433,16 +332,6 @@ library ClashResult {
     _keyTuple[0] = key;
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store, bytes32 key) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**

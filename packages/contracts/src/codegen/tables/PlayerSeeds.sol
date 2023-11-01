@@ -93,13 +93,6 @@ library PlayerSeeds {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Get seeds.
    */
   function getSeeds(uint256 gameId) internal view returns (uint256[] memory seeds) {
@@ -118,17 +111,6 @@ library PlayerSeeds {
     _keyTuple[0] = bytes32(uint256(gameId));
 
     bytes memory _blob = StoreCore.getDynamicField(_tableId, _keyTuple, 0);
-    return (SliceLib.getSubslice(_blob, 0, _blob.length).decodeArray_uint256());
-  }
-
-  /**
-   * @notice Get seeds (using the specified store).
-   */
-  function getSeeds(IStore _store, uint256 gameId) internal view returns (uint256[] memory seeds) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameId));
-
-    bytes memory _blob = _store.getDynamicField(_tableId, _keyTuple, 0);
     return (SliceLib.getSubslice(_blob, 0, _blob.length).decodeArray_uint256());
   }
 
@@ -155,17 +137,6 @@ library PlayerSeeds {
   }
 
   /**
-   * @notice Get seeds (using the specified store).
-   */
-  function get(IStore _store, uint256 gameId) internal view returns (uint256[] memory seeds) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameId));
-
-    bytes memory _blob = _store.getDynamicField(_tableId, _keyTuple, 0);
-    return (SliceLib.getSubslice(_blob, 0, _blob.length).decodeArray_uint256());
-  }
-
-  /**
    * @notice Set seeds.
    */
   function setSeeds(uint256 gameId, uint256[] memory seeds) internal {
@@ -186,16 +157,6 @@ library PlayerSeeds {
   }
 
   /**
-   * @notice Set seeds (using the specified store).
-   */
-  function setSeeds(IStore _store, uint256 gameId, uint256[] memory seeds) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameId));
-
-    _store.setDynamicField(_tableId, _keyTuple, 0, EncodeArray.encode((seeds)));
-  }
-
-  /**
    * @notice Set seeds.
    */
   function set(uint256 gameId, uint256[] memory seeds) internal {
@@ -213,16 +174,6 @@ library PlayerSeeds {
     _keyTuple[0] = bytes32(uint256(gameId));
 
     StoreCore.setDynamicField(_tableId, _keyTuple, 0, EncodeArray.encode((seeds)));
-  }
-
-  /**
-   * @notice Set seeds (using the specified store).
-   */
-  function set(IStore _store, uint256 gameId, uint256[] memory seeds) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameId));
-
-    _store.setDynamicField(_tableId, _keyTuple, 0, EncodeArray.encode((seeds)));
   }
 
   /**
@@ -252,19 +203,6 @@ library PlayerSeeds {
   }
 
   /**
-   * @notice Get the length of seeds (using the specified store).
-   */
-  function lengthSeeds(IStore _store, uint256 gameId) internal view returns (uint256) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameId));
-
-    uint256 _byteLength = _store.getDynamicFieldLength(_tableId, _keyTuple, 0);
-    unchecked {
-      return _byteLength / 32;
-    }
-  }
-
-  /**
    * @notice Get the length of seeds.
    */
   function length(uint256 gameId) internal view returns (uint256) {
@@ -285,19 +223,6 @@ library PlayerSeeds {
     _keyTuple[0] = bytes32(uint256(gameId));
 
     uint256 _byteLength = StoreCore.getDynamicFieldLength(_tableId, _keyTuple, 0);
-    unchecked {
-      return _byteLength / 32;
-    }
-  }
-
-  /**
-   * @notice Get the length of seeds (using the specified store).
-   */
-  function length(IStore _store, uint256 gameId) internal view returns (uint256) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameId));
-
-    uint256 _byteLength = _store.getDynamicFieldLength(_tableId, _keyTuple, 0);
     unchecked {
       return _byteLength / 32;
     }
@@ -332,20 +257,6 @@ library PlayerSeeds {
   }
 
   /**
-   * @notice Get an item of seeds (using the specified store).
-   * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
-   */
-  function getItemSeeds(IStore _store, uint256 gameId, uint256 _index) internal view returns (uint256) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameId));
-
-    unchecked {
-      bytes memory _blob = _store.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 32, (_index + 1) * 32);
-      return (uint256(bytes32(_blob)));
-    }
-  }
-
-  /**
    * @notice Get an item of seeds.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
@@ -374,20 +285,6 @@ library PlayerSeeds {
   }
 
   /**
-   * @notice Get an item of seeds (using the specified store).
-   * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
-   */
-  function getItem(IStore _store, uint256 gameId, uint256 _index) internal view returns (uint256) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameId));
-
-    unchecked {
-      bytes memory _blob = _store.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 32, (_index + 1) * 32);
-      return (uint256(bytes32(_blob)));
-    }
-  }
-
-  /**
    * @notice Push an element to seeds.
    */
   function pushSeeds(uint256 gameId, uint256 _element) internal {
@@ -405,16 +302,6 @@ library PlayerSeeds {
     _keyTuple[0] = bytes32(uint256(gameId));
 
     StoreCore.pushToDynamicField(_tableId, _keyTuple, 0, abi.encodePacked((_element)));
-  }
-
-  /**
-   * @notice Push an element to seeds (using the specified store).
-   */
-  function pushSeeds(IStore _store, uint256 gameId, uint256 _element) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameId));
-
-    _store.pushToDynamicField(_tableId, _keyTuple, 0, abi.encodePacked((_element)));
   }
 
   /**
@@ -438,16 +325,6 @@ library PlayerSeeds {
   }
 
   /**
-   * @notice Push an element to seeds (using the specified store).
-   */
-  function push(IStore _store, uint256 gameId, uint256 _element) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameId));
-
-    _store.pushToDynamicField(_tableId, _keyTuple, 0, abi.encodePacked((_element)));
-  }
-
-  /**
    * @notice Pop an element from seeds.
    */
   function popSeeds(uint256 gameId) internal {
@@ -468,16 +345,6 @@ library PlayerSeeds {
   }
 
   /**
-   * @notice Pop an element from seeds (using the specified store).
-   */
-  function popSeeds(IStore _store, uint256 gameId) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameId));
-
-    _store.popFromDynamicField(_tableId, _keyTuple, 0, 32);
-  }
-
-  /**
    * @notice Pop an element from seeds.
    */
   function pop(uint256 gameId) internal {
@@ -495,16 +362,6 @@ library PlayerSeeds {
     _keyTuple[0] = bytes32(uint256(gameId));
 
     StoreCore.popFromDynamicField(_tableId, _keyTuple, 0, 32);
-  }
-
-  /**
-   * @notice Pop an element from seeds (using the specified store).
-   */
-  function pop(IStore _store, uint256 gameId) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameId));
-
-    _store.popFromDynamicField(_tableId, _keyTuple, 0, 32);
   }
 
   /**
@@ -530,19 +387,6 @@ library PlayerSeeds {
     unchecked {
       bytes memory _encoded = abi.encodePacked((_element));
       StoreCore.spliceDynamicData(_tableId, _keyTuple, 0, uint40(_index * 32), uint40(_encoded.length), _encoded);
-    }
-  }
-
-  /**
-   * @notice Update an element of seeds (using the specified store) at `_index`.
-   */
-  function updateSeeds(IStore _store, uint256 gameId, uint256 _index, uint256 _element) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameId));
-
-    unchecked {
-      bytes memory _encoded = abi.encodePacked((_element));
-      _store.spliceDynamicData(_tableId, _keyTuple, 0, uint40(_index * 32), uint40(_encoded.length), _encoded);
     }
   }
 
@@ -573,19 +417,6 @@ library PlayerSeeds {
   }
 
   /**
-   * @notice Update an element of seeds (using the specified store) at `_index`.
-   */
-  function update(IStore _store, uint256 gameId, uint256 _index, uint256 _element) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameId));
-
-    unchecked {
-      bytes memory _encoded = abi.encodePacked((_element));
-      _store.spliceDynamicData(_tableId, _keyTuple, 0, uint40(_index * 32), uint40(_encoded.length), _encoded);
-    }
-  }
-
-  /**
    * @notice Delete all data for given keys.
    */
   function deleteRecord(uint256 gameId) internal {
@@ -603,16 +434,6 @@ library PlayerSeeds {
     _keyTuple[0] = bytes32(uint256(gameId));
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store, uint256 gameId) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(gameId));
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**
