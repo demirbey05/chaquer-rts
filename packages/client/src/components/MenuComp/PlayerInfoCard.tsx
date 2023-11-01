@@ -72,9 +72,8 @@ const PublicWallet = () => {
 
     return (
         <>
-            <Tag size='lg' backgroundColor={"CaptionText"} borderRadius='full'>
+            <Tag size='lg' backgroundColor={"blue.800"} borderRadius='full'>
                 Public Wallet: {truncatedPublicWallet}
-
             </Tag>
             <Button
                 ms={2}

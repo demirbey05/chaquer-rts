@@ -102,7 +102,7 @@ input::-webkit-inner-spin-button {
 .menu-row {
     display: flex;
     flex-direction: row;
-    margin-top: 25px;
+    margin-top: 50px;
 }
 
 @media (min-width: 1000px) {
