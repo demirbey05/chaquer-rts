@@ -3,7 +3,7 @@ import mediumShip from '../../images/shipAssets/medium_ship.png'
 import largeShip from '../../images/shipAssets/large_ship.png'
 import React, { useState, useEffect } from "react";
 import { MdLocationPin } from 'react-icons/md'
-import { Button } from "@chakra-ui/react";
+import { Button, Tooltip } from "@chakra-ui/react";
 import { usePlayer } from "../../context/PlayerContext";
 import { useMyFleetPositions } from '../../hooks/SeaHooks/useMyFleetPositions';
 import { useGame } from '../../context/GameContext';
@@ -67,9 +67,11 @@ export const FleetInfoDrawer = ({ isInputFocused }: { isInputFocused: boolean })
 
     return (
         <>
-            <button className="fleet-info-button" onClick={toggleDrawer}>
-                <GiShipBow />
-            </button>
+            <Tooltip label='My Fleet Details' placement='top'>
+                <button className="fleet-info-button" onClick={toggleDrawer}>
+                    <GiShipBow />
+                </button>
+            </Tooltip>
             <div id="fleet-info-drawer" className={`fleet-info-drawer ${isOpen ? "open" : ""}`}>
                 <div className="d-flex justify-between border-bottom mb-2 p-2">
                     <h5 className="font-extrabold">My Fleet Details</h5>

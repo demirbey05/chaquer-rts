@@ -3,7 +3,7 @@ import cavalryImg from "../../images/armyAssets/cavalry.png";
 import swordsmanImg from "../../images/armyAssets/swordsman.png";
 import React, { useState, useEffect } from "react";
 import { MdLocationPin } from 'react-icons/md'
-import { Button } from "@chakra-ui/react";
+import { Button, Tooltip } from "@chakra-ui/react";
 import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
 import { usePlayer } from "../../context/PlayerContext";
 import { useGame } from "../../context/GameContext";
@@ -65,9 +65,11 @@ export const ArmyInfoDrawer = ({ isInputFocused }: { isInputFocused: boolean }) 
 
     return (
         <>
-            <button className="army-info-button" onClick={toggleDrawer}>
-                ⚔️
-            </button>
+            <Tooltip label='My Army Details' placement='top'>
+                <button className="army-info-button" onClick={toggleDrawer}>
+                    ⚔️
+                </button>
+            </Tooltip>
             <div id="army-info-drawer" className={`army-info-drawer ${isOpen ? "open" : ""}`}>
                 <div className="d-flex justify-between border-bottom mb-2 p-2">
                     <h5 className="font-extrabold">My Army Details</h5>

@@ -1,4 +1,4 @@
-import gameBgImg from '../../images/backgrounds/game-page-background2.jpg'
+import gameBgImg from '../../images/backgrounds/game-page-background.jpg'
 import chaquerMap from '../../images/backgrounds/chaquer-map.jpg'
 import map from "../../../map.json";
 import ScrollContainer from 'react-indiana-drag-scroll'
@@ -28,7 +28,6 @@ import { useFleetPositions } from "../../hooks/SeaHooks/useFleetPositions";
 import { useMyFleetPositions } from "../../hooks/SeaHooks/useMyFleetPositions";
 import { Coord } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 import { getNumberOfSoldierInArmy } from "../../utils/helperFunctions/ArmyFunctions/getNumberOfSoliderInArmy";
-import { getTerrainAsset } from '../../utils/helperFunctions/CustomFunctions/getTerrainAsset';
 import { isValidTerrainType } from '../../utils/helperFunctions/CustomFunctions/isValidTerrainType';
 import { isMyCastle } from '../../utils/helperFunctions/CastleFunctions/isMyCastle';
 import { isUserClickedManhattanPosition } from '../../utils/helperFunctions/CustomFunctions/isUserClickedManhattanPosition';

@@ -8,66 +8,11 @@
     background-repeat: no-repeat;
     background-size: cover;
     z-index: 6;
-    height: 40px;
-    width: 40px;
+    height: 45px;
+    width: 45px;
     position: fixed;
-    left: 0;
-    top: 0;
-    margin-top: 25px;
-    font-size: 20px;
-    border-radius: 10px;
-}
-
-.army-info-button {
-    background-image: url('../images/interfaceAssets/drawer_button.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    z-index: 1;
-    height: 40px;
-    width: 40px;
-    position: fixed;
-    left: 0;
-    top: 0;
-    margin-top: 70px;
-    font-size: 20px;
-    border-radius: 10px;
-}
-
-.fleet-info-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-image: url('../images/interfaceAssets/drawer_button.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    z-index: 1;
-    height: 40px;
-    width: 40px;
-    position: fixed;
-    left: 0;
-    top: 0;
-    margin-top: 115px;
-    font-size: 20px;
-    border-radius: 10px;
-}
-
-.market-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-image: url('../images/interfaceAssets/drawer_button.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    z-index: 1;
-    height: 40px;
-    width: 40px;
-    position: fixed;
-    left: 0;
-    top: 0;
-    margin-top: 160px;
+    left: 33%;
+    bottom: 25px;
     font-size: 20px;
     border-radius: 10px;
 }
@@ -81,12 +26,11 @@
     background-repeat: no-repeat;
     background-size: cover;
     z-index: 6;
-    height: 40px;
-    width: 40px;
+    height: 45px;
+    width: 45px;
     position: fixed;
-    left: 0;
-    top: 0;
-    margin-top: 205px;
+    left: 36%;
+    bottom: 25px;
     font-size: 20px;
     border-radius: 10px;
 }
@@ -100,12 +44,62 @@
     background-repeat: no-repeat;
     background-size: cover;
     z-index: 1;
-    height: 40px;
-    width: 40px;
+    height: 45px;
+    width: 45px;
     position: fixed;
-    left: 0;
-    top: 0;
-    margin-top: 250px;
+    left: 39%;
+    bottom: 25px;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.market-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1;
+    height: 45px;
+    width: 45px;
+    position: fixed;
+    left: 42%;
+    bottom: 25px;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.army-info-button {
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1;
+    height: 45px;
+    width: 45px;
+    position: fixed;
+    left: 57%;
+    bottom: 25px;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.fleet-info-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1;
+    height: 45px;
+    width: 45px;
+    position: fixed;
+    left: 60%;
+    bottom: 25px;
     font-size: 20px;
     border-radius: 10px;
 }
@@ -119,12 +113,11 @@
     background-repeat: no-repeat;
     background-size: cover;
     z-index: 1;
-    height: 40px;
-    width: 40px;
+    height: 45px;
+    width: 45px;
     position: fixed;
-    right: 0;
-    top: 0;
-    margin-top: 25px;
+    left: 63%;
+    bottom: 25px;
     font-size: 20px;
     border-radius: 10px;
 }
@@ -138,12 +131,11 @@
     background-repeat: no-repeat;
     background-size: cover;
     z-index: 1;
-    height: 40px;
-    width: 40px;
+    height: 45px;
+    width: 45px;
     position: fixed;
-    right: 0;
-    top: 0;
-    margin-top: 290px;
+    left: 66%;
+    bottom: 25px;
     font-size: 20px;
     border-radius: 10px;
 }
@@ -153,10 +145,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    color: white;
     font-size: 35px;
-    border: none;
     cursor: pointer;
     position: fixed;
     bottom: 25px;
@@ -172,7 +161,7 @@
     font-size: 30px;
     position: fixed;
     bottom: 25px;
-    right: 45%;
+    left: 52.5%;
     z-index: 1;
 }
 
@@ -183,7 +172,7 @@
     font-size: 30px;
     position: fixed;
     bottom: 25px;
-    left: 45%;
+    left: 47.5%;
     z-index: 1;
 }
 

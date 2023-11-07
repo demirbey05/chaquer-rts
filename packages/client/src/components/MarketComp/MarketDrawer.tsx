@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Tooltip } from "@chakra-ui/react";
 import { BuyResources } from "./BuyResources";
 import { SellResources } from "./SellResources";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
@@ -41,9 +41,11 @@ export const MarketDrawer = ({ isInputFocused }: { isInputFocused: boolean }) =>
         <>
             {isLoadingSell && <EventProgressBar text={"Selling resources..."} />}
             {isLoadingBuy && <EventProgressBar text={"Buying resources..."} />}
-            <button className="market-button" onClick={toggleDrawer}>
-                <SlBasket />
-            </button>
+            <Tooltip label='Market' placement='top'>
+                <button className="market-button" onClick={toggleDrawer}>
+                    <SlBasket />
+                </button>
+            </Tooltip>
             <div id="market-drawer" className={`market-drawer ${isOpen ? "open" : ""}`}>
                 <div className="d-flex justify-between border-bottom mb-2 p-2">
                     <h5 className="font-extrabold">Market</h5>

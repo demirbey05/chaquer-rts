@@ -1,4 +1,5 @@
 import { useGame } from '../../../context/GameContext';
+import { Tooltip } from '@chakra-ui/react';
 import { usePlayer } from '../../../context/PlayerContext';
 import { useNumberOfResource } from '../../../hooks/ResourceHooks/useNumberOfResource';
 import foodIcon from '../../../images/resourceAssets/corn_icon.png'
@@ -10,7 +11,10 @@ export const FoodCount = () => {
 
     return (
         <div className="col-3 mine-progress-bar-col">
-            <img className='me-2' src={foodIcon} width={"10px"} height={"10px"} alt="food-icon" />: {numberOfResource ? Number(numberOfResource.numOfFood) : 0}
+            <Tooltip label='Food' placement='bottom' >
+                <img className='me-2' src={foodIcon} width={"10px"} height={"10px"} alt="food-icon" />
+            </Tooltip>
+            : {numberOfResource ? Number(numberOfResource.numOfFood) : 0}
         </div>
     )
 }

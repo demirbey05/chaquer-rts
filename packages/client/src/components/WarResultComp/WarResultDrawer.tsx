@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Tooltip } from "@chakra-ui/react";
 import { usePlayer } from '../../context/PlayerContext';
 import { useWarResult } from '../../hooks/useWarResult';
 import { useMyUsername } from "../../hooks/IdentityHooks/useMyUsername";
@@ -36,11 +37,16 @@ export const WarResultDrawer = ({ isInputFocused }: { isInputFocused: boolean })
 
     return (
         <>
-            <button className="war-result-button" onClick={toggleOffcanvas}>
-                💥
-            </button>
+            <Tooltip label='War Results' placement='top'>
+                <button className="war-result-button" onClick={toggleOffcanvas}>
+                    💥
+                </button>
+            </Tooltip>
             <div id="warResultDrawer" className={`my-war-result-drawer ${isOpen ? "open" : ""}`}>
-                <h4 className="text-center text-white p-2 mb-3 border-bottom">War Results</h4>
+                <div className='d-flex justify-between align-items-center border-bottom mb-2 p-2'>
+                    <h4 className="font-extrabold ms-4">War Results</h4>
+                    <button type="button" className="me-4" onClick={toggleOffcanvas}>&#10008;</button>
+                </div>
                 <div>
                     {
                         warResults && warResults.map((data, key) => {

@@ -1,3 +1,4 @@
+import { Tooltip } from '@chakra-ui/react';
 import { useGame } from '../../../context/GameContext';
 import { usePlayer } from '../../../context/PlayerContext';
 import { useCredit } from '../../../hooks/EconomyHooks/useCredit';
@@ -10,7 +11,10 @@ export const CreditCount = () => {
     const credit = useCredit(gameID, userWallet);
     return (
         <div className='d-flex'>
-            <img className='me-2' src={creaditIcon} width={"25px"} height={"25px"} alt='credit-icon' />: {credit ? getNumberFromBigInt(credit).slice(0, 12) : 0}
+            <Tooltip label='Credit' placement='bottom' >
+                <img className='me-2' src={creaditIcon} width={"25px"} height={"25px"} alt='credit-icon' />
+            </Tooltip>
+            : {credit ? getNumberFromBigInt(credit).slice(0, 12) : 0}
         </div>
     )
 }

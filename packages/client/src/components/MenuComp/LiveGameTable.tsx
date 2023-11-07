@@ -32,10 +32,23 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
                             .filter((game) => game.state !== 4)
                             .map((game, key) => (
                                 <Tr key={key}>
-                                    <Td><img src={chaquerMap} alt="Map Image" width={"75"} height={"75"} /></Td>
-                                    <Td>{game.name && game.name.length > 15 ? `${game.name.slice(0, 15)}...` : game.name}</Td>
-                                    <Td>{getGameState(game.state)}</Td>
-                                    <Td>{Number(game.numberOfPlayer)} / {Number(game.limitOfPlayer)}</Td>
+                                    <Td>
+                                        <img
+                                            src={chaquerMap}
+                                            alt="Map Image"
+                                            width={"75"}
+                                            height={"75"}
+                                            style={{ transform: "rotateX(60deg) rotateZ(45deg)" }} />
+                                    </Td>
+                                    <Td>
+                                        {game.name && game.name.length > 15 ? `${game.name.slice(0, 15)}...` : game.name}
+                                    </Td>
+                                    <Td>
+                                        {getGameState(game.state)}
+                                    </Td>
+                                    <Td>
+                                        {Number(game.numberOfPlayer)} / {Number(game.limitOfPlayer)}
+                                    </Td>
                                     <Td>
                                         <JoinGameButtom
                                             isDisabled={!username}

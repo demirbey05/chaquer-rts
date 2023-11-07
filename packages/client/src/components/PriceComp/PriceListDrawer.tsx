@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Tooltip } from "@chakra-ui/react";
 import { ArmyPrices } from "./ArmyPrices";
 import { ResourcePrices } from "./ResourcePrices";
 import { FleetPrices } from "./FleetPrices";
@@ -31,12 +31,20 @@ export const PriceListDrawer = ({ isInputFocused, isSpectator }: { isInputFocuse
     }, [isOpen, isInputFocused]);
 
     return (
-        <div>
-            <button className={"price-list-button"} style={isSpectator ? { marginTop: "25px" } : {}} onClick={toggleDrawer}>
-                <AiOutlineStock />
-            </button>
+        <>
+            <Tooltip label='Prices' placement='top'>
+                <button
+                    className={"price-list-button"}
+                    style={isSpectator ? { marginTop: "25px" } : {}}
+                    onClick={toggleDrawer}>
+                    <AiOutlineStock />
+                </button>
+            </Tooltip>
             <div id="prices-drawer-body" className={`prices-drawer ${isOpen ? "open" : ""}`} style={isSpectator ? { marginTop: "95px" } : {}}>
-                <h4 className="text-center p-2 mb-2 mt-2 border-bottom font-extrabold">Current Prices</h4>
+                <div className='d-flex justify-between align-items-center border-bottom mb-2 p-2'>
+                    <h4 className="ms-4 font-extrabold">Current Prices</h4>
+                    <button type="button" className="me-4" onClick={toggleDrawer}>&#10008;</button>
+                </div>
                 <Tabs isFitted variant='enclosed'>
                     <TabList>
                         <Tab _selected={{ color: 'white', bg: 'red.500' }}>Buy Prices</Tab>
@@ -58,6 +66,6 @@ export const PriceListDrawer = ({ isInputFocused, isSpectator }: { isInputFocuse
                     </TabPanels>
                 </Tabs>
             </div>
-        </div>
+        </>
     )
 }
