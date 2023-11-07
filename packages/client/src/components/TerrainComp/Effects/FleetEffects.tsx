@@ -35,6 +35,7 @@ export const FleetEffects = (myFleetPositions: any[] | undefined,
                 myFleetPositions.map((data: any) => {
                     const element = document.getElementById(`${data.myFleetPosition.y},${data.myFleetPosition.x}`)!;
                     if (element && element.children[0]) {
+                        element.style.border = "";
                         element.removeChild(element.children[0])
                     }
                 });
@@ -72,6 +73,7 @@ export const FleetEffects = (myFleetPositions: any[] | undefined,
                 fleetPositions.map((data: any) => {
                     const element = document.getElementById(`${data.fleetPosition.y},${data.fleetPosition.x}`)!;
                     if (element && element.children[0]) {
+                        element.style.border = "";
                         element.removeChild(element.children[0])
                     }
                 });

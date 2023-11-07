@@ -136,6 +136,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                 armyPositions.map((data: any) => {
                     const element = document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!;
                     if (element && element.children[0]) {
+                        element.style.border = "";
                         element.removeChild(element.children[0]);
                     }
                 });
