@@ -9,12 +9,13 @@ import {
     ListItem,
     UnorderedList,
 } from '@chakra-ui/react'
+import { FcInfo } from 'react-icons/fc'
 
 export const ShortCutTips = () => {
     return (
         <Popover isLazy>
             <PopoverTrigger>
-                <button className="tips-button">i</button>
+                <button className="tips-button"><FcInfo /></button>
             </PopoverTrigger>
             <PopoverContent backgroundColor={"blackAlpha.700"} color={"white"}>
                 <PopoverArrow />

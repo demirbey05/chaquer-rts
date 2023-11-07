@@ -37,6 +37,7 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
         const data: string = ethers.utils.hexlify(flatten2D(map));
         const initGameTx = await systemCalls.initGame(numberOfPlayer, width, height, data, gameName, 1);
         if (initGameTx) {
+            console.log(initGameTx)
             setGameID(Number(initGameTx.result))
             const options = {
                 method: 'POST',
@@ -58,7 +59,7 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
             };
 
             try {
-                await fetch('https://discord.com/api/webhooks/1164497192879411211/hXwMgsEiM-ldEx28QJo5Oqoj1rgeV3_R6DjnvmRAKZKsT7Q3dKMAGKPbY-fg8qrwAqvM', options)
+                //await fetch('https://discord.com/api/webhooks/1164497192879411211/hXwMgsEiM-ldEx28QJo5Oqoj1rgeV3_R6DjnvmRAKZKsT7Q3dKMAGKPbY-fg8qrwAqvM', options)
             } catch (e) {
                 console.log(e)
             }
@@ -149,9 +150,8 @@ const CreateGameWarning = ({ setIsCreateGameModalOpen, setIsOpen }: { setIsCreat
             </div>
             <Alert status='info' textAlign={"left"} textColor={"black"}>
                 <AlertIcon />
-                Info: Remember, you have the authority to determine the number of players for the game.
-                When initiating a game, it is crucial to ensure that you can assemble a sufficient number of participants for the game to commence.
-                Failure to do so may result in the game not being able to start
+                When creating a game, it is crucial to ensure that you can assemble a sufficient number of participants for the game to commence.
+                If you cannot, the game will be not started.
             </Alert>
             <Button onClick={() => { setIsCreateGameModalOpen(true); setIsOpen(false) }} colorScheme={"facebook"} mt={3}>I Understood</Button>
         </>

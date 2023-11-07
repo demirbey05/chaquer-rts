@@ -1,43 +1,36 @@
 /* Drawer button styles */
-.price-list-button {
-    background-color: #ECC94B;
-    z-index: 1;
-    height: 60px;
-    width: 60px;
-    position: fixed;
-    right: 0;
-    top: 0;
-    margin-top: 305px;
-    font-size: 30px;
-    border-radius: 10px;
-}
-
 .settings-button {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ECC94B;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     z-index: 6;
-    height: 60px;
-    width: 60px;
+    height: 40px;
+    width: 40px;
     position: fixed;
     left: 0;
     top: 0;
     margin-top: 25px;
-    font-size: 30px;
+    font-size: 20px;
     border-radius: 10px;
 }
 
 .army-info-button {
-    background-color: #ECC94B;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     z-index: 1;
-    height: 60px;
-    width: 60px;
+    height: 40px;
+    width: 40px;
     position: fixed;
     left: 0;
     top: 0;
-    margin-top: 90px;
-    font-size: 30px;
+    margin-top: 70px;
+    font-size: 20px;
     border-radius: 10px;
 }
 
@@ -45,28 +38,37 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ECC94B;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     z-index: 1;
-    height: 60px;
-    width: 60px;
+    height: 40px;
+    width: 40px;
     position: fixed;
     left: 0;
     top: 0;
-    margin-top: 155px;
-    font-size: 30px;
+    margin-top: 115px;
+    font-size: 20px;
     border-radius: 10px;
 }
 
 .market-button {
-    background-color: #ECC94B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     z-index: 1;
-    height: 60px;
-    width: 60px;
+    height: 40px;
+    width: 40px;
     position: fixed;
     left: 0;
     top: 0;
-    margin-top: 220px;
-    font-size: 30px;
+    margin-top: 160px;
+    font-size: 20px;
     border-radius: 10px;
 }
 
@@ -74,31 +76,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ECC94B;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     z-index: 6;
-    height: 60px;
-    width: 60px;
+    height: 40px;
+    width: 40px;
     position: fixed;
     left: 0;
     top: 0;
-    margin-top: 285px;
-    font-size: 30px;
-    border-radius: 10px;
-}
-
-.war-result-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #ECC94B;
-    z-index: 1;
-    height: 60px;
-    width: 60px;
-    position: fixed;
-    right: 0;
-    top: 0;
-    margin-top: 25px;
-    font-size: 30px;
+    margin-top: 205px;
+    font-size: 20px;
     border-radius: 10px;
 }
 
@@ -106,26 +95,67 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ECC94B;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     z-index: 1;
-    height: 60px;
-    width: 60px;
+    height: 40px;
+    width: 40px;
     position: fixed;
     left: 0;
     top: 0;
-    margin-top: 350px;
-    font-size: 30px;
+    margin-top: 250px;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.war-result-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1;
+    height: 40px;
+    width: 40px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    margin-top: 25px;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.price-list-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1;
+    height: 40px;
+    width: 40px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    margin-top: 290px;
+    font-size: 20px;
     border-radius: 10px;
 }
 
 /*Circle Button for tips*/
 .tips-button {
-    width: 35px;
-    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
-    background-color: #ECC94B;
     color: white;
-    font-size: 25px;
+    font-size: 35px;
     border: none;
     cursor: pointer;
     position: fixed;
@@ -138,7 +168,7 @@
 .zoom-in-button {
     width: 35px;
     height: 35px;
-    color: white;
+    color: #000000;
     font-size: 30px;
     position: fixed;
     bottom: 25px;
@@ -149,7 +179,7 @@
 .zoom-out-button {
     width: 35px;
     height: 35px;
-    color: white;
+    color: #000000;
     font-size: 30px;
     position: fixed;
     bottom: 25px;
@@ -159,18 +189,20 @@
 
 .menu-buttons {
     width: 225px;
-    color: dark;
+    color: #000000;
     padding: 20px;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-image: url("../images/interfaceAssets/large-button.jpg");
+    background-position: center;
     font-weight: bolder;
     border: none;
 }
 
 .menu-game-list-button {
     width: 100px;
-    color: dark;
+    color: #000000;
     padding: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-image: url("../images/interfaceAssets/large-button.jpg");
+    background-position: center;
     font-weight: bolder;
     border: none;
 }

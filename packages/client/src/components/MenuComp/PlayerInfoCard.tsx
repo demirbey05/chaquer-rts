@@ -22,13 +22,14 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                         <>
                             <Tag
                                 size='lg'
-                                backgroundColor={"CaptionText"}
+                                backgroundColor={"blue.800"}
                                 borderRadius='full'>
                                 Username: {username}
                             </Tag>
                             <Button
                                 size={"sm"}
                                 ms={2}
+                                backgroundColor={"blue.800"}
                                 colorScheme={"facebook"}
                                 onClick={() => setIsUserModalOpen(true)}>
                                 <EditIcon />
@@ -38,6 +39,7 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                         <div className='d-flex justify-content-center'>
                             <Button
                                 size={"sm"}
+                                backgroundColor={"blue.800"}
                                 colorScheme={"facebook"}
                                 onClick={() => setIsUserModalOpen(true)}>
                                 Assign Username
@@ -79,6 +81,7 @@ const PublicWallet = () => {
                 ms={2}
                 size={"sm"}
                 colorScheme={"facebook"}
+                backgroundColor={"blue.800"}
                 onClick={onCopy}>
                 {hasCopied ? "Copied!" : "Copy"}
             </Button>

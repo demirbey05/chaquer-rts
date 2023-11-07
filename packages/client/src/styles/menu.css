@@ -1,0 +1,63 @@
+.menu-background {
+    background-image: url("../images/backgrounds/menu-background.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+    height: 100%;
+    width: 100%;
+    filter: blur(3px);
+    z-index: -1;
+    position: absolute;
+}
+
+.menu-title {
+    font-size: 60px;
+    color: white;
+    font-weight: bolder;
+    border-radius: 5px;
+    border-top: 2px solid rgb(255, 255, 255);
+    border-bottom: 2px solid rgb(255, 255, 255);
+    width: 50%;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    margin-top: 50px;
+}
+
+#menu-items {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.menu-row {
+    display: flex;
+    flex-direction: row;
+    margin-top: 50px;
+}
+
+@media (min-width: 1000px) {
+    .menu-row {
+        flex-direction: row;
+    }
+}
+
+@media (max-width: 1000px) {
+    .menu-row {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .playerCardMargin {
+        margin-top: 25px;
+    }
+}
+
+.loader-box {
+    width: 400px;
+    margin-top: 100px;
+    margin-bottom: 50px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+}

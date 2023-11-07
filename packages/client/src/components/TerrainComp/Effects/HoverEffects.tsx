@@ -41,7 +41,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                 x: parseInt(fromArmyPosition.x),
                 y: parseInt(fromArmyPosition.y),
             }).map((data) => {
-                if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
+                if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                     canCastleBeSettle(values[data.x][data.y]) &&
                         !isMyCastle(myCastlePosition, data.x, data.y) &&
                         !isMyArmy({ x: data.x, y: data.y }, myArmyPosition) &&
@@ -60,7 +60,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                     x: parseInt(fromArmyPosition.x),
                     y: parseInt(fromArmyPosition.y),
                 }).map((data) => {
-                    if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
+                    if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                         if (canCastleBeSettle(values[data.x][data.y])) {
                             document.getElementById(`${data.y},${data.x}`)?.classList.remove("blueTileEffect");
                         }
@@ -76,7 +76,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
             myCastlePosition.map((position: any) => {
                 getManhattanPositions(position.myCastlePosition).map(
                     (data) => {
-                        if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
+                        if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                             if (
                                 numberOfArmy !== (5 + myCastlePosition.length - 1) &&
                                 canCastleBeSettle(values[data.x][data.y]) &&
@@ -104,7 +104,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
             myCastlePosition.map((position: any) => {
                 getManhattanPositions(position.myCastlePosition).map(
                     (data) => {
-                        if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
+                        if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                             if (getArmySettlePositions(data.x, data.y, myCastlePosition)) {
                                 document.getElementById(`${data.y},${data.x}`)?.classList.remove("orangeTileEffect")
                                 document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-toggle", "");
@@ -123,7 +123,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
             myDockPositions.map((position: any) => {
                 getManhattanPositions(position.myDockPosition).map(
                     (data) => {
-                        if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
+                        if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                             if (
                                 !isBorder &&
                                 canFleetBeSettled(values[data.x][data.y]) &&
@@ -145,7 +145,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
             myDockPositions.map((position: any) => {
                 getManhattanPositions(position.myDockPosition).map(
                     (data) => {
-                        if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
+                        if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                             document.getElementById(`${data.y},${data.x}`)?.classList.remove("orangeTileEffect")
                             document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-toggle", "");
                             document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-target", "");
@@ -163,7 +163,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                 x: parseInt(fromFleetPosition.x),
                 y: parseInt(fromFleetPosition.y),
             }).map((data) => {
-                if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
+                if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                     canFleetBeSettled(values[data.x][data.y]) &&
                         !isMyFleet({ x: data.x, y: data.y }, myFleetPositions) &&
                         !isMyResource(data.x, data.y, myResourcePositions) &&
@@ -180,7 +180,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                     x: parseInt(fromFleetPosition.x),
                     y: parseInt(fromFleetPosition.y),
                 }).map((data) => {
-                    if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
+                    if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                         if (canFleetBeSettled(values[data.x][data.y])) {
                             document.getElementById(`${data.y},${data.x}`)?.classList.remove("yellowTileEffect");
                         }

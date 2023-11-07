@@ -5,6 +5,7 @@ import { SellResources } from "./SellResources";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useResourcesInStoke } from "../../hooks/EconomyHooks/useResourcesInStoke";
 import { useGame } from "../../context/GameContext";
+import { SlBasket } from 'react-icons/sl'
 
 export const MarketDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const { gameID } = useGame();
@@ -41,7 +42,7 @@ export const MarketDrawer = ({ isInputFocused }: { isInputFocused: boolean }) =>
             {isLoadingSell && <EventProgressBar text={"Selling resources..."} />}
             {isLoadingBuy && <EventProgressBar text={"Buying resources..."} />}
             <button className="market-button" onClick={toggleDrawer}>
-                🛒
+                <SlBasket />
             </button>
             <div id="market-drawer" className={`market-drawer ${isOpen ? "open" : ""}`}>
                 <div className="d-flex justify-between border-bottom mb-2 p-2">

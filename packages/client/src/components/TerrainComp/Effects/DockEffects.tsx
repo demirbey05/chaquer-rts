@@ -7,6 +7,7 @@ import { isManhattanPosition } from "../../../utils/helperFunctions/CustomFuncti
 import { getBorderColor } from "../../../utils/constants/getBorderColors";
 import { isArmyPosition } from "../../../utils/helperFunctions/ArmyFunctions/isArmyPosition";
 import { getNumberOfSoldierInArmy } from "../../../utils/helperFunctions/ArmyFunctions/getNumberOfSoliderInArmy";
+import dockTile from '../../../images/shipAssets/dock.png'
 
 export const DockEffects = (isArmySettleStage: boolean | undefined,
     castlePositions: any[],
@@ -27,7 +28,21 @@ export const DockEffects = (isArmySettleStage: boolean | undefined,
         if (dockPositions && dockPositions.length > 0) {
             dockPositions.map(
                 (data) => {
-                    document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.innerHTML = "⚓";
+                    const element = document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!;
+                    if (element) {
+                        while (element.firstChild) {
+                            element.removeChild(element.firstChild);
+                        }
+
+                        const imgElement = document.createElement("img");
+                        imgElement.src = dockTile;
+                        imgElement.style.transform = "rotateX(-60deg) rotateZ(-25deg) rotateY(45deg)"
+                        imgElement.style.height = "100px"
+                        imgElement.style.width = "75px"
+                        imgElement.style.marginBottom = "15px"
+                        imgElement.style.marginRight = "15px"
+                        element.appendChild(imgElement);
+                    }
                     if (Number(data.dockColor.colorIndex) !== 0) {
                         document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.border = "4px solid";
                         document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.style.borderColor = getBorderColor(Number(data.dockColor.colorIndex));
@@ -53,7 +68,7 @@ export const DockEffects = (isArmySettleStage: boolean | undefined,
             if (myDockPositions && myDockPositions.length > 0) {
                 myDockPositions.map((position: any) => {
                     if (document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)) {
-                        document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
+                        document.getElementById(`${position.myDockPosition.y},${position.myDockPosition.x}`)!.style.border = "";
                     }
                 });
             }

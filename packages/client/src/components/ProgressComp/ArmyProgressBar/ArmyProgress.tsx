@@ -27,8 +27,15 @@ export const ArmyProgress = () => {
             bg='red.500'
             isDisabled={numberOfArmy !== maxArmySize}>
             <div className='col-md-6 me-1'>
-                <Progress border={"2px"} bgColor={"transparent"} hasStripe isAnimated height={"32px"} value={numberOfArmy} max={maxArmySize} borderRadius="10px" colorScheme="green">
-                    <ProgressLabel fontSize="15px" className='text-dark'>
+                <Progress
+                    border={"1px"}
+                    backgroundColor={"transparent"}
+                    height={"32px"}
+                    value={numberOfArmy}
+                    max={maxArmySize}
+                    borderRadius="10px"
+                    colorScheme={"whatsapp"}>
+                    <ProgressLabel fontSize="15px" className='text-white'>
                         ⚔️ {numberOfArmy} / {maxArmySize} ⚔️
                     </ProgressLabel>
                 </Progress>

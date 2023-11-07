@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai';
+import { RiZoomOutLine, RiZoomInLine } from 'react-icons/ri';
 
 export const ZoomHandler = ({ isInputFocused, zoomLevel, setZoomLevel }:
     { isInputFocused: boolean, zoomLevel: number, setZoomLevel: (value: number) => void }) => {
     const handleZoomIn = () => {
-        if (zoomLevel < 1.3) {
+        if (zoomLevel < 2.5) {
             setZoomLevel(zoomLevel + 0.1);
         }
     };
@@ -36,10 +36,10 @@ export const ZoomHandler = ({ isInputFocused, zoomLevel, setZoomLevel }:
     return (
         <>
             <button className="zoom-in-button" onClick={handleZoomIn}>
-                <AiOutlineZoomIn />
+                <RiZoomInLine />
             </button>
             <button className="zoom-out-button" onClick={handleZoomOut}>
-                <AiOutlineZoomOut />
+                <RiZoomOutLine />
             </button>
         </>
     );

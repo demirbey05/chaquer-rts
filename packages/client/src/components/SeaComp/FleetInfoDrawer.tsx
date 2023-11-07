@@ -1,13 +1,13 @@
 import smallShip from '../../images/shipAssets/small_ship.png'
 import mediumShip from '../../images/shipAssets/medium_ship.png'
 import largeShip from '../../images/shipAssets/large_ship.png'
-import shipEmoji from '../../images/shipAssets/ship_emoji.png'
 import React, { useState, useEffect } from "react";
 import { MdLocationPin } from 'react-icons/md'
 import { Button } from "@chakra-ui/react";
 import { usePlayer } from "../../context/PlayerContext";
 import { useMyFleetPositions } from '../../hooks/SeaHooks/useMyFleetPositions';
 import { useGame } from '../../context/GameContext';
+import { GiShipBow } from 'react-icons/gi'
 
 // Scroll to div by id as middle of the screen
 const scrollToDiv = (targetId: any) => {
@@ -68,7 +68,7 @@ export const FleetInfoDrawer = ({ isInputFocused }: { isInputFocused: boolean })
     return (
         <>
             <button className="fleet-info-button" onClick={toggleDrawer}>
-                <img src={shipEmoji} width="35px" height="35px" />
+                <GiShipBow />
             </button>
             <div id="fleet-info-drawer" className={`fleet-info-drawer ${isOpen ? "open" : ""}`}>
                 <div className="d-flex justify-between border-bottom mb-2 p-2">

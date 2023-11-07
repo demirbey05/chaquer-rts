@@ -19,8 +19,8 @@ type TerrainContextType = {
 const TerrainContext = createContext<TerrainContextType>({
   values: null,
   setIsLoading: () => { },
-  width: 50,
-  height: 50,
+  width: 25,
+  height: 25,
   setValues: () => { },
   setRefresh: () => { },
   refresh: 0,
@@ -32,8 +32,8 @@ const TerrainContext = createContext<TerrainContextType>({
 });
 
 const TerrainProvider: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode; }) => {
-  const width = 50;
-  const height = 50;
+  const width = 25;
+  const height = 25;
   const [values, setValues] = useState<any>(null);
   const [permArray, setPermArray] = useState<any>(null);
   const [refresh, setRefresh] = useState<number>(0);

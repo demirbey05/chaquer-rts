@@ -4,6 +4,7 @@ import { ArmyPrices } from "./ArmyPrices";
 import { ResourcePrices } from "./ResourcePrices";
 import { FleetPrices } from "./FleetPrices";
 import { ResourceBuyPrices } from "./ResourceBuyPrices";
+import { AiOutlineStock } from 'react-icons/ai'
 
 export const PriceListDrawer = ({ isInputFocused, isSpectator }: { isInputFocused: boolean, isSpectator: boolean }) => {
     const [isOpen, setIsOpen] = useState(true);
@@ -32,7 +33,7 @@ export const PriceListDrawer = ({ isInputFocused, isSpectator }: { isInputFocuse
     return (
         <div>
             <button className={"price-list-button"} style={isSpectator ? { marginTop: "25px" } : {}} onClick={toggleDrawer}>
-                $
+                <AiOutlineStock />
             </button>
             <div id="prices-drawer-body" className={`prices-drawer ${isOpen ? "open" : ""}`} style={isSpectator ? { marginTop: "95px" } : {}}>
                 <h4 className="text-center p-2 mb-2 mt-2 border-bottom font-extrabold">Current Prices</h4>

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Slider, SliderTrack, SliderFilledTrack, SliderThumb } from "@chakra-ui/react";
 import { FaPlay, FaStop } from 'react-icons/fa'
 import { RiArrowGoBackFill } from 'react-icons/ri'
+import { FiSettings } from 'react-icons/fi'
 
 export const SettingsDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -84,7 +85,7 @@ export const SettingsDrawer = ({ isInputFocused }: { isInputFocused: boolean }) 
     return (
         <>
             <button className="settings-button" onClick={toggleDrawer}>
-                ⚙️
+                <FiSettings />
             </button>
             <div id="settings-drawer" className={`settings-drawer ${isOpen ? "open" : ""}`}>
                 <AudioControlCompHeader toggleDrawer={toggleDrawer} />

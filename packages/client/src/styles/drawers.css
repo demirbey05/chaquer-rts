@@ -5,10 +5,8 @@
     z-index: 2;
     height: 200px;
     width: 300px;
-    margin-top: 95px;
+    margin-top: 80px;
     margin-right: 5px;
-    border-top: 2px solid rgb(241, 241, 241);
-    border-bottom: 2px solid rgb(241, 241, 241);
     overflow: hidden;
     text-align: center;
     border-radius: 25px;
@@ -30,8 +28,9 @@
     z-index: 2;
     height: 425px;
     width: 300px;
-    margin-top: 375px;
+    margin-top: 350px;
     margin-right: 5px;
+    border-radius: 25px;
     position: fixed;
     top: 0;
     right: -305px;
@@ -53,6 +52,7 @@
     width: 250px;
     padding: 10px;
     margin-top: 90px;
+    border-radius: 25px;
     position: fixed;
     top: 0;
     left: -400px;
@@ -74,6 +74,7 @@
     width: 400px;
     padding: 10px;
     margin-top: 90px;
+    border-radius: 25px;
     position: fixed;
     top: 0;
     left: -400px;
@@ -109,6 +110,7 @@
     width: 400px;
     padding: 10px;
     margin-top: 90px;
+    border-radius: 25px;
     position: fixed;
     top: 0;
     left: -400px;
@@ -142,6 +144,7 @@
     width: 400px;
     padding: 10px;
     margin-top: 90px;
+    border-radius: 25px;
     position: fixed;
     top: 0;
     left: -400px;
@@ -163,6 +166,7 @@
     width: 250px;
     padding: 10px;
     margin-top: 90px;
+    border-radius: 25px;
     position: fixed;
     top: 0;
     left: -250px;
@@ -208,7 +212,8 @@
     z-index: 2;
     height: 300px;
     width: 300px;
-    margin-top: 415px;
+    margin-top: 290px;
+    border-radius: 25px;
     overflow: hidden;
     position: fixed;
     top: 0;
