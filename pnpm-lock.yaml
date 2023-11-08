@@ -1,16 +1,12 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 importers:
 
   .:
     devDependencies:
       '@latticexyz/cli':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70(google-protobuf@3.21.2)
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa(google-protobuf@3.21.2)
       '@typescript-eslint/eslint-plugin':
         specifier: 5.46.1
         version: 5.46.1(@typescript-eslint/parser@5.46.1)(eslint@8.29.0)(typescript@5.1.6)
@@ -48,35 +44,35 @@ importers:
         specifier: ^5.7.2
         version: 5.7.2
       '@latticexyz/common':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
       '@latticexyz/config':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70(typescript@5.1.6)
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa(typescript@5.1.6)
       '@latticexyz/dev-tools':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70(@latticexyz/common@2.0.0-main-52182f70)(@latticexyz/recs@2.0.0-main-52182f70)(@latticexyz/store-sync@2.0.0-main-52182f70)(@latticexyz/store@2.0.0-main-52182f70)(@latticexyz/utils@2.0.0-main-52182f70)(@latticexyz/world@2.0.0-main-52182f70)(typescript@5.1.6)(zod@3.21.4)
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa(@latticexyz/common@2.0.0-main-bb91edaa)(@latticexyz/recs@2.0.0-main-bb91edaa)(@latticexyz/store-sync@2.0.0-main-bb91edaa)(@latticexyz/store@2.0.0-main-bb91edaa)(@latticexyz/utils@2.0.0-main-bb91edaa)(@latticexyz/world@2.0.0-main-bb91edaa)(typescript@5.1.6)(zod@3.21.4)
       '@latticexyz/react':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
       '@latticexyz/recs':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
       '@latticexyz/schema-type':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
       '@latticexyz/services':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70(google-protobuf@3.21.2)
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa(google-protobuf@3.21.2)
       '@latticexyz/store-sync':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70(typescript@5.1.6)
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa(react@18.2.0)(typescript@5.1.6)
       '@latticexyz/utils':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa
       '@latticexyz/world':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70(typescript@5.1.6)
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa(typescript@5.1.6)
       '@wagmi/chains':
         specifier: ^0.2.22
         version: 0.2.22(typescript@5.1.6)
@@ -196,26 +192,26 @@ importers:
         specifier: ^5.7.2
         version: 5.7.2
       '@latticexyz/abi-ts':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa
       '@latticexyz/cli':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70(google-protobuf@3.21.2)
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa(google-protobuf@3.21.2)
       '@latticexyz/config':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70(typescript@5.1.6)
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa(typescript@5.1.6)
       '@latticexyz/schema-type':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
       '@latticexyz/store':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70(typescript@5.1.6)
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa(typescript@5.1.6)
       '@latticexyz/world':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70(typescript@5.1.6)
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa(typescript@5.1.6)
       '@latticexyz/world-modules':
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70(typescript@5.1.6)
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa(typescript@5.1.6)
       '@prb/math':
         specifier: ^4.0.1
         version: 4.0.1
@@ -251,11 +247,11 @@ importers:
         specifier: ^3.3.7
         version: 3.3.7
       solhint-config-mud:
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa
       solhint-plugin-mud:
-        specifier: 2.0.0-main-52182f70
-        version: 2.0.0-main-52182f70
+        specifier: 2.0.0-main-bb91edaa
+        version: 2.0.0-main-bb91edaa
       typechain:
         specifier: ^8.1.1
         version: 8.1.1(typescript@5.1.6)
@@ -3817,8 +3813,8 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /@latticexyz/abi-ts@2.0.0-main-52182f70:
-    resolution: {integrity: sha512-ZlUPAecsGzv1yIKYSpJfv62Bb493pucWb6JzXHUE9+wX4t9gSetDMQC2spmZ424//ooEXcn0XjWBOjLBeStu7A==}
+  /@latticexyz/abi-ts@2.0.0-main-bb91edaa:
+    resolution: {integrity: sha512-LPXK2zIMCRcO1b9sQDL2LxQ0oT1d63OvkZkdq+Yl45d66qJZVq+SE8JSO5lVotgoQ/Q4RASdpPx1ZiJtz25pWA==}
     hasBin: true
     dependencies:
       chalk: 5.3.0
@@ -3829,10 +3825,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@latticexyz/block-logs-stream@2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-gECKik09j3/xrWP6rATrGz/TUUmjSs5HTdYb+w8QkLtEfM1ZC6/0a1hfu8umiVikADwqSmCr9Tnc2KiKzjfWTQ==}
+  /@latticexyz/block-logs-stream@2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4):
+    resolution: {integrity: sha512-9C/cQmC2NRZOvYuhWfsv8mJkn0ggawxqDdoptydFopjxEGL1JyXxgG/hjFddZQUjaIM3E/BPDEPWVyGKP2AABA==}
     dependencies:
-      '@latticexyz/common': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/common': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
       abitype: 0.9.8(typescript@5.1.6)(zod@3.21.4)
       debug: 4.3.4
       rxjs: 7.5.5
@@ -3845,25 +3841,25 @@ packages:
       - zod
     dev: false
 
-  /@latticexyz/cli@2.0.0-main-52182f70(google-protobuf@3.21.2):
-    resolution: {integrity: sha512-IpgF6fAeXwzOG+YxseHFrFre5WtEJ6CKmWA3tTPdf9gX4wpNzG/b24bhG8PWoTkITDZN6Mgyn3L+pFLy1CmyYw==}
+  /@latticexyz/cli@2.0.0-main-bb91edaa(google-protobuf@3.21.2):
+    resolution: {integrity: sha512-j1iQLbIIb0wuXDEZWD+3DqunQT7oDOFov1SdgSQAIIVsdLOHavgBTm5LOz9RMnnQ/sM8+RCAVEQwAP6dr1fEnA==}
     hasBin: true
     dependencies:
       '@ethersproject/abi': 5.7.0
       '@ethersproject/providers': 5.7.2
       '@improbable-eng/grpc-web': 0.15.0(google-protobuf@3.21.2)
       '@improbable-eng/grpc-web-node-http-transport': 0.15.0(@improbable-eng/grpc-web@0.15.0)
-      '@latticexyz/abi-ts': 2.0.0-main-52182f70
-      '@latticexyz/common': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/config': 2.0.0-main-52182f70(typescript@5.1.6)
-      '@latticexyz/gas-report': 2.0.0-main-52182f70
-      '@latticexyz/protocol-parser': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/schema-type': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/services': 2.0.0-main-52182f70(google-protobuf@3.21.2)
-      '@latticexyz/store': 2.0.0-main-52182f70(typescript@5.1.6)
-      '@latticexyz/utils': 2.0.0-main-52182f70
-      '@latticexyz/world': 2.0.0-main-52182f70(typescript@5.1.6)
-      '@latticexyz/world-modules': 2.0.0-main-52182f70(typescript@5.1.6)
+      '@latticexyz/abi-ts': 2.0.0-main-bb91edaa
+      '@latticexyz/common': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/config': 2.0.0-main-bb91edaa(typescript@5.1.6)
+      '@latticexyz/gas-report': 2.0.0-main-bb91edaa
+      '@latticexyz/protocol-parser': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/schema-type': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/services': 2.0.0-main-bb91edaa(google-protobuf@3.21.2)
+      '@latticexyz/store': 2.0.0-main-bb91edaa(typescript@5.1.6)
+      '@latticexyz/utils': 2.0.0-main-bb91edaa
+      '@latticexyz/world': 2.0.0-main-bb91edaa(typescript@5.1.6)
+      '@latticexyz/world-modules': 2.0.0-main-bb91edaa(typescript@5.1.6)
       chalk: 5.3.0
       chokidar: 3.5.3
       debug: 4.3.4
@@ -3889,10 +3885,10 @@ packages:
       - supports-color
       - utf-8-validate
 
-  /@latticexyz/common@2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-auFn42O6iXsE8Y0vCZl2c1550WlvyhkHP9dhQbBKH/5PAWLBfnXSdvEzuP/U7nPnt+LIylTADHEn7MH/6zcEwA==}
+  /@latticexyz/common@2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4):
+    resolution: {integrity: sha512-mSpGscEHheVK2c7j+YTMVz73kHFfnPWHrrc+n19FC/hLUXNaWhP6ds2ORe/CtfkttYPvRkdhYmv62SbBfYgabw==}
     dependencies:
-      '@latticexyz/schema-type': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/schema-type': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
       '@solidity-parser/parser': 0.16.0
       debug: 4.3.4
       execa: 7.1.1
@@ -3908,11 +3904,11 @@ packages:
       - utf-8-validate
       - zod
 
-  /@latticexyz/config@2.0.0-main-52182f70(typescript@5.1.6):
-    resolution: {integrity: sha512-3+82pR1V1jkFPKnmV194njL8tBMrbCj0SdYTwpnKybEifKwOrbZIgo3rn+i5aO81oHxKra5ySjDstdqTFDMsoQ==}
+  /@latticexyz/config@2.0.0-main-bb91edaa(typescript@5.1.6):
+    resolution: {integrity: sha512-aSUtsOT8WAayfccnYu08E8bDjYZavVdMa5XtGoRu2z5md4e1Sekxf83dSHHEnyiTFm0lOW441xDEAJ76K8cR0Q==}
     dependencies:
-      '@latticexyz/common': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/schema-type': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/common': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/schema-type': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
       esbuild: 0.17.19
       find-up: 6.3.0
       viem: 1.14.0(typescript@5.1.6)(zod@3.21.4)
@@ -3924,23 +3920,23 @@ packages:
       - typescript
       - utf-8-validate
 
-  /@latticexyz/dev-tools@2.0.0-main-52182f70(@latticexyz/common@2.0.0-main-52182f70)(@latticexyz/recs@2.0.0-main-52182f70)(@latticexyz/store-sync@2.0.0-main-52182f70)(@latticexyz/store@2.0.0-main-52182f70)(@latticexyz/utils@2.0.0-main-52182f70)(@latticexyz/world@2.0.0-main-52182f70)(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-6mcO/jx/4nfYgGinTNVPwcur5YUZr1nnxXcWeUJNvUrRvdjvbIRHo7vYEMdZJ3zwhHJ4Q325LsAZ4ouzvMS8LQ==}
+  /@latticexyz/dev-tools@2.0.0-main-bb91edaa(@latticexyz/common@2.0.0-main-bb91edaa)(@latticexyz/recs@2.0.0-main-bb91edaa)(@latticexyz/store-sync@2.0.0-main-bb91edaa)(@latticexyz/store@2.0.0-main-bb91edaa)(@latticexyz/utils@2.0.0-main-bb91edaa)(@latticexyz/world@2.0.0-main-bb91edaa)(typescript@5.1.6)(zod@3.21.4):
+    resolution: {integrity: sha512-SjU47GZs01wa3i6KL9RhhwqIOKMxHco+C0DvFlVuGbwMY4+2Ym5LwbFXHEuQISLLIMZIvZljsKa3wLOUhpUcPg==}
     peerDependencies:
-      '@latticexyz/common': 2.0.0-main-52182f70
-      '@latticexyz/recs': 2.0.0-main-52182f70
-      '@latticexyz/store': 2.0.0-main-52182f70
-      '@latticexyz/store-sync': 2.0.0-main-52182f70
-      '@latticexyz/utils': 2.0.0-main-52182f70
-      '@latticexyz/world': 2.0.0-main-52182f70
+      '@latticexyz/common': 2.0.0-main-bb91edaa
+      '@latticexyz/recs': 2.0.0-main-bb91edaa
+      '@latticexyz/store': 2.0.0-main-bb91edaa
+      '@latticexyz/store-sync': 2.0.0-main-bb91edaa
+      '@latticexyz/utils': 2.0.0-main-bb91edaa
+      '@latticexyz/world': 2.0.0-main-bb91edaa
     dependencies:
-      '@latticexyz/common': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/react': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/recs': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/store': 2.0.0-main-52182f70(typescript@5.1.6)
-      '@latticexyz/store-sync': 2.0.0-main-52182f70(typescript@5.1.6)
-      '@latticexyz/utils': 2.0.0-main-52182f70
-      '@latticexyz/world': 2.0.0-main-52182f70(typescript@5.1.6)
+      '@latticexyz/common': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/react': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/recs': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/store': 2.0.0-main-bb91edaa(typescript@5.1.6)
+      '@latticexyz/store-sync': 2.0.0-main-bb91edaa(react@18.2.0)(typescript@5.1.6)
+      '@latticexyz/utils': 2.0.0-main-bb91edaa
+      '@latticexyz/world': 2.0.0-main-bb91edaa(typescript@5.1.6)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-router-dom: 6.16.0(react-dom@18.2.0)(react@18.2.0)
@@ -3958,8 +3954,8 @@ packages:
       - zod
     dev: false
 
-  /@latticexyz/gas-report@2.0.0-main-52182f70:
-    resolution: {integrity: sha512-2EtGm1+FkahONSbaN3dZuHyApLWIl6xPw4ovuXJ4SYWbIgHqyx8PQ8NNHlkW2nHYydfkM14bAIohwBbLPhDcVw==}
+  /@latticexyz/gas-report@2.0.0-main-bb91edaa:
+    resolution: {integrity: sha512-Ln47fMnonzwF7SJVXsyLa7bwEgH2dTyCj5vgH2kO064jA9CjZMbEfStSiioxqZDQZDcY2ZA1CRY+CVTFwlM7WQ==}
     hasBin: true
     dependencies:
       chalk: 5.3.0
@@ -3970,11 +3966,11 @@ packages:
       table: 6.8.1
       yargs: 17.7.2
 
-  /@latticexyz/protocol-parser@2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-qKfnddDiL03nuA9cxuEhH+wpSHpWSjlUDve5F0oomUdn8K4SwCv38LNdeuiUKl6fF2LCBicTGmbLkSVqXGfREQ==}
+  /@latticexyz/protocol-parser@2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4):
+    resolution: {integrity: sha512-8Po+nMfjBISxzSA2e0KmDP8ZLEeLhFPCBVs/8DVocvvWK/AJqsxixDzJmmZ173KxrqUPMh6FUwl6IH02Kkwa7w==}
     dependencies:
-      '@latticexyz/common': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/schema-type': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/common': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/schema-type': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
       abitype: 0.9.8(typescript@5.1.6)(zod@3.21.4)
       viem: 1.14.0(typescript@5.1.6)(zod@3.21.4)
     transitivePeerDependencies:
@@ -3984,11 +3980,11 @@ packages:
       - utf-8-validate
       - zod
 
-  /@latticexyz/react@2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-T2HidjebewuG7q1pI017yYGw7FwP90sQlvN28SCXwE7eHEC22gaP//mNHkwKFYmZHFbvn8sbhmaQmtfSIZn1PQ==}
+  /@latticexyz/react@2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4):
+    resolution: {integrity: sha512-I/TzJ+0mfnHkWzSAmZ+b+N5VxW7u309AAUQeD0C8MNVaJYLJqwXO1hT9RcvPWePP9vYAonFnKK8YiHx4JfckaQ==}
     dependencies:
-      '@latticexyz/recs': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/store': 2.0.0-main-52182f70(typescript@5.1.6)
+      '@latticexyz/recs': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/store': 2.0.0-main-bb91edaa(typescript@5.1.6)
       fast-deep-equal: 3.1.3
       mobx: 6.9.0
       react: 18.2.0
@@ -4001,11 +3997,11 @@ packages:
       - zod
     dev: false
 
-  /@latticexyz/recs@2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-HS/dyEiQEuyovDJZJpBPs1lc9tnLk5k1GOau8Ut4yHEgAitJJbKiENkFLJTvfZmQigv9kP+rxrmvvA9abbA7vA==}
+  /@latticexyz/recs@2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4):
+    resolution: {integrity: sha512-4bbo1GKWZjyVG6yB/WSvYU2/eNX+Ym3Pun15echVLAiubTnIi5sSy25qRJSOkPX3LgjgcRTMygCSZo52D9bAYQ==}
     dependencies:
-      '@latticexyz/schema-type': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/utils': 2.0.0-main-52182f70
+      '@latticexyz/schema-type': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/utils': 2.0.0-main-bb91edaa
       mobx: 6.9.0
       rxjs: 7.5.5
     transitivePeerDependencies:
@@ -4015,8 +4011,8 @@ packages:
       - zod
     dev: false
 
-  /@latticexyz/schema-type@2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-xTK8aPY6SgurW+XUG5H+zwZmsYgDVi2a8Gg6mxgdd6AxM7wTmeVeGg42IkV7/9513q1vvNJJlNGuIPA+Gr57Ug==}
+  /@latticexyz/schema-type@2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4):
+    resolution: {integrity: sha512-V+6y+xMGUtLpWTQ8zmqnWT3BcB7E5DQHsc0nhDMRUxmi62i0FdMx5UM1YeSuOqYzRk0rw/4qQEUamY/GzQ9S8Q==}
     dependencies:
       abitype: 0.9.8(typescript@5.1.6)(zod@3.21.4)
       viem: 1.14.0(typescript@5.1.6)(zod@3.21.4)
@@ -4026,8 +4022,8 @@ packages:
       - utf-8-validate
       - zod
 
-  /@latticexyz/services@2.0.0-main-52182f70(google-protobuf@3.21.2):
-    resolution: {integrity: sha512-pDFsJq6Qjx8Etlk482rwo929IdQQadnetq3upHK9F50mN3jUJbwXC4SbjZSRSiQ6HtBnqJIdZ8fC1w+VfRROrA==}
+  /@latticexyz/services@2.0.0-main-bb91edaa(google-protobuf@3.21.2):
+    resolution: {integrity: sha512-jBSJS1Gu5H5bGCQmMwKwYi23Toej3NPeLN3ad6lH/CCtKt4T5tw9kfxhBfQamnj7JUel81X6X6RR8XCdxOCu9A==}
     dependencies:
       long: 5.2.3
       nice-grpc-common: 2.0.2
@@ -4036,16 +4032,16 @@ packages:
     transitivePeerDependencies:
       - google-protobuf
 
-  /@latticexyz/store-sync@2.0.0-main-52182f70(typescript@5.1.6):
-    resolution: {integrity: sha512-sJZ4wGD4UUJkKiCtJAaM69L23Zc7KXR4ABTS/C3Yxm5Y1Ujthw6qpu9XuG8eQbRhHLxc7I0rx/NFASbGbVl2Kg==}
+  /@latticexyz/store-sync@2.0.0-main-bb91edaa(react@18.2.0)(typescript@5.1.6):
+    resolution: {integrity: sha512-APAm6hHcXeBZsVAbTsIlQ5cL1prs2t1T1ECrCH/l5/Ju27rPX6tqut2E6B+J1XixxdnR/cE1pYjzw9ttmeuKkQ==}
     dependencies:
-      '@latticexyz/block-logs-stream': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/common': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/protocol-parser': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/recs': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/schema-type': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/store': 2.0.0-main-52182f70(typescript@5.1.6)
-      '@latticexyz/world': 2.0.0-main-52182f70(typescript@5.1.6)
+      '@latticexyz/block-logs-stream': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/common': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/protocol-parser': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/recs': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/schema-type': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/store': 2.0.0-main-bb91edaa(typescript@5.1.6)
+      '@latticexyz/world': 2.0.0-main-bb91edaa(typescript@5.1.6)
       '@trpc/client': 10.34.0(@trpc/server@10.34.0)
       '@trpc/server': 10.34.0
       debug: 4.3.4
@@ -4057,6 +4053,7 @@ packages:
       superjson: 1.13.1
       viem: 1.14.0(typescript@5.1.6)(zod@3.21.4)
       zod: 3.21.4
+      zustand: 4.3.8(react@18.2.0)
     transitivePeerDependencies:
       - '@aws-sdk/client-rds-data'
       - '@cloudflare/workers-types'
@@ -4071,21 +4068,23 @@ packages:
       - better-sqlite3
       - bufferutil
       - bun-types
+      - immer
       - knex
       - mysql2
       - pg
+      - react
       - sqlite3
       - supports-color
       - typescript
       - utf-8-validate
     dev: false
 
-  /@latticexyz/store@2.0.0-main-52182f70(typescript@5.1.6):
-    resolution: {integrity: sha512-MguqsHKExqa8wcyKAbHgXdLqc623UO2kTrflWsxNOl9QukdvwJYPnnedmU2bqID077MV8UzYzYA0Jo+XjjbwEw==}
+  /@latticexyz/store@2.0.0-main-bb91edaa(typescript@5.1.6):
+    resolution: {integrity: sha512-qhe9dbPStN1rQ7k/CyKrzlEP5ZsCIRcdgNn02mZ0DU72xldAnXqBYJOQa5OEaaxdUlmLAhTowoDQg+EDNAHv9Q==}
     dependencies:
-      '@latticexyz/common': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/config': 2.0.0-main-52182f70(typescript@5.1.6)
-      '@latticexyz/schema-type': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/common': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/config': 2.0.0-main-bb91edaa(typescript@5.1.6)
+      '@latticexyz/schema-type': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
       abitype: 0.9.8(typescript@5.1.6)(zod@3.21.4)
       viem: 1.14.0(typescript@5.1.6)(zod@3.21.4)
       zod: 3.21.4
@@ -4095,21 +4094,21 @@ packages:
       - typescript
       - utf-8-validate
 
-  /@latticexyz/utils@2.0.0-main-52182f70:
-    resolution: {integrity: sha512-G7jJcaDRLwFa3Rmz1zZziolZQAsAXNgkqshrUMz9LZNOZKE11fXesrmmydoM9gSifsdNw6HqajRLuqAV5qe1eA==}
+  /@latticexyz/utils@2.0.0-main-bb91edaa:
+    resolution: {integrity: sha512-+7uOkkh7rB9Vnp27Hr1swnxUPvBGlMhqts1nGsRsPNsRWgF3ZfVuX361uWkqPET5xklMjzI63YQuFLydCMM2Lg==}
     dependencies:
       mobx: 6.9.0
       proxy-deep: 3.1.1
       rxjs: 7.5.5
 
-  /@latticexyz/world-modules@2.0.0-main-52182f70(typescript@5.1.6):
-    resolution: {integrity: sha512-+AuAQIwc6Ux7R4Vbb/DVvWxqDSkt3eJQNrBK4Rq5O6tZ38Z9cQlOYrdi47m0sGOTgxfp4HVV0cjv4ucOrtgRjA==}
+  /@latticexyz/world-modules@2.0.0-main-bb91edaa(typescript@5.1.6):
+    resolution: {integrity: sha512-OifGOUTzRBjtP2jUbvCo8a1r9XZd6bRRaWRYuY+GC8Tp0gBTrV25bbihkjFU3Cm88s0TNVyBVYAT0wRBeGVpDQ==}
     dependencies:
-      '@latticexyz/common': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/config': 2.0.0-main-52182f70(typescript@5.1.6)
-      '@latticexyz/schema-type': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/store': 2.0.0-main-52182f70(typescript@5.1.6)
-      '@latticexyz/world': 2.0.0-main-52182f70(typescript@5.1.6)
+      '@latticexyz/common': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/config': 2.0.0-main-bb91edaa(typescript@5.1.6)
+      '@latticexyz/schema-type': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/store': 2.0.0-main-bb91edaa(typescript@5.1.6)
+      '@latticexyz/world': 2.0.0-main-bb91edaa(typescript@5.1.6)
       zod: 3.21.4
     transitivePeerDependencies:
       - bufferutil
@@ -4117,13 +4116,13 @@ packages:
       - typescript
       - utf-8-validate
 
-  /@latticexyz/world@2.0.0-main-52182f70(typescript@5.1.6):
-    resolution: {integrity: sha512-5U/i7tbso7sKznq+GYyH/cOoEr4ROQCKao/KBd+z/SJM/rrWCGxtqurux+aDAqLJGAeX+wLDSFwIp3MZjD2MeA==}
+  /@latticexyz/world@2.0.0-main-bb91edaa(typescript@5.1.6):
+    resolution: {integrity: sha512-ArBLvIXygWxl1ZOOODtjfAHjbGSig6l8cu9K+7Ors8nfFp30GAtgNdI0J4TDxARsQ9IUrqVOtL676bx6lYJWjg==}
     dependencies:
-      '@latticexyz/common': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/config': 2.0.0-main-52182f70(typescript@5.1.6)
-      '@latticexyz/schema-type': 2.0.0-main-52182f70(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/store': 2.0.0-main-52182f70(typescript@5.1.6)
+      '@latticexyz/common': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/config': 2.0.0-main-bb91edaa(typescript@5.1.6)
+      '@latticexyz/schema-type': 2.0.0-main-bb91edaa(typescript@5.1.6)(zod@3.21.4)
+      '@latticexyz/store': 2.0.0-main-bb91edaa(typescript@5.1.6)
       abitype: 0.9.8(typescript@5.1.6)(zod@3.21.4)
       viem: 1.14.0(typescript@5.1.6)(zod@3.21.4)
       zod: 3.21.4
@@ -8484,12 +8483,12 @@ packages:
       astral-regex: 2.0.0
       is-fullwidth-code-point: 3.0.0
 
-  /solhint-config-mud@2.0.0-main-52182f70:
-    resolution: {integrity: sha512-NmxbvgajkntCucSW7mHK1jNX33byIw0oFqKAFuI8Nsg1P/Mt2B+LaqZ+g2YR/JTdU6i2kc+MTKcpwII4mvOa4A==}
+  /solhint-config-mud@2.0.0-main-bb91edaa:
+    resolution: {integrity: sha512-GuYd53K3ksk9JTVydRMfL/jkVM1MZpMfhBWVxigXhaSRug1Pon5Fx5trVQrVcg6PYj06qNWpDwrSOc2jLgs1rg==}
     dev: true
 
-  /solhint-plugin-mud@2.0.0-main-52182f70:
-    resolution: {integrity: sha512-rgcbLPZEpCt8FWdyhTluovSyOOKQsdxwgXE7FeJzA/cUIsCLgUe+SmGOHeRODoNTMHrJNUkM2rq52jWGbcqdzw==}
+  /solhint-plugin-mud@2.0.0-main-bb91edaa:
+    resolution: {integrity: sha512-S17HirC+3pbfymrZ8Wi1byYDYm2XLoWZQ47y5omuZGTOUyEMR0U+XbC7R3QhHXvuYAW9gJY6sGFSQhvOte4/CA==}
     dependencies:
       '@solidity-parser/parser': 0.16.0
     dev: true
@@ -9405,3 +9404,7 @@ packages:
     name: forge-std
     version: 1.2.0
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

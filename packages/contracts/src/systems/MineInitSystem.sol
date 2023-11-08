@@ -110,7 +110,7 @@ contract MineInitSystem is System {
       previousHash = LibRandom.generateRandomNumber(previousHash, gameID);
       y = uint32((uint256(previousHash) % height) + offset.yOffset);
 
-      if (MapConfig.getItemTerrain(gameID, x * width * offset.dropFactor + y)[0] == hex"03") {
+      if (MapConfig.getItemTerrain(gameID, x * ((width * offset.dropFactor)+1) + y)[0] == hex"03") {
         continue;
       }
       if (LibQueries.queryPositionEntity(IStore(_world()), x, y, gameID) > 0) {
