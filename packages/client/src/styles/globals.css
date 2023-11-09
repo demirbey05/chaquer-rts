@@ -59,10 +59,9 @@ input::-webkit-inner-spin-button {
     position: fixed;
     bottom: 0;
     right: 0;
-    padding: 2px;
+    padding: 3px;
     background-color: rgba(0, 0, 0, 0.3);
     color: white;
-    text-align: center;
-    font-size: 12px;
+    font-size: 11px;
     z-index: 999;
 }
