@@ -49,7 +49,7 @@ const CollectButton = () => {
                 hasArrow
                 backgroundColor={"black"}
                 label='Resources ready...'
-                placement='bottom'
+                placement='right'
                 isOpen={!isDisabled}>
                 <Button
                     isDisabled={isDisabled}
