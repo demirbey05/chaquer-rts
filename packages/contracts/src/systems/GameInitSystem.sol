@@ -8,6 +8,7 @@ import { IdentitySystem } from "./IdentitySystem.sol";
 import "./Errors.sol";
 import { State } from "../codegen/common.sol";
 import { initialCredit } from "./Constants.sol";
+import {SystemSwitch} from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import {IWorld} from "../codegen/world/IWorld.sol";
 
 error InitSystem__UsernameAlreadyInitialized();
@@ -114,6 +115,6 @@ contract GameInitSystem is System {
     Players.set(gameID, sender, true);
     GameMetaData.setNumberOfPlayer(gameID, currentNumOfUser + 1);
     CreditOwn.set(gameID, sender, initialCredit);
-    IWorld(_world()).commitSeed(gameID, seed);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).commitSeed,(gameID,seed)));
   }
 }

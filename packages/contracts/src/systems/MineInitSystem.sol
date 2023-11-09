@@ -26,9 +26,6 @@ contract MineInitSystem is System {
     if (!isPlayer) {
       revert MineSystem__NoAuthorized();
     }
-    if (LibQueries.getOwnedCastleIDs(IStore(_world()), sender, gameID).length == 0) {
-      revert MineSystem__NoCastleOfUsers();
-    }
     if (GameMetaData.getState(gameID) != State.Waiting) {
       revert MineSystem__WrongState();
     }
