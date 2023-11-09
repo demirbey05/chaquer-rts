@@ -6,6 +6,9 @@ import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useResourcesInStoke } from "../../hooks/EconomyHooks/useResourcesInStoke";
 import { useGame } from "../../context/GameContext";
 import { SlBasket } from 'react-icons/sl'
+import cornIcon from '../../images/resourceAssets/corn_icon.png'
+import woodIcon from '../../images/resourceAssets/wood_icon.png'
+import diomandIcon from '../../images/resourceAssets/diomand_icon.png'
 
 export const MarketDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const { gameID } = useGame();
@@ -69,24 +72,30 @@ export const MarketDrawer = ({ isInputFocused }: { isInputFocused: boolean }) =>
                     <h2 className="text-center border-top border-bottom p-2">Stocks</h2>
                     <div className="d-flex align-items-center justify-content-center mt-2">
                         <div className="col align-items-center ms-4">
-                            <div className="row justify-content-center w-100">
-                                🌽
+                            <div className="row w-100">
+                                <div className="d-flex justify-content-center">
+                                    <img src={cornIcon} width={"25px"} height={"25px"} alt="food-count" />
+                                </div>
                             </div>
                             <div className="row justify-content-center text-center w-100 border-1 mt-2">
                                 {resourcesInStock && Number(resourcesInStock.foodSold)}
                             </div>
                         </div>
                         <div className="col align-items-center ms-4">
-                            <div className="row justify-content-center w-100">
-                                🪓
+                            <div className="row w-100">
+                                <div className="d-flex justify-content-center">
+                                    <img src={woodIcon} width={"25px"} height={"25px"} alt="wood-count" />
+                                </div>
                             </div>
                             <div className="row justify-content-center text-center w-100 border-1 mt-2">
                                 {resourcesInStock && Number(resourcesInStock.woodSold)}
                             </div>
                         </div>
                         <div className="col align-items-center ms-4">
-                            <div className="row justify-content-center w-100">
-                                💎
+                            <div className="row w-100">
+                                <div className="d-flex justify-content-center">
+                                    <img src={diomandIcon} width={"25px"} height={"25px"} alt="diomand-count" />
+                                </div>
                             </div>
                             <div className="row justify-content-center text-center w-100 border-1 mt-2">
                                 {resourcesInStock && Number(resourcesInStock.goldSold)}

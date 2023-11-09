@@ -12,7 +12,7 @@ export const WoodCount = () => {
     return (
         <div className="col-3 mine-progress-bar-col">
             <Tooltip label='Wood' placement='bottom' >
-                <img className='me-2' src={woodIcon} width={"25px"} height={"10px"} alt="food-icon" />
+                <img className='me-2' src={woodIcon} width={"30px"} height={"30px"} alt="food-icon" />
             </Tooltip>
             : {numberOfResource ? Number(numberOfResource.numOfWood) : 0}
         </div>

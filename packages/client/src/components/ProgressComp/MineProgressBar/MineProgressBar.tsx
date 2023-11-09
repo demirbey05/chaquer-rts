@@ -7,7 +7,6 @@ import { WoodCount } from "../MineProgressBar/WoodCount";
 import { GoldCount } from '../MineProgressBar/GoldCount';
 import { useLastResourceCollectBlock } from "../../../hooks/ResourceHooks/useLastResourceCollectBlock";
 import { usePlayer } from "../../../context/PlayerContext";
-import largeButtonAsset from '../../../images/interfaceAssets/large-button.jpg'
 
 export const MineProgressBar = () => {
     return (

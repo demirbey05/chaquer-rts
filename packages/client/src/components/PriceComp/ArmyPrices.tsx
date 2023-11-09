@@ -1,13 +1,20 @@
 import { useArmyPrices } from "../../hooks/EconomyHooks/useArmyPrices";
+import creditIcon from '../../images/resourceAssets/credit_icon.png'
 
 export const ArmyPrices = () => {
     const armyPrices = useArmyPrices();
 
     return (
         <div className="mt-2">
-            <PriceListItem name={"Swordsman/per"} isFleetPrices={false} price={armyPrices.swordsmanPrice} />
-            <PriceListItem name={"Archer/per"} isFleetPrices={false} price={armyPrices.archerPrice} />
-            <PriceListItem name={"Cavalry/per"} isFleetPrices={false} price={armyPrices.cavalryPrice} />
+            <PriceListItem
+                name={"Swordsman"}
+                price={armyPrices.swordsmanPrice} />
+            <PriceListItem
+                name={"Archer"}
+                price={armyPrices.archerPrice} />
+            <PriceListItem
+                name={"Cavalry"}
+                price={armyPrices.cavalryPrice} />
         </div>
     )
 }
@@ -15,7 +22,6 @@ export const ArmyPrices = () => {
 interface PriceListItemPropTypes {
     name: string,
     price: any,
-    isFleetPrices: boolean
 }
 
 const PriceListItem = (props: PriceListItemPropTypes) => {
@@ -24,13 +30,10 @@ const PriceListItem = (props: PriceListItemPropTypes) => {
             {props.name}
         </span>
         {
-            !props.isFleetPrices ?
-                <span className="me-2">
-                    {props.price && props.price.toString().slice(0, 12)} 💰
-                </span> :
-                <span className="me-2">
-                    {props.price && props.price}
-                </span>
+            <span className="me-2 d-flex align-items-center">
+                {props.price && props.price.toString().slice(0, 12)}
+                <img className="ms-2" src={creditIcon} alt="credit-icon" width={"15px"} height={"15px"} />
+            </span>
         }
     </p>
 }

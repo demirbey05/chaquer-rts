@@ -1,4 +1,5 @@
-import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
+import creditIcon from '../../images/resourceAssets/credit_icon.png'
+import woodIcon from '../../images/resourceAssets/wood_icon.png'
 
 export const FleetPrices = () => {
     const fleetPrices = {
@@ -12,17 +13,26 @@ export const FleetPrices = () => {
 
     return (
         <div className="mt-2">
-            <PriceListItem name={"Baron's Dagger/per"} isFleetPrices={true} price={`${fleetPrices.smallShipCredit} 💰 + ${fleetPrices.smallShipWood} 🪓`} />
-            <PriceListItem name={"Knight's Galley/per"} isFleetPrices={true} price={`${fleetPrices.mediumShipCredit} 💰 + ${fleetPrices.mediumShipWood} 🪓`} />
-            <PriceListItem name={"King's Leviathan/per"} isFleetPrices={true} price={`${fleetPrices.bigShipCredit} 💰 + ${fleetPrices.bigShipWood} 🪓`} />
+            <PriceListItem
+                name={"Baron's Dagger"}
+                creditPrice={`${fleetPrices.smallShipCredit}`}
+                woodPrice={`${fleetPrices.smallShipWood}`} />
+            <PriceListItem
+                name={"Knight's Galley"}
+                creditPrice={`${fleetPrices.mediumShipCredit}`}
+                woodPrice={`${fleetPrices.mediumShipWood}`} />
+            <PriceListItem
+                name={"King's Leviathan"}
+                creditPrice={`${fleetPrices.bigShipCredit}`}
+                woodPrice={`${fleetPrices.bigShipWood}`} />
         </div>
     )
 }
 
 interface PriceListItemPropTypes {
     name: string,
-    price: any,
-    isFleetPrices: boolean
+    creditPrice: any,
+    woodPrice: any
 }
 
 const PriceListItem = (props: PriceListItemPropTypes) => {
@@ -31,13 +41,13 @@ const PriceListItem = (props: PriceListItemPropTypes) => {
             {props.name}
         </span>
         {
-            !props.isFleetPrices ?
-                <span className="me-2">
-                    {props.price && getNumberFromBigInt(props.price).slice(0, 12)} 💰
-                </span> :
-                <span className="me-2">
-                    {props.price && props.price}
-                </span>
+            <span className="me-2 d-flex">
+                {props.creditPrice && props.creditPrice}
+                <img className="ms-2" src={creditIcon} alt="credit-icon" width={"15px"} height={"15px"} />
+                <span className='ms-2 me-2'>+</span>
+                {props.woodPrice && props.woodPrice}
+                <img className="ms-2" src={woodIcon} alt="credit-icon" width={"15px"} height={"15px"} />
+            </span>
         }
     </p>
 }

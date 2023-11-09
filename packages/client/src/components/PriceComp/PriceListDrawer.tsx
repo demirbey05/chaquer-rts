@@ -52,15 +52,15 @@ export const PriceListDrawer = ({ isInputFocused, isSpectator }: { isInputFocuse
                     </TabList>
                     <TabPanels>
                         <TabPanel>
-                            <h6 className="text-center p-2 mb-2 border-bottom">Resource Prices</h6>
+                            <h6 className="text-center p-2 mb-2 border-bottom">Resource Prices/per</h6>
                             <ResourceBuyPrices />
-                            <h6 className="text-center p-2 border-bottom">Army Prices</h6>
+                            <h6 className="text-center p-2 border-bottom">Army Prices/per</h6>
                             <ArmyPrices />
-                            <h6 className="text-center p-2 mt-2 border-bottom">Fleet Prices</h6>
+                            <h6 className="text-center p-2 mt-2 border-bottom">Fleet Prices/per</h6>
                             <FleetPrices />
                         </TabPanel>
                         <TabPanel>
-                            <h6 className="text-center p-2 mb-2 border-bottom">Resource Prices</h6>
+                            <h6 className="text-center p-2 mb-2 border-bottom">Resource Prices/per</h6>
                             <ResourcePrices />
                         </TabPanel>
                     </TabPanels>
