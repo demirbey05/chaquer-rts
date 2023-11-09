@@ -21,6 +21,7 @@
 
 .mine-progress-bar-col {
     display: flex;
+    align-items: center;
     width: 100px;
     font-weight: bolder
 }

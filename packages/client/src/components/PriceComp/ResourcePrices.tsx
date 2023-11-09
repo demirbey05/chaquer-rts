@@ -1,13 +1,23 @@
 import { useResourcePrices } from "../../hooks/EconomyHooks/useResourcePrices";
+import creditIcon from '../../images/resourceAssets/credit_icon.png'
+import cornIcon from '../../images/resourceAssets/corn_icon.png'
+import woodIcon from '../../images/resourceAssets/wood_icon.png'
+import diomand from '../../images/resourceAssets/diomand_icon.png'
 
 export const ResourcePrices = () => {
     const resourcePrices = useResourcePrices();
 
     return (
         <div>
-            <PriceListItem name={"🌽/per"} isFleetPrices={false} price={resourcePrices.foodPrice} />
-            <PriceListItem name={"🪓/per"} isFleetPrices={false} price={resourcePrices.woodPrice} />
-            <PriceListItem name={"💎/per"} isFleetPrices={false} price={resourcePrices.goldPrice} />
+            <PriceListItem
+                name={cornIcon}
+                price={resourcePrices.foodPrice} />
+            <PriceListItem
+                name={woodIcon}
+                price={resourcePrices.woodPrice} />
+            <PriceListItem
+                name={diomand}
+                price={resourcePrices.goldPrice} />
         </div>
     )
 }
@@ -15,22 +25,16 @@ export const ResourcePrices = () => {
 interface PriceListItemPropTypes {
     name: string,
     price: any,
-    isFleetPrices: boolean
 }
 
 const PriceListItem = (props: PriceListItemPropTypes) => {
     return <p className="d-flex justify-between">
         <span className="ms-2">
-            {props.name}
+            <img className="ms-2" src={props.name} alt="icon" width={"20px"} height={"20px"} />
         </span>
-        {
-            !props.isFleetPrices ?
-                <span className="me-2">
-                    {props.price && props.price.toString().slice(0, 12)} 💰
-                </span> :
-                <span className="me-2">
-                    {props.price && props.price}
-                </span>
-        }
+        <span className="me-2 d-flex align-items-center">
+            {props.price && props.price.toString().slice(0, 12)}
+            <img className="ms-2" src={creditIcon} alt="credit-icon" width={"15px"} height={"15px"} />
+        </span>
     </p>
 }

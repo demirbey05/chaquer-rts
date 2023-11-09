@@ -123,13 +123,13 @@ interface ResultPropTypes {
 
 const Result = (props: ResultPropTypes) => {
     return <p className='text-white mb-3'>
-        <span className={`${props.myBgColor} p-2`}>
+        <span className={`${props.myBgColor} p-2 border-2 rounded`}>
             {props.username && props.username.length < 9 ? props.username : "You"}
         </span>
         <span className="me-2 ms-2">
             {props.text}
         </span>
-        <span className={`${props.enemyBgColor} p-2`}>
+        <span className={`${props.enemyBgColor} p-2 border-2 rounded`}>
             Enemy
         </span>
         <span className="ms-2">

@@ -5,6 +5,9 @@ import { usePlayer } from '../../context/PlayerContext';
 import { useError } from "../../context/ErrorContext";
 import { useNumberOfResource } from '../../hooks/ResourceHooks/useNumberOfResource';
 import { useGame } from "../../context/GameContext";
+import cornIcon from '../../images/resourceAssets/corn_icon.png'
+import woodIcon from '../../images/resourceAssets/wood_icon.png'
+import diomandIcon from '../../images/resourceAssets/diomand_icon.png'
 
 interface SellResourcesPropTypes {
     setIsLoading: (value: boolean) => void,
@@ -234,7 +237,7 @@ export const SellResources = (props: SellResourcesPropTypes) => {
 
     return (
         <div className="d-flex align-middle justify-center mt-2 mb-2">
-            <ResourceCard resourceEmoji={"🌽"}
+            <ResourceCard resourceEmoji={cornIcon}
                 resourceName={"Food"}
                 setResourceCount={setNumFood}
                 resourceType={0}
@@ -247,7 +250,7 @@ export const SellResources = (props: SellResourcesPropTypes) => {
                 handle100ResourceSell={handle100ResourceSell}
                 handle500ResourceSell={handle500ResourceSell}
                 handleSell={handleFoodSell} />
-            <ResourceCard resourceEmoji={"🪓"}
+            <ResourceCard resourceEmoji={woodIcon}
                 resourceName={"Wood"}
                 setResourceCount={setNumWood}
                 resourceType={1}
@@ -260,7 +263,7 @@ export const SellResources = (props: SellResourcesPropTypes) => {
                 handle100ResourceSell={handle100ResourceSell}
                 handle500ResourceSell={handle500ResourceSell}
                 handleSell={handleWoodSell} />
-            <ResourceCard resourceEmoji={"💎"}
+            <ResourceCard resourceEmoji={diomandIcon}
                 resourceName={"Diomand"}
                 setResourceCount={setNumGold}
                 resourceType={2}
@@ -295,14 +298,16 @@ interface ResourceCardPropTypes {
 
 const ResourceCard = (props: ResourceCardPropTypes) => {
     return (
-        <div className="col align-items-center ms-4">
-            <div className="row justify-content-center w-100">
-                {props.resourceEmoji}
+        <div className="col align-items-center ps-2">
+            <div className="row w-100">
+                <div className="d-flex justify-content-center">
+                    <img src={props.resourceEmoji} width={"30px"} height={"30px"} alt={props.resourceName} />
+                </div>
             </div>
-            <div className="row justify-content-center text-center w-100 border-1 mt-2">
+            <div className="row justify-content-center text-center border-1 mt-2 w-100">
                 {props.resourceName}
             </div>
-            <div className="row justify-content-center mt-2 w-100">
+            <div className="row mt-2 w-100">
                 <input
                     className="form-control dark-input bg-dark text-white"
                     placeholder={`# of ${props.resourceName}`}
@@ -358,11 +363,12 @@ const ManualButton = (props: ManualButtonPropTypes) => {
             fontSize="13px"
             textColor="dark"
             className="w-75"
-            mt={4}
+            mt={3}
             isDisabled={props.isDisabled || props.isLoading}
             onClick={() => props.handleSell()}
         >
-            Sell {props.numOfResource} {props.resourceEmoji}
+            Sell {props.numOfResource}
+            <img className="ms-1" src={props.resourceEmoji} width={"20px"} height={"20px"} alt="icon" />
         </Button>
     )
 }
@@ -384,11 +390,12 @@ const AutoButton = (props: AutoButtonPropTypes) => {
             fontSize="13px"
             textColor="dark"
             className="w-75"
-            mt={4}
+            mt={3}
             isDisabled={props.isDisabled || props.isLoading}
             onClick={() => props.handleSell({ resourceType: props.resourceType })}
         >
-            Sell {props.numOfResource} {props.resourceEmoji}
+            Sell {props.numOfResource}
+            <img className="ms-1" src={props.resourceEmoji} width={"20px"} height={"20px"} alt="icon" />
         </Button>
     )
 }

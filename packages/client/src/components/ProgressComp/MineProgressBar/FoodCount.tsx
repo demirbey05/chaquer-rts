@@ -12,7 +12,7 @@ export const FoodCount = () => {
     return (
         <div className="col-3 mine-progress-bar-col">
             <Tooltip label='Food' placement='bottom' >
-                <img className='me-2' src={foodIcon} width={"10px"} height={"10px"} alt="food-icon" />
+                <img className='me-2' src={foodIcon} width={"30px"} height={"30px"} alt="food-icon" />
             </Tooltip>
             : {numberOfResource ? Number(numberOfResource.numOfFood) : 0}
         </div>
