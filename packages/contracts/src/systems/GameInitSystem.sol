@@ -12,7 +12,8 @@ import { initialCredit } from "./Constants.sol";
 error InitSystem__UsernameAlreadyInitialized();
 
 contract GameInitSystem is System {
-  uint256 constant capacityLowerBound = 1;
+  uint256 constant capacityLowerBound = 3;
+  uint256 constant capacityUpperBound = 5;
 
   function initMapData(
     uint256 gameID,
@@ -44,8 +45,8 @@ contract GameInitSystem is System {
     if (prevCapacity > 0) {
       revert InitSystem__CapacityAlreadyInitialized();
     }
-    if (capacity < capacityLowerBound) {
-      revert InitSystem__CapacityIsTooLow();
+    if (capacity < capacityLowerBound || capacity > capacityUpperBound) {
+      revert InitSystem__CapacityBoundsExceeded();
     }
     GameMetaData.setLimitOfPlayer(gameID, capacity);
     GameMetaData.setState(gameID, State.Waiting);
