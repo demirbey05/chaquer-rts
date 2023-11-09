@@ -25,7 +25,7 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
     };
 
     useEffect(() => {
-        if (numberOfPlayer <= 8 && numberOfPlayer >= 3 && gameName.length > 0 && gameName.length <= 32) {
+        if (numberOfPlayer <= 5 && numberOfPlayer >= 3 && gameName.length > 0 && gameName.length <= 32) {
             setDisable(false)
         } else {
             setDisable(true)
@@ -34,10 +34,11 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
 
     const handleCreateGame = async () => {
         setIsLoading(true)
+        var buf = new Uint8Array(1);
+        crypto.getRandomValues(buf);
         const data: string = ethers.utils.hexlify(flatten2D(map));
-        const initGameTx = await systemCalls.initGame(numberOfPlayer, width, height, data, gameName, 1);
+        const initGameTx = await systemCalls.initGame(numberOfPlayer, width, height, data, gameName, 1, buf[0]);
         if (initGameTx) {
-            console.log(initGameTx)
             setGameID(Number(initGameTx.result))
             const options = {
                 method: 'POST',
@@ -90,7 +91,7 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
                             type="number"
                             className="form-control dark-input bg-dark text-white"
                             id="numberOfPlayerInput"
-                            placeholder="Number of Player (Min: 3 - Max: 8)" required />
+                            placeholder="Number of Player (Min: 3 - Max: 5)" required />
                         <div className="modal-footer justify-content-around mt-3">
                             <BackMapButton toggleDrawer={toggleDrawer} isLoading={isLoading} />
                             <CreateGameButton onClick={() => handleCreateGame()} isLoading={isLoading} disable={disable || isLoading} />

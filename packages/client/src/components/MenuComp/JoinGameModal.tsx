@@ -44,7 +44,9 @@ export const JoinGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
                 if (userValid === true || userValid === false) {
                     navigate(`/game/${gameID}`);
                 } else {
-                    const tx = await systemCalls.joinGame(gameID);
+                    var buf = new Uint8Array(1);
+                    crypto.getRandomValues(buf);
+                    const tx = await systemCalls.joinGame(gameID, buf[0]);
                     if (tx) {
                         const interval = setInterval(() => {
                             if (userValid === true || userValid === false) {

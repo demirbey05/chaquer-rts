@@ -10,7 +10,8 @@ export function createSystemCalls({
     height: number,
     terrain: string,
     gameName: string,
-    mapID: number
+    mapID: number,
+    seedValue: number
   ) => {
     try {
       const txSimulated = await worldContract.simulate.InitGame([
@@ -20,6 +21,7 @@ export function createSystemCalls({
         terrain,
         gameName,
         mapID,
+        BigInt(seedValue),
       ]);
       const tx = await worldContract.write.InitGame([
         BigInt(capacity),
@@ -28,6 +30,7 @@ export function createSystemCalls({
         terrain,
         gameName,
         mapID,
+        BigInt(seedValue),
       ]);
       await waitForTransaction(tx);
       return txSimulated;
@@ -127,9 +130,12 @@ export function createSystemCalls({
       return null;
     }
   };
-  const joinGame = async (gameID: number) => {
+  const joinGame = async (gameID: number, seedValue: number) => {
     try {
-      const tx = await worldContract.write.joinGame([BigInt(gameID)]);
+      const tx = await worldContract.write.joinGame([
+        BigInt(gameID),
+        BigInt(seedValue),
+      ]);
       await waitForTransaction(tx);
       return tx;
     } catch (e) {
