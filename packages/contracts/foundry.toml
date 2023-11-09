@@ -20,3 +20,6 @@ eth_rpc_url = "https://lattice-goerli-sequencer.optimism.io"
 
 [profile.loot-chain]
 eth_rpc_url = "https://testnet.rpc.lootchain.com/http"
+
+[profile.alt-layer]
+eth_rpc_url = "https://flashlayer.alt.technology/chaquer281c1962f"
