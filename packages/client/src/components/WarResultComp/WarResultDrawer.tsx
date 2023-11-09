@@ -43,7 +43,7 @@ export const WarResultDrawer = ({ isInputFocused }: { isInputFocused: boolean })
                 </button>
             </Tooltip>
             <div id="warResultDrawer" className={`my-war-result-drawer ${isOpen ? "open" : ""}`}>
-                <div className='d-flex justify-between align-items-center border-bottom mb-2 p-2'>
+                <div className='d-flex justify-between align-items-center border-bottom mb-3 p-2'>
                     <h4 className="font-extrabold ms-4">War Results</h4>
                     <button type="button" className="me-4" onClick={toggleOffcanvas}>&#10008;</button>
                 </div>

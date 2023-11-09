@@ -112,7 +112,10 @@ export const ChatMessageDrawer = ({ isInputFocused, setIsInputFocused, isSpectat
                 </button>
             </Tooltip>
             <div id="chatDrawer" className={`chat-drawer ${isOpen ? "open" : ""}`} style={isSpectator ? { marginTop: "225px" } : {}}>
-                <h4 className="text-center font-extrabold p-2 mb-2 border-bottom">Chat</h4>
+                <div className="d-flex justify-between border-bottom mb-1 p-2">
+                    <h4 className="font-extrabold ms-3">Chat</h4>
+                    <button className="me-3" type="button" onClick={toggleOffcanvas}>&#10008;</button>
+                </div>
                 <div className='row'>
                     <div className='chat-body' ref={chatBodyRef}>
                         {

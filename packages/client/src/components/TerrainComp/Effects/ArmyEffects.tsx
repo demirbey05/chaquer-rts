@@ -98,6 +98,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                         `${data.myArmyPosition.y},${data.myArmyPosition.x}`
                     )!;
                     if (element && element.children[0]) {
+                        element.style.border = ""
                         element.removeChild(element.children[0])
                     }
                 });
