@@ -61,10 +61,6 @@ contract MapSystem is System {
     GameMetaData.setNumberOfCastle(gameID, numOfCastle + 1);
     ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(ownerCandidate, gameID), gameID);
 
-    if (numOfCastle == GameMetaData.getLimitOfPlayer(gameID) - 1) {
-      GameMetaData.setState(gameID, State.Seed);
-    }
-
     return entityID;
   }
 

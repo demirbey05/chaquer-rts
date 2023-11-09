@@ -258,7 +258,7 @@ export default mudConfig({
   
   enums: {
     MineType: ["Food","Wood","Gold"],
-    State:["None","Waiting","Seed","Started","Completed"],
+    State:["None","Waiting","Started","Completed"],
     ClashType:["Castle","Mine","Dock","Battle","NavalWar"],
     AttackerType:["Army","Fleet"],
   },

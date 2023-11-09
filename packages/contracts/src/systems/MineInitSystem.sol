@@ -29,7 +29,7 @@ contract MineInitSystem is System {
     if (LibQueries.getOwnedCastleIDs(IStore(_world()), sender, gameID).length == 0) {
       revert MineSystem__NoCastleOfUsers();
     }
-    if (GameMetaData.getState(gameID) != State.Seed) {
+    if (GameMetaData.getState(gameID) != State.Waiting) {
       revert MineSystem__WrongState();
     }
     if (SeedInited.get(gameID, sender)) {
@@ -37,7 +37,7 @@ contract MineInitSystem is System {
     }
     PlayerSeeds.push(gameID, seed);
     SeedInited.set(gameID, sender, true);
-    if (PlayerSeeds.length(gameID) == GameMetaData.getLimitOfPlayer(gameID) - 2) {
+    if (PlayerSeeds.length(gameID) == GameMetaData.getLimitOfPlayer(gameID)) {
       resourceSystemInit(gameID);
     }
   }
@@ -110,7 +110,7 @@ contract MineInitSystem is System {
       previousHash = LibRandom.generateRandomNumber(previousHash, gameID);
       y = uint32((uint256(previousHash) % height) + offset.yOffset);
 
-      if (MapConfig.getItemTerrain(gameID, x * ((width * offset.dropFactor)+1) + y)[0] == hex"03") {
+      if (MapConfig.getItemTerrain(gameID, x * ((width * offset.dropFactor) + 1) + y)[0] == hex"03") {
         continue;
       }
       if (LibQueries.queryPositionEntity(IStore(_world()), x, y, gameID) > 0) {
