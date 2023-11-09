@@ -34,9 +34,7 @@ contract MineInitSystem is System {
     }
     PlayerSeeds.push(gameID, seed);
     SeedInited.set(gameID, sender, true);
-    if (PlayerSeeds.length(gameID) == GameMetaData.getLimitOfPlayer(gameID)) {
-      resourceSystemInit(gameID);
-    }
+
   }
 
   function resourceSystemInit(uint256 gameID) public {
