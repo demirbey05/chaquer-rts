@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { RiZoomOutLine, RiZoomInLine } from 'react-icons/ri';
 
 export const ZoomHandler = ({ isInputFocused, zoomLevel, setZoomLevel }:
     { isInputFocused: boolean, zoomLevel: number, setZoomLevel: (value: number) => void }) => {
@@ -23,24 +22,26 @@ export const ZoomHandler = ({ isInputFocused, zoomLevel, setZoomLevel }:
         }
     };
 
+    const handleWheel = (event: WheelEvent) => {
+        if (!isInputFocused) {
+            if (event.deltaY < 0) {
+                handleZoomIn();
+            } else {
+                handleZoomOut();
+            }
+            event.preventDefault();
+        }
+    };
+
     useEffect(() => {
         if (!isInputFocused) {
             window.addEventListener('keydown', handleKeyPress);
+            window.addEventListener('wheel', handleWheel);
         }
 
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
+            window.removeEventListener('wheel', handleWheel);
         };
     }, [zoomLevel, isInputFocused]);
-
-    return (
-        <>
-            <button className="zoom-in-button" onClick={handleZoomIn}>
-                <RiZoomInLine />
-            </button>
-            <button className="zoom-out-button" onClick={handleZoomOut}>
-                <RiZoomOutLine />
-            </button>
-        </>
-    );
 };

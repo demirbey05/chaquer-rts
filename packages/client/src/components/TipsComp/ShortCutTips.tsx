@@ -99,7 +99,7 @@ export const ShortCutTips = () => {
                             <div className='d-flex align-items-center'>
                                 🔎
                                 <p className='ms-2'>
-                                    Zoom In (+) {"->"} Press "I"
+                                    Zoom In {"->"} Mouse Wheel
                                 </p>
                             </div>
                         </ListItem>
@@ -107,7 +107,7 @@ export const ShortCutTips = () => {
                             <div className='d-flex align-items-center'>
                                 🔎
                                 <p className='ms-2'>
-                                    Zoom Out (-) {"->"} Press "O"
+                                    Zoom Out {"->"} Mouse Wheel
                                 </p>
                             </div>
                         </ListItem>

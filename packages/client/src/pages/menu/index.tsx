@@ -140,7 +140,7 @@ const EnterGameButton = () => {
 
 const GameTutorialButton = () => {
   return (
-    <a href="https://docs.chaquer.xyz/" target={"_blank"}>
+    <a href="https://docs.chaquer.xyz/basics/read-before-playing" target={"_blank"}>
       <button
         className='btn btn-dark menu-buttons mt-2'>
         Game Tutorial

@@ -56,6 +56,7 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
                                             setGameID={setGameID}
                                             gameID={Number(game.mirror)} />
                                         <SpectatorButton
+                                            username={username}
                                             gameState={game.state}
                                             setIsSpectateGameModalOpen={setIsSpectateGameModalOpen}
                                             setGameID={setGameID}
@@ -83,11 +84,11 @@ const JoinGameButtom = ({ isDisabled, setIsJoinGameModalOpen, setGameID, gameID 
     )
 }
 
-const SpectatorButton = ({ gameState, setIsSpectateGameModalOpen, setGameID, gameID }: { gameState: any, setIsSpectateGameModalOpen: (value: boolean) => void, setGameID: (value: number) => void, gameID: number }) => {
+const SpectatorButton = ({ gameState, setIsSpectateGameModalOpen, setGameID, gameID, username }: { gameState: any, setIsSpectateGameModalOpen: (value: boolean) => void, setGameID: (value: number) => void, gameID: number, username: string }) => {
     return (
         <button
             className='btn btn-dark menu-game-list-button'
-            disabled={gameState !== 2 && gameState !== 3}
+            disabled={(gameState !== 2 && gameState !== 3) || !username}
             onClick={() => {
                 setIsSpectateGameModalOpen(true)
                 setGameID(gameID)

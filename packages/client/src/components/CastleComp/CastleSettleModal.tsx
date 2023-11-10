@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useBeforeUnload } from "react-router-dom";
 import { Button } from "@chakra-ui/react";
-import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useMUD } from "../../context/MUDContext";
 import { useCastle } from "../../context/CastleContext";
 import { useError } from "../../context/ErrorContext";
@@ -16,9 +15,9 @@ export const CastleSettleModal = () => {
   const { userWallet } = usePlayer();
   const { gameID } = useGame();
 
-  const [isLoadingJoin, setIsLoadingJoin] = useState<boolean>(false);
-
   const userValid = usePlayerIsValid(gameID, userWallet);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useBeforeUnload(
     useCallback((e) => {
@@ -29,28 +28,21 @@ export const CastleSettleModal = () => {
     }, [])
   );
 
-  useEffect(() => {
-    if (!(userValid && userValid === true)) {
-      setIsLoadingJoin(true)
-    }
-    else {
-      setIsLoadingJoin(false)
-    }
-  }, [userValid])
-
   const handleClick = async () => {
-    setIsCastleSettled(true);
+    setIsLoading(true)
     const tx = await systemCalls.settleCastle(tempCastle.x, tempCastle.y, gameID)
     if (tx === null) {
       setErrorMessage("An error occurred during castle settlement.");
       setErrorTitle("Castle Settlement Error");
       setShowError(true);
+    } else {
+      var myModalEl = document.getElementById('castleSettleModal');
+      var modal = bootstrap.Modal.getInstance(myModalEl)
+      modal.hide();
+      setIsCastleSettled(true);
     }
+    setIsLoading(false)
   };
-
-  if (isLoadingJoin) {
-    return <EventProgressBar text="Joining to the game..." />
-  }
 
   if (!isCastleSettled) {
     return (
@@ -74,9 +66,10 @@ export const CastleSettleModal = () => {
             <div className="modal-footer">
               <Button
                 colorScheme="whatsapp"
+                isLoading={isLoading}
+                loadingText={"Settling"}
                 border="solid"
                 textColor="dark"
-                data-bs-dismiss="modal"
                 isDisabled={!(userValid && userValid === true)}
                 onClick={() => handleClick()}
               >
@@ -84,6 +77,7 @@ export const CastleSettleModal = () => {
               </Button>
               <Button
                 colorScheme="red"
+                isLoading={isLoading}
                 border="solid"
                 textColor="dark"
                 data-bs-dismiss="modal"

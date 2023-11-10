@@ -22,10 +22,8 @@ export const ArmyProgress = () => {
     }, [myCastlePositions, numberOfArmy])
     return (
         <Tooltip
-            label='Your army size is full.'
-            fontSize='md'
-            bg='red.500'
-            isDisabled={numberOfArmy !== maxArmySize}>
+            label='Your Army Size'
+            fontSize='md'>
             <div className='col-md-6 me-1'>
                 <Progress
                     border={"1px"}

@@ -11,7 +11,7 @@
     height: 45px;
     width: 45px;
     position: fixed;
-    left: 30%;
+    left: 36%;
     bottom: 25px;
     font-size: 20px;
     border-radius: 10px;
@@ -29,7 +29,7 @@
     height: 45px;
     width: 45px;
     position: fixed;
-    left: 34%;
+    left: 40%;
     bottom: 25px;
     font-size: 20px;
     border-radius: 10px;
@@ -47,7 +47,7 @@
     height: 45px;
     width: 45px;
     position: fixed;
-    left: 38%;
+    left: 44%;
     bottom: 25px;
     font-size: 20px;
     border-radius: 10px;
@@ -65,7 +65,7 @@
     height: 45px;
     width: 45px;
     position: fixed;
-    left: 42%;
+    left: 48%;
     bottom: 25px;
     font-size: 20px;
     border-radius: 10px;
@@ -80,7 +80,7 @@
     height: 45px;
     width: 45px;
     position: fixed;
-    left: 57%;
+    left: 52%;
     bottom: 25px;
     font-size: 20px;
     border-radius: 10px;
@@ -98,7 +98,7 @@
     height: 45px;
     width: 45px;
     position: fixed;
-    left: 61%;
+    left: 56%;
     bottom: 25px;
     font-size: 20px;
     border-radius: 10px;
@@ -116,7 +116,7 @@
     height: 45px;
     width: 45px;
     position: fixed;
-    left: 65%;
+    left: 60%;
     bottom: 25px;
     font-size: 20px;
     border-radius: 10px;
@@ -134,7 +134,7 @@
     height: 45px;
     width: 45px;
     position: fixed;
-    left: 69%;
+    left: 64%;
     bottom: 25px;
     font-size: 20px;
     border-radius: 10px;
@@ -150,29 +150,6 @@
     position: fixed;
     bottom: 25px;
     left: 25px;
-    z-index: 1;
-}
-
-/*Zoom Buttons*/
-.zoom-in-button {
-    width: 35px;
-    height: 35px;
-    color: #000000;
-    font-size: 30px;
-    position: fixed;
-    bottom: 25px;
-    left: 52.5%;
-    z-index: 1;
-}
-
-.zoom-out-button {
-    width: 35px;
-    height: 35px;
-    color: #000000;
-    font-size: 30px;
-    position: fixed;
-    bottom: 25px;
-    left: 47.5%;
     z-index: 1;
 }
 
