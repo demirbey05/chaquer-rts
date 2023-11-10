@@ -80,6 +80,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                     imgElement.style.width = "75px"
                     imgElement.style.marginBottom = "15px"
                     imgElement.style.marginRight = "15px"
+                    imgElement.style.pointerEvents = "none"
 
                     element.appendChild(imgElement);
                     element.style.border = "2px solid";
@@ -124,6 +125,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                 imgElement.style.width = "75px";
                 imgElement.style.marginBottom = "15px";
                 imgElement.style.marginRight = "15px";
+                imgElement.style.pointerEvents = "none"
 
                 element.appendChild(imgElement);
                 element.style.border = "2px solid";

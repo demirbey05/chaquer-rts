@@ -41,6 +41,7 @@ export const DockEffects = (isArmySettleStage: boolean | undefined,
                         imgElement.style.width = "75px"
                         imgElement.style.marginBottom = "15px"
                         imgElement.style.marginRight = "15px"
+                        imgElement.style.pointerEvents = "none"
                         element.appendChild(imgElement);
                     }
                     if (Number(data.dockColor.colorIndex) !== 0) {

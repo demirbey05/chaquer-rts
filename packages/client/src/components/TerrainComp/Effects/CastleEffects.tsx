@@ -58,6 +58,7 @@ export const CastleEffects = (fleetSettleStage: boolean,
                     imgElement.style.width = "75px"
                     imgElement.style.marginBottom = "15px"
                     imgElement.style.marginRight = "15px"
+                    imgElement.style.pointerEvents = "none"
 
                     element.appendChild(imgElement);
                     element.style.border = "4px solid";
