@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { createPublicClient, http } from 'viem'
 import { foundry } from 'viem/chains'
 import { latticeTestnet } from "@latticexyz/common/chains";
+import { altlayer } from "../mud/altlayer";
 
 export function useCurrentBlockNumber() {
-    const chain = import.meta.env.PROD ? latticeTestnet : foundry;
+    const chain = foundry
 
     const publicClient = createPublicClient({
         chain: chain,

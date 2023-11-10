@@ -1,9 +1,10 @@
 import soundTrack from '../../sounds/chaquerSoundTrack.mp3'
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { Button, Slider, SliderTrack, SliderFilledTrack, SliderThumb } from "@chakra-ui/react";
+import { Button, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Tooltip } from "@chakra-ui/react";
 import { FaPlay, FaStop } from 'react-icons/fa'
 import { RiArrowGoBackFill } from 'react-icons/ri'
+import { FiSettings } from 'react-icons/fi'
 
 export const SettingsDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -83,9 +84,11 @@ export const SettingsDrawer = ({ isInputFocused }: { isInputFocused: boolean }) 
 
     return (
         <>
-            <button className="settings-button" onClick={toggleDrawer}>
-                ⚙️
-            </button>
+            <Tooltip label='Settings' placement='top'>
+                <button className="settings-button" onClick={toggleDrawer}>
+                    <FiSettings />
+                </button>
+            </Tooltip>
             <div id="settings-drawer" className={`settings-drawer ${isOpen ? "open" : ""}`}>
                 <AudioControlCompHeader toggleDrawer={toggleDrawer} />
                 <div className='ms-2'>

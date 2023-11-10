@@ -8,7 +8,7 @@ error InitSystem__MismatchedSize();
 error InitSystem__NotEnoughDimension();
 error InitSystem__NotInitialized();
 error InitSystem__CapacityAlreadyInitialized();
-error InitSystem__CapacityIsTooLow();
+error InitSystem__CapacityBoundsExceeded();
 
 //Castle Settle System Errors
 error CastleSettle__MapIsNotReady();

@@ -7,7 +7,7 @@ export const isPositionNextToSea = (
   const numberY = parseInt(y);
 
   if (
-    numberX + 1 <= 49 &&
+    numberX + 1 <= 24 &&
     terrainValues[numberX + 1][numberY] === 2 &&
     terrainValues[numberX][numberY] === 1
   ) {
@@ -15,7 +15,7 @@ export const isPositionNextToSea = (
   }
 
   if (
-    numberY + 1 <= 49 &&
+    numberY + 1 <= 24 &&
     terrainValues[numberX][numberY + 1] === 2 &&
     terrainValues[numberX][numberY] === 1
   ) {

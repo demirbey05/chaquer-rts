@@ -13,6 +13,8 @@ import { useMyDockPositions } from "../../hooks/SeaHooks/useMyDockPositions";
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { useNumberOfResource } from "../../hooks/ResourceHooks/useNumberOfResource";
 import { useGame } from "../../context/GameContext";
+import creditIcon from '../../images/resourceAssets/credit_icon.png'
+import woodIcon from '../../images/resourceAssets/wood_icon.png'
 
 export const DockSettleModal = () => {
     const { systemCalls, components } = useMUD();
@@ -109,8 +111,8 @@ export const DockSettleModal = () => {
                 document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.innerHTML = "";
                 document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
             } else {
-                setErrorMessage("You need 30 food + 30 gold to move your army.")
-                setErrorTitle("Army Move Error")
+                setErrorMessage("You need 30 food + 30 diomand to move your army.")
+                setErrorTitle("Army Move Warning")
                 setShowError(true)
             }
 
@@ -146,10 +148,16 @@ export const DockSettleModal = () => {
                             Dock Settlement
                         </h1>
                     </div>
-                    <div className="modal-body font-bold">
-                        <span>{"You are going to deploy a dock ⚓. Price of this dock ⚓ is "}</span>
-                        {myDockPositions && (100 * (myDockPositions.length + 1))} 💰 + {myDockPositions && (1500 * (myDockPositions.length + 1))} 🪵 ,
-                        <span>{" are you sure?"}</span>
+                    <div className="modal-body text-center font-bold">
+                        <p>{"You are going to settle a dock ⚓."}</p>
+                        <p className="d-flex align-items-center justify-content-center">
+                            <span className="me-2">Price of this dock :</span>
+                            {myDockPositions && (100 * (myDockPositions.length + 1))}
+                            <img className="ms-2" src={creditIcon} width={"20px"} height={"20px"} alt="credit-icon" />
+                            <span className="ms-2 me-2">+</span>
+                            {myDockPositions && (1500 * (myDockPositions.length + 1))}
+                            <img className="ms-2" src={woodIcon} width={"20px"} height={"20px"} alt="wood-icon" />
+                        </p>
                     </div>
                     <div className="modal-footer d-flex justify-between">
                         <Button

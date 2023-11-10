@@ -17,12 +17,12 @@ export const DataFetchProgress = () => {
 const ProgressBar = () => {
     const progress = useSyncProgress();
     return (
-        <Progress colorScheme="linkedin"
+        <Progress
+            colorScheme={"green"}
+            backgroundColor={"blackAlpha.500"}
             borderRadius={"25px"}
             width={"75%"}
             height='32px'
-            hasStripe
-            isAnimated
             value={progress ? progress.percentage * 100 : 0} />
     )
 }
@@ -31,8 +31,12 @@ const ProgressInfo = () => {
     const progress = useSyncProgress();
     return (
         <>
-            <p className="text-white text-2xl">{progress ? (progress.percentage !== 100 ? progress.percentage * 100 : 100) : 0}%</p>
-            <p className="text-white text-xl">{progress ? progress.message : "Fetching data from blockchain"}...</p>
+            <p className="text-2xl font-extrabold">
+                {progress ? (progress.percentage !== 100 ? progress.percentage * 100 : 100) : 0}%
+            </p>
+            <p className="text-xl font-extrabold">
+                {progress ? progress.message : "Fetching data from blockchain"}...
+            </p>
         </>
     )
 }

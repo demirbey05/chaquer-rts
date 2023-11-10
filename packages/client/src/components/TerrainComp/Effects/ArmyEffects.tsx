@@ -7,6 +7,7 @@ import { isMyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isMyArmy"
 import { isEnemyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isEnemyArmy";
 import { getArmyMergePositions } from "../../../utils/helperFunctions/ArmyFunctions/getArmyMergePositions";
 import { isArmyMergePosition } from "../../../utils/helperFunctions/ArmyFunctions/isArmyMergePositions";
+import armyTile from '../../../images/armyAssets/army.png';
 
 export const ArmyEffects = (isArmyUpdateStage: boolean,
     values: number[][],
@@ -60,41 +61,92 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
         }
     }, [isArmySettleStage, castlePositions, resources, dockPositions]);
 
-    // Deploy army emojis to position. Add border for user's army.
+    // Deploy and handle my army tiles
     useEffect(() => {
-        const clearBoard = () => {
-            const boardElements = document.getElementsByClassName("army-emoji");
-            Array.from(boardElements).forEach((element: any) => {
-                element.innerHTML = "";
-                element.style.border = "0.5px solid rgba(0, 0, 0, 0.1)"; // Clear the border
-            });
-        };
-
         if (myArmyPosition) {
-            // Clear the board before redeploying army emojis
-            clearBoard();
-
             myArmyPosition.forEach((data: any) => {
                 const element = document.getElementById(
                     `${data.myArmyPosition.y},${data.myArmyPosition.x}`
                 )!;
-                element.innerHTML = "⚔️";
-                element.style.border = "2px solid";
-                element.style.borderColor = getBorderColor(Number(data.myArmyColor.colorIndex));
+                if (element) {
+                    while (element.firstChild) {
+                        element.removeChild(element.firstChild);
+                    }
+
+                    const imgElement = document.createElement("img");
+                    imgElement.src = armyTile;
+                    imgElement.style.transform = "rotateX(-60deg) rotateZ(-25deg) rotateY(45deg)"
+                    imgElement.style.height = "100px"
+                    imgElement.style.width = "75px"
+                    imgElement.style.marginBottom = "15px"
+                    imgElement.style.marginRight = "15px"
+                    imgElement.style.pointerEvents = "none"
+
+                    element.appendChild(imgElement);
+                    element.style.border = "2px solid";
+                    element.style.borderColor = getBorderColor(Number(data.myArmyColor.colorIndex));
+                    element.classList.add("army-emoji");
+                }
             });
         }
 
         setNumberOfArmy(myArmyNumber);
 
-        //Puts the army emojis to army positions
+        return () => {
+            if (myArmyPosition) {
+                myArmyPosition.forEach((data: any) => {
+                    const element = document.getElementById(
+                        `${data.myArmyPosition.y},${data.myArmyPosition.x}`
+                    )!;
+                    if (element && element.children[0]) {
+                        element.style.border = ""
+                        element.removeChild(element.children[0])
+                    }
+                });
+            }
+        }
+
+    }, [myArmyPosition])
+
+    // Deploy army emojis to position. Add border for user's army.
+    useEffect(() => {
         armyPositions.map((data: any) => {
             const element = document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!;
-            element.innerHTML = "⚔️";
-            element.style.border = "2px solid";
-            element.style.borderColor = getBorderColor(Number(data.armyColor.colorIndex));
-            element.classList.add("army-emoji");
+            if (element) {
+                // Check if there's already a child image, and remove it if it exists
+                while (element.firstChild) {
+                    element.removeChild(element.firstChild);
+                }
+
+                const imgElement = document.createElement("img");
+                imgElement.src = armyTile;
+                imgElement.style.transform = "rotateX(-60deg) rotateZ(-25deg) rotateY(45deg)";
+                imgElement.style.height = "100px";
+                imgElement.style.width = "75px";
+                imgElement.style.marginBottom = "15px";
+                imgElement.style.marginRight = "15px";
+                imgElement.style.pointerEvents = "none"
+
+                element.appendChild(imgElement);
+                element.style.border = "2px solid";
+                element.style.borderColor = getBorderColor(Number(data.armyColor.colorIndex));
+                element.classList.add("army-emoji");
+            }
         });
-    }, [armyPositions, myArmyPosition, myArmyNumber]);
+
+        return () => {
+            if (armyPositions) {
+                armyPositions.map((data: any) => {
+                    const element = document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!;
+                    if (element && element.children[0]) {
+                        element.style.border = "";
+                        element.removeChild(element.children[0]);
+                    }
+                });
+            }
+        }
+    }, [armyPositions]);
+
 
     // Army Update Drawer data-bs attributes
     useEffect(() => {
@@ -102,7 +154,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
             myCastlePosition.map((position: any) => {
                 getManhattanPositions(position.myCastlePosition).map(
                     (data) => {
-                        if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
+                        if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                             if (
                                 canCastleBeSettle(values[data.x][data.y]) &&
                                 !isBorder &&
@@ -123,7 +175,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
             myCastlePosition.map((position: any) => {
                 getManhattanPositions(position.myCastlePosition).map(
                     (data) => {
-                        if (data.x >= 0 && data.y >= 0 && data.x < 50 && data.y < 50) {
+                        if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                             if (getArmySettlePositions(data.x, data.y, myCastlePosition)) {
                                 document.getElementById(`${data.y},${data.x}`)?.classList.remove("orangeTileEffect");
                                 document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-toggle", "");

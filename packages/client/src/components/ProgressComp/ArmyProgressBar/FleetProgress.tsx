@@ -1,9 +1,9 @@
-import shipEmoji from '../../../images/shipAssets/ship_emoji.png';
 import { Tooltip, Progress, ProgressLabel } from '@chakra-ui/react'
 import { usePlayer } from '../../../context/PlayerContext';
 import { useMyDockPositions } from '../../../hooks/SeaHooks/useMyDockPositions';
 import { useMyFleetPositions } from '../../../hooks/SeaHooks/useMyFleetPositions';
 import { useGame } from '../../../context/GameContext';
+import { GiShipBow } from 'react-icons/gi'
 
 export const FleetProgress = () => {
     const { userWallet } = usePlayer();
@@ -17,11 +17,17 @@ export const FleetProgress = () => {
             bg='red.500'
             isDisabled={myDockPositions && myFleetPositions && (myDockPositions.length !== myFleetPositions.length)}>
             <div className='col-md-6 ms-1'>
-                <Progress border={"2px"} bgColor={"transparent"} hasStripe isAnimated height={"32px"} value={myFleetPositions ? myFleetPositions.length : 0} max={(myDockPositions && myDockPositions!.length !== 0) ? myDockPositions?.length : 1} borderRadius="10px">
-                    <ProgressLabel fontSize="15px" className='text-dark d-flex justify-center align-items-center'>
-                        <img className='me-2' src={shipEmoji} alt="ship-emoji" width={"20px"} height={"20px"} />
+                <Progress
+                    border={"1px"}
+                    backgroundColor={"transparent"}
+                    height={"32px"}
+                    value={myFleetPositions ? myFleetPositions.length : 0}
+                    max={(myDockPositions && myDockPositions!.length !== 0) ? myDockPositions?.length : 1}
+                    borderRadius="10px">
+                    <ProgressLabel fontSize="15px" className='d-flex justify-center align-items-center'>
+                        <GiShipBow className='me-2' />
                         {myFleetPositions ? myFleetPositions.length : 0} / {myDockPositions ? myDockPositions?.length : 0}
-                        <img className='ms-2' src={shipEmoji} alt="ship-emoji" width={"20px"} height={"20px"} />
+                        <GiShipBow className='ms-2' />
                     </ProgressLabel>
                 </Progress>
             </div>

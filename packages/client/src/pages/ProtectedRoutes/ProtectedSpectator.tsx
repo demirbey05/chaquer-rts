@@ -17,7 +17,7 @@ export const ProtectedSpectator = ({ username }: { username: string }) => {
         return <Navigate to="/" />
     }
 
-    if (gameData && (gameData.state === 0 || gameData.state === 1 || gameData.state === 2)) {
+    if (gameData && (gameData.state === 0 || gameData.state === 1)) {
         return <Navigate to="/" />
     }
 

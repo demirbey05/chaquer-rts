@@ -8,11 +8,14 @@ import { IdentitySystem } from "./IdentitySystem.sol";
 import "./Errors.sol";
 import { State } from "../codegen/common.sol";
 import { initialCredit } from "./Constants.sol";
+import {SystemSwitch} from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
+import {IWorld} from "../codegen/world/IWorld.sol";
 
 error InitSystem__UsernameAlreadyInitialized();
 
 contract GameInitSystem is System {
-  uint256 constant capacityLowerBound = 1;
+  uint256 constant capacityLowerBound = 3;
+  uint256 constant capacityUpperBound = 5;
 
   function initMapData(
     uint256 gameID,
@@ -44,8 +47,8 @@ contract GameInitSystem is System {
     if (prevCapacity > 0) {
       revert InitSystem__CapacityAlreadyInitialized();
     }
-    if (capacity < capacityLowerBound) {
-      revert InitSystem__CapacityIsTooLow();
+    if (capacity < capacityLowerBound || capacity > capacityUpperBound) {
+      revert InitSystem__CapacityBoundsExceeded();
     }
     GameMetaData.setLimitOfPlayer(gameID, capacity);
     GameMetaData.setState(gameID, State.Waiting);
@@ -58,7 +61,8 @@ contract GameInitSystem is System {
     uint32 height,
     bytes calldata terrain,
     string memory name,
-    uint8 mapId
+    uint8 mapId,
+    uint256 firstSeed
   ) public returns (uint256) {
     uint256 gameID = LatestGameID.get(keccak256("gameID")) + 1;
     initMapData(gameID, width, height, terrain);
@@ -66,7 +70,7 @@ contract GameInitSystem is System {
     GameMetaData.setName(gameID, name);
     GameMetaData.setMapId(gameID, mapId);
     GameMetaData.setMirror(gameID, gameID);
-    joinGame(gameID);
+    joinGame(gameID,firstSeed);
     LatestGameID.set(keccak256("gameID"), gameID);
     return gameID;
   }
@@ -81,7 +85,7 @@ contract GameInitSystem is System {
   }
 
   //@dev - if user has not username
-  function joinGame(uint256 gameID) public {
+  function joinGame(uint256 gameID,uint256 seed) public {
     address sender = _msgSender();
     uint256 limit = GameMetaData.getLimitOfPlayer(gameID);
     uint256 currentNumOfUser = GameMetaData.getNumberOfPlayer(gameID);
@@ -111,5 +115,6 @@ contract GameInitSystem is System {
     Players.set(gameID, sender, true);
     GameMetaData.setNumberOfPlayer(gameID, currentNumOfUser + 1);
     CreditOwn.set(gameID, sender, initialCredit);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).commitSeed,(gameID,seed)));
   }
 }

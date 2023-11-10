@@ -25,7 +25,7 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
     };
 
     useEffect(() => {
-        if (numberOfPlayer <= 8 && numberOfPlayer >= 3 && gameName.length > 0 && gameName.length <= 32) {
+        if (numberOfPlayer <= 5 && numberOfPlayer >= 3 && gameName.length > 0 && gameName.length <= 32) {
             setDisable(false)
         } else {
             setDisable(true)
@@ -34,8 +34,10 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
 
     const handleCreateGame = async () => {
         setIsLoading(true)
+        var buf = new Uint8Array(1);
+        crypto.getRandomValues(buf);
         const data: string = ethers.utils.hexlify(flatten2D(map));
-        const initGameTx = await systemCalls.initGame(numberOfPlayer, width, height, data, gameName, 1);
+        const initGameTx = await systemCalls.initGame(numberOfPlayer, width, height, data, gameName, 1, buf[0]);
         if (initGameTx) {
             setGameID(Number(initGameTx.result))
             const options = {
@@ -58,7 +60,7 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
             };
 
             try {
-                await fetch('https://discord.com/api/webhooks/1164497192879411211/hXwMgsEiM-ldEx28QJo5Oqoj1rgeV3_R6DjnvmRAKZKsT7Q3dKMAGKPbY-fg8qrwAqvM', options)
+                //await fetch('https://discord.com/api/webhooks/1164497192879411211/hXwMgsEiM-ldEx28QJo5Oqoj1rgeV3_R6DjnvmRAKZKsT7Q3dKMAGKPbY-fg8qrwAqvM', options)
             } catch (e) {
                 console.log(e)
             }
@@ -89,7 +91,7 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
                             type="number"
                             className="form-control dark-input bg-dark text-white"
                             id="numberOfPlayerInput"
-                            placeholder="Number of Player (Min: 3 - Max: 8)" required />
+                            placeholder="Number of Player (Min: 3 - Max: 5)" required />
                         <div className="modal-footer justify-content-around mt-3">
                             <BackMapButton toggleDrawer={toggleDrawer} isLoading={isLoading} />
                             <CreateGameButton onClick={() => handleCreateGame()} isLoading={isLoading} disable={disable || isLoading} />
@@ -149,9 +151,8 @@ const CreateGameWarning = ({ setIsCreateGameModalOpen, setIsOpen }: { setIsCreat
             </div>
             <Alert status='info' textAlign={"left"} textColor={"black"}>
                 <AlertIcon />
-                Info: Remember, you have the authority to determine the number of players for the game.
-                When initiating a game, it is crucial to ensure that you can assemble a sufficient number of participants for the game to commence.
-                Failure to do so may result in the game not being able to start
+                When creating a game, it is crucial to ensure that you can assemble a sufficient number of participants for the game to commence.
+                If you cannot, the game will be not started.
             </Alert>
             <Button onClick={() => { setIsCreateGameModalOpen(true); setIsOpen(false) }} colorScheme={"facebook"} mt={3}>I Understood</Button>
         </>

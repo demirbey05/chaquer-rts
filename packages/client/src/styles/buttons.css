@@ -1,72 +1,19 @@
 /* Drawer button styles */
-.price-list-button {
-    background-color: #ECC94B;
-    z-index: 1;
-    height: 60px;
-    width: 60px;
-    position: fixed;
-    right: 0;
-    top: 0;
-    margin-top: 305px;
-    font-size: 30px;
-    border-radius: 10px;
-}
-
 .settings-button {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ECC94B;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     z-index: 6;
-    height: 60px;
-    width: 60px;
+    height: 45px;
+    width: 45px;
     position: fixed;
-    left: 0;
-    top: 0;
-    margin-top: 25px;
-    font-size: 30px;
-    border-radius: 10px;
-}
-
-.army-info-button {
-    background-color: #ECC94B;
-    z-index: 1;
-    height: 60px;
-    width: 60px;
-    position: fixed;
-    left: 0;
-    top: 0;
-    margin-top: 90px;
-    font-size: 30px;
-    border-radius: 10px;
-}
-
-.fleet-info-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ECC94B;
-    z-index: 1;
-    height: 60px;
-    width: 60px;
-    position: fixed;
-    left: 0;
-    top: 0;
-    margin-top: 155px;
-    font-size: 30px;
-    border-radius: 10px;
-}
-
-.market-button {
-    background-color: #ECC94B;
-    z-index: 1;
-    height: 60px;
-    width: 60px;
-    position: fixed;
-    left: 0;
-    top: 0;
-    margin-top: 220px;
-    font-size: 30px;
+    left: 30%;
+    bottom: 25px;
+    font-size: 20px;
     border-radius: 10px;
 }
 
@@ -74,31 +21,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ECC94B;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     z-index: 6;
-    height: 60px;
-    width: 60px;
+    height: 45px;
+    width: 45px;
     position: fixed;
-    left: 0;
-    top: 0;
-    margin-top: 285px;
-    font-size: 30px;
-    border-radius: 10px;
-}
-
-.war-result-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #ECC94B;
-    z-index: 1;
-    height: 60px;
-    width: 60px;
-    position: fixed;
-    right: 0;
-    top: 0;
-    margin-top: 25px;
-    font-size: 30px;
+    left: 34%;
+    bottom: 25px;
+    font-size: 20px;
     border-radius: 10px;
 }
 
@@ -106,27 +39,113 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ECC94B;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     z-index: 1;
-    height: 60px;
-    width: 60px;
+    height: 45px;
+    width: 45px;
     position: fixed;
-    left: 0;
-    top: 0;
-    margin-top: 350px;
-    font-size: 30px;
+    left: 38%;
+    bottom: 25px;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.market-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1;
+    height: 45px;
+    width: 45px;
+    position: fixed;
+    left: 42%;
+    bottom: 25px;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.army-info-button {
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1;
+    height: 45px;
+    width: 45px;
+    position: fixed;
+    left: 57%;
+    bottom: 25px;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.fleet-info-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1;
+    height: 45px;
+    width: 45px;
+    position: fixed;
+    left: 61%;
+    bottom: 25px;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.war-result-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1;
+    height: 45px;
+    width: 45px;
+    position: fixed;
+    left: 65%;
+    bottom: 25px;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.price-list-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../images/interfaceAssets/drawer_button.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1;
+    height: 45px;
+    width: 45px;
+    position: fixed;
+    left: 69%;
+    bottom: 25px;
+    font-size: 20px;
     border-radius: 10px;
 }
 
 /*Circle Button for tips*/
 .tips-button {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: #ECC94B;
-    color: white;
-    font-size: 25px;
-    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
     cursor: pointer;
     position: fixed;
     bottom: 25px;
@@ -138,39 +157,41 @@
 .zoom-in-button {
     width: 35px;
     height: 35px;
-    color: white;
+    color: #000000;
     font-size: 30px;
     position: fixed;
     bottom: 25px;
-    right: 45%;
+    left: 52.5%;
     z-index: 1;
 }
 
 .zoom-out-button {
     width: 35px;
     height: 35px;
-    color: white;
+    color: #000000;
     font-size: 30px;
     position: fixed;
     bottom: 25px;
-    left: 45%;
+    left: 47.5%;
     z-index: 1;
 }
 
 .menu-buttons {
     width: 225px;
-    color: dark;
+    color: #000000;
     padding: 20px;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-image: url("../images/interfaceAssets/large-button.jpg");
+    background-position: center;
     font-weight: bolder;
     border: none;
 }
 
 .menu-game-list-button {
     width: 100px;
-    color: dark;
+    color: #000000;
     padding: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-image: url("../images/interfaceAssets/large-button.jpg");
+    background-position: center;
     font-weight: bolder;
     border: none;
 }

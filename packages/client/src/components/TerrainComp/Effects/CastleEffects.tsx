@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { getBorderColor } from "../../../utils/constants/getBorderColors";
+import castle from '../../../images/mapAssets/castle.png'
 
 export const CastleEffects = (fleetSettleStage: boolean,
     myCastlePosition: any[],
@@ -37,7 +38,7 @@ export const CastleEffects = (fleetSettleStage: boolean,
             if (myCastlePosition && myCastlePosition.length > 0) {
                 myCastlePosition.map((position: any) => {
                     if (document.getElementById(`${position.myCastlePosition.y},${position.myCastlePosition.x}`)) {
-                        document.getElementById(`${position.myCastlePosition.y},${position.myCastlePosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
+                        document.getElementById(`${position.myCastlePosition.y},${position.myCastlePosition.x}`)!.style.border = "";
                     }
                 });
             }
@@ -50,7 +51,16 @@ export const CastleEffects = (fleetSettleStage: boolean,
             castlePositions.forEach((data) => {
                 const element = document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`);
                 if (element) {
-                    element.innerHTML = "🏰";
+                    const imgElement = document.createElement("img");
+                    imgElement.src = castle;
+                    imgElement.style.transform = "rotateX(-60deg) rotateZ(-25deg) rotateY(45deg)"
+                    imgElement.style.height = "100px"
+                    imgElement.style.width = "75px"
+                    imgElement.style.marginBottom = "15px"
+                    imgElement.style.marginRight = "15px"
+                    imgElement.style.pointerEvents = "none"
+
+                    element.appendChild(imgElement);
                     element.style.border = "4px solid";
                     element.style.borderColor = getBorderColor(Number(data.castleColor.colorIndex));
                     element.style.pointerEvents = "none";
@@ -58,13 +68,14 @@ export const CastleEffects = (fleetSettleStage: boolean,
             });
         }
 
+
         return () => {
             if (castlePositions && castlePositions.length > 0) {
                 castlePositions.forEach((position) => {
                     const elementToClear = document.getElementById(`${position.castlePosition.y},${position.castlePosition.x}`);
                     if (elementToClear) {
                         elementToClear.innerHTML = "";
-                        elementToClear.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
+                        elementToClear.style.border = "";
                     }
                 });
             }

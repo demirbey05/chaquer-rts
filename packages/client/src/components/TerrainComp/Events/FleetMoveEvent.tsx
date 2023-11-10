@@ -52,8 +52,8 @@ export const FleetMoveEvent = async (
             toFleetPositionRef.current = { x: -1, y: -1 };
             fromFleetPositionRef.current = { x: "-1", y: "-1" };
         } else {
-            setErrorMessage("You need 50 food + 50 gold to move your fleet.")
-            setErrorTitle("Fleet Move Error")
+            setErrorMessage("You need 50 food + 50 diomand to move your fleet.")
+            setErrorTitle("Fleet Move Warning")
             setShowError(true)
         }
 

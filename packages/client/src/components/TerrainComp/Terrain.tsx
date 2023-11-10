@@ -1,7 +1,7 @@
-import MapImg from '../../images/backgrounds/map.png';
-import gameBgImg from '../../images/backgrounds/gameBackground.jpg'
+import gameBgImg from '../../images/backgrounds/game-page-background.jpg'
+import chaquerMap from '../../images/backgrounds/chaquer-map.jpg'
 import map from "../../../map.json";
-import ScrollContainer from "react-indiana-drag-scroll";
+import ScrollContainer from 'react-indiana-drag-scroll'
 import { TerrainType } from "../../terrain-helper/types";
 import { useRef, useState } from "react";
 import { Entity } from "@latticexyz/recs";
@@ -28,7 +28,7 @@ import { useFleetPositions } from "../../hooks/SeaHooks/useFleetPositions";
 import { useMyFleetPositions } from "../../hooks/SeaHooks/useMyFleetPositions";
 import { Coord } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 import { getNumberOfSoldierInArmy } from "../../utils/helperFunctions/ArmyFunctions/getNumberOfSoliderInArmy";
-import { getTerrainAsset } from '../../utils/helperFunctions/CustomFunctions/getTerrainAsset';
+import { isValidTerrainType } from '../../utils/helperFunctions/CustomFunctions/isValidTerrainType';
 import { isMyCastle } from '../../utils/helperFunctions/CastleFunctions/isMyCastle';
 import { isUserClickedManhattanPosition } from '../../utils/helperFunctions/CustomFunctions/isUserClickedManhattanPosition';
 import { getDataAtrY, getDataAtrX } from "../../utils/helperFunctions/CustomFunctions/getIdDataAtr";
@@ -38,7 +38,6 @@ import { isEnemyArmy } from "../../utils/helperFunctions/ArmyFunctions/isEnemyAr
 import { isEnemyCastle } from "../../utils/helperFunctions/CastleFunctions/isEnemyCastle";
 import { isUserClickedMine } from "../../utils/helperFunctions/ResourceFuntions/isUserClickedMine";
 import { isPositionNextToSea } from "../../utils/helperFunctions/SeaFunctions/isPositionNextToSea";
-import { isValidTerrainType } from "../../utils/helperFunctions/CustomFunctions/isValidTerrainType";
 import { isMyDock } from "../../utils/helperFunctions/SeaFunctions/isMyDock";
 import { isEnemyDock } from "../../utils/helperFunctions/SeaFunctions/isEnemyDock";
 import { CastleEffects } from "./Effects/CastleEffects";
@@ -60,9 +59,9 @@ import { FleetMoveEvent } from "./Events/FleetMoveEvent";
 import { FleetAttackEvent } from "./Events/FleetAttackEvent";
 import { isEnemyFleet } from "../../utils/helperFunctions/SeaFunctions/isEnemyFleet";
 import { SeaMineCaptureEvent } from "./Events/SeaMineCaptureEvent";
-import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { ArmyMergeEvent } from './Events/ArmyMergeEvent';
 import { usePlayerIsValid } from '../../hooks/IdentityHooks/usePlayerIsValid';
+import { EventProgressBar } from '../ProgressComp/EventProgressBar';
 
 export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }: { isBorder: boolean, zoomLevel: number, tileSize: number, fontSize: number, isSpectator: boolean }) => {
   const { components, systemCalls } = useMUD();
@@ -478,10 +477,12 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
     fleetPositions);
 
   const terrainContainer = {
-    zIndex: "0",
+    zIndex: "-1",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     height: "100vh",
     minWidth: "100vh",
-    overflow: "scroll",
     backgroundImage: `url(${gameBgImg})`,
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover"
@@ -492,13 +493,12 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
       <div className={`inline-grid ${isBorder && "border-4 border-black"}`}
         style={{
           pointerEvents: isBorder === true ? "none" : "auto",
-          transform: `scale(${zoomLevel})`,
+          transform: `scale(${zoomLevel}) rotateX(60deg) rotateZ(45deg) rotateY(0deg)`,
           transition: "transform 0.2s ease-in-out",
-          zIndex: "1",
-          backgroundImage: `url(${MapImg})`, // Remove the 4 next line to remove AI generated terrain
+          zIndex: "0",
+          backgroundImage: `url(${chaquerMap})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
-          boxShadow: "20px 20px rgba(0, 0, 0, 0.5)",
         }} >
         {
           rows.map((row) => {
@@ -514,13 +514,9 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
                     gridRow: row + 1,
                     width: `${tileSize}px`,
                     height: `${tileSize}px`,
-                    //backgroundImage: `${getTerrainAsset(values[row][column])}`, // remove the next 2 line for AI generated map
-                    //backgroundSize: "cover",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    fontSize: `${fontSize}px`,
-                    border: "0.5px solid rgba(0, 0, 0, 0.1)"
                   }}
                   onClick={(e) => {
                     handleClick(e);

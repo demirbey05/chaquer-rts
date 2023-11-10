@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Tooltip } from '@chakra-ui/react';
 import { FaUsers } from 'react-icons/fa'
 import { useGame } from '../../context/GameContext';
 import { useUsernameWithColors } from '../../hooks/IdentityHooks/useUsernamesWithColors';
@@ -33,9 +34,14 @@ export const PlayerListDrawer = ({ isInputFocused, isSpectator }: { isInputFocus
 
     return (
         <>
-            <button className='players-list-button' style={isSpectator ? { marginTop: "90px" } : {}} onClick={toggleDrawer}>
-                <FaUsers />
-            </button>
+            <Tooltip label='Player List' placement='top'>
+                <button
+                    className='players-list-button'
+                    style={isSpectator ? { marginTop: "90px" } : {}}
+                    onClick={toggleDrawer}>
+                    <FaUsers />
+                </button>
+            </Tooltip>
             <div id="players-in-game-drawer" className={`players-in-game-drawer ${isOpen ? "open" : ""}`}>
                 <UserInGameDrawerHeader toggleDrawer={toggleDrawer} />
                 <div className='ms-2'>

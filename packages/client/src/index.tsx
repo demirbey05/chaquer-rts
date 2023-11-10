@@ -7,6 +7,7 @@ import './styles/hoverEffects.css'
 import './styles/warnings.css';
 import './styles/modals.css';
 import './styles/animations.css';
+import './styles/menu.css';
 import ReactDOM from "react-dom/client";
 import mudConfig from "contracts/mud.config";
 import { App } from "./App";

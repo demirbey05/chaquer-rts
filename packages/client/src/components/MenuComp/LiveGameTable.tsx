@@ -1,4 +1,4 @@
-import mapImg from '../../images/backgrounds/map.png';
+import chaquerMap from '../../images/backgrounds/chaquer-map.jpg';
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react'
 import { useGameList } from '../../hooks/GameHooks/useGameList';
 import { useGame } from '../../context/GameContext';
@@ -32,10 +32,23 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
                             .filter((game) => game.state !== 4)
                             .map((game, key) => (
                                 <Tr key={key}>
-                                    <Td><img src={mapImg} alt="Map Image" width={"75"} height={"75"} /></Td>
-                                    <Td>{game.name && game.name.length > 15 ? `${game.name.slice(0, 15)}...` : game.name}</Td>
-                                    <Td>{getGameState(game.state)}</Td>
-                                    <Td>{Number(game.numberOfPlayer)} / {Number(game.limitOfPlayer)}</Td>
+                                    <Td>
+                                        <img
+                                            src={chaquerMap}
+                                            alt="Map Image"
+                                            width={"75"}
+                                            height={"75"}
+                                            style={{ transform: "rotateX(60deg) rotateZ(45deg)" }} />
+                                    </Td>
+                                    <Td>
+                                        {game.name && game.name.length > 15 ? `${game.name.slice(0, 15)}...` : game.name}
+                                    </Td>
+                                    <Td>
+                                        {getGameState(game.state)}
+                                    </Td>
+                                    <Td>
+                                        {Number(game.numberOfPlayer)} / {Number(game.limitOfPlayer)}
+                                    </Td>
                                     <Td>
                                         <JoinGameButtom
                                             isDisabled={!username}
@@ -74,7 +87,7 @@ const SpectatorButton = ({ gameState, setIsSpectateGameModalOpen, setGameID, gam
     return (
         <button
             className='btn btn-dark menu-game-list-button'
-            disabled={gameState !== 3 && gameState !== 4}
+            disabled={gameState !== 2 && gameState !== 3}
             onClick={() => {
                 setIsSpectateGameModalOpen(true)
                 setGameID(gameID)

@@ -20,9 +20,8 @@ contract IdentitySystem is System {
     if (state == State.Waiting) {
       LibUtils.deletePlayer(IStore(_world()), sender, gameID);
     }
-    if (state == State.Seed) {
+    if (state == State.Waiting) {
       LibUtils.deletePlayer(IStore(_world()), sender, gameID);
-      GameMetaData.setState(gameID, State.Waiting);
     }
     return;
   }

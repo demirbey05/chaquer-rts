@@ -46,8 +46,7 @@ const CollectButton = () => {
         <div className="col-3 mine-progress-bar-col">
             <Tooltip
                 hasArrow
-                fontSize='md'
-                bg={"Highlight"}
+                backgroundColor={"black"}
                 label='Resources ready...'
                 placement='right'
                 isOpen={!isDisabled}>
@@ -57,13 +56,10 @@ const CollectButton = () => {
                     loadingText={"Collecting"}
                     size={"sm"}
                     textColor={"black"}
-                    colorScheme={"whatsapp"}
-                    border={"solid"}
                     onClick={handleCollect}>
                     Collect
                 </Button>
             </Tooltip>
-
         </div>
     )
 }

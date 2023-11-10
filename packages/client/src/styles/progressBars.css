@@ -7,7 +7,6 @@
     height: 50px;
     border-radius: 10px;
     overflow: hidden;
-    border: 2px solid rgb(241, 241, 241);
     left: 50%;
     right: 0;
     top: 0;
@@ -15,11 +14,14 @@
     padding: 20px;
     z-index: 1;
     position: absolute;
-    background-color: rgb(148, 163, 184, 0.5);
-    color: white;
+    background-image: url("../images/interfaceAssets/progress_bar.png");
+    background-position: center;
+    color: rgb(255, 255, 255);
 }
 
 .mine-progress-bar-col {
+    display: flex;
+    align-items: center;
     width: 100px;
     font-weight: bolder
 }
@@ -33,7 +35,6 @@
     height: 50px;
     border-radius: 10px;
     overflow: hidden;
-    border: 2px solid rgb(241, 241, 241);
     left: 0%;
     right: 0;
     top: 0;
@@ -41,8 +42,9 @@
     padding: 20px;
     z-index: 1;
     position: absolute;
-    background-color: rgb(148, 163, 184, 0.5);
-    color: white;
+    background-image: url("../images/interfaceAssets/credit_bar.png");
+    background-position: center;
+    color: rgb(255, 255, 255);
 }
 
 .credit-progress-bar-col {
@@ -60,7 +62,6 @@
     border-radius: 15px;
     overflow: hidden;
     flex-direction: row;
-    border: 2px solid rgb(241, 241, 241);
     left: 0;
     right: 50%;
     top: 0;
@@ -68,7 +69,9 @@
     padding: 10px;
     z-index: 1;
     position: absolute;
-    background-color: rgb(148, 163, 184, 0.5);
+    background-image: url("../images/interfaceAssets/progress_bar.png");
+    background-position: center;
+    color: rgb(255, 255, 255);
 }
 
 /* Event progress bars */

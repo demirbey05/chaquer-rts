@@ -20,10 +20,11 @@ interface IGameInitSystem {
     uint32 height,
     bytes calldata terrain,
     string memory name,
-    uint8 mapId
+    uint8 mapId,
+    uint256 firstSeed
   ) external returns (uint256);
 
   function initUsername(string memory userName) external;
 
-  function joinGame(uint256 gameID) external;
+  function joinGame(uint256 gameID, uint256 seed) external;
 }

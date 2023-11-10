@@ -5,16 +5,13 @@
     z-index: 2;
     height: 200px;
     width: 300px;
-    margin-top: 95px;
-    margin-right: 5px;
-    border-top: 2px solid rgb(241, 241, 241);
-    border-bottom: 2px solid rgb(241, 241, 241);
+    margin-top: 80px;
     overflow: hidden;
     text-align: center;
     border-radius: 25px;
     position: fixed;
     top: 0;
-    right: -305px;
+    right: -300px;
     transition: right 0.3s ease;
     font-size: 14px;
 }
@@ -28,15 +25,15 @@
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
     z-index: 2;
-    height: 425px;
+    height: 450px;
     width: 300px;
-    margin-top: 375px;
-    margin-right: 5px;
+    margin-top: 300px;
+    border-radius: 25px;
     position: fixed;
     top: 0;
-    right: -305px;
+    right: -300px;
     transition: right 0.3s ease;
-    font-size: 13px;
+    font-size: 14px;
 }
 
 .prices-drawer.open {
@@ -53,10 +50,12 @@
     width: 250px;
     padding: 10px;
     margin-top: 90px;
+    border-radius: 25px;
     position: fixed;
     top: 0;
     left: -400px;
     transition: left 0.3s ease;
+    font-size: 14px;
 }
 
 .settings-drawer.open {
@@ -74,10 +73,12 @@
     width: 400px;
     padding: 10px;
     margin-top: 90px;
+    border-radius: 25px;
     position: fixed;
     top: 0;
     left: -400px;
     transition: left 0.3s ease;
+    font-size: 14px;
 }
 
 .army-info-drawer::-webkit-scrollbar {
@@ -109,10 +110,12 @@
     width: 400px;
     padding: 10px;
     margin-top: 90px;
+    border-radius: 25px;
     position: fixed;
     top: 0;
     left: -400px;
     transition: left 0.3s ease;
+    font-size: 14px;
 }
 
 .fleet-info-drawer::-webkit-scrollbar {
@@ -142,10 +145,12 @@
     width: 400px;
     padding: 10px;
     margin-top: 90px;
+    border-radius: 25px;
     position: fixed;
     top: 0;
     left: -400px;
     transition: left 0.3s ease;
+    font-size: 14px;
 }
 
 .market-drawer.open {
@@ -163,10 +168,12 @@
     width: 250px;
     padding: 10px;
     margin-top: 90px;
+    border-radius: 25px;
     position: fixed;
     top: 0;
     left: -250px;
     transition: left 0.3s ease;
+    font-size: 14px;
 }
 
 .players-in-game-drawer::-webkit-scrollbar {
@@ -208,7 +215,8 @@
     z-index: 2;
     height: 300px;
     width: 300px;
-    margin-top: 415px;
+    margin-top: 290px;
+    border-radius: 25px;
     overflow: hidden;
     position: fixed;
     top: 0;

@@ -8,6 +8,9 @@ import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { usePlayer } from "../../context/PlayerContext";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { useGame } from "../../context/GameContext";
+import cornIcon from '../../images/resourceAssets/corn_icon.png'
+import woodIcon from '../../images/resourceAssets/wood_icon.png'
+import diomandIcon from '../../images/resourceAssets/diomand_icon.png'
 
 interface BuyResourcesPropTypes {
     setIsLoading: (value: boolean) => void,
@@ -242,7 +245,7 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
 
     return (
         <div className="d-flex align-middle justify-center mt-2 mb-2">
-            <ResourceCard resourceEmoji={"🌽"}
+            <ResourceCard resourceEmoji={cornIcon}
                 resourceName={"Food"}
                 setResourceCount={setNumFood}
                 resourceType={0}
@@ -255,7 +258,7 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
                 handle100ResourceBuy={handle100ResourceBuy}
                 handle500ResourceBuy={handle500ResourceBuy}
                 handleBuy={handleFoodBuy} />
-            <ResourceCard resourceEmoji={"🪓"}
+            <ResourceCard resourceEmoji={woodIcon}
                 resourceName={"Wood"}
                 setResourceCount={setNumWood}
                 resourceType={1}
@@ -268,7 +271,7 @@ export const BuyResources = (props: BuyResourcesPropTypes) => {
                 handle100ResourceBuy={handle100ResourceBuy}
                 handle500ResourceBuy={handle500ResourceBuy}
                 handleBuy={handleWoodBuy} />
-            <ResourceCard resourceEmoji={"💎"}
+            <ResourceCard resourceEmoji={diomandIcon}
                 resourceName={"Diomand"}
                 setResourceCount={setNumGold}
                 resourceType={2}
@@ -303,11 +306,13 @@ interface ResourceCardPropTypes {
 
 const ResourceCard = (props: ResourceCardPropTypes) => {
     return (
-        <div className="col align-items-center ms-4">
-            <div className="row justify-content-center w-100">
-                {props.resourceEmoji}
+        <div className="col align-items-center ps-2">
+            <div className="row w-100">
+                <div className="d-flex justify-content-center">
+                    <img src={props.resourceEmoji} width={"30px"} height={"30px"} alt={props.resourceName} />
+                </div>
             </div>
-            <div className="row justify-content-center text-center w-100 border-1 mt-2">
+            <div className="row justify-content-center text-center border-1 mt-2 w-100">
                 {props.resourceName}
             </div>
             <div className="row justify-content-center mt-2 w-100">
@@ -366,11 +371,12 @@ const ManualButton = (props: ManualButtonPropTypes) => {
             fontSize="13px"
             textColor="dark"
             className="w-75"
-            mt={4}
+            mt={3}
             isDisabled={props.isDisabled || props.isLoading}
             onClick={() => props.handleSell()}
         >
-            Buy {props.numOfResource} {props.resourceEmoji}
+            Buy {props.numOfResource}
+            <img className="ms-1" src={props.resourceEmoji} width={"20px"} height={"20px"} alt="icon" />
         </Button>
     )
 }
@@ -392,11 +398,12 @@ const AutoButton = (props: AutoButtonPropTypes) => {
             fontSize="13px"
             textColor="dark"
             className="w-75"
-            mt={4}
+            mt={3}
             isDisabled={props.isDisabled || props.isLoading}
             onClick={() => props.handleSell({ resourceType: props.resourceType })}
         >
-            Buy {props.numOfResource} {props.resourceEmoji}
+            Buy {props.numOfResource}
+            <img className="ms-1" src={props.resourceEmoji} width={"20px"} height={"20px"} alt="icon" />
         </Button>
     )
 }

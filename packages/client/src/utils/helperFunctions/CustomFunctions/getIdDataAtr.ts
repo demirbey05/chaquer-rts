@@ -1,9 +1,17 @@
 export const getDataAtrX = (event: any) => {
   const id = event.target.dataset.row;
-  return id.toString();
+  if (id) {
+    return id.toString();
+  } else {
+    return "-1";
+  }
 };
 
 export const getDataAtrY = (event: any) => {
   const id = event.target.dataset.column;
-  return id.toString();
+  if (id) {
+    return id.toString();
+  } else {
+    return "-1";
+  }
 };

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Tooltip } from "@chakra-ui/react";
 import { ArmyPrices } from "./ArmyPrices";
 import { ResourcePrices } from "./ResourcePrices";
 import { FleetPrices } from "./FleetPrices";
 import { ResourceBuyPrices } from "./ResourceBuyPrices";
+import { AiOutlineStock } from 'react-icons/ai'
 
 export const PriceListDrawer = ({ isInputFocused, isSpectator }: { isInputFocused: boolean, isSpectator: boolean }) => {
     const [isOpen, setIsOpen] = useState(true);
@@ -30,12 +31,20 @@ export const PriceListDrawer = ({ isInputFocused, isSpectator }: { isInputFocuse
     }, [isOpen, isInputFocused]);
 
     return (
-        <div>
-            <button className={"price-list-button"} style={isSpectator ? { marginTop: "25px" } : {}} onClick={toggleDrawer}>
-                $
-            </button>
+        <>
+            <Tooltip label='Prices' placement='top'>
+                <button
+                    className={"price-list-button"}
+                    style={isSpectator ? { left: "42%" } : {}}
+                    onClick={toggleDrawer}>
+                    <AiOutlineStock />
+                </button>
+            </Tooltip>
             <div id="prices-drawer-body" className={`prices-drawer ${isOpen ? "open" : ""}`} style={isSpectator ? { marginTop: "95px" } : {}}>
-                <h4 className="text-center p-2 mb-2 mt-2 border-bottom font-extrabold">Current Prices</h4>
+                <div className='d-flex justify-between align-items-center border-bottom mb-2 p-2'>
+                    <h4 className="ms-4 font-extrabold">Current Prices</h4>
+                    <button type="button" className="me-4" onClick={toggleDrawer}>&#10008;</button>
+                </div>
                 <Tabs isFitted variant='enclosed'>
                     <TabList>
                         <Tab _selected={{ color: 'white', bg: 'red.500' }}>Buy Prices</Tab>
@@ -43,20 +52,20 @@ export const PriceListDrawer = ({ isInputFocused, isSpectator }: { isInputFocuse
                     </TabList>
                     <TabPanels>
                         <TabPanel>
-                            <h6 className="text-center p-2 mb-2 border-bottom">Resource Prices</h6>
+                            <h6 className="text-center p-2 mb-2 border-bottom">Resource Prices/per</h6>
                             <ResourceBuyPrices />
-                            <h6 className="text-center p-2 border-bottom">Army Prices</h6>
+                            <h6 className="text-center p-2 border-bottom">Army Prices/per</h6>
                             <ArmyPrices />
-                            <h6 className="text-center p-2 mt-2 border-bottom">Fleet Prices</h6>
+                            <h6 className="text-center p-2 mt-2 border-bottom">Fleet Prices/per</h6>
                             <FleetPrices />
                         </TabPanel>
                         <TabPanel>
-                            <h6 className="text-center p-2 mb-2 border-bottom">Resource Prices</h6>
+                            <h6 className="text-center p-2 mb-2 border-bottom">Resource Prices/per</h6>
                             <ResourcePrices />
                         </TabPanel>
                     </TabPanels>
                 </Tabs>
             </div>
-        </div>
+        </>
     )
 }

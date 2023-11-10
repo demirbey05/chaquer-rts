@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Tooltip } from "@chakra-ui/react";
 import { usePlayer } from '../../context/PlayerContext';
 import { useWarResult } from '../../hooks/useWarResult';
 import { useMyUsername } from "../../hooks/IdentityHooks/useMyUsername";
@@ -36,11 +37,16 @@ export const WarResultDrawer = ({ isInputFocused }: { isInputFocused: boolean })
 
     return (
         <>
-            <button className="war-result-button" onClick={toggleOffcanvas}>
-                💥
-            </button>
+            <Tooltip label='War Results' placement='top'>
+                <button className="war-result-button" onClick={toggleOffcanvas}>
+                    💥
+                </button>
+            </Tooltip>
             <div id="warResultDrawer" className={`my-war-result-drawer ${isOpen ? "open" : ""}`}>
-                <h4 className="text-center text-white p-2 mb-3 border-bottom">War Results</h4>
+                <div className='d-flex justify-between align-items-center border-bottom mb-3 p-2'>
+                    <h4 className="font-extrabold ms-4">War Results</h4>
+                    <button type="button" className="me-4" onClick={toggleOffcanvas}>&#10008;</button>
+                </div>
                 <div>
                     {
                         warResults && warResults.map((data, key) => {
@@ -117,13 +123,13 @@ interface ResultPropTypes {
 
 const Result = (props: ResultPropTypes) => {
     return <p className='text-white mb-3'>
-        <span className={`${props.myBgColor} p-2`}>
+        <span className={`${props.myBgColor} p-2 border-2 rounded`}>
             {props.username && props.username.length < 9 ? props.username : "You"}
         </span>
         <span className="me-2 ms-2">
             {props.text}
         </span>
-        <span className={`${props.enemyBgColor} p-2`}>
+        <span className={`${props.enemyBgColor} p-2 border-2 rounded`}>
             Enemy
         </span>
         <span className="ms-2">

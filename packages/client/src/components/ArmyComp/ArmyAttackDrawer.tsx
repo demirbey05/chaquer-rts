@@ -16,8 +16,10 @@ export const ArmyAttackDrawer = () => {
     setEnemyArmyConfig,
     enemyArmyConfig,
     setIsAttackStage,
-    attackFromArmyPositionToArmy,
-    attackToArmyPositionToArmy } = useAttack();
+    setAttackFromArmyPositionToArmy,
+    setAttackToArmyPositionToArmy,
+    attackToArmyPositionToArmy,
+    attackFromArmyPositionToArmy } = useAttack();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -25,8 +27,8 @@ export const ArmyAttackDrawer = () => {
     setIsAttackStage(false);
     setMyArmyConfig(undefined);
     setEnemyArmyConfig(undefined);
-    attackToArmyPositionToArmy(undefined);
-    attackFromArmyPositionToArmy(undefined);
+    setAttackFromArmyPositionToArmy(undefined);
+    setAttackToArmyPositionToArmy(undefined);
   };
 
   const handleAttack = async () => {
@@ -67,8 +69,8 @@ export const ArmyAttackDrawer = () => {
     }
 
     setIsAttackStage(false);
-    attackToArmyPositionToArmy(undefined);
-    attackFromArmyPositionToArmy(undefined);
+    setAttackToArmyPositionToArmy(undefined);
+    setAttackFromArmyPositionToArmy(undefined);
     setMyArmyConfig(undefined);
     setEnemyArmyConfig(undefined);
   };
