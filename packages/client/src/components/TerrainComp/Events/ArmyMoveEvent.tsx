@@ -58,8 +58,8 @@ export const ArmyMoveEvent = async (
             toArmyPositionRef.current = { x: -1, y: -1 };
             fromArmyPositionRef.current = { x: "-1", y: "-1" };
         } else {
-            setErrorMessage("You need 30 food + 30 gold to move your army.");
-            setErrorTitle("Army Move Error");
+            setErrorMessage("You need 30 food + 30 diomand to move your army.");
+            setErrorTitle("Army Move Warning");
             setShowError(true);
         }
 

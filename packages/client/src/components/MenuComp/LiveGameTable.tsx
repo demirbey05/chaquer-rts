@@ -87,7 +87,7 @@ const SpectatorButton = ({ gameState, setIsSpectateGameModalOpen, setGameID, gam
     return (
         <button
             className='btn btn-dark menu-game-list-button'
-            disabled={gameState !== 3 && gameState !== 4}
+            disabled={gameState !== 2 && gameState !== 3}
             onClick={() => {
                 setIsSpectateGameModalOpen(true)
                 setGameID(gameID)

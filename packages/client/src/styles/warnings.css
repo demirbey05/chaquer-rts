@@ -14,14 +14,17 @@
 }
 
 .my-warning-title {
+    display: flex;
+    align-items: center;
     font-size: 15px;
-    font-weight: bold;
-    color: white;
-    border-bottom: 1px solid white;
+    font-weight: bolder;
+    color: rgb(0, 0, 0);
+    border-bottom: 1px solid rgb(0, 0, 0);
 }
 
 .my-warning-message {
-    color: white;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
     font-size: 12px;
     margin-top: 10px;
 }

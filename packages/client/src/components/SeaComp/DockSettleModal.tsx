@@ -111,8 +111,8 @@ export const DockSettleModal = () => {
                 document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.innerHTML = "";
                 document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
             } else {
-                setErrorMessage("You need 30 food + 30 gold to move your army.")
-                setErrorTitle("Army Move Error")
+                setErrorMessage("You need 30 food + 30 diomand to move your army.")
+                setErrorTitle("Army Move Warning")
                 setShowError(true)
             }
 
