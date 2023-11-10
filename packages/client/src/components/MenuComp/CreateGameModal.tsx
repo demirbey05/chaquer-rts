@@ -60,7 +60,7 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
             };
 
             try {
-                await fetch('https://discord.com/api/webhooks/1164497192879411211/hXwMgsEiM-ldEx28QJo5Oqoj1rgeV3_R6DjnvmRAKZKsT7Q3dKMAGKPbY-fg8qrwAqvM', options)
+                !import.meta.env.DEV && await fetch('https://discord.com/api/webhooks/1164497192879411211/hXwMgsEiM-ldEx28QJo5Oqoj1rgeV3_R6DjnvmRAKZKsT7Q3dKMAGKPbY-fg8qrwAqvM', options)
             } catch (e) {
                 console.log(e)
             }
