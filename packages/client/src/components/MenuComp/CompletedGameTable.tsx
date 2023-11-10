@@ -23,7 +23,7 @@ export const CompletedGameTable = ({ gameNameFilter }: { gameNameFilter: string 
                     {gameList &&
                         gameList
                             .filter((game) => game.name.toLowerCase().includes(gameNameFilter))
-                            .filter((game) => game.state === 4)
+                            .filter((game) => game.state === 3)
                             .map((game, key) => (
                                 <Tr key={key}>
                                     <Td>

@@ -29,7 +29,7 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
                                 selectedPlayers.length === 0 ||
                                 selectedPlayers.includes(Number(game.numberOfPlayer))
                             )
-                            .filter((game) => game.state !== 4)
+                            .filter((game) => game.state !== 3)
                             .map((game, key) => (
                                 <Tr key={key}>
                                     <Td>
@@ -101,7 +101,7 @@ const getGameState = (gameState: number) => {
     if (gameState === 1) {
         return "Waiting for Players"
     }
-    else if (gameState === 2 || gameState === 3) {
+    else if (gameState === 2) {
         return "Game Started"
     } else {
         return null
