@@ -27,7 +27,7 @@ export const JoinGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
 
     useEffect(() => {
         if (userValid === undefined && gameData) {
-            if (gameData.state === 2 || gameData.state === 3 || gameData.state === 4 || Number(gameData.numberOfPlayer) === Number(gameData.limitOfPlayer)) {
+            if (gameData.state === 2 || gameData.state === 3 || Number(gameData.numberOfPlayer) === Number(gameData.limitOfPlayer)) {
                 setIsButtonDisabled(true)
             } else {
                 setIsButtonDisabled(false)
@@ -76,7 +76,7 @@ export const JoinGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
                             </h1>
                         </div>
                         {
-                            userValid === undefined && gameData && (gameData.state === 2 || gameData.state === 3 || gameData.state === 4 || Number(gameData.numberOfPlayer) === Number(gameData.limitOfPlayer)) ?
+                            userValid === undefined && gameData && (gameData.state === 2 || gameData.state === 3 || Number(gameData.numberOfPlayer) === Number(gameData.limitOfPlayer)) ?
                                 <Alert textColor={"black"} status='warning'>
                                     <AlertIcon />
                                     Seems game is full or started. You cannot join.
