@@ -19,7 +19,6 @@ export const useSyncProgress = () => {
 
     useEffect(() => {
         if (progress) {
-            console.log(progress)
             setPercentage(progress)
         }
     }, [progress, value]);

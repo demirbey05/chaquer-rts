@@ -1,6 +1,6 @@
 import map from "../../../map.json";
 import { useEffect, useState } from "react";
-import { Button, Alert, AlertIcon } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { useMUD } from "../../context/MUDContext";
 import { useTerrain } from "../../context/TerrainContext";
 import { useGame } from "../../context/GameContext";
@@ -149,11 +149,10 @@ const CreateGameWarning = ({ setIsCreateGameModalOpen, setIsOpen }: { setIsCreat
                     Warning about Creating Game
                 </h1>
             </div>
-            <Alert status='info' textAlign={"left"} textColor={"black"}>
-                <AlertIcon />
+            <p className="text-info d-flex font-bolder">
                 When creating a game, it is crucial to ensure that you can assemble a sufficient number of participants for the game to commence.
                 If you cannot, the game will be not started.
-            </Alert>
+            </p>
             <Button onClick={() => { setIsCreateGameModalOpen(true); setIsOpen(false) }} colorScheme={"facebook"} mt={3}>I Understood</Button>
         </>
     )

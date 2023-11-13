@@ -10,7 +10,13 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
     const gameList = useGameList();
 
     return (
-        <TableContainer textColor={"white"} overflowY={"auto"} backgroundColor={"rgba(0,0,0,0.8)"} height={"525px"}>
+        <TableContainer
+            border={"2px"}
+            borderRadius={"10px"}
+            textColor={"white"}
+            overflowY={"auto"}
+            backgroundColor={"rgba(0,0,0,0.8)"}
+            height={"525px"}>
             <Table variant='simple'>
                 <Thead position="sticky" top={0} zIndex="10" backgroundColor={"black"}>
                     <Tr>

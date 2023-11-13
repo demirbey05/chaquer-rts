@@ -69,7 +69,7 @@ export const MarketDrawer = ({ isInputFocused }: { isInputFocused: boolean }) =>
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
-                    <h2 className="text-center border-top border-bottom p-2">Stocks</h2>
+                    <h2 className="text-center border-top border-bottom p-2">Market Stocks</h2>
                     <div className="d-flex align-items-center justify-content-center mt-2">
                         <div className="col align-items-center ms-4">
                             <div className="row w-100">

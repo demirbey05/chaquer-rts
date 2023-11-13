@@ -9,20 +9,20 @@ import {
     ListItem,
     UnorderedList
 } from '@chakra-ui/react'
-import { FaCircleInfo } from 'react-icons/fa6'
 import { FiSettings } from 'react-icons/fi'
 import { GiShipBow } from 'react-icons/gi'
 import { SlBasket } from 'react-icons/sl'
 import { FaUsers } from 'react-icons/fa'
 import { BsFillChatDotsFill } from 'react-icons/bs'
 import { AiOutlineStock } from 'react-icons/ai'
+import { FaInfo } from 'react-icons/fa'
 
 export const ShortCutTips = () => {
     return (
         <Popover isLazy>
             <PopoverTrigger>
                 <button className="tips-button">
-                    <FaCircleInfo />
+                    <FaInfo />
                 </button>
             </PopoverTrigger>
             <PopoverContent backgroundColor={"blackAlpha.700"} color={"white"}>
@@ -51,7 +51,7 @@ export const ShortCutTips = () => {
                             <div className='d-flex align-items-center'>
                                 <GiShipBow className='me-2' />
                                 <p>
-                                    Army Info {"->"} Press "A"
+                                    Fleet Info {"->"} Press "F"
                                 </p>
                             </div>
                         </ListItem>

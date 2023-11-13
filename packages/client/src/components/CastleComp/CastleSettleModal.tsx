@@ -1,5 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
-import { useBeforeUnload } from "react-router-dom";
+import { useState } from "react";
 import { Button } from "@chakra-ui/react";
 import { useMUD } from "../../context/MUDContext";
 import { useCastle } from "../../context/CastleContext";
@@ -19,14 +18,14 @@ export const CastleSettleModal = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  useBeforeUnload(
+  /*useBeforeUnload(
     useCallback((e) => {
       const handleExit = async () => {
         await systemCalls.exitGame(gameID)
       }
       handleExit();
     }, [])
-  );
+  );*/
 
   const handleClick = async () => {
     setIsLoading(true)
@@ -77,7 +76,7 @@ export const CastleSettleModal = () => {
               </Button>
               <Button
                 colorScheme="red"
-                isLoading={isLoading}
+                isDisabled={isLoading}
                 border="solid"
                 textColor="dark"
                 data-bs-dismiss="modal"

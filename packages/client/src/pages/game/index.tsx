@@ -42,6 +42,7 @@ import { FleetInfoDrawer } from "../../components/SeaComp/FleetInfoDrawer";
 import { ArmyMergeDrawer } from "../../components/ArmyComp/ArmyMergeDrawer";
 import { ChatMessageDrawer } from "../../components/ChatComp/ChatMessageDrawer";
 import { VersionInfo } from "../../components/TipsComp/VersionInfo";
+import { GameTutorial } from "../../components/TipsComp/GameTutorial";
 
 export const Game = () => {
   const { gameID } = useGame();
@@ -68,6 +69,7 @@ export const Game = () => {
       {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <FleetInfoDrawer isInputFocused={isInputFocused} />}
       {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <MarketDrawer isInputFocused={isInputFocused} />}
       {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <ShortCutTips />}
+      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <GameTutorial />}
       {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <WarResultDrawer isInputFocused={isInputFocused} />}
       {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <ChatMessageDrawer isInputFocused={isInputFocused} setIsInputFocused={setIsInputFocused} isSpectator={false} />}
       {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <ArmySettleModal />}

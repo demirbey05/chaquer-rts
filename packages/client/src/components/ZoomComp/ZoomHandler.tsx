@@ -14,14 +14,6 @@ export const ZoomHandler = ({ isInputFocused, zoomLevel, setZoomLevel }:
         }
     };
 
-    const handleKeyPress = (event: KeyboardEvent) => {
-        if (event.key === 'ı' || event.key === 'I') {
-            handleZoomIn();
-        } else if (event.key === 'o' || event.key === 'O') {
-            handleZoomOut();
-        }
-    };
-
     const handleWheel = (event: WheelEvent) => {
         if (!isInputFocused) {
             if (event.deltaY < 0) {
@@ -35,12 +27,10 @@ export const ZoomHandler = ({ isInputFocused, zoomLevel, setZoomLevel }:
 
     useEffect(() => {
         if (!isInputFocused) {
-            window.addEventListener('keydown', handleKeyPress);
-            window.addEventListener('wheel', handleWheel);
+            window.addEventListener('wheel', handleWheel, { passive: false });
         }
 
         return () => {
-            window.removeEventListener('keydown', handleKeyPress);
             window.removeEventListener('wheel', handleWheel);
         };
     }, [zoomLevel, isInputFocused]);

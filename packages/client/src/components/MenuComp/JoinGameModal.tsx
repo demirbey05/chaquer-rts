@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Alert, AlertIcon } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { useGame } from "../../context/GameContext";
 import { usePlayerIsValid } from "../../hooks/IdentityHooks/usePlayerIsValid";
 import { useGameData } from "../../hooks/useGameData";
 import { usePlayer } from "../../context/PlayerContext";
 import { useMUD } from "../../context/MUDContext";
+import { AiFillWarning } from 'react-icons/ai'
 
 export const JoinGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (value: boolean) => void }) => {
     const { systemCalls } = useMUD();
@@ -77,10 +78,10 @@ export const JoinGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
                         </div>
                         {
                             userValid === undefined && gameData && (gameData.state === 2 || gameData.state === 3 || Number(gameData.numberOfPlayer) === Number(gameData.limitOfPlayer)) ?
-                                <Alert textColor={"black"} status='warning'>
-                                    <AlertIcon />
+                                <p className="text-warning d-flex justify-content-center align-items-center font-bolder">
+                                    <AiFillWarning className="me-3" />
                                     Seems game is full or started. You cannot join.
-                                </Alert> :
+                                </p> :
                                 <div className="modal-header justify-center mb-2">
                                     <p>Click to Join Game button to join game.</p>
                                 </div>
