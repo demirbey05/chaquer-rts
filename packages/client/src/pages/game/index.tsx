@@ -93,7 +93,7 @@ export const Game = () => {
       <SettingsDrawer isInputFocused={isInputFocused} />
       <PlayerListDrawer isInputFocused={isInputFocused} isSpectator={false} />
       <ZoomHandler isInputFocused={isInputFocused} zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />
-      <Terrain isBorder={false} zoomLevel={zoomLevel} tileSize={40} fontSize={20} isSpectator={false} />
+      <Terrain isBorder={false} zoomLevel={zoomLevel} tileSize={40} isSpectator={false} />
     </>
   );
 }

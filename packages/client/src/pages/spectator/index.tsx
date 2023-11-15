@@ -17,7 +17,7 @@ export const Spectator = () => {
             <PriceListDrawer isInputFocused={true} isSpectator={true} />
             <ChatMessageDrawer isInputFocused={true} setIsInputFocused={() => true} isSpectator={true} />
             <ZoomHandler isInputFocused={true} zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />
-            <Terrain isBorder={true} zoomLevel={zoomLevel} fontSize={20} tileSize={40} isSpectator={true} />
+            <Terrain isBorder={true} zoomLevel={zoomLevel} tileSize={40} isSpectator={true} />
         </>
     )
 }

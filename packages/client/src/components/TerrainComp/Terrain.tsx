@@ -63,7 +63,7 @@ import { ArmyMergeEvent } from './Events/ArmyMergeEvent';
 import { usePlayerIsValid } from '../../hooks/IdentityHooks/usePlayerIsValid';
 import { EventProgressBar } from '../ProgressComp/EventProgressBar';
 
-export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }: { isBorder: boolean, zoomLevel: number, tileSize: number, fontSize: number, isSpectator: boolean }) => {
+export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBorder: boolean, zoomLevel: number, tileSize: number, isSpectator: boolean }) => {
   const { components, systemCalls } = useMUD();
   const { width, height } = useTerrain();
 
@@ -489,8 +489,11 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, fontSize, isSpectator }
   }
 
   return (
-    <ScrollContainer className={`${!isBorder && "scroll-container"}`} style={isBorder === false ? terrainContainer : (isSpectator ? terrainContainer : {})}>
-      <div className={`inline-grid ${isBorder && "border-4 border-black"}`}
+    <ScrollContainer
+      className={`${!isBorder && "scroll-container"}`}
+      style={isBorder === false ? terrainContainer : (isSpectator ? terrainContainer : {})}>
+      <div
+        className={`inline-grid ${isBorder && "border-4 border-black"}`}
         style={{
           pointerEvents: isBorder === true ? "none" : "auto",
           transform: `scale(${zoomLevel}) rotateX(60deg) rotateZ(45deg) rotateY(0deg)`,

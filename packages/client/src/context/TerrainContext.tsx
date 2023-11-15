@@ -1,32 +1,24 @@
-import { useState, useEffect, useContext, createContext, ReactNode, useRef } from "react";
+import { useState, useContext, createContext, ReactNode, useRef } from "react";
 import { ethers } from "ethers";
 
 type TerrainContextType = {
-  values: any;
-  setIsLoading: (value: boolean) => void;
   width: number;
   height: number;
+  values: any;
   setValues: (value: any) => void;
   setRefresh: (value: number) => void;
   refresh: number;
-  isLoading: boolean;
-  setPermArray: (value: any) => void;
-  saveTerrain: () => void;
   abiCoder: any;
   provider: ethers.providers.BaseProvider;
 };
 
 const TerrainContext = createContext<TerrainContextType>({
-  values: null,
-  setIsLoading: () => { },
   width: 25,
   height: 25,
+  values: null,
   setValues: () => { },
   setRefresh: () => { },
   refresh: 0,
-  isLoading: false,
-  setPermArray: () => { },
-  saveTerrain: () => { },
   abiCoder: undefined,
   provider: new ethers.providers.JsonRpcProvider(),
 });
@@ -35,39 +27,17 @@ const TerrainProvider: React.FC<{ children: ReactNode }> = ({ children }: { chil
   const width = 25;
   const height = 25;
   const [values, setValues] = useState<any>(null);
-  const [permArray, setPermArray] = useState<any>(null);
   const [refresh, setRefresh] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { current: abiCoder } = useRef(new ethers.utils.AbiCoder());
   const { current: provider } = useRef(new ethers.providers.JsonRpcProvider());
 
-  useEffect(() => {
-    saveTerrain();
-    setIsLoading(false);
-  }, [values]);
-
-  useEffect(() => {
-    const terrain = window.localStorage.getItem("terrain");
-    if (terrain) {
-      setValues(JSON.parse(terrain));
-    }
-  }, []);
-
-  const saveTerrain = () => {
-    window.localStorage.setItem("terrain", JSON.stringify(values));
-  };
-
   const results: TerrainContextType = {
-    values,
-    setIsLoading,
-    isLoading,
     width,
     height,
+    values,
     setValues,
     setRefresh,
     refresh,
-    setPermArray,
-    saveTerrain,
     abiCoder,
     provider,
   };
