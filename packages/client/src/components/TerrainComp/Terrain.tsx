@@ -63,7 +63,7 @@ import { ArmyMergeEvent } from './Events/ArmyMergeEvent';
 import { usePlayerIsValid } from '../../hooks/IdentityHooks/usePlayerIsValid';
 import { EventProgressBar } from '../ProgressComp/EventProgressBar';
 
-export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBorder: boolean, zoomLevel: number, tileSize: number, isSpectator: boolean }) => {
+export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpectator: boolean }) => {
   const { components, systemCalls } = useMUD();
   const { width, height } = useTerrain();
 
@@ -418,7 +418,6 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
     fromArmyPosition);
   ArmyEffects(isArmyUpdateStage,
     values,
-    isBorder,
     myCastlePosition,
     dockPositions,
     castlePositions,
@@ -452,7 +451,6 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
     resources,
     numberOfArmy,
     isArmySettleStage,
-    isBorder,
     castlePositions,
     myCastlePosition,
     values,
@@ -512,8 +510,8 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
                   style={{
                     gridColumn: column + 1,
                     gridRow: row + 1,
-                    width: `${tileSize}px`,
-                    height: `${tileSize}px`,
+                    width: "40px",
+                    height: "40px",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
@@ -522,18 +520,15 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
                     handleClick(e);
                   }}
                   className={`
-                ${!isBorder &&
-                    isValidTerrainType(values[row][column]) &&
+                ${isValidTerrainType(values[row][column]) &&
                     "hoverTileEffect"
                     }`}
                   data-bs-toggle={`${canCastleBeSettle(values[row][column]) &&
-                    !isCastleSettled &&
-                    !isBorder
+                    !isCastleSettled
                     ? "modal" : ""
                     }`}
                   data-bs-target={`${canCastleBeSettle(values[row][column]) &&
-                    !isCastleSettled &&
-                    !isBorder
+                    !isCastleSettled
                     ? "#castleSettleModal" : ""
                     }`}
                 ></span>

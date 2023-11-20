@@ -34,4 +34,6 @@ export const ZoomHandler = ({ isInputFocused, zoomLevel, setZoomLevel }:
             window.removeEventListener('wheel', handleWheel);
         };
     }, [zoomLevel, isInputFocused]);
+
+    return <></>
 };

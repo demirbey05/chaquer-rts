@@ -14,8 +14,40 @@ import {
     Box
 } from '@chakra-ui/react'
 import { IoGameControllerOutline } from 'react-icons/io5'
+import { useState, useEffect } from 'react';
 
 export const GameTutorial = () => {
+    const [helloTask, setHelloTask] = useState(localStorage.getItem("helloTask"));
+    const [armySettlementTask, setArmySettlementTask] = useState(localStorage.getItem("armySettlementTask"));
+    const [armyMovementTask, setArmyMovementTask] = useState(localStorage.getItem("armyMovementTask"));
+    const [updateArmyTask, setUpdateArmyTask] = useState(localStorage.getItem("updateArmyTask"));
+    const [mergeTwoArmiesTask, setMergeTwoArmiesTask] = useState(localStorage.getItem("mergeTwoArmiesTask"));
+    const [attackCaptureTask, setAttackCaptureTask] = useState(localStorage.getItem("attackCaptureTask"));
+    const [dockSettlementTask, setDockSettlementTask] = useState(localStorage.getItem("dockSettlementTask"));
+    const [fleetSettlementTask, setFleetSettlementTask] = useState(localStorage.getItem("fleetSettlementTask"));
+    const [fleetMovementTask, setFleetMovementTask] = useState(localStorage.getItem("fleetMovementTask"));
+
+    useEffect(() => {
+        const handleStorageChange = () => {
+            setHelloTask(localStorage.getItem("helloTask"));
+            setArmySettlementTask(localStorage.getItem("armySettlementTask"));
+            setArmyMovementTask(localStorage.getItem("armyMovementTask"));
+            setUpdateArmyTask(localStorage.getItem("updateArmyTask"));
+            setMergeTwoArmiesTask(localStorage.getItem("mergeTwoArmiesTask"));
+            setAttackCaptureTask(localStorage.getItem("attackCaptureTask"));
+            setDockSettlementTask(localStorage.getItem("dockSettlementTask"));
+            setFleetSettlementTask(localStorage.getItem("fleetSettlementTask"));
+            setFleetMovementTask(localStorage.getItem("fleetMovementTask"));
+        };
+        console.log("burası çalıştı")
+
+        window.addEventListener('storage', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, []);
+
     return (
         <>
             <Popover isLazy defaultIsOpen={true}>
@@ -33,10 +65,10 @@ export const GameTutorial = () => {
                     <PopoverBody>
                         <Accordion allowToggle defaultIndex={[0]}>
                             <AccordionItem>
-                                <h2>
+                                <h2 className={helloTask === null ? "text-warning" : "text-success"}>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            1-Say Hello to Other Players
+                                            Say Hello to Other Players
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -48,10 +80,10 @@ export const GameTutorial = () => {
                                 </AccordionPanel>
                             </AccordionItem>
                             <AccordionItem >
-                                <h2>
+                                <h2 className={armySettlementTask === null ? "text-warning" : "text-success"}>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            2-Army Settlement
+                                            Army Settlement
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -65,10 +97,10 @@ export const GameTutorial = () => {
                             </AccordionItem>
 
                             <AccordionItem>
-                                <h2>
+                                <h2 className={armyMovementTask === null ? "text-warning" : "text-success"}>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            3-Army Movement
+                                            Army Movement
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -80,10 +112,10 @@ export const GameTutorial = () => {
                                 </AccordionPanel>
                             </AccordionItem>
                             <AccordionItem>
-                                <h2>
+                                <h2 className={updateArmyTask === null ? "text-warning" : "text-success"}>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            4- Update Army Size
+                                            Update Army Size
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -96,10 +128,10 @@ export const GameTutorial = () => {
                                 </AccordionPanel>
                             </AccordionItem>
                             <AccordionItem>
-                                <h2>
+                                <h2 className={mergeTwoArmiesTask === null ? "text-warning" : "text-success"}>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            5- Merge Two Armies
+                                            Merge Two Armies
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -111,10 +143,10 @@ export const GameTutorial = () => {
                                 </AccordionPanel>
                             </AccordionItem>
                             <AccordionItem>
-                                <h2>
+                                <h2 className={attackCaptureTask === null ? "text-warning" : "text-success"}>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            6-Attack and Capture
+                                            Attack and Capture
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -128,10 +160,10 @@ export const GameTutorial = () => {
                                 </AccordionPanel>
                             </AccordionItem>
                             <AccordionItem>
-                                <h2>
+                                <h2 className={dockSettlementTask === null ? "text-warning" : "text-success"}>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            7- Dock Settlement
+                                            Dock Settlement
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -146,10 +178,10 @@ export const GameTutorial = () => {
                                 </AccordionPanel>
                             </AccordionItem>
                             <AccordionItem>
-                                <h2>
+                                <h2 className={fleetSettlementTask === null ? "text-warning" : "text-success"}>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            8-Fleet Settlement
+                                            Fleet Settlement
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -162,10 +194,10 @@ export const GameTutorial = () => {
                                 </AccordionPanel>
                             </AccordionItem>
                             <AccordionItem>
-                                <h2>
+                                <h2 className={fleetMovementTask === null ? "text-warning" : "text-success"}>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            9-Fleet Movement
+                                            Fleet Movement
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -179,7 +211,7 @@ export const GameTutorial = () => {
                         </Accordion>
                     </PopoverBody>
                 </PopoverContent>
-            </Popover>
+            </Popover >
         </>
     )
 }

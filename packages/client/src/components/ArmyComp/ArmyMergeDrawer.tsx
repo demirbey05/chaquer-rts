@@ -89,6 +89,9 @@ export const ArmyMergeDrawer = () => {
             setErrorMessage("An error occurred while trying to merge the armies.");
             setErrorTitle("Army Merge Error");
             setShowError(true);
+        } else {
+            const isTask = localStorage.getItem("mergeTwoArmiesTask")
+            !isTask && localStorage.setItem("mergeTwoArmiesTask", "true")
         }
 
         setIsLoading(false);

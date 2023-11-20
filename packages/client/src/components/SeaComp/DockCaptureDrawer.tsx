@@ -64,6 +64,9 @@ export const DockCaptureDrawer = () => {
             setErrorMessage("An error occurred while trying to capture the dock.")
             setErrorTitle("Dock Capture Error")
             setShowError(true)
+        } else {
+            const isTask = localStorage.getItem("attackCaptureTask")
+            !isTask && localStorage.setItem("attackCaptureTask", "true")
         }
 
         setIsLoading(false)

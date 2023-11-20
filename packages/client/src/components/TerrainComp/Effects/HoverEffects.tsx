@@ -24,7 +24,6 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
     resources: any[],
     numberOfArmy: any,
     isArmySettleStage: boolean | undefined,
-    isBorder: boolean,
     castlePositions: any[],
     myCastlePosition: any[],
     values: number[][],
@@ -47,7 +46,6 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                         !isMyArmy({ x: data.x, y: data.y }, myArmyPosition) &&
                         !isMyResource(data.x, data.y, myResourcePositions) &&
                         !isMyDock(data.x, data.y, myDockPositions) &&
-                        !isBorder &&
                         document.getElementById(`${data.y},${data.x}`)?.classList.add("blueTileEffect");
                 }
             });
@@ -68,7 +66,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                 });
             }
         }
-    }, [fromArmyPosition, isArmyMoveStage, myCastlePosition, myArmyPosition, myResourcePositions, myDockPositions, isBorder, values]);
+    }, [fromArmyPosition, isArmyMoveStage, myCastlePosition, myArmyPosition, myResourcePositions, myDockPositions, values]);
 
     //Orange hover effect and Army Settle data-bs
     useEffect(() => {
@@ -80,7 +78,6 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                             if (
                                 numberOfArmy !== (5 + myCastlePosition.length - 1) &&
                                 canCastleBeSettle(values[data.x][data.y]) &&
-                                !isBorder &&
                                 !isResourcePosition(data.x, data.y, resources) &&
                                 !isEnemyCastle({ x: data.x, y: data.y }, myCastlePosition, castlePositions) &&
                                 !isMyCastle(myCastlePosition, data.x, data.y) &&
@@ -115,7 +112,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                 );
             });
         }
-    }, [isArmySettleStage, myCastlePosition, resources, myCastlePosition, castlePositions, armyPositions, dockPositions, values, isBorder, myDockPositions]);
+    }, [isArmySettleStage, myCastlePosition, resources, myCastlePosition, castlePositions, armyPositions, dockPositions, values, myDockPositions]);
 
     // Orange hover effect - Fleet Settle data-bs
     useEffect(() => {
@@ -125,7 +122,6 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                     (data) => {
                         if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                             if (
-                                !isBorder &&
                                 canFleetBeSettled(values[data.x][data.y]) &&
                                 !isMyFleet({ x: data.x, y: data.y }, myFleetPositions) &&
                                 !isResourcePosition(data.x, data.y, resources)
@@ -167,7 +163,6 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                     canFleetBeSettled(values[data.x][data.y]) &&
                         !isMyFleet({ x: data.x, y: data.y }, myFleetPositions) &&
                         !isMyResource(data.x, data.y, myResourcePositions) &&
-                        !isBorder &&
                         document.getElementById(`${data.y},${data.x}`)?.classList.add("yellowTileEffect");
                 }
             });
@@ -188,5 +183,5 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                 });
             }
         }
-    }, [fromFleetPosition, isFleetMoveStage, myFleetPositions, myResourcePositions, isBorder, values]);
+    }, [fromFleetPosition, isFleetMoveStage, myFleetPositions, myResourcePositions, values]);
 }

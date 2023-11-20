@@ -187,6 +187,10 @@ export const ArmyUpdateModal = () => {
         if (tx) {
             setArmyConfig({ numSwordsman: 0, numArcher: 0, numCavalry: 0 })
             document.getElementById(`${castlePosition.y},${castlePosition.x}`)!.style.pointerEvents = "auto";
+
+            const isTask = localStorage.getItem("updateArmyTask")
+            !isTask && localStorage.setItem("updateArmyTask", "true")
+
             setArmyPositionUpdate(undefined)
             setCastlePosition(undefined)
         } else {

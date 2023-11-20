@@ -5,7 +5,6 @@ import { GameTips } from '../TipsComp/GameTips';
 import { useGameData } from '../../hooks/useGameData';
 
 export const PlayerWaitingStage = () => {
-    //const { systemCalls } = useMUD();
     const { gameID } = useGame();
     const { isCastleSettled } = useCastle();
 
@@ -13,15 +12,6 @@ export const PlayerWaitingStage = () => {
     const gameState = gameData ? gameData.state : null;
     const numberOfPlayer = gameData ? Number(gameData.numberOfPlayer) : 0;
     const limitOfPlayer = gameData ? Number(Number(gameData.limitOfPlayer)) : 0;
-
-    /*useBeforeUnload(
-        useCallback((e) => {
-            const handleExit = async () => {
-                await systemCalls.exitGame(gameID)
-            }
-            handleExit();
-        }, [])
-    );*/
 
     if (isCastleSettled) {
         return (
@@ -43,9 +33,9 @@ export const PlayerWaitingStage = () => {
                                 </CircularProgress>
                             </span>
                             <Progress size='sm' colorScheme={"whatsapp"} isIndeterminate />
+                            <GameTips />
                         </>
                     }
-                    <GameTips />
                 </div>
             </div>
         )

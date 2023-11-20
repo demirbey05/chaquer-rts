@@ -134,6 +134,9 @@ export const ArmySettleModal = () => {
       setSwordsmanCount('');
       setArcherCount('');
       setCavalryCount('');
+
+      const isTask = localStorage.getItem("armySettlementTask")
+      !isTask && localStorage.setItem("armySettlementTask", "true")
     } else {
       setErrorMessage("An error occurred during army settlement.");
       setErrorTitle("Army Settlement Error");

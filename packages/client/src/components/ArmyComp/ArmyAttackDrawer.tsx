@@ -58,6 +58,9 @@ export const ArmyAttackDrawer = () => {
       setErrorMessage("An error occurred while attacking to army.");
       setErrorTitle("Army Attack Error");
       setShowError(true);
+    } else {
+      const isTask = localStorage.getItem("attackCaptureTask")
+      !isTask && localStorage.setItem("attackCaptureTask", "true")
     }
 
     setIsLoading(false);

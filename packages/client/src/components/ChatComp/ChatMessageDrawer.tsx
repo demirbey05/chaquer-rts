@@ -87,6 +87,9 @@ export const ChatMessageDrawer = ({ isInputFocused, setIsInputFocused, isSpectat
                 setTimeout(() => {
                     setIsButtonDisabled(false);
                 }, 30000);
+
+                var isTask = localStorage.getItem("helloTask")
+                !isTask && localStorage.setItem("helloTask", "true")
             } else {
                 setErrorMessage("An error occurred while sending a message.");
                 setErrorTitle("Message Error");

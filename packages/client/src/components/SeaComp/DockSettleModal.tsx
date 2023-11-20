@@ -83,6 +83,8 @@ export const DockSettleModal = () => {
             setShowError(true)
         }
         else {
+            const isTask = localStorage.getItem("dockSettlementTask")
+            !isTask && localStorage.setItem("dockSettlementTask", "true")
             setDockSettleStage(false);
             setDockPosition(undefined);
         }
@@ -116,6 +118,9 @@ export const DockSettleModal = () => {
                 const audio = new Audio(armyMoveSoundEffect);
                 audio.volume = 0.2;
                 audio.play();
+
+                const isTask = localStorage.getItem("armyMovementTask")
+                !isTask && localStorage.setItem("armyMovementTask", "true")
             } else {
                 setErrorMessage("You need 30 food + 30 diomand to move your army.")
                 setErrorTitle("Army Move Warning")

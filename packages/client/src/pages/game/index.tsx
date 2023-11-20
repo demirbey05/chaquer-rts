@@ -1,5 +1,5 @@
 import "../../styles/globals.css"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePlayer } from "../../context/PlayerContext";
 import { useGame } from "../../context/GameContext";
 import { useGameData } from "../../hooks/useGameData";
@@ -40,6 +40,7 @@ import { ArmyMergeDrawer } from "../../components/ArmyComp/ArmyMergeDrawer";
 import { ChatMessageDrawer } from "../../components/ChatComp/ChatMessageDrawer";
 import { VersionInfo } from "../../components/TipsComp/VersionInfo";
 import { GameTutorial } from "../../components/TipsComp/GameTutorial";
+import { scrollToCenter } from "../../utils/helperFunctions/CustomFunctions/scrollToCenter";
 
 export const Game = () => {
   const { gameID } = useGame();
@@ -49,68 +50,52 @@ export const Game = () => {
 
   const gameData = useGameData(gameID);
 
-  useEffect(() => {
-    const checkAndScroll = () => {
-      const targetDiv = document.getElementById("12,12");
-      const scrollOptions = {
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center'
-      };
+  const playerWaiting: boolean = gameData && gameData.state === 1 && !isPlayerLost
+  const gameIsStarted: boolean = gameData && gameData.state === 2 && !isPlayerLost
+  const gameOver: boolean = gameData && gameData.state === 3 && isPlayerWinner
 
-      if (targetDiv) {
-        targetDiv.scrollIntoView(scrollOptions);
-        clearInterval(intervalId);
-      }
-    };
-
-    const intervalId = setInterval(checkAndScroll, 1000);
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
+  scrollToCenter()
 
   return (
     <>
       {!isPlayerLost && <CastleSettleWarning />}
       {!isPlayerLost && <CastleSettleModal />}
-      {gameData && gameData.state === 1 && !isPlayerLost && <PlayerWaitingStage />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <ArmySettleWarning />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <ArmyUpdateWarning />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <ArmyMoveWarning />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <ArmyProgressBar />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <MineProgressBar />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <CreditProgressBar />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <ArmyInfoDrawer isInputFocused={isInputFocused} />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <FleetInfoDrawer isInputFocused={isInputFocused} />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <MarketDrawer isInputFocused={isInputFocused} />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <ShortCutTips />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <GameTutorial />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <WarResultDrawer isInputFocused={isInputFocused} />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <ChatMessageDrawer isInputFocused={isInputFocused} setIsInputFocused={setIsInputFocused} isSpectator={false} />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <ArmySettleModal />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <ArmyUpdateModal />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <ArmyMergeDrawer />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <ArmyAttackDrawer />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <CastleAttackDrawer />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <MineCaptureDrawer />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <DockSettleModal />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <DockCaptureDrawer />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <FleetSettleModal />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <FleetSettleWarning />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <FleetMoveWarning />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <FleetAttackDrawer />}
-      {gameData && gameData.state === 2 && !isPlayerLost && <SeaMineCaptureDrawer />}
-      {gameData && gameData.state === 2 && <PriceListDrawer isInputFocused={isInputFocused} isSpectator={false} />}
+      {playerWaiting && <PlayerWaitingStage />}
+      {gameIsStarted && <ArmySettleWarning />}
+      {gameIsStarted && <ArmyUpdateWarning />}
+      {gameIsStarted && <ArmyMoveWarning />}
+      {gameIsStarted && <ArmyProgressBar />}
+      {gameIsStarted && <MineProgressBar />}
+      {gameIsStarted && <CreditProgressBar />}
+      {gameIsStarted && <ArmyInfoDrawer isInputFocused={isInputFocused} />}
+      {gameIsStarted && <FleetInfoDrawer isInputFocused={isInputFocused} />}
+      {gameIsStarted && <MarketDrawer isInputFocused={isInputFocused} />}
+      {gameIsStarted && <ShortCutTips />}
+      {gameIsStarted && <GameTutorial />}
+      {gameIsStarted && <WarResultDrawer isInputFocused={isInputFocused} />}
+      {gameIsStarted && <ChatMessageDrawer isInputFocused={isInputFocused} setIsInputFocused={setIsInputFocused} isSpectator={false} />}
+      {gameIsStarted && <ArmySettleModal />}
+      {gameIsStarted && <ArmyUpdateModal />}
+      {gameIsStarted && <ArmyMergeDrawer />}
+      {gameIsStarted && <ArmyAttackDrawer />}
+      {gameIsStarted && <CastleAttackDrawer />}
+      {gameIsStarted && <MineCaptureDrawer />}
+      {gameIsStarted && <DockSettleModal />}
+      {gameIsStarted && <DockCaptureDrawer />}
+      {gameIsStarted && <FleetSettleModal />}
+      {gameIsStarted && <FleetSettleWarning />}
+      {gameIsStarted && <FleetMoveWarning />}
+      {gameIsStarted && <FleetAttackDrawer />}
+      {gameIsStarted && <SeaMineCaptureDrawer />}
+      {gameIsStarted && <PriceListDrawer isInputFocused={isInputFocused} isSpectator={false} />}
       {isPlayerLost && <PlayerLostWarning />}
-      {gameData && gameData.state === 3 && isPlayerWinner && <PlayerWonAnimation />}
+      {gameOver && <PlayerWonAnimation />}
 
-      <VersionInfo />
+      <Terrain zoomLevel={zoomLevel} isSpectator={false} />
       <SettingsDrawer isInputFocused={isInputFocused} />
       <PlayerListDrawer isInputFocused={isInputFocused} isSpectator={false} />
+      <VersionInfo />
       <ZoomHandler isInputFocused={isInputFocused} zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />
-      <Terrain isBorder={false} zoomLevel={zoomLevel} tileSize={40} isSpectator={false} />
     </>
   );
 }

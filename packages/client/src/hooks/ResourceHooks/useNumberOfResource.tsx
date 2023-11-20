@@ -29,10 +29,8 @@ export const useNumberOfFood = () => {
             const newFoodNumber = calculateResource(Number(numberOfResources.numOfFood), lastCollectBlockNumber, resourceEntityNumber)
             setFoodNumber(newFoodNumber)
         }
-    }, [numberOfResources])
+    }, [lastCollectBlockNumber])
 
-    numberOfResources && console.log("BC:" + Number(numberOfResources.numOfFood))
-    console.log("Client:" + foodNumber)
     return foodNumber
 }
 
@@ -51,7 +49,7 @@ export const useNumberOfWood = () => {
             const newWoodNumber = calculateResource(Number(numberOfResources.numOfWood), lastCollectBlockNumber, resourceEntityNumber)
             setWoodNumber(newWoodNumber)
         }
-    }, [numberOfResources])
+    }, [lastCollectBlockNumber])
 
     return woodNumber
 }
@@ -71,7 +69,7 @@ export const useNumberOfDiomand = () => {
             const newDiomandNumber = calculateResource(Number(numberOfResources.numOfGold), lastCollectBlockNumber, resourceEntityNumber)
             setDiomandNumber(newDiomandNumber)
         }
-    }, [numberOfResources])
+    }, [lastCollectBlockNumber])
 
     return diomandNumber
 }

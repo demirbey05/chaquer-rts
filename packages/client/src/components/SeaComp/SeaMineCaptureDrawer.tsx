@@ -68,6 +68,9 @@ export const SeaMineCaptureDrawer = () => {
             setErrorMessage("An error occurred while trying to capture a sea mine.")
             setErrorTitle("Sea Mine Capture Error")
             setShowError(true)
+        } else {
+            const isTask = localStorage.getItem("attackCaptureTask")
+            !isTask && localStorage.setItem("attackCaptureTask", "true")
         }
 
         setIsLoading(false)

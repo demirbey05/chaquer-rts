@@ -52,12 +52,12 @@ export const ArmyMoveEvent = async (
         );
 
         if (tx) {
-            document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
-            document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
-
             const audio = new Audio(armyMoveSoundEffect);
             audio.volume = 0.2;
             audio.play();
+
+            const isTask = localStorage.getItem("armyMovementTask")
+            !isTask && localStorage.setItem("armyMovementTask", "true")
 
             setFromArmyPosition(undefined);
             toArmyPositionRef.current = { x: -1, y: -1 };
