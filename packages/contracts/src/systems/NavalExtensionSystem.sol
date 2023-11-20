@@ -5,11 +5,19 @@ pragma solidity ^0.8.0;
 import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
-import { LibQueries, LibMath, LibNaval } from "../libraries/Libraries.sol";
+import { LibQueries, LibMath, LibNaval,LibUtils } from "../libraries/Libraries.sol";
 import { baseCostDock, requiredArmySize, baseWoodCostDock, maxShipInFleet, smallCreditCost, smallWoodCost, mediumCreditCost, mediumWoodCost, bigCreditCost, bigWoodCost, fleetMoveFoodCost, fleetMoveGoldCost } from "./Constants.sol";
-import { CreditOwn, ColorOwnable, AddressToColorIndex,ArmyConfig,ArmyConfigData, ResourceOwnData, FleetOwnable, FleetConfig, Position, FleetConfigData, MapConfig, DockOwnable, ResourceOwn, ArmyOwnable } from "../codegen/index.sol";
+import { CreditOwn,FleetCarry, ColorOwnable, AddressToColorIndex,ArmyConfig,ArmyConfigData, ResourceOwnData, FleetOwnable, FleetConfig, Position, FleetConfigData, MapConfig, DockOwnable, ResourceOwn, ArmyOwnable } from "../codegen/index.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
+
+error FleetLoad__NoAuthorization();
+error FleetLoad__WrongGameID();
+error FleetLoad__WrongConfig();
+error FleetLoad__UnsufficientCap();
+error FleetLoad__NoArmyPlace();
+
+
 
 contract NavalExtensionSystem is System {
   function buildDock(
@@ -154,7 +162,7 @@ contract NavalExtensionSystem is System {
     ResourceOwn.setNumOfGold(fleetOwner, gameID, resourcesOfUser.numOfGold - fleetMoveGoldCost);
   }
 
-  function loadFleet(bytes32 fleetID, bytes32 armyID, ArmyConfigData armyPart) public {
+  function loadFleet(bytes32 fleetID, bytes32 armyID, ArmyConfigData calldata armyPart) public {
     address fleetOwner = FleetOwnable.getOwner(fleetID);
     address armyOwner = ArmyOwnable.getOwner(armyID);
     if (fleetOwner != (_msgSender())) {
@@ -166,11 +174,31 @@ contract NavalExtensionSystem is System {
     FleetConfigData memory fleet = FleetConfig.get(fleetID);
     ArmyConfigData memory army = ArmyConfig.get(armyID);
 
+
     if(fleet.gameID != army.gameID){
       revert FleetLoad__WrongGameID();
     }
+    if (armyPart.numSwordsman > army.numSwordsman || armyPart.numArcher > army.numArcher || armyPart.numCavalry > army.numCavalry|| armyPart.numSwordsman + armyPart.numArcher + armyPart.numCavalry == 0) {
+      revert FleetLoad__WrongConfig();
+    }
+    if(fleet.numSmall + 2 * fleet.numMedium + 3 *fleet.numBig < armyPart.numSwordsman + armyPart.numArcher + armyPart.numCavalry ){
+      revert FleetLoad__UnsufficientCap();
+    }
+    if(LibQueries.queryNumCarriedArmyIDs(IStore(_world()), fleetID, fleet.gameID) != 0){
+      revert FleetLoad__NoArmyPlace();
+    }
 
-    FleetConfig.set(fleetID, fleet);
-    ArmyOwnable.setFleet(armyID, fleetID);
+    (uint32 x, uint32 y,) = Position.get(fleetID);
+
+    if(armyPart.numSwordsman != army.numSwordsman && armyPart.numArcher != army.numArcher && armyPart.numCavalry != army.numCavalry){
+      bytes32 newArmy = LibUtils.divideArmy(armyID, armyPart);
+      Position.set(newArmy, x, y, fleet.gameID);
+      FleetCarry.set(newArmy, fleetID,fleet.gameID);
+    }else {
+      Position.set(armyID, x, y, fleet.gameID);
+      FleetCarry.set(armyID, fleetID,fleet.gameID);
+    
+    }
+    
   }
 }

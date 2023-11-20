@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 import { query, QueryFragment, QueryType } from "@latticexyz/world-modules/src/modules/keysintable/query.sol";
-import { PositionTableId, FleetOwnableTableId, FleetOwnable, DockOwnable, DockOwnableTableId, CastleOwnableTableId, Position, CastleOwnable, ArmyOwnableTableId, ArmyOwnable, ResourceOwnable, ResourceOwnableTableId } from "../codegen/index.sol";
+import { PositionTableId,FleetCarryTableId,FleetCarry, FleetOwnableTableId, FleetOwnable, DockOwnable, DockOwnableTableId, CastleOwnableTableId, Position, CastleOwnable, ArmyOwnableTableId, ArmyOwnable, ResourceOwnable, ResourceOwnableTableId } from "../codegen/index.sol";
 import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { MineType } from "../codegen/common.sol";
@@ -137,5 +137,14 @@ library LibQueries {
     );
     bytes32[] memory entities = getKeysWithValue(world, FleetOwnableTableId, staticData, encodedLengths, dynamicDat);
     return entities;
+  }
+
+  function queryNumCarriedArmyIDs(IStore world,bytes32 fleetID,uint256 gameID) internal view returns (uint256) {
+    (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicDat) = FleetCarry.encode(
+      fleetID,
+      gameID
+    );
+    bytes32[] memory entities = getKeysWithValue(world, FleetCarryTableId, staticData, encodedLengths, dynamicDat);
+    return entities.length;
   }
 }

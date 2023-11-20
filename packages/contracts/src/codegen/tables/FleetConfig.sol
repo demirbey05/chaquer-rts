@@ -21,22 +21,22 @@ import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 import { RESOURCE_TABLE, RESOURCE_OFFCHAIN_TABLE } from "@latticexyz/store/src/storeResourceTypes.sol";
 
 ResourceId constant _tableId = ResourceId.wrap(
-  bytes32(abi.encodePacked(RESOURCE_TABLE, bytes14(""), bytes16("ArmyConfig")))
+  bytes32(abi.encodePacked(RESOURCE_TABLE, bytes14(""), bytes16("FleetConfig")))
 );
-ResourceId constant ArmyConfigTableId = _tableId;
+ResourceId constant FleetConfigTableId = _tableId;
 
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
   0x002c040004040420000000000000000000000000000000000000000000000000
 );
 
-struct ArmyConfigData {
-  uint32 numSwordsman;
-  uint32 numArcher;
-  uint32 numCavalry;
+struct FleetConfigData {
+  uint32 numSmall;
+  uint32 numMedium;
+  uint32 numBig;
   uint256 gameID;
 }
 
-library ArmyConfig {
+library FleetConfig {
   /**
    * @notice Get the table values' field layout.
    * @return _fieldLayout The field layout for the table.
@@ -85,9 +85,9 @@ library ArmyConfig {
    */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
     fieldNames = new string[](4);
-    fieldNames[0] = "numSwordsman";
-    fieldNames[1] = "numArcher";
-    fieldNames[2] = "numCavalry";
+    fieldNames[0] = "numSmall";
+    fieldNames[1] = "numMedium";
+    fieldNames[2] = "numBig";
     fieldNames[3] = "gameID";
   }
 
@@ -106,9 +106,9 @@ library ArmyConfig {
   }
 
   /**
-   * @notice Get numSwordsman.
+   * @notice Get numSmall.
    */
-  function getNumSwordsman(bytes32 key) internal view returns (uint32 numSwordsman) {
+  function getNumSmall(bytes32 key) internal view returns (uint32 numSmall) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -117,9 +117,9 @@ library ArmyConfig {
   }
 
   /**
-   * @notice Get numSwordsman.
+   * @notice Get numSmall.
    */
-  function _getNumSwordsman(bytes32 key) internal view returns (uint32 numSwordsman) {
+  function _getNumSmall(bytes32 key) internal view returns (uint32 numSmall) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -128,29 +128,29 @@ library ArmyConfig {
   }
 
   /**
-   * @notice Set numSwordsman.
+   * @notice Set numSmall.
    */
-  function setNumSwordsman(bytes32 key, uint32 numSwordsman) internal {
+  function setNumSmall(bytes32 key, uint32 numSmall) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreSwitch.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((numSwordsman)), _fieldLayout);
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((numSmall)), _fieldLayout);
   }
 
   /**
-   * @notice Set numSwordsman.
+   * @notice Set numSmall.
    */
-  function _setNumSwordsman(bytes32 key, uint32 numSwordsman) internal {
+  function _setNumSmall(bytes32 key, uint32 numSmall) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((numSwordsman)), _fieldLayout);
+    StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((numSmall)), _fieldLayout);
   }
 
   /**
-   * @notice Get numArcher.
+   * @notice Get numMedium.
    */
-  function getNumArcher(bytes32 key) internal view returns (uint32 numArcher) {
+  function getNumMedium(bytes32 key) internal view returns (uint32 numMedium) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -159,9 +159,9 @@ library ArmyConfig {
   }
 
   /**
-   * @notice Get numArcher.
+   * @notice Get numMedium.
    */
-  function _getNumArcher(bytes32 key) internal view returns (uint32 numArcher) {
+  function _getNumMedium(bytes32 key) internal view returns (uint32 numMedium) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -170,29 +170,29 @@ library ArmyConfig {
   }
 
   /**
-   * @notice Set numArcher.
+   * @notice Set numMedium.
    */
-  function setNumArcher(bytes32 key, uint32 numArcher) internal {
+  function setNumMedium(bytes32 key, uint32 numMedium) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreSwitch.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((numArcher)), _fieldLayout);
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((numMedium)), _fieldLayout);
   }
 
   /**
-   * @notice Set numArcher.
+   * @notice Set numMedium.
    */
-  function _setNumArcher(bytes32 key, uint32 numArcher) internal {
+  function _setNumMedium(bytes32 key, uint32 numMedium) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreCore.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((numArcher)), _fieldLayout);
+    StoreCore.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((numMedium)), _fieldLayout);
   }
 
   /**
-   * @notice Get numCavalry.
+   * @notice Get numBig.
    */
-  function getNumCavalry(bytes32 key) internal view returns (uint32 numCavalry) {
+  function getNumBig(bytes32 key) internal view returns (uint32 numBig) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -201,9 +201,9 @@ library ArmyConfig {
   }
 
   /**
-   * @notice Get numCavalry.
+   * @notice Get numBig.
    */
-  function _getNumCavalry(bytes32 key) internal view returns (uint32 numCavalry) {
+  function _getNumBig(bytes32 key) internal view returns (uint32 numBig) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -212,23 +212,23 @@ library ArmyConfig {
   }
 
   /**
-   * @notice Set numCavalry.
+   * @notice Set numBig.
    */
-  function setNumCavalry(bytes32 key, uint32 numCavalry) internal {
+  function setNumBig(bytes32 key, uint32 numBig) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreSwitch.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((numCavalry)), _fieldLayout);
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((numBig)), _fieldLayout);
   }
 
   /**
-   * @notice Set numCavalry.
+   * @notice Set numBig.
    */
-  function _setNumCavalry(bytes32 key, uint32 numCavalry) internal {
+  function _setNumBig(bytes32 key, uint32 numBig) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreCore.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((numCavalry)), _fieldLayout);
+    StoreCore.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((numBig)), _fieldLayout);
   }
 
   /**
@@ -276,7 +276,7 @@ library ArmyConfig {
   /**
    * @notice Get the full data.
    */
-  function get(bytes32 key) internal view returns (ArmyConfigData memory _table) {
+  function get(bytes32 key) internal view returns (FleetConfigData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -291,7 +291,7 @@ library ArmyConfig {
   /**
    * @notice Get the full data.
    */
-  function _get(bytes32 key) internal view returns (ArmyConfigData memory _table) {
+  function _get(bytes32 key) internal view returns (FleetConfigData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -306,8 +306,8 @@ library ArmyConfig {
   /**
    * @notice Set the full data using individual values.
    */
-  function set(bytes32 key, uint32 numSwordsman, uint32 numArcher, uint32 numCavalry, uint256 gameID) internal {
-    bytes memory _staticData = encodeStatic(numSwordsman, numArcher, numCavalry, gameID);
+  function set(bytes32 key, uint32 numSmall, uint32 numMedium, uint32 numBig, uint256 gameID) internal {
+    bytes memory _staticData = encodeStatic(numSmall, numMedium, numBig, gameID);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -321,8 +321,8 @@ library ArmyConfig {
   /**
    * @notice Set the full data using individual values.
    */
-  function _set(bytes32 key, uint32 numSwordsman, uint32 numArcher, uint32 numCavalry, uint256 gameID) internal {
-    bytes memory _staticData = encodeStatic(numSwordsman, numArcher, numCavalry, gameID);
+  function _set(bytes32 key, uint32 numSmall, uint32 numMedium, uint32 numBig, uint256 gameID) internal {
+    bytes memory _staticData = encodeStatic(numSmall, numMedium, numBig, gameID);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -336,8 +336,8 @@ library ArmyConfig {
   /**
    * @notice Set the full data using the data struct.
    */
-  function set(bytes32 key, ArmyConfigData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.numSwordsman, _table.numArcher, _table.numCavalry, _table.gameID);
+  function set(bytes32 key, FleetConfigData memory _table) internal {
+    bytes memory _staticData = encodeStatic(_table.numSmall, _table.numMedium, _table.numBig, _table.gameID);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -351,8 +351,8 @@ library ArmyConfig {
   /**
    * @notice Set the full data using the data struct.
    */
-  function _set(bytes32 key, ArmyConfigData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.numSwordsman, _table.numArcher, _table.numCavalry, _table.gameID);
+  function _set(bytes32 key, FleetConfigData memory _table) internal {
+    bytes memory _staticData = encodeStatic(_table.numSmall, _table.numMedium, _table.numBig, _table.gameID);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -368,12 +368,12 @@ library ArmyConfig {
    */
   function decodeStatic(
     bytes memory _blob
-  ) internal pure returns (uint32 numSwordsman, uint32 numArcher, uint32 numCavalry, uint256 gameID) {
-    numSwordsman = (uint32(Bytes.slice4(_blob, 0)));
+  ) internal pure returns (uint32 numSmall, uint32 numMedium, uint32 numBig, uint256 gameID) {
+    numSmall = (uint32(Bytes.slice4(_blob, 0)));
 
-    numArcher = (uint32(Bytes.slice4(_blob, 4)));
+    numMedium = (uint32(Bytes.slice4(_blob, 4)));
 
-    numCavalry = (uint32(Bytes.slice4(_blob, 8)));
+    numBig = (uint32(Bytes.slice4(_blob, 8)));
 
     gameID = (uint256(Bytes.slice32(_blob, 12)));
   }
@@ -388,8 +388,8 @@ library ArmyConfig {
     bytes memory _staticData,
     PackedCounter,
     bytes memory
-  ) internal pure returns (ArmyConfigData memory _table) {
-    (_table.numSwordsman, _table.numArcher, _table.numCavalry, _table.gameID) = decodeStatic(_staticData);
+  ) internal pure returns (FleetConfigData memory _table) {
+    (_table.numSmall, _table.numMedium, _table.numBig, _table.gameID) = decodeStatic(_staticData);
   }
 
   /**
@@ -417,12 +417,12 @@ library ArmyConfig {
    * @return The static data, encoded into a sequence of bytes.
    */
   function encodeStatic(
-    uint32 numSwordsman,
-    uint32 numArcher,
-    uint32 numCavalry,
+    uint32 numSmall,
+    uint32 numMedium,
+    uint32 numBig,
     uint256 gameID
   ) internal pure returns (bytes memory) {
-    return abi.encodePacked(numSwordsman, numArcher, numCavalry, gameID);
+    return abi.encodePacked(numSmall, numMedium, numBig, gameID);
   }
 
   /**
@@ -432,12 +432,12 @@ library ArmyConfig {
    * @return The dyanmic (variable length) data, encoded into a sequence of bytes.
    */
   function encode(
-    uint32 numSwordsman,
-    uint32 numArcher,
-    uint32 numCavalry,
+    uint32 numSmall,
+    uint32 numMedium,
+    uint32 numBig,
     uint256 gameID
   ) internal pure returns (bytes memory, PackedCounter, bytes memory) {
-    bytes memory _staticData = encodeStatic(numSwordsman, numArcher, numCavalry, gameID);
+    bytes memory _staticData = encodeStatic(numSmall, numMedium, numBig, gameID);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;

@@ -9,7 +9,6 @@ import { AttackerType, ClashType } from "../codegen/common.sol";
 import { CastleOwnable, CreditOwn, Position, ResourceOwnable, SoldierCreated, DockOwnable, ArmyConfig, ArmyConfigData, ArmyOwnable, ClashResult, ColorOwnable, AddressToColorIndex, Players, GameMetaData } from "../codegen/index.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
-import {getUniqueEntity} from "@latticexyz/world-modules/src/uniqueentity/getUniqueEntity.sol";
 error ErrorInCalculatingBattleScores();
 
 function findRemainings(BattleResult memory result) pure returns (RemainingData memory remainings) {
@@ -257,7 +256,7 @@ library LibUtils {
     IStore world,
     address user,
     uint256 gameID,
-    address getter
+    address getterdivideArmy
   ) internal {
     bytes32[] memory castleOwnerDocks = LibQueries.getDocks(world, user, gameID);
     for (uint i = 0; i < castleOwnerDocks.length; i++) {
@@ -316,13 +315,13 @@ library LibUtils {
     );
   }
 
-  function divideArmy(IWorld world, bytes32 armyID, ArmyConfigData partition) internal returns(bytes32){
+  function divideArmy(bytes32 armyID, ArmyConfigData memory partition) internal returns(bytes32){
     ArmyConfigData memory army = ArmyConfig.get(armyID);
-    bytes32 newArmyID = getUniqueEntity();
+    bytes32 newArmyID = keccak256(abi.encodePacked(armyID, block.timestamp));
 
     ArmyConfig.set(newArmyID, partition.numSwordsman, partition.numArcher, partition.numCavalry, army.gameID);
     ArmyOwnable.set(newArmyID, ArmyOwnable.getOwner(armyID), army.gameID);
-    ColorOwnable.set(newArmyID, ColorOwnable.getColorIndex(armyID), army.gameID);
+    ColorOwnable.set(newArmyID, ColorOwnable.getColorIndex(armyID), army.gameID); 
 
     ArmyConfig.set(armyID,army.numSwordsman - partition.numSwordsman, army.numArcher - partition.numArcher, army.numCavalry - partition.numCavalry, army.gameID);
     return newArmyID;

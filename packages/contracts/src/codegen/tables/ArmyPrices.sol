@@ -21,22 +21,21 @@ import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 import { RESOURCE_TABLE, RESOURCE_OFFCHAIN_TABLE } from "@latticexyz/store/src/storeResourceTypes.sol";
 
 ResourceId constant _tableId = ResourceId.wrap(
-  bytes32(abi.encodePacked(RESOURCE_TABLE, bytes14(""), bytes16("ArmyConfig")))
+  bytes32(abi.encodePacked(RESOURCE_TABLE, bytes14(""), bytes16("ArmyPrices")))
 );
-ResourceId constant ArmyConfigTableId = _tableId;
+ResourceId constant ArmyPricesTableId = _tableId;
 
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
-  0x002c040004040420000000000000000000000000000000000000000000000000
+  0x0060030020202000000000000000000000000000000000000000000000000000
 );
 
-struct ArmyConfigData {
-  uint32 numSwordsman;
-  uint32 numArcher;
-  uint32 numCavalry;
-  uint256 gameID;
+struct ArmyPricesData {
+  uint256 priceSwordsman;
+  uint256 priceArcher;
+  uint256 priceCavalry;
 }
 
-library ArmyConfig {
+library ArmyPrices {
   /**
    * @notice Get the table values' field layout.
    * @return _fieldLayout The field layout for the table.
@@ -51,7 +50,7 @@ library ArmyConfig {
    */
   function getKeySchema() internal pure returns (Schema) {
     SchemaType[] memory _keySchema = new SchemaType[](1);
-    _keySchema[0] = SchemaType.BYTES32;
+    _keySchema[0] = SchemaType.UINT256;
 
     return SchemaLib.encode(_keySchema);
   }
@@ -61,11 +60,10 @@ library ArmyConfig {
    * @return _valueSchema The value schema for the table.
    */
   function getValueSchema() internal pure returns (Schema) {
-    SchemaType[] memory _valueSchema = new SchemaType[](4);
-    _valueSchema[0] = SchemaType.UINT32;
-    _valueSchema[1] = SchemaType.UINT32;
-    _valueSchema[2] = SchemaType.UINT32;
-    _valueSchema[3] = SchemaType.UINT256;
+    SchemaType[] memory _valueSchema = new SchemaType[](3);
+    _valueSchema[0] = SchemaType.UINT256;
+    _valueSchema[1] = SchemaType.UINT256;
+    _valueSchema[2] = SchemaType.UINT256;
 
     return SchemaLib.encode(_valueSchema);
   }
@@ -76,7 +74,7 @@ library ArmyConfig {
    */
   function getKeyNames() internal pure returns (string[] memory keyNames) {
     keyNames = new string[](1);
-    keyNames[0] = "key";
+    keyNames[0] = "gameID";
   }
 
   /**
@@ -84,11 +82,10 @@ library ArmyConfig {
    * @return fieldNames An array of strings with the names of value fields.
    */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
-    fieldNames = new string[](4);
-    fieldNames[0] = "numSwordsman";
-    fieldNames[1] = "numArcher";
-    fieldNames[2] = "numCavalry";
-    fieldNames[3] = "gameID";
+    fieldNames = new string[](3);
+    fieldNames[0] = "priceSwordsman";
+    fieldNames[1] = "priceArcher";
+    fieldNames[2] = "priceCavalry";
   }
 
   /**
@@ -106,179 +103,137 @@ library ArmyConfig {
   }
 
   /**
-   * @notice Get numSwordsman.
+   * @notice Get priceSwordsman.
    */
-  function getNumSwordsman(bytes32 key) internal view returns (uint32 numSwordsman) {
+  function getPriceSwordsman(uint256 gameID) internal view returns (uint256 priceSwordsman) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
     bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (uint32(bytes4(_blob)));
+    return (uint256(bytes32(_blob)));
   }
 
   /**
-   * @notice Get numSwordsman.
+   * @notice Get priceSwordsman.
    */
-  function _getNumSwordsman(bytes32 key) internal view returns (uint32 numSwordsman) {
+  function _getPriceSwordsman(uint256 gameID) internal view returns (uint256 priceSwordsman) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (uint32(bytes4(_blob)));
+    return (uint256(bytes32(_blob)));
   }
 
   /**
-   * @notice Set numSwordsman.
+   * @notice Set priceSwordsman.
    */
-  function setNumSwordsman(bytes32 key, uint32 numSwordsman) internal {
+  function setPriceSwordsman(uint256 gameID, uint256 priceSwordsman) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreSwitch.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((numSwordsman)), _fieldLayout);
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((priceSwordsman)), _fieldLayout);
   }
 
   /**
-   * @notice Set numSwordsman.
+   * @notice Set priceSwordsman.
    */
-  function _setNumSwordsman(bytes32 key, uint32 numSwordsman) internal {
+  function _setPriceSwordsman(uint256 gameID, uint256 priceSwordsman) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((numSwordsman)), _fieldLayout);
+    StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((priceSwordsman)), _fieldLayout);
   }
 
   /**
-   * @notice Get numArcher.
+   * @notice Get priceArcher.
    */
-  function getNumArcher(bytes32 key) internal view returns (uint32 numArcher) {
+  function getPriceArcher(uint256 gameID) internal view returns (uint256 priceArcher) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
     bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 1, _fieldLayout);
-    return (uint32(bytes4(_blob)));
+    return (uint256(bytes32(_blob)));
   }
 
   /**
-   * @notice Get numArcher.
+   * @notice Get priceArcher.
    */
-  function _getNumArcher(bytes32 key) internal view returns (uint32 numArcher) {
+  function _getPriceArcher(uint256 gameID) internal view returns (uint256 priceArcher) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 1, _fieldLayout);
-    return (uint32(bytes4(_blob)));
+    return (uint256(bytes32(_blob)));
   }
 
   /**
-   * @notice Set numArcher.
+   * @notice Set priceArcher.
    */
-  function setNumArcher(bytes32 key, uint32 numArcher) internal {
+  function setPriceArcher(uint256 gameID, uint256 priceArcher) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreSwitch.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((numArcher)), _fieldLayout);
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((priceArcher)), _fieldLayout);
   }
 
   /**
-   * @notice Set numArcher.
+   * @notice Set priceArcher.
    */
-  function _setNumArcher(bytes32 key, uint32 numArcher) internal {
+  function _setPriceArcher(uint256 gameID, uint256 priceArcher) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreCore.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((numArcher)), _fieldLayout);
+    StoreCore.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((priceArcher)), _fieldLayout);
   }
 
   /**
-   * @notice Get numCavalry.
+   * @notice Get priceCavalry.
    */
-  function getNumCavalry(bytes32 key) internal view returns (uint32 numCavalry) {
+  function getPriceCavalry(uint256 gameID) internal view returns (uint256 priceCavalry) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
     bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 2, _fieldLayout);
-    return (uint32(bytes4(_blob)));
+    return (uint256(bytes32(_blob)));
   }
 
   /**
-   * @notice Get numCavalry.
+   * @notice Get priceCavalry.
    */
-  function _getNumCavalry(bytes32 key) internal view returns (uint32 numCavalry) {
+  function _getPriceCavalry(uint256 gameID) internal view returns (uint256 priceCavalry) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 2, _fieldLayout);
-    return (uint32(bytes4(_blob)));
-  }
-
-  /**
-   * @notice Set numCavalry.
-   */
-  function setNumCavalry(bytes32 key, uint32 numCavalry) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    StoreSwitch.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((numCavalry)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set numCavalry.
-   */
-  function _setNumCavalry(bytes32 key, uint32 numCavalry) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    StoreCore.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((numCavalry)), _fieldLayout);
-  }
-
-  /**
-   * @notice Get gameID.
-   */
-  function getGameID(bytes32 key) internal view returns (uint256 gameID) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 3, _fieldLayout);
     return (uint256(bytes32(_blob)));
   }
 
   /**
-   * @notice Get gameID.
+   * @notice Set priceCavalry.
    */
-  function _getGameID(bytes32 key) internal view returns (uint256 gameID) {
+  function setPriceCavalry(uint256 gameID, uint256 priceCavalry) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
-    bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 3, _fieldLayout);
-    return (uint256(bytes32(_blob)));
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((priceCavalry)), _fieldLayout);
   }
 
   /**
-   * @notice Set gameID.
+   * @notice Set priceCavalry.
    */
-  function setGameID(bytes32 key, uint256 gameID) internal {
+  function _setPriceCavalry(uint256 gameID, uint256 priceCavalry) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
-    StoreSwitch.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((gameID)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set gameID.
-   */
-  function _setGameID(bytes32 key, uint256 gameID) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
-
-    StoreCore.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((gameID)), _fieldLayout);
+    StoreCore.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((priceCavalry)), _fieldLayout);
   }
 
   /**
    * @notice Get the full data.
    */
-  function get(bytes32 key) internal view returns (ArmyConfigData memory _table) {
+  function get(uint256 gameID) internal view returns (ArmyPricesData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
     (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = StoreSwitch.getRecord(
       _tableId,
@@ -291,9 +246,9 @@ library ArmyConfig {
   /**
    * @notice Get the full data.
    */
-  function _get(bytes32 key) internal view returns (ArmyConfigData memory _table) {
+  function _get(uint256 gameID) internal view returns (ArmyPricesData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
     (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = StoreCore.getRecord(
       _tableId,
@@ -306,14 +261,14 @@ library ArmyConfig {
   /**
    * @notice Set the full data using individual values.
    */
-  function set(bytes32 key, uint32 numSwordsman, uint32 numArcher, uint32 numCavalry, uint256 gameID) internal {
-    bytes memory _staticData = encodeStatic(numSwordsman, numArcher, numCavalry, gameID);
+  function set(uint256 gameID, uint256 priceSwordsman, uint256 priceArcher, uint256 priceCavalry) internal {
+    bytes memory _staticData = encodeStatic(priceSwordsman, priceArcher, priceCavalry);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
 
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreSwitch.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
   }
@@ -321,14 +276,14 @@ library ArmyConfig {
   /**
    * @notice Set the full data using individual values.
    */
-  function _set(bytes32 key, uint32 numSwordsman, uint32 numArcher, uint32 numCavalry, uint256 gameID) internal {
-    bytes memory _staticData = encodeStatic(numSwordsman, numArcher, numCavalry, gameID);
+  function _set(uint256 gameID, uint256 priceSwordsman, uint256 priceArcher, uint256 priceCavalry) internal {
+    bytes memory _staticData = encodeStatic(priceSwordsman, priceArcher, priceCavalry);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
 
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData, _fieldLayout);
   }
@@ -336,14 +291,14 @@ library ArmyConfig {
   /**
    * @notice Set the full data using the data struct.
    */
-  function set(bytes32 key, ArmyConfigData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.numSwordsman, _table.numArcher, _table.numCavalry, _table.gameID);
+  function set(uint256 gameID, ArmyPricesData memory _table) internal {
+    bytes memory _staticData = encodeStatic(_table.priceSwordsman, _table.priceArcher, _table.priceCavalry);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
 
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreSwitch.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
   }
@@ -351,14 +306,14 @@ library ArmyConfig {
   /**
    * @notice Set the full data using the data struct.
    */
-  function _set(bytes32 key, ArmyConfigData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.numSwordsman, _table.numArcher, _table.numCavalry, _table.gameID);
+  function _set(uint256 gameID, ArmyPricesData memory _table) internal {
+    bytes memory _staticData = encodeStatic(_table.priceSwordsman, _table.priceArcher, _table.priceCavalry);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
 
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData, _fieldLayout);
   }
@@ -368,14 +323,12 @@ library ArmyConfig {
    */
   function decodeStatic(
     bytes memory _blob
-  ) internal pure returns (uint32 numSwordsman, uint32 numArcher, uint32 numCavalry, uint256 gameID) {
-    numSwordsman = (uint32(Bytes.slice4(_blob, 0)));
+  ) internal pure returns (uint256 priceSwordsman, uint256 priceArcher, uint256 priceCavalry) {
+    priceSwordsman = (uint256(Bytes.slice32(_blob, 0)));
 
-    numArcher = (uint32(Bytes.slice4(_blob, 4)));
+    priceArcher = (uint256(Bytes.slice32(_blob, 32)));
 
-    numCavalry = (uint32(Bytes.slice4(_blob, 8)));
-
-    gameID = (uint256(Bytes.slice32(_blob, 12)));
+    priceCavalry = (uint256(Bytes.slice32(_blob, 64)));
   }
 
   /**
@@ -388,16 +341,16 @@ library ArmyConfig {
     bytes memory _staticData,
     PackedCounter,
     bytes memory
-  ) internal pure returns (ArmyConfigData memory _table) {
-    (_table.numSwordsman, _table.numArcher, _table.numCavalry, _table.gameID) = decodeStatic(_staticData);
+  ) internal pure returns (ArmyPricesData memory _table) {
+    (_table.priceSwordsman, _table.priceArcher, _table.priceCavalry) = decodeStatic(_staticData);
   }
 
   /**
    * @notice Delete all data for given keys.
    */
-  function deleteRecord(bytes32 key) internal {
+  function deleteRecord(uint256 gameID) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreSwitch.deleteRecord(_tableId, _keyTuple);
   }
@@ -405,9 +358,9 @@ library ArmyConfig {
   /**
    * @notice Delete all data for given keys.
    */
-  function _deleteRecord(bytes32 key) internal {
+  function _deleteRecord(uint256 gameID) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
   }
@@ -417,12 +370,11 @@ library ArmyConfig {
    * @return The static data, encoded into a sequence of bytes.
    */
   function encodeStatic(
-    uint32 numSwordsman,
-    uint32 numArcher,
-    uint32 numCavalry,
-    uint256 gameID
+    uint256 priceSwordsman,
+    uint256 priceArcher,
+    uint256 priceCavalry
   ) internal pure returns (bytes memory) {
-    return abi.encodePacked(numSwordsman, numArcher, numCavalry, gameID);
+    return abi.encodePacked(priceSwordsman, priceArcher, priceCavalry);
   }
 
   /**
@@ -432,12 +384,11 @@ library ArmyConfig {
    * @return The dyanmic (variable length) data, encoded into a sequence of bytes.
    */
   function encode(
-    uint32 numSwordsman,
-    uint32 numArcher,
-    uint32 numCavalry,
-    uint256 gameID
+    uint256 priceSwordsman,
+    uint256 priceArcher,
+    uint256 priceCavalry
   ) internal pure returns (bytes memory, PackedCounter, bytes memory) {
-    bytes memory _staticData = encodeStatic(numSwordsman, numArcher, numCavalry, gameID);
+    bytes memory _staticData = encodeStatic(priceSwordsman, priceArcher, priceCavalry);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -448,9 +399,9 @@ library ArmyConfig {
   /**
    * @notice Encode keys as a bytes32 array using this table's field layout.
    */
-  function encodeKeyTuple(bytes32 key) internal pure returns (bytes32[] memory) {
+  function encodeKeyTuple(uint256 gameID) internal pure returns (bytes32[] memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = key;
+    _keyTuple[0] = bytes32(uint256(gameID));
 
     return _keyTuple;
   }
