@@ -75,8 +75,6 @@ error MineCapture__TooFarToAttack();
 error MineCapture__NonMatchedGameID();
 
 // Economy System Errors
-
-error EconomySystem__DifferenceIsLess();
 error EconomySystem__InsufficientSource();
 error EconomySystem__InsufficientCredit();
 error EconomySystem__InsufficientSupply();
