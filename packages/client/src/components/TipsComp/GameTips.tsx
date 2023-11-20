@@ -11,10 +11,10 @@ export const GameTips = () => {
         return () => clearInterval(interval);
     }, []);
 
-    const tip1 = "To move your army, you need to pay 30 food and 30 gold";
+    const tip1 = "To move your army, you need to pay 30 food and 30 diomand";
     const tip2 = "If you are going to settle a dock, the number of soldiers in the army must be greater than or equal to 20";
     const tip3 = "In the beginning, your target should be resources";
-    const tip4 = "To move your fleet, you need to pay 50 food and 50 gold";
+    const tip4 = "To move your fleet, you need to pay 50 food and 50 diomand";
     const tip5 = "You can deploy as many fleet as number of docks that you have";
 
     let tipToShow;

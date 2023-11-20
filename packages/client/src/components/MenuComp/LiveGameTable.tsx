@@ -10,7 +10,13 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
     const gameList = useGameList();
 
     return (
-        <TableContainer textColor={"white"} overflowY={"auto"} backgroundColor={"rgba(0,0,0,0.8)"} height={"525px"}>
+        <TableContainer
+            border={"2px"}
+            borderRadius={"10px"}
+            textColor={"white"}
+            overflowY={"auto"}
+            backgroundColor={"rgba(0,0,0,0.8)"}
+            height={"525px"}>
             <Table variant='simple'>
                 <Thead position="sticky" top={0} zIndex="10" backgroundColor={"black"}>
                     <Tr>
@@ -29,7 +35,7 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
                                 selectedPlayers.length === 0 ||
                                 selectedPlayers.includes(Number(game.numberOfPlayer))
                             )
-                            .filter((game) => game.state !== 4)
+                            .filter((game) => game.state !== 3)
                             .map((game, key) => (
                                 <Tr key={key}>
                                     <Td>
@@ -56,6 +62,7 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
                                             setGameID={setGameID}
                                             gameID={Number(game.mirror)} />
                                         <SpectatorButton
+                                            username={username}
                                             gameState={game.state}
                                             setIsSpectateGameModalOpen={setIsSpectateGameModalOpen}
                                             setGameID={setGameID}
@@ -83,11 +90,11 @@ const JoinGameButtom = ({ isDisabled, setIsJoinGameModalOpen, setGameID, gameID 
     )
 }
 
-const SpectatorButton = ({ gameState, setIsSpectateGameModalOpen, setGameID, gameID }: { gameState: any, setIsSpectateGameModalOpen: (value: boolean) => void, setGameID: (value: number) => void, gameID: number }) => {
+const SpectatorButton = ({ gameState, setIsSpectateGameModalOpen, setGameID, gameID, username }: { gameState: any, setIsSpectateGameModalOpen: (value: boolean) => void, setGameID: (value: number) => void, gameID: number, username: string }) => {
     return (
         <button
             className='btn btn-dark menu-game-list-button'
-            disabled={gameState !== 2 && gameState !== 3}
+            disabled={(gameState !== 2 && gameState !== 3) || !username}
             onClick={() => {
                 setIsSpectateGameModalOpen(true)
                 setGameID(gameID)
@@ -101,7 +108,7 @@ const getGameState = (gameState: number) => {
     if (gameState === 1) {
         return "Waiting for Players"
     }
-    else if (gameState === 2 || gameState === 3) {
+    else if (gameState === 2) {
         return "Game Started"
     } else {
         return null

@@ -1,14 +1,11 @@
-import { useCallback } from 'react';
-import { useBeforeUnload } from "react-router-dom";
 import { Progress, CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
-import { useMUD } from '../../context/MUDContext';
 import { useCastle } from '../../context/CastleContext';
 import { useGame } from '../../context/GameContext';
 import { GameTips } from '../TipsComp/GameTips';
 import { useGameData } from '../../hooks/useGameData';
 
 export const PlayerWaitingStage = () => {
-    const { systemCalls } = useMUD();
+    //const { systemCalls } = useMUD();
     const { gameID } = useGame();
     const { isCastleSettled } = useCastle();
 
@@ -17,14 +14,14 @@ export const PlayerWaitingStage = () => {
     const numberOfPlayer = gameData ? Number(gameData.numberOfPlayer) : 0;
     const limitOfPlayer = gameData ? Number(Number(gameData.limitOfPlayer)) : 0;
 
-    useBeforeUnload(
+    /*useBeforeUnload(
         useCallback((e) => {
             const handleExit = async () => {
                 await systemCalls.exitGame(gameID)
             }
             handleExit();
         }, [])
-    );
+    );*/
 
     if (isCastleSettled) {
         return (
@@ -34,7 +31,7 @@ export const PlayerWaitingStage = () => {
                         (gameState && gameData.state === 1) &&
                         <>
                             <span className="waiting-for-players-info-message">
-                                Waiting for the other players...
+                                Waiting for other players and castle settlements...
                                 <CircularProgress
                                     className='ms-4'
                                     value={(numberOfPlayer / limitOfPlayer) * 100}

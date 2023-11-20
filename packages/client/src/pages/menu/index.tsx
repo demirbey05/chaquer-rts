@@ -49,8 +49,16 @@ export const Menu = () => {
             refresh !== 0 &&
             <div className='menu-row'>
               <div className='col-8 pe-4 ps-4'>
-                <Tabs isFitted variant='enclosed'>
-                  <TabList backgroundColor={"rgba(0,0,0,0.8)"} textColor={'white'}>
+                <Tabs
+                  isFitted
+                  variant={"soft-rounded"}
+                >
+                  <TabList
+                    backgroundColor={"rgba(0,0,0,0.8)"}
+                    textColor={'white'}
+                    border={"2px"}
+                    borderRadius={"10px"}
+                    mb={0.5}>
                     <Tab _selected={{ color: 'white', bg: 'green.500' }}>Live Games</Tab>
                     <Tab _selected={{ color: 'white', bg: 'blue.500' }}>Completed Games</Tab>
                   </TabList>
@@ -140,7 +148,7 @@ const EnterGameButton = () => {
 
 const GameTutorialButton = () => {
   return (
-    <a href="https://docs.chaquer.xyz/" target={"_blank"}>
+    <a href="https://docs.chaquer.xyz/basics/read-before-playing" target={"_blank"}>
       <button
         className='btn btn-dark menu-buttons mt-2'>
         Game Tutorial

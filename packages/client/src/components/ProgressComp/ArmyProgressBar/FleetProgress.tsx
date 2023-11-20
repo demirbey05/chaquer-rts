@@ -12,10 +12,8 @@ export const FleetProgress = () => {
     const myDockPositions = useMyDockPositions(userWallet, gameID);
     return (
         <Tooltip
-            label='Your fleet size is full. Deploy or Capture a dock to increase fleet capacity!'
-            fontSize='md'
-            bg='red.500'
-            isDisabled={myDockPositions && myFleetPositions && (myDockPositions.length !== myFleetPositions.length)}>
+            label='Your Fleet Size'
+            fontSize='md'>
             <div className='col-md-6 ms-1'>
                 <Progress
                     border={"1px"}
