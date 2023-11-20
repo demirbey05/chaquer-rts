@@ -15,6 +15,11 @@ interface INavalExtensionSystem {
   error FleetLoad__WrongConfig();
   error FleetLoad__UnsufficientCap();
   error FleetLoad__NoArmyPlace();
+  error FleetLoad__NumArmyLow();
+  error FleetUnload__NoArmyPlace();
+  error FleetUnload__TooFar();
+  error FleetUnload__WrongTerrainType();
+  error FleetUnload__TileIsNotEmpty();
 
   function buildDock(uint32 coord_x, uint32 coord_y, bytes32 requestedArmy, uint256 gameID) external returns (bytes32);
 
@@ -23,4 +28,6 @@ interface INavalExtensionSystem {
   function moveFleet(bytes32 fleetID, uint32 x, uint32 y) external;
 
   function loadFleet(bytes32 fleetID, bytes32 armyID, ArmyConfigData calldata armyPart) external;
+
+  function unloadArmy(bytes32 fleetID, uint32 x, uint32 y, uint256 gameID) external;
 }

@@ -223,7 +223,7 @@ library LibUtils {
     emitClashTableEvent(uint8(result), attackerID, mineID, gameID, attackerOwner, mineOwner, ClashType.Mine);
   }
 
-  function handleFleetAttack(
+  function handleFleetAttack(IStore world,
     bytes32 attackerID,
     bytes32 mineID,
     address attackerOwner,
@@ -231,7 +231,7 @@ library LibUtils {
     bytes32[] memory ownerEntitiesSurrondMine,
     uint256 gameID
   ) internal {
-    uint8 result = LibNaval.fightFleetToFleetGroup(attackerID, ownerEntitiesSurrondMine, gameID);
+    uint8 result = LibNaval.fightFleetToFleetGroup(world,attackerID, ownerEntitiesSurrondMine, gameID);
     if (result == 1) {
       ResourceOwnable.setOwner(mineID, attackerOwner);
       ColorOwnable.setColorIndex(mineID, AddressToColorIndex.getColorIndex(attackerOwner, gameID));

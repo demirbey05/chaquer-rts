@@ -6,7 +6,7 @@ import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { LibQueries, LibMath, LibNaval,LibUtils } from "../libraries/Libraries.sol";
-import { baseCostDock, requiredArmySize, baseWoodCostDock, maxShipInFleet, smallCreditCost, smallWoodCost, mediumCreditCost, mediumWoodCost, bigCreditCost, bigWoodCost, fleetMoveFoodCost, fleetMoveGoldCost } from "./Constants.sol";
+import { baseCostDock,maxArmyNum, requiredArmySize, baseWoodCostDock, maxShipInFleet, smallCreditCost, smallWoodCost, mediumCreditCost, mediumWoodCost, bigCreditCost, bigWoodCost, fleetMoveFoodCost, fleetMoveGoldCost } from "./Constants.sol";
 import { CreditOwn,FleetCarry, ColorOwnable, AddressToColorIndex,ArmyConfig,ArmyConfigData, ResourceOwnData, FleetOwnable, FleetConfig, Position, FleetConfigData, MapConfig, DockOwnable, ResourceOwn, ArmyOwnable } from "../codegen/index.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
@@ -16,7 +16,11 @@ error FleetLoad__WrongGameID();
 error FleetLoad__WrongConfig();
 error FleetLoad__UnsufficientCap();
 error FleetLoad__NoArmyPlace();
-
+error FleetLoad__NumArmyLow();
+error FleetUnload__NoArmyPlace();
+error FleetUnload__TooFar();
+error FleetUnload__WrongTerrainType();
+error FleetUnload__TileIsNotEmpty();
 
 
 contract NavalExtensionSystem is System {
@@ -158,6 +162,9 @@ contract NavalExtensionSystem is System {
       revert FleetMove__TooFar();
     }
     Position.set(fleetID, x, y, gameID);
+    if(LibQueries.queryNumCarriedArmyIDs(IStore(_world()), fleetID, gameID) != 0){
+      moveCarriedArmy(fleetID,gameID,x,y);
+    }
     ResourceOwn.setNumOfFood(fleetOwner, gameID, resourcesOfUser.numOfFood - fleetMoveFoodCost);
     ResourceOwn.setNumOfGold(fleetOwner, gameID, resourcesOfUser.numOfGold - fleetMoveGoldCost);
   }
@@ -191,14 +198,41 @@ contract NavalExtensionSystem is System {
     (uint32 x, uint32 y,) = Position.get(fleetID);
 
     if(armyPart.numSwordsman != army.numSwordsman && armyPart.numArcher != army.numArcher && armyPart.numCavalry != army.numCavalry){
+      if(LibQueries.queryGetArmyNumber(IStore(_world()), fleetOwner, fleet.gameID) >= maxArmyNum + LibQueries.getOwnedCastleIDs(IStore(_world()), fleetOwner, fleet.gameID).length - 1){
+        revert FleetLoad__NumArmyLow();
+      }
       bytes32 newArmy = LibUtils.divideArmy(armyID, armyPart);
       Position.set(newArmy, x, y, fleet.gameID);
       FleetCarry.set(newArmy, fleetID,fleet.gameID);
     }else {
       Position.set(armyID, x, y, fleet.gameID);
       FleetCarry.set(armyID, fleetID,fleet.gameID);
-    
+    } 
+  }
+
+  function unloadArmy(bytes32 fleetID, uint32 x, uint32 y, uint256 gameID) public{
+    if(LibQueries.queryNumCarriedArmyIDs(IStore(_world()), fleetID, gameID) == 0){
+      revert FleetUnload__NoArmyPlace();
     }
+    if (MapConfig.getItemTerrain(gameID, x * MapConfig.getWidth(gameID) + y)[0] != hex"01") {
+      revert FleetUnload__WrongTerrainType();
+    }
+    // The tile is not empty
+    if (LibQueries.queryPositionEntity(IStore(_world()), x, y, gameID) > 0) {
+      revert FleetUnload__TileIsNotEmpty();
+    }
+    // max 3 point away from the fleet position 
+    (uint32 xFleet, uint32 yFleet, ) = Position.get(fleetID);
+    if (LibMath.manhattan(x, y, xFleet, yFleet) > 3) {
+      revert FleetUnload__TooFar();
+    }
+
+    moveCarriedArmy(fleetID,gameID,x,y);
     
+  }
+
+  function moveCarriedArmy(bytes32 fleetID,uint256 gameID,uint32 x,uint32 y) internal {
+    bytes32 armyID = LibQueries.queryCarriedArmyIDs(IStore(_world()), fleetID, gameID)[0];
+    Position.set(armyID, x, y, gameID);
   }
 }

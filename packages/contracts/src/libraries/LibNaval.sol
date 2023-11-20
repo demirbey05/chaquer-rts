@@ -2,7 +2,10 @@
 
 pragma solidity ^0.8.0;
 import { ArmyConfig, ArmyConfigData, Position, MapConfig, FleetConfigData, FleetConfig, FleetOwnable, ColorOwnable } from "../codegen/index.sol";
-import { LibMath } from "./LibMath.sol";
+import {LibMath} from "./LibMath.sol";
+import {LibUtils} from "./Utils.sol";
+import {LibQueries} from "./LibQueries.sol";
+import {IStore} from "@latticexyz/store/src/IStore.sol";
 
 library LibNaval {
   function isInManhattanDistance(
@@ -86,23 +89,29 @@ library LibNaval {
     return (winner, winnerNew);
   }
 
-  function deleteFleet(bytes32 fleetID) internal {
+  function deleteFleet(IStore world, bytes32 fleetID,uint256 gameID) internal {
     FleetConfig.deleteRecord(fleetID);
     FleetOwnable.deleteRecord(fleetID);
     Position.deleteRecord(fleetID);
     ColorOwnable.deleteRecord(fleetID);
+
+    // If there is an carried army
+
+    if(LibQueries.queryNumCarriedArmyIDs(world, fleetID, gameID) != 0){
+      LibUtils.deleteArmy(LibQueries.queryCarriedArmyIDs(world, fleetID, gameID)[0]);
+    }
   }
 
-  function deleteFleetGroup(bytes32[] memory fleetGroup) internal {
+  function deleteFleetGroup(IStore world,bytes32[] memory fleetGroup,uint256 gameID) internal {
     for (uint256 i = 0; i < fleetGroup.length; i++) {
       if (fleetGroup[i] == bytes32(0)) {
         continue;
       }
-      deleteFleet(fleetGroup[i]);
+      deleteFleet(world,fleetGroup[i],gameID);
     }
   }
 
-  function distributeToFleetGroup(FleetConfigData memory remainingFleet, bytes32[] memory fleetGroup) internal {
+  function distributeToFleetGroup(IStore world ,FleetConfigData memory remainingFleet, bytes32[] memory fleetGroup) internal {
     uint32 numFleet = 0;
     for (uint256 i = 0; i < fleetGroup.length; i++) {
       if (fleetGroup[i] == bytes32(0)) {
@@ -114,7 +123,7 @@ library LibNaval {
     uint32 numMedium = remainingFleet.numMedium / numFleet;
     uint32 numBig = remainingFleet.numBig / numFleet;
     if (numSmall == 0 && numMedium == 0 && numBig == 0) {
-      deleteFleetGroup(fleetGroup);
+      deleteFleetGroup(world ,fleetGroup,remainingFleet.gameID);
       return;
     }
     for (uint256 i = 0; i < fleetGroup.length; i++) {
@@ -126,7 +135,7 @@ library LibNaval {
     }
   }
 
-  function fightFleetToFleetGroup(
+  function fightFleetToFleetGroup(IStore world,
     bytes32 fleetID,
     bytes32[] memory fleetGroup,
     uint256 gameID
@@ -143,14 +152,14 @@ library LibNaval {
     }
     (uint8 result, FleetConfigData memory newConfig) = fightTwoFleet(fleetConfig, fleetGroupConfig);
     if (result == 0) {
-      deleteFleet(fleetID);
-      deleteFleetGroup(fleetGroup);
+      deleteFleet(world,fleetID,gameID);
+      deleteFleetGroup(world,fleetGroup,gameID);
     } else if (result == 1) {
-      deleteFleetGroup(fleetGroup);
+      deleteFleetGroup(world,fleetGroup,gameID);
       FleetConfig.set(fleetID, newConfig);
     } else if (result == 2) {
-      deleteFleet(fleetID);
-      distributeToFleetGroup(newConfig, fleetGroup);
+      deleteFleet(world,fleetID,gameID);
+      distributeToFleetGroup(world ,newConfig, fleetGroup);
     }
     return result;
   }

@@ -147,4 +147,12 @@ library LibQueries {
     bytes32[] memory entities = getKeysWithValue(world, FleetCarryTableId, staticData, encodedLengths, dynamicDat);
     return entities.length;
   }
+  function queryCarriedArmyIDs(IStore world,bytes32 fleetID,uint256 gameID) internal view returns (bytes32[] memory) {
+    (bytes memory staticData, PackedCounter encodedLengths, bytes memory dynamicDat) = FleetCarry.encode(
+      fleetID,
+      gameID
+    );
+    bytes32[] memory entities = getKeysWithValue(world, FleetCarryTableId, staticData, encodedLengths, dynamicDat);
+    return entities;
+  }
 }
