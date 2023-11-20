@@ -1,4 +1,5 @@
 import { getIDFromPosition } from "../../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
+import armyMoveSoundEffect from '../../../sounds/soundEffects/army-move-effect.mp3'
 
 export const ArmyMoveEvent = async (
     setIsArmyMergeStage: (value: boolean) => void,
@@ -53,6 +54,10 @@ export const ArmyMoveEvent = async (
         if (tx) {
             document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
             document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
+
+            const audio = new Audio(armyMoveSoundEffect);
+            audio.volume = 0.2;
+            audio.play();
 
             setFromArmyPosition(undefined);
             toArmyPositionRef.current = { x: -1, y: -1 };

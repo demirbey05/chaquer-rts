@@ -100,7 +100,7 @@
 .player-card-info-modal {
     background-color: rgba(0, 0, 0, 0.8);
     border: 2px solid white;
-    border-radius: 10px;
+    border-radius: 25px;
     color: white;
     padding: 10px;
 }

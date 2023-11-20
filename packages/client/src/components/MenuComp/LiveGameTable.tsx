@@ -12,7 +12,7 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
     return (
         <TableContainer
             border={"2px"}
-            borderRadius={"10px"}
+            borderRadius={"25px"}
             textColor={"white"}
             overflowY={"auto"}
             backgroundColor={"rgba(0,0,0,0.8)"}

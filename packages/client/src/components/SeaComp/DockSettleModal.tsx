@@ -15,6 +15,7 @@ import { useNumberOfResource } from "../../hooks/ResourceHooks/useNumberOfResour
 import { useGame } from "../../context/GameContext";
 import creditIcon from '../../images/resourceAssets/credit_icon.png'
 import woodIcon from '../../images/resourceAssets/wood_icon.png'
+import armyMoveSoundEffect from "../../sounds/soundEffects/army-move-effect.mp3"
 
 export const DockSettleModal = () => {
     const { systemCalls, components } = useMUD();
@@ -110,6 +111,10 @@ export const DockSettleModal = () => {
             if (tx) {
                 document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.innerHTML = "";
                 document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
+
+                const audio = new Audio(armyMoveSoundEffect);
+                audio.volume = 0.2;
+                audio.play();
             } else {
                 setErrorMessage("You need 30 food + 30 diomand to move your army.")
                 setErrorTitle("Army Move Warning")

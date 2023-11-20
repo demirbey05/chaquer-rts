@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SettingsDrawer } from "../../components/SettingsComp/SettingsDrawer";
 import { PlayerListDrawer } from "../../components/PlayerComp/PlayerListDrawer";
 import { ZoomHandler } from "../../components/ZoomComp/ZoomHandler";
@@ -9,6 +9,29 @@ import { VersionInfo } from "../../components/TipsComp/VersionInfo";
 
 export const Spectator = () => {
     const [zoomLevel, setZoomLevel] = useState(1);
+
+    useEffect(() => {
+        const checkAndScroll = () => {
+            const targetDiv = document.getElementById("12,12");
+            const scrollOptions = {
+                behavior: 'smooth',
+                block: 'center',
+                inline: 'center'
+            };
+
+            if (targetDiv) {
+                targetDiv.scrollIntoView(scrollOptions);
+                clearInterval(intervalId);
+            }
+        };
+
+        const intervalId = setInterval(checkAndScroll, 1000);
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
+
     return (
         <>
             <VersionInfo />

@@ -175,6 +175,7 @@
     width: 225px;
     color: #000000;
     padding: 20px;
+    border-radius: 25px;
     background-image: url("../images/interfaceAssets/large-button.jpg");
     background-position: center;
     font-weight: bolder;
@@ -185,6 +186,7 @@
     width: 100px;
     color: #000000;
     padding: 10px;
+    border-radius: 25px;
     background-image: url("../images/interfaceAssets/large-button.jpg");
     background-position: center;
     font-weight: bolder;

@@ -35,7 +35,7 @@ export const PriceListDrawer = ({ isInputFocused, isSpectator }: { isInputFocuse
             <Tooltip label='Prices' placement='top'>
                 <button
                     className={"price-list-button"}
-                    style={isSpectator ? { left: "42%" } : {}}
+                    style={isSpectator ? { left: "48%" } : {}}
                     onClick={toggleDrawer}>
                     <AiOutlineStock />
                 </button>

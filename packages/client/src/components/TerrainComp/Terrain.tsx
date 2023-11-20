@@ -477,10 +477,6 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
     fleetPositions);
 
   const terrainContainer = {
-    zIndex: "-1",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
     height: "100vh",
     minWidth: "100vh",
     backgroundImage: `url(${gameBgImg})`,
@@ -490,18 +486,19 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
 
   return (
     <ScrollContainer
-      className={`${!isBorder && "scroll-container"}`}
-      style={isBorder === false ? terrainContainer : (isSpectator ? terrainContainer : {})}>
+      className="scroll-container"
+      style={terrainContainer}>
       <div
-        className={`inline-grid ${isBorder && "border-4 border-black"}`}
+        className="inline-grid"
         style={{
-          pointerEvents: isBorder === true ? "none" : "auto",
+          pointerEvents: isSpectator === true ? "none" : "auto",
           transform: `scale(${zoomLevel}) rotateX(60deg) rotateZ(45deg) rotateY(0deg)`,
           transition: "transform 0.2s ease-in-out",
           zIndex: "0",
           backgroundImage: `url(${chaquerMap})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
+          margin: "750px 1350px",
         }} >
         {
           rows.map((row) => {

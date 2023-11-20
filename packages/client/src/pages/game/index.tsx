@@ -1,8 +1,7 @@
 import "../../styles/globals.css"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePlayer } from "../../context/PlayerContext";
 import { useGame } from "../../context/GameContext";
-import { useCountOfPlayerSeed } from "../../hooks/IdentityHooks/useCountOfPlayerSeed";
 import { useIsMineInitialized } from "../../hooks/ResourceHooks/useIsMineInitialized";
 import { useGameData } from "../../hooks/useGameData";
 import { Terrain } from "../../components/TerrainComp/Terrain";
@@ -18,7 +17,6 @@ import { CastleAttackDrawer } from "../../components/CastleComp/CastleAttackDraw
 import { PlayerLostWarning } from "../../components/PlayerComp/PlayerLostWarning";
 import { PlayerWonAnimation } from "../../components/PlayerComp/PlayerWonAnimation";
 import { PlayerWaitingStage } from "../../components/PlayerComp/PlayerWaitingStage";
-import { PlayerSeedStage } from '../../components/PlayerComp/PlayerSeedStage';
 import { SettingsDrawer } from "../../components/SettingsComp/SettingsDrawer";
 import { MineCaptureDrawer } from "../../components/MineComp/MineCaptureDrawer";
 import { MineProgressBar } from '../../components/ProgressComp/MineProgressBar/MineProgressBar';
@@ -51,8 +49,29 @@ export const Game = () => {
   const [isInputFocused, setIsInputFocused] = useState(false);
 
   const gameData = useGameData(gameID);
-  const playerSeedCount = useCountOfPlayerSeed(gameID);
   const mineInited = useIsMineInitialized(gameID);
+
+  useEffect(() => {
+    const checkAndScroll = () => {
+      const targetDiv = document.getElementById("12,12");
+      const scrollOptions = {
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center'
+      };
+
+      if (targetDiv) {
+        targetDiv.scrollIntoView(scrollOptions);
+        clearInterval(intervalId);
+      }
+    };
+
+    const intervalId = setInterval(checkAndScroll, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   return (
     <>
