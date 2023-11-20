@@ -11,7 +11,7 @@ import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/g
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { useMyDockPositions } from "../../hooks/SeaHooks/useMyDockPositions";
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
-import { useNumberOfResource } from "../../hooks/ResourceHooks/useNumberOfResource";
+import { useNumberOfWood } from "../../hooks/ResourceHooks/useNumberOfResource";
 import { useGame } from "../../context/GameContext";
 import creditIcon from '../../images/resourceAssets/credit_icon.png'
 import woodIcon from '../../images/resourceAssets/wood_icon.png'
@@ -32,18 +32,19 @@ export const DockSettleModal = () => {
 
     const myDockPositions = useMyDockPositions(userWallet, gameID);
     const myCredit = useCredit(gameID, userWallet);
-    const myResources = useNumberOfResource(userWallet, gameID);
+
+    const numberOfWood = useNumberOfWood()
 
     useEffect(() => {
-        if (myDockPositions && myCredit && myResources) {
-            if (Number(getNumberFromBigInt(myCredit)) >= (100 * (myDockPositions.length + 1)) && Number(myResources.numOfWood) >= (1500 * (myDockPositions.length + 1))) {
+        if (myDockPositions && myCredit) {
+            if (Number(getNumberFromBigInt(myCredit)) >= (100 * (myDockPositions.length + 1)) && numberOfWood >= (1500 * (myDockPositions.length + 1))) {
                 setIsDisabled(false)
             }
             else {
                 setIsDisabled(true)
             }
         }
-    }, [myDockPositions, myCredit, myResources])
+    }, [myDockPositions, myCredit, numberOfWood])
 
     const handleBackMap = () => {
         setIsArmyMoveStage(false)

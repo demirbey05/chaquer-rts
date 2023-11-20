@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@chakra-ui/react";
 import { useMUD } from "../../context/MUDContext";
-import { usePlayer } from '../../context/PlayerContext';
 import { useError } from "../../context/ErrorContext";
-import { useNumberOfResource } from '../../hooks/ResourceHooks/useNumberOfResource';
+import { useNumberOfDiomand, useNumberOfFood, useNumberOfWood } from '../../hooks/ResourceHooks/useNumberOfResource';
 import { useGame } from "../../context/GameContext";
 import cornIcon from '../../images/resourceAssets/corn_icon.png'
 import woodIcon from '../../images/resourceAssets/wood_icon.png'
@@ -16,7 +15,6 @@ interface SellResourcesPropTypes {
 
 export const SellResources = (props: SellResourcesPropTypes) => {
     const { systemCalls } = useMUD();
-    const { userWallet } = usePlayer();
     const { gameID } = useGame();
     const { setShowError, setErrorMessage, setErrorTitle } = useError();
 
@@ -40,112 +38,115 @@ export const SellResources = (props: SellResourcesPropTypes) => {
     const [is500FoodDisabled, setIs500FoodDisabled] = useState<boolean>(true);
     const [is500GoldDisabled, setIs500GoldDisabled] = useState<boolean>(true);
 
-    const numberOfResource: any = useNumberOfResource(userWallet, gameID);
+    const numberOfFood = useNumberOfFood()
+    const numberOfWood = useNumberOfWood()
+    const numberOfDiomand = useNumberOfDiomand()
 
     useEffect(() => {
-        // Food
-        if (numberOfResource && numberOfResource!.numOfFood >= 30) {
+        if (numberOfFood >= 30) {
             setIs30FoodDisabled(false);
         }
         else {
             setIs30FoodDisabled(true);
         }
 
-        if (numberOfResource && numberOfResource!.numOfFood >= 100) {
+        if (numberOfFood >= 100) {
             setIs100FoodDisabled(false);
         }
         else {
             setIs100FoodDisabled(true);
         }
 
-        if (numberOfResource && numberOfResource!.numOfFood >= 500) {
+        if (numberOfFood >= 500) {
             setIs500FoodDisabled(false);
         }
         else {
             setIs500FoodDisabled(true);
         }
+    }, [numberOfFood])
 
-        // Wood
-        if (numberOfResource && numberOfResource!.numOfWood >= 30) {
+    useEffect(() => {
+        if (numberOfWood >= 30) {
             setIs30WoodDisabled(false);
         }
         else {
             setIs30WoodDisabled(true);
         }
 
-        if (numberOfResource && numberOfResource!.numOfWood >= 100) {
+        if (numberOfWood >= 100) {
             setIs100WoodDisabled(false);
         }
         else {
             setIs100WoodDisabled(true);
         }
 
-        if (numberOfResource && numberOfResource!.numOfWood >= 500) {
+        if (numberOfWood >= 500) {
             setIs500WoodDisabled(false);
         }
         else {
             setIs500WoodDisabled(true);
         }
+    }, [numberOfWood])
 
-        // Gold
-        if (numberOfResource && numberOfResource!.numOfGold >= 30) {
+    useEffect(() => {
+        if (numberOfDiomand >= 30) {
             setIs30GoldDisabled(false);
         }
         else {
             setIs30GoldDisabled(true);
         }
 
-        if (numberOfResource && numberOfResource!.numOfGold >= 100) {
+        if (numberOfDiomand >= 100) {
             setIs100GoldDisabled(false);
         }
         else {
             setIs100GoldDisabled(true);
         }
 
-        if (numberOfResource && numberOfResource!.numOfGold >= 500) {
+        if (numberOfDiomand >= 500) {
             setIs500GoldDisabled(false);
         }
         else {
             setIs500GoldDisabled(true);
         }
 
-    }, [numberOfResource])
+    }, [numberOfDiomand])
 
     useEffect(() => {
         if (numFood && numFood.toString().length === 0) {
             setIsFoodDisabled(true);
         }
 
-        if (numberOfResource && (parseInt(numFood) <= numberOfResource!.numOfFood && parseInt(numFood) > 0)) {
+        if (parseInt(numFood) <= numberOfFood && parseInt(numFood) > 0) {
             setIsFoodDisabled(false);
         } else {
             setIsFoodDisabled(true);
         }
-    }, [numFood, numberOfResource]);
+    }, [numFood, numberOfFood]);
 
     useEffect(() => {
         if (numWood && numWood.toString().length === 0) {
             setIsWoodDisabled(true);
         }
 
-        if (numberOfResource && (parseInt(numWood) <= numberOfResource!.numOfWood && parseInt(numWood) > 0)) {
+        if (parseInt(numWood) <= numberOfWood && parseInt(numWood) > 0) {
             setIsWoodDisabled(false);
         } else {
             setIsWoodDisabled(true);
         }
-    }, [numWood, numberOfResource]);
+    }, [numWood, numberOfWood]);
 
     useEffect(() => {
         if (numGold && numGold.toString().length === 0) {
             setIsGoldDisabled(true);
         }
 
-        if (numberOfResource && (parseInt(numGold) <= numberOfResource!.numOfGold && parseInt(numGold) > 0)) {
+        if (parseInt(numGold) <= numberOfDiomand && parseInt(numGold) > 0) {
             setIsGoldDisabled(false);
         } else {
             setIsGoldDisabled(true);
         }
-    }, [numGold, numberOfResource]);
+    }, [numGold, numberOfDiomand]);
 
     const handleFoodSell = async () => {
         props.setIsLoading(true);
