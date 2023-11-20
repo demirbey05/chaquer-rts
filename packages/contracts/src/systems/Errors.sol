@@ -92,6 +92,7 @@ error NavalSystem__ArmySizeIsLow();
 error NavalSystem__NotSeaSide();
 error NavalSystem__TileIsNotEmpty();
 error NavalSystem__WrongTile();
+error NavalSystem__NoAuthorization();
 error NavalCapture__FriendFireNotAllowed();
 error NavalCapture__NoAuthorization();
 error NavalCapture__TooFarToAttack();

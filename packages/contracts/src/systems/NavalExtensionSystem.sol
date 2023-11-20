@@ -7,7 +7,7 @@ import "./Errors.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { LibQueries, LibMath, LibNaval } from "../libraries/Libraries.sol";
 import { baseCostDock, requiredArmySize, baseWoodCostDock, maxShipInFleet, smallCreditCost, smallWoodCost, mediumCreditCost, mediumWoodCost, bigCreditCost, bigWoodCost, fleetMoveFoodCost, fleetMoveGoldCost } from "./Constants.sol";
-import { CreditOwn, ColorOwnable, AddressToColorIndex, ResourceOwnData, FleetOwnable, FleetConfig, Position, FleetConfigData, MapConfig, DockOwnable, ResourceOwn, ArmyOwnable } from "../codegen/index.sol";
+import { CreditOwn, ArmyOwnable, ColorOwnable, AddressToColorIndex, ResourceOwnData, FleetOwnable, FleetConfig, Position, FleetConfigData, MapConfig, DockOwnable, ResourceOwn, ArmyOwnable } from "../codegen/index.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 
@@ -49,6 +49,9 @@ contract NavalExtensionSystem is System {
     // If there is any entity in that location
     if (LibQueries.queryPositionEntity(IStore(_world()), coord_x, coord_y, gameID) > 0) {
       revert NavalSystem__TileIsNotEmpty();
+    }
+    if (ArmyOwnable.getOwner(requestedArmy) != sender) {
+      revert NavalSystem__NoAuthorization();
     }
 
     // Terrain should be land
