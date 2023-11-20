@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useMUD } from "../../../context/MUDContext";
 import { useGame } from "../../../context/GameContext";
-import { Button, Tooltip } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { FoodCount } from "../MineProgressBar/FoodCount";
 import { WoodCount } from "../MineProgressBar/WoodCount";
 import { GoldCount } from '../MineProgressBar/GoldCount';
@@ -44,22 +44,15 @@ const CollectButton = () => {
     }
     return (
         <div className="col-3 mine-progress-bar-col">
-            <Tooltip
-                hasArrow
-                backgroundColor={"black"}
-                label='Resources ready...'
-                placement='right'
-                isOpen={!isDisabled}>
-                <Button
-                    isDisabled={isDisabled}
-                    isLoading={isLoading}
-                    loadingText={"Collecting"}
-                    size={"sm"}
-                    textColor={"black"}
-                    onClick={handleCollect}>
-                    Collect
-                </Button>
-            </Tooltip>
+            <Button
+                isDisabled={isDisabled}
+                isLoading={isLoading}
+                loadingText={"Collecting"}
+                size={"sm"}
+                textColor={"black"}
+                onClick={handleCollect}>
+                Collect
+            </Button>
         </div>
     )
 }

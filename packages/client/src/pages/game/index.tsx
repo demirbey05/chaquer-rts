@@ -2,7 +2,6 @@ import "../../styles/globals.css"
 import { useEffect, useState } from "react";
 import { usePlayer } from "../../context/PlayerContext";
 import { useGame } from "../../context/GameContext";
-import { useIsMineInitialized } from "../../hooks/ResourceHooks/useIsMineInitialized";
 import { useGameData } from "../../hooks/useGameData";
 import { Terrain } from "../../components/TerrainComp/Terrain";
 import { ArmyInfoDrawer } from "../../components/ArmyComp/ArmyInfoDrawer";
@@ -49,7 +48,6 @@ export const Game = () => {
   const [isInputFocused, setIsInputFocused] = useState(false);
 
   const gameData = useGameData(gameID);
-  const mineInited = useIsMineInitialized(gameID);
 
   useEffect(() => {
     const checkAndScroll = () => {
@@ -78,33 +76,33 @@ export const Game = () => {
       {!isPlayerLost && <CastleSettleWarning />}
       {!isPlayerLost && <CastleSettleModal />}
       {gameData && gameData.state === 1 && !isPlayerLost && <PlayerWaitingStage />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <ArmySettleWarning />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <ArmyUpdateWarning />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <ArmyMoveWarning />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <ArmyProgressBar />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <MineProgressBar />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <CreditProgressBar />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <ArmyInfoDrawer isInputFocused={isInputFocused} />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <FleetInfoDrawer isInputFocused={isInputFocused} />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <MarketDrawer isInputFocused={isInputFocused} />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <ShortCutTips />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <GameTutorial />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <WarResultDrawer isInputFocused={isInputFocused} />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <ChatMessageDrawer isInputFocused={isInputFocused} setIsInputFocused={setIsInputFocused} isSpectator={false} />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <ArmySettleModal />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <ArmyUpdateModal />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <ArmyMergeDrawer />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <ArmyAttackDrawer />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <CastleAttackDrawer />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <MineCaptureDrawer />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <DockSettleModal />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <DockCaptureDrawer />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <FleetSettleModal />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <FleetSettleWarning />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <FleetMoveWarning />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <FleetAttackDrawer />}
-      {gameData && gameData.state === 2 && !isPlayerLost && mineInited && <SeaMineCaptureDrawer />}
-      {gameData && gameData.state === 2 && mineInited && <PriceListDrawer isInputFocused={isInputFocused} isSpectator={false} />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <ArmySettleWarning />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <ArmyUpdateWarning />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <ArmyMoveWarning />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <ArmyProgressBar />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <MineProgressBar />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <CreditProgressBar />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <ArmyInfoDrawer isInputFocused={isInputFocused} />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <FleetInfoDrawer isInputFocused={isInputFocused} />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <MarketDrawer isInputFocused={isInputFocused} />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <ShortCutTips />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <GameTutorial />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <WarResultDrawer isInputFocused={isInputFocused} />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <ChatMessageDrawer isInputFocused={isInputFocused} setIsInputFocused={setIsInputFocused} isSpectator={false} />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <ArmySettleModal />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <ArmyUpdateModal />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <ArmyMergeDrawer />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <ArmyAttackDrawer />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <CastleAttackDrawer />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <MineCaptureDrawer />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <DockSettleModal />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <DockCaptureDrawer />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <FleetSettleModal />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <FleetSettleWarning />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <FleetMoveWarning />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <FleetAttackDrawer />}
+      {gameData && gameData.state === 2 && !isPlayerLost && <SeaMineCaptureDrawer />}
+      {gameData && gameData.state === 2 && <PriceListDrawer isInputFocused={isInputFocused} isSpectator={false} />}
       {isPlayerLost && <PlayerLostWarning />}
       {gameData && gameData.state === 3 && isPlayerWinner && <PlayerWonAnimation />}
 

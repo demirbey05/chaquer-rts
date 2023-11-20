@@ -38,3 +38,24 @@ export function useResources(gameID: number) {
 
     return resources;
 }
+
+export function useMyResourceEntityNumber(gameID: number, address: any, sourceType: number) {
+    const { components } = useMUD();
+
+    const resourceEntites = useEntityQuery([
+        HasValue(components.ResourceOwnable, { gameID: BigInt(gameID), owner: address, sourceType: sourceType }),
+    ]);
+    const valueOwn = useObservableValue(components.ResourceOwnable.update$);
+
+    const [resources, setResources] = useState<number>(0);
+
+    useEffect(() => {
+        const resource = resourceEntites.map((entityIndex) =>
+            getComponentValue(components.ResourceOwnable, entityIndex)
+        );
+
+        setResources(resource.length);
+    }, [resourceEntites, valueOwn]);
+
+    return resources;
+}

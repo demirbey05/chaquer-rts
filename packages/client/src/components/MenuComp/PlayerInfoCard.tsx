@@ -21,6 +21,7 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                     {showUsername ? (
                         <>
                             <Tag
+                                padding={"10px"}
                                 size='lg'
                                 backgroundColor={"blue.800"}
                                 borderRadius='full'>
@@ -74,7 +75,11 @@ const PublicWallet = () => {
 
     return (
         <>
-            <Tag size='lg' backgroundColor={"blue.800"} borderRadius='full'>
+            <Tag
+                padding={"10px"}
+                size='lg'
+                backgroundColor={"blue.800"}
+                borderRadius='full'>
                 Public Wallet: {truncatedPublicWallet}
             </Tag>
             <Button
