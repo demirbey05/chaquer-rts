@@ -9,6 +9,7 @@ import { AttackerType, ClashType } from "../codegen/common.sol";
 import { CastleOwnable, CreditOwn, Position, ResourceOwnable, SoldierCreated, DockOwnable, ArmyConfig, ArmyConfigData, ArmyOwnable, ClashResult, ColorOwnable, AddressToColorIndex, Players, GameMetaData } from "../codegen/index.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
+import {getUniqueEntity} from "@latticexyz/world-modules/src/uniqueentity/getUniqueEntity.sol";
 error ErrorInCalculatingBattleScores();
 
 function findRemainings(BattleResult memory result) pure returns (RemainingData memory remainings) {
@@ -313,5 +314,17 @@ library LibUtils {
       SoldierCreated.getNumOfArcher(config.gameID) + config.numArcher,
       SoldierCreated.getNumOfCavalry(config.gameID) + config.numCavalry
     );
+  }
+
+  function divideArmy(IWorld world, bytes32 armyID, ArmyConfigData partition) internal returns(bytes32){
+    ArmyConfigData memory army = ArmyConfig.get(armyID);
+    bytes32 newArmyID = getUniqueEntity();
+
+    ArmyConfig.set(newArmyID, partition.numSwordsman, partition.numArcher, partition.numCavalry, army.gameID);
+    ArmyOwnable.set(newArmyID, ArmyOwnable.getOwner(armyID), army.gameID);
+    ColorOwnable.set(newArmyID, ColorOwnable.getColorIndex(armyID), army.gameID);
+
+    ArmyConfig.set(armyID,army.numSwordsman - partition.numSwordsman, army.numArcher - partition.numArcher, army.numCavalry - partition.numCavalry, army.gameID);
+    return newArmyID;
   }
 }

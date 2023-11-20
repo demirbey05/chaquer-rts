@@ -7,7 +7,7 @@ import "./Errors.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { LibQueries, LibMath, LibNaval } from "../libraries/Libraries.sol";
 import { baseCostDock, requiredArmySize, baseWoodCostDock, maxShipInFleet, smallCreditCost, smallWoodCost, mediumCreditCost, mediumWoodCost, bigCreditCost, bigWoodCost, fleetMoveFoodCost, fleetMoveGoldCost } from "./Constants.sol";
-import { CreditOwn, ArmyOwnable, ColorOwnable, AddressToColorIndex, ResourceOwnData, FleetOwnable, FleetConfig, Position, FleetConfigData, MapConfig, DockOwnable, ResourceOwn, ArmyOwnable } from "../codegen/index.sol";
+import { CreditOwn, ColorOwnable, AddressToColorIndex,ArmyConfig,ArmyConfigData, ResourceOwnData, FleetOwnable, FleetConfig, Position, FleetConfigData, MapConfig, DockOwnable, ResourceOwn, ArmyOwnable } from "../codegen/index.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 
@@ -152,5 +152,25 @@ contract NavalExtensionSystem is System {
     Position.set(fleetID, x, y, gameID);
     ResourceOwn.setNumOfFood(fleetOwner, gameID, resourcesOfUser.numOfFood - fleetMoveFoodCost);
     ResourceOwn.setNumOfGold(fleetOwner, gameID, resourcesOfUser.numOfGold - fleetMoveGoldCost);
+  }
+
+  function loadFleet(bytes32 fleetID, bytes32 armyID, ArmyConfigData armyPart) public {
+    address fleetOwner = FleetOwnable.getOwner(fleetID);
+    address armyOwner = ArmyOwnable.getOwner(armyID);
+    if (fleetOwner != (_msgSender())) {
+      revert FleetLoad__NoAuthorization();
+    }
+    if (fleetOwner != armyOwner) {
+      revert FleetLoad__NoAuthorization();
+    }
+    FleetConfigData memory fleet = FleetConfig.get(fleetID);
+    ArmyConfigData memory army = ArmyConfig.get(armyID);
+
+    if(fleet.gameID != army.gameID){
+      revert FleetLoad__WrongGameID();
+    }
+
+    FleetConfig.set(fleetID, fleet);
+    ArmyOwnable.setFleet(armyID, fleetID);
   }
 }
