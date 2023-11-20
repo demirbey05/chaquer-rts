@@ -32,11 +32,26 @@ export const GameTutorial = () => {
                     </PopoverHeader>
                     <PopoverBody>
                         <Accordion allowToggle defaultIndex={[0]}>
+                            <AccordionItem>
+                                <h2>
+                                    <AccordionButton>
+                                        <Box as="span" flex='1' textAlign='left'>
+                                            1-Say Hello to Other Players
+                                        </Box>
+                                        <AccordionIcon />
+                                    </AccordionButton>
+                                </h2>
+                                <AccordionPanel pb={4} textColor={"aqua"}>
+                                    <p>1. Press the "C" key and close this onboarding panel.</p>
+                                    <p>2. You will see the chat panel.</p>
+                                    <p>3. Type "hello" to input field and send.</p>
+                                </AccordionPanel>
+                            </AccordionItem>
                             <AccordionItem >
                                 <h2>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            1-Army Settlement
+                                            2-Army Settlement
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -53,7 +68,7 @@ export const GameTutorial = () => {
                                 <h2>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            2-Army Movement
+                                            3-Army Movement
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -68,7 +83,7 @@ export const GameTutorial = () => {
                                 <h2>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            3- Update Army Size
+                                            4- Update Army Size
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -84,7 +99,7 @@ export const GameTutorial = () => {
                                 <h2>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            4- Merge Two Armies
+                                            5- Merge Two Armies
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -99,7 +114,7 @@ export const GameTutorial = () => {
                                 <h2>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            5-Attack and Capture
+                                            6-Attack and Capture
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -116,7 +131,7 @@ export const GameTutorial = () => {
                                 <h2>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            6- Dock Settlement
+                                            7- Dock Settlement
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -134,7 +149,7 @@ export const GameTutorial = () => {
                                 <h2>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            7-Fleet Settlement
+                                            8-Fleet Settlement
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -150,7 +165,7 @@ export const GameTutorial = () => {
                                 <h2>
                                     <AccordionButton>
                                         <Box as="span" flex='1' textAlign='left'>
-                                            8-Fleet Movement
+                                            9-Fleet Movement
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
