@@ -29,5 +29,6 @@ import { FleetOwnable, FleetOwnableTableId } from "./tables/FleetOwnable.sol";
 import { ClashResult, ClashResultData, ClashResultTableId } from "./tables/ClashResult.sol";
 import { ColorOwnable, ColorOwnableData, ColorOwnableTableId } from "./tables/ColorOwnable.sol";
 import { ChatMessages, ChatMessagesData, ChatMessagesTableId } from "./tables/ChatMessages.sol";
+import { FleetCarry, FleetCarryData, FleetCarryTableId } from "./tables/FleetCarry.sol";
 import { LastMessageTime, LastMessageTimeTableId } from "./tables/LastMessageTime.sol";
 import { LatestGameID, LatestGameIDTableId } from "./tables/LatestGameID.sol";

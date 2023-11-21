@@ -244,6 +244,12 @@ export default mudConfig({
       },
       offchainOnly:true,
     },
+    FleetCarry:{
+      valueSchema:{
+        carrierID:"bytes32",
+        gameID:"uint256",
+      }
+    },
     LastMessageTime:{
       keySchema:{
         gameID:"uint256",

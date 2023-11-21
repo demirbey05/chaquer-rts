@@ -223,7 +223,7 @@ library LibUtils {
     emitClashTableEvent(uint8(result), attackerID, mineID, gameID, attackerOwner, mineOwner, ClashType.Mine);
   }
 
-  function handleFleetAttack(
+  function handleFleetAttack(IStore world,
     bytes32 attackerID,
     bytes32 mineID,
     address attackerOwner,
@@ -231,7 +231,7 @@ library LibUtils {
     bytes32[] memory ownerEntitiesSurrondMine,
     uint256 gameID
   ) internal {
-    uint8 result = LibNaval.fightFleetToFleetGroup(attackerID, ownerEntitiesSurrondMine, gameID);
+    uint8 result = LibNaval.fightFleetToFleetGroup(world,attackerID, ownerEntitiesSurrondMine, gameID);
     if (result == 1) {
       ResourceOwnable.setOwner(mineID, attackerOwner);
       ColorOwnable.setColorIndex(mineID, AddressToColorIndex.getColorIndex(attackerOwner, gameID));
@@ -256,7 +256,7 @@ library LibUtils {
     IStore world,
     address user,
     uint256 gameID,
-    address getter
+    address getterdivideArmy
   ) internal {
     bytes32[] memory castleOwnerDocks = LibQueries.getDocks(world, user, gameID);
     for (uint i = 0; i < castleOwnerDocks.length; i++) {
@@ -313,5 +313,17 @@ library LibUtils {
       SoldierCreated.getNumOfArcher(config.gameID) + config.numArcher,
       SoldierCreated.getNumOfCavalry(config.gameID) + config.numCavalry
     );
+  }
+
+  function divideArmy(bytes32 armyID, ArmyConfigData memory partition) internal returns(bytes32){
+    ArmyConfigData memory army = ArmyConfig.get(armyID);
+    bytes32 newArmyID = keccak256(abi.encodePacked(armyID, block.timestamp));
+
+    ArmyConfig.set(newArmyID, partition.numSwordsman, partition.numArcher, partition.numCavalry, army.gameID);
+    ArmyOwnable.set(newArmyID, ArmyOwnable.getOwner(armyID), army.gameID);
+    ColorOwnable.set(newArmyID, ColorOwnable.getColorIndex(armyID), army.gameID); 
+
+    ArmyConfig.set(armyID,army.numSwordsman - partition.numSwordsman, army.numArcher - partition.numArcher, army.numCavalry - partition.numCavalry, army.gameID);
+    return newArmyID;
   }
 }

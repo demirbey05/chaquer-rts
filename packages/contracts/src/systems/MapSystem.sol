@@ -16,6 +16,7 @@ import "./Errors.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 
+
 error MoveArmy__UnsufficientFood();
 error MoveArmy__UnsufficientGold();
 

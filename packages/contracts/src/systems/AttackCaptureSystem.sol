@@ -188,11 +188,11 @@ contract AttackCaptureSystem is System {
     (uint8 winner, FleetConfigData memory winnerNew) = LibNaval.fightTwoFleet(fleetOneConfig, fleetTwoConfig);
     LibUtils.emitClashTableEvent(winner, fleetOne, fleetTwo, gameID, fleetOneOwner, fleetTwoOwner, ClashType.NavalWar);
     if (winner == 0) {
-      LibNaval.deleteFleet(fleetOne);
-      LibNaval.deleteFleet(fleetTwo);
+      LibNaval.deleteFleet(IStore(_world()),fleetOne,gameID);
+      LibNaval.deleteFleet(IStore(_world()),fleetTwo,gameID);
       return;
     }
     FleetConfig.set(winner == 1 ? fleetOne : fleetTwo, winnerNew);
-    LibNaval.deleteFleet(winner == 1 ? fleetTwo : fleetOne);
+    LibNaval.deleteFleet(IStore(_world()),winner == 1 ? fleetTwo : fleetOne,gameID);
   }
 }
