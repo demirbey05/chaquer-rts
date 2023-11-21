@@ -127,6 +127,7 @@ export const DockSettleModal = () => {
 
                 const isTask = localStorage.getItem("armyMovementTask")
                 !isTask && localStorage.setItem("armyMovementTask", "true")
+                window.dispatchEvent(new Event('localDataStorage'));
             } else {
                 setErrorMessage("You need 30 food + 30 diomand to move your army.")
                 setErrorTitle("Army Move Warning")

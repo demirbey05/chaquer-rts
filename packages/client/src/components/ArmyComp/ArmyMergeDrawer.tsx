@@ -92,6 +92,7 @@ export const ArmyMergeDrawer = () => {
         } else {
             const isTask = localStorage.getItem("mergeTwoArmiesTask")
             !isTask && localStorage.setItem("mergeTwoArmiesTask", "true")
+            window.dispatchEvent(new Event('localDataStorage'));
         }
 
         setIsLoading(false);

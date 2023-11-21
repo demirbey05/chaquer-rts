@@ -67,6 +67,7 @@ export const MineCaptureDrawer = () => {
         if (tx) {
             const isTask = localStorage.getItem("attackCaptureTask")
             !isTask && localStorage.setItem("attackCaptureTask", "true")
+            window.dispatchEvent(new Event('localDataStorage'));
         } else {
             setErrorMessage("An error occurred while trying to capture a mine.")
             setErrorTitle("Mine Capture Error")

@@ -66,6 +66,7 @@ export const ArmyAttackDrawer = () => {
     } else {
       const isTask = localStorage.getItem("attackCaptureTask")
       !isTask && localStorage.setItem("attackCaptureTask", "true")
+      window.dispatchEvent(new Event('localDataStorage'));
     }
 
     setIsLoading(false);

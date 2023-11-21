@@ -153,6 +153,7 @@ export const FleetSettleModal = () => {
 
             const isTask = localStorage.getItem("fleetSettlementTask")
             !isTask && localStorage.setItem("fleetSettlementTask", "true")
+            window.dispatchEvent(new Event('localDataStorage'));
         } else {
             setErrorMessage("You have no enough credit!")
             setErrorTitle("Fleet Settlement Error")

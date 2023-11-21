@@ -137,6 +137,7 @@ export const ArmySettleModal = () => {
 
       const isTask = localStorage.getItem("armySettlementTask")
       !isTask && localStorage.setItem("armySettlementTask", "true")
+      window.dispatchEvent(new Event('localDataStorage'));
     } else {
       setErrorMessage("An error occurred during army settlement.");
       setErrorTitle("Army Settlement Error");

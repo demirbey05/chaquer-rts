@@ -52,6 +52,7 @@ export const FleetMoveEvent = async (
 
             const isTask = localStorage.getItem("fleetMovementTask")
             !isTask && localStorage.setItem("fleetMovementTask", "true")
+            window.dispatchEvent(new Event('localDataStorage'));
 
             setFromFleetPosition(undefined);
             toFleetPositionRef.current = { x: -1, y: -1 };

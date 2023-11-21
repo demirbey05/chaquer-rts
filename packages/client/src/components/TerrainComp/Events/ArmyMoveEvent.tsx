@@ -58,6 +58,7 @@ export const ArmyMoveEvent = async (
 
             const isTask = localStorage.getItem("armyMovementTask")
             !isTask && localStorage.setItem("armyMovementTask", "true")
+            window.dispatchEvent(new Event('localDataStorage'));
 
             setFromArmyPosition(undefined);
             toArmyPositionRef.current = { x: -1, y: -1 };
