@@ -2,20 +2,23 @@ import archerImg from "../../images/armyAssets/archer.png";
 import cavalryImg from "../../images/armyAssets/cavalry.png";
 import swordsmanImg from "../../images/armyAssets/swordsman.png";
 import { useMUD } from "../../context/MUDContext";
-import { Button, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
-import { useArmy } from "../../context/ArmyContext";
 import { useError } from "../../context/ErrorContext";
-import { usePlayer } from "../../context/PlayerContext";
-import { useCastle } from "../../context/CastleContext";
 import { useGame } from "../../context/GameContext";
 import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 import { useFleet } from "../../context/FleetContext";
+import { useMyFleetPositions } from "../../hooks/SeaHooks/useMyFleetPositions";
+import { usePlayer } from "../../context/PlayerContext";
+import { getMyFleetConfigByPosition } from "../../utils/helperFunctions/SeaFunctions/getFleetConfigByPosition";
+import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
+import { getMyArmyConfigByPosition } from "../../utils/helperFunctions/ArmyFunctions/getArmyConfigByPosition";
 
 export const FleetLoadModal = () => {
   const { systemCalls, components } = useMUD();
   const { gameID } = useGame();
+  const { userWallet } = usePlayer();
   const { setIsFleetLoadStage, setTargetLoadFleetPosition, targetLoadFleetPosition, loadArmyPosition, setLoadArmyPosition } = useFleet()
   const { setErrorMessage, setErrorTitle, setShowError } = useError();
 
@@ -23,9 +26,77 @@ export const FleetLoadModal = () => {
   const [archerCount, setArcherCount] = useState<number>(0);
   const [cavalryCount, setCavalryCount] = useState<number>(0);
 
+  const [maxCapacity, setMaxCapacity] = useState<number>(0)
+  const [fleetConfig, setFleetConfig] = useState<any>();
+  const [armyConfig, setArmyConfig] = useState<any>()
+
   const [isDisabled, setIsDisabled] = useState(true);
+  const [armyCheck, setArmyCheck] = useState<boolean>(false)
+  const [totalSizeCheck, setTotalSizeCheck] = useState<boolean>(false)
+  const [warningMessage, setWarningMessage] = useState<string>("")
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const myFleets = useMyFleetPositions(userWallet, gameID)
+  const myArmies = useMyArmy(userWallet, gameID)
+
+  useEffect(() => {
+    setIsDisabled(!(armyCheck && totalSizeCheck))
+  }, [armyCheck, totalSizeCheck])
+
+  useEffect(() => {
+    if (armyConfig) {
+      if (Number(swordsmanCount) > armyConfig.numSwordsman) {
+        setArmyCheck(false)
+      } else if (Number(archerCount) > armyConfig.numArcher) {
+        setArmyCheck(false)
+      } else if (Number(cavalryCount) > armyConfig.cavalryCount) {
+        setArmyCheck(false)
+      } else {
+        setArmyCheck(true)
+      }
+    }
+  }, [armyConfig, swordsmanCount, archerCount, cavalryCount])
+
+  useEffect(() => {
+    if (armyConfig && fleetConfig) {
+      const maxLoad = fleetConfig.numSmall + fleetConfig.numMedium * 2 + fleetConfig.numBig * 3;
+      const armyTotal = Number(swordsmanCount) + Number(archerCount) + Number(cavalryCount);
+
+      if (maxLoad >= armyTotal) {
+        setTotalSizeCheck(true)
+      } else {
+        setTotalSizeCheck(false)
+      }
+    }
+  }, [armyConfig, fleetConfig, swordsmanCount, archerCount, cavalryCount])
+
+  useEffect(() => {
+    if (loadArmyPosition && myArmies) {
+      if (getMyArmyConfigByPosition({ x: loadArmyPosition.x, y: loadArmyPosition.y }, myArmies)) {
+        const config = getMyArmyConfigByPosition({ x: loadArmyPosition.x, y: loadArmyPosition.y }, myArmies).myArmyConfig
+        setArmyConfig(config)
+      }
+    } else {
+      setArmyConfig(undefined)
+    }
+  }, [loadArmyPosition])
+
+  useEffect(() => {
+    if (targetLoadFleetPosition && myFleets) {
+      if (getMyFleetConfigByPosition({ x: targetLoadFleetPosition.x, y: targetLoadFleetPosition.y }, myFleets)) {
+        const config = getMyFleetConfigByPosition({ x: targetLoadFleetPosition.x, y: targetLoadFleetPosition.y }, myFleets).myFleetConfig
+        const max = config.numSmall + config.numMedium * 2 + config.numBig * 3;
+        setMaxCapacity(max)
+      }
+    } else {
+      setMaxCapacity(0)
+    }
+  }, [targetLoadFleetPosition])
+
+  const handleBackMap = () => {
+    setIsFleetLoadStage(false)
+  }
 
   const handleClick = async () => {
     setIsFleetLoadStage(false);
@@ -132,6 +203,9 @@ export const FleetLoadModal = () => {
                   imageHeight={"100px"}
                   imageWidth={"125px"} />
               </div>
+              <div className="row mt-3 ">
+                <ArmyConfigInfo armyConfig={armyConfig} capacity={maxCapacity} />
+              </div>
             </div>
           </div>
           <div className="modal-footer">
@@ -140,6 +214,7 @@ export const FleetLoadModal = () => {
               border="solid"
               textColor="dark"
               data-bs-dismiss="modal"
+              isDisabled={isDisabled}
               onClick={() => handleClick()}
             >
               Load Fleet
@@ -148,6 +223,7 @@ export const FleetLoadModal = () => {
               colorScheme="red"
               border="solid"
               textColor="dark"
+              onClick={() => handleBackMap()}
               data-bs-dismiss="modal"
             >
               Back to Map
@@ -186,6 +262,28 @@ const ArmySettleInputBody = (props: ArmySettleInputBody) => {
           id={props.soldierName}
           onChange={(e: any) => props.setSoliderCount(e.target.value)}
           onClick={(e: any) => e.target.select()} />
+      </div>
+    </div>
+  )
+}
+
+const ArmyConfigInfo = ({ armyConfig, capacity }: any) => {
+  return (
+    <div className="col text-center">
+      <div className="col text-2xl w-100 border-bottom p-2 mb-2">
+        Load Info
+      </div>
+      <div className="col text-info p-1">
+        Swordsman : {armyConfig ? armyConfig.numSwordsman : 0}
+      </div>
+      <div className="col text-info p-1">
+        Archer : {armyConfig ? armyConfig.numArcher : 0}
+      </div>
+      <div className="col text-info p-1">
+        Cavalry : {armyConfig ? armyConfig.numCavalry : 0}
+      </div>
+      <div className="col text-success p-2">
+        Fleet Solider Capacity : {capacity}
       </div>
     </div>
   )

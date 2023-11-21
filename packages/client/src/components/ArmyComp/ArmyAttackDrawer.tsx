@@ -53,11 +53,12 @@ export const ArmyAttackDrawer = () => {
     }
 
     setIsLoading(true);
-    const tx = await systemCalls.attackToArmy(attackFromArmyId[0] as string, attackToArmyId[0] as string, gameID);
 
     const audio = new Audio(battleSoundEffect);
-    audio.volume = 0.2;
+    audio.volume = 0.4;
     audio.play();
+
+    const tx = await systemCalls.attackToArmy(attackFromArmyId[0] as string, attackToArmyId[0] as string, gameID);
 
     if (tx === null) {
       setErrorMessage("An error occurred while attacking to army.");

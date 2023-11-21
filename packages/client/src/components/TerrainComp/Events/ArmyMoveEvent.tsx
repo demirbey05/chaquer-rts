@@ -43,6 +43,11 @@ export const ArmyMoveEvent = async (
 
     if (toArmyPositionRef.current && isArmyMoveStage) {
         setIsLoading(true);
+
+        const audio = new Audio(armyMoveSoundEffect);
+        audio.volume = 0.4;
+        audio.play();
+
         var targetDiv = document.getElementById(`${toArmyPositionRef.current.y},${toArmyPositionRef.current.x}`);
         targetDiv?.classList.add("animate-border-army-move");
 
@@ -54,9 +59,7 @@ export const ArmyMoveEvent = async (
         );
 
         if (tx) {
-            const audio = new Audio(armyMoveSoundEffect);
-            audio.volume = 0.2;
-            audio.play();
+
 
             const isTask = localStorage.getItem("armyMovementTask")
             !isTask && localStorage.setItem("armyMovementTask", "true")

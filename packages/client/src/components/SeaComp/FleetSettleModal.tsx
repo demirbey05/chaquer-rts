@@ -133,6 +133,10 @@ export const FleetSettleModal = () => {
 
         setIsLoading(true)
 
+        const audio = new Audio(fleetSettleSoundEffect);
+        audio.volume = 0.4;
+        audio.play();
+
         const tx = await systemCalls.settleFleet(
             fleetPosition.x,
             fleetPosition.y,
@@ -146,10 +150,6 @@ export const FleetSettleModal = () => {
             setSmallShipCount('');
             setMediumShipCount('');
             setLargeShipCount('');
-
-            const audio = new Audio(fleetSettleSoundEffect);
-            audio.volume = 0.2;
-            audio.play();
 
             const isTask = localStorage.getItem("fleetSettlementTask")
             !isTask && localStorage.setItem("fleetSettlementTask", "true")

@@ -36,6 +36,11 @@ export const FleetMoveEvent = async (
 
     if (toFleetPositionRef.current && isFleetMoveStage) {
         setIsLoading(true)
+
+        const audio = new Audio(fleetMoveSoundEffect);
+        audio.volume = 0.4;
+        audio.play();
+
         var targetDiv = document.getElementById(`${toFleetPositionRef.current.y},${toFleetPositionRef.current.x}`);
         targetDiv?.classList.add("animate-border-fleet-move");
 
@@ -46,10 +51,6 @@ export const FleetMoveEvent = async (
         )
 
         if (tx) {
-            const audio = new Audio(fleetMoveSoundEffect);
-            audio.volume = 0.2;
-            audio.play();
-
             const isTask = localStorage.getItem("fleetMovementTask")
             !isTask && localStorage.setItem("fleetMovementTask", "true")
             window.dispatchEvent(new Event('localDataStorage'));

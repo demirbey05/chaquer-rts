@@ -1,4 +1,4 @@
-import { Progress, CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
+import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
 import { useCastle } from '../../context/CastleContext';
 import { useGame } from '../../context/GameContext';
 import { GameTips } from '../TipsComp/GameTips';
@@ -9,7 +9,6 @@ export const PlayerWaitingStage = () => {
     const { isCastleSettled } = useCastle();
 
     const gameData = useGameData(gameID)
-    const gameState = gameData ? gameData.state : null;
     const numberOfPlayer = gameData ? Number(gameData.numberOfPlayer) : 0;
     const limitOfPlayer = gameData ? Number(Number(gameData.limitOfPlayer)) : 0;
 
@@ -17,25 +16,24 @@ export const PlayerWaitingStage = () => {
         return (
             <div id="overlay" className="waiting-for-players-fade-overlay">
                 <div className="waiting-for-players-message-container">
-                    {
-                        (gameState && gameData.state === 1) &&
-                        <>
-                            <span className="waiting-for-players-info-message">
-                                Waiting for other players and castle settlements...
-                                <CircularProgress
-                                    className='ms-4'
-                                    value={(numberOfPlayer / limitOfPlayer) * 100}
-                                    color='green.400'
-                                    thickness='12px'>
-                                    <CircularProgressLabel>
-                                        ({numberOfPlayer}/{limitOfPlayer})
-                                    </CircularProgressLabel>
-                                </CircularProgress>
-                            </span>
-                            <Progress size='sm' colorScheme={"whatsapp"} isIndeterminate />
-                            <GameTips />
-                        </>
-                    }
+                    <span className="waiting-for-players-info-message">
+                        {
+                            gameData && numberOfPlayer !== limitOfPlayer && "Waiting for other players..."
+                        }
+                        {
+                            gameData && numberOfPlayer === limitOfPlayer && "Waiting for castle settlements..."
+                        }
+                        <CircularProgress
+                            className='ms-4'
+                            max={limitOfPlayer}
+                            value={numberOfPlayer}
+                            thickness='16px'>
+                            <CircularProgressLabel>
+                                {numberOfPlayer}/{limitOfPlayer}
+                            </CircularProgressLabel>
+                        </CircularProgress>
+                    </span>
+                    <GameTips />
                 </div>
             </div>
         )

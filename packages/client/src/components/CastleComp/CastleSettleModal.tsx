@@ -6,7 +6,6 @@ import { useError } from "../../context/ErrorContext";
 import { usePlayer } from "../../context/PlayerContext";
 import { useGame } from "../../context/GameContext";
 import { usePlayerIsValid } from "../../hooks/IdentityHooks/usePlayerIsValid";
-import buildSoundEffect from '../../sounds/soundEffects/build-effect.mp3'
 
 export const CastleSettleModal = () => {
   const { systemCalls } = useMUD();
@@ -27,9 +26,6 @@ export const CastleSettleModal = () => {
       setErrorTitle("Castle Settlement Error");
       setShowError(true);
     } else {
-      const audio = new Audio(buildSoundEffect);
-      audio.volume = 0.4;
-      audio.play();
       var myModalEl = document.getElementById('castleSettleModal');
       var modal = bootstrap.Modal.getInstance(myModalEl)
       modal.hide();
