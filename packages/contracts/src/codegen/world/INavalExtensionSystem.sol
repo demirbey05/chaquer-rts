@@ -20,6 +20,7 @@ interface INavalExtensionSystem {
   error FleetUnload__TooFar();
   error FleetUnload__WrongTerrainType();
   error FleetUnload__TileIsNotEmpty();
+  error FleetLoad__TooFar();
 
   function buildDock(uint32 coord_x, uint32 coord_y, bytes32 requestedArmy, uint256 gameID) external returns (bytes32);
 
