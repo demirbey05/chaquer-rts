@@ -25,6 +25,5 @@ export function useCurrentBlockNumber() {
         return () => clearInterval(intervalId);
     }, [])
 
-
     return currentBlock;
 }

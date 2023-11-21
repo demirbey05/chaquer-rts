@@ -89,7 +89,8 @@ export const ChatMessageDrawer = ({ isInputFocused, setIsInputFocused, isSpectat
                 }, 30000);
 
                 var isTask = localStorage.getItem("helloTask")
-                !isTask && localStorage.setItem("helloTask", "true")
+                !isTask && localStorage.setItem("helloTask", "new value");
+                window.dispatchEvent(new Event('localDataStorage'));
             } else {
                 setErrorMessage("An error occurred while sending a message.");
                 setErrorTitle("Message Error");

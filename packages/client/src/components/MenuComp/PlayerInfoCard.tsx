@@ -28,7 +28,7 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                                 Username: {username}
                             </Tag>
                             <Button
-                                size={"sm"}
+                                padding={"10px"}
                                 ms={2}
                                 backgroundColor={"blue.800"}
                                 colorScheme={"facebook"}
@@ -39,7 +39,7 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                     ) : (
                         <div className='d-flex justify-content-center'>
                             <Button
-                                size={"sm"}
+                                padding={"10px"}
                                 backgroundColor={"blue.800"}
                                 colorScheme={"facebook"}
                                 onClick={() => setIsUserModalOpen(true)}>
@@ -83,8 +83,8 @@ const PublicWallet = () => {
                 Public Wallet: {truncatedPublicWallet}
             </Tag>
             <Button
+                padding={"10px"}
                 ms={2}
-                size={"sm"}
                 colorScheme={"facebook"}
                 backgroundColor={"blue.800"}
                 onClick={onCopy}>

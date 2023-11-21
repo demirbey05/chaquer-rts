@@ -190,6 +190,7 @@ export const ArmyUpdateModal = () => {
 
             const isTask = localStorage.getItem("updateArmyTask")
             !isTask && localStorage.setItem("updateArmyTask", "true")
+            window.dispatchEvent(new Event('localDataStorage'));
 
             setArmyPositionUpdate(undefined)
             setCastlePosition(undefined)

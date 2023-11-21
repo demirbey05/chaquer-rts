@@ -25,7 +25,7 @@ export const useNumberOfFood = () => {
     const resourceEntityNumber = useMyResourceEntityNumber(gameID, userWallet, 0)
 
     useEffect(() => {
-        if (numberOfResources && lastCollectBlockNumber >= 1) {
+        if (numberOfResources) {
             const newFoodNumber = calculateResource(Number(numberOfResources.numOfFood), lastCollectBlockNumber, resourceEntityNumber)
             setFoodNumber(newFoodNumber)
         }
@@ -45,7 +45,7 @@ export const useNumberOfWood = () => {
     const resourceEntityNumber = useMyResourceEntityNumber(gameID, userWallet, 1)
 
     useEffect(() => {
-        if (numberOfResources && lastCollectBlockNumber >= 1) {
+        if (numberOfResources) {
             const newWoodNumber = calculateResource(Number(numberOfResources.numOfWood), lastCollectBlockNumber, resourceEntityNumber)
             setWoodNumber(newWoodNumber)
         }
@@ -65,7 +65,7 @@ export const useNumberOfDiomand = () => {
     const resourceEntityNumber = useMyResourceEntityNumber(gameID, userWallet, 2)
 
     useEffect(() => {
-        if (numberOfResources && lastCollectBlockNumber >= 1) {
+        if (numberOfResources) {
             const newDiomandNumber = calculateResource(Number(numberOfResources.numOfGold), lastCollectBlockNumber, resourceEntityNumber)
             setDiomandNumber(newDiomandNumber)
         }

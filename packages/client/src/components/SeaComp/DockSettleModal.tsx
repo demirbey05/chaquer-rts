@@ -16,6 +16,7 @@ import { useGame } from "../../context/GameContext";
 import creditIcon from '../../images/resourceAssets/credit_icon.png'
 import woodIcon from '../../images/resourceAssets/wood_icon.png'
 import armyMoveSoundEffect from "../../sounds/soundEffects/army-move-effect.mp3"
+import buildSoundEffect from '../../sounds/soundEffects/build-effect.mp3'
 
 export const DockSettleModal = () => {
     const { systemCalls, components } = useMUD();
@@ -85,6 +86,11 @@ export const DockSettleModal = () => {
         else {
             const isTask = localStorage.getItem("dockSettlementTask")
             !isTask && localStorage.setItem("dockSettlementTask", "true")
+
+            const audio = new Audio(fleetSettleSoundEffect);
+            audio.volume = 0.2;
+            audio.play();
+
             setDockSettleStage(false);
             setDockPosition(undefined);
         }
@@ -115,8 +121,8 @@ export const DockSettleModal = () => {
                 document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.innerHTML = "";
                 document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
 
-                const audio = new Audio(armyMoveSoundEffect);
-                audio.volume = 0.2;
+                const audio = new Audio(buildSoundEffect);
+                audio.volume = 0.4;
                 audio.play();
 
                 const isTask = localStorage.getItem("armyMovementTask")
