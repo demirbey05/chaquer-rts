@@ -87,7 +87,7 @@ export const DockSettleModal = () => {
             const isTask = localStorage.getItem("dockSettlementTask")
             !isTask && localStorage.setItem("dockSettlementTask", "true")
 
-            const audio = new Audio(fleetSettleSoundEffect);
+            const audio = new Audio(buildSoundEffect);
             audio.volume = 0.2;
             audio.play();
 
@@ -121,7 +121,7 @@ export const DockSettleModal = () => {
                 document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.innerHTML = "";
                 document.getElementById(`${armyPositionToSettleDock.y},${armyPositionToSettleDock.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
 
-                const audio = new Audio(buildSoundEffect);
+                const audio = new Audio(armyMoveSoundEffect);
                 audio.volume = 0.4;
                 audio.play();
 

@@ -22,7 +22,7 @@
 .mine-progress-bar-col {
     display: flex;
     align-items: center;
-    width: 100px;
+    width: 150px;
     font-weight: bolder
 }
 
@@ -76,11 +76,11 @@
 
 /* Event progress bars */
 .event-progress-bar {
-    position: absolute;
+    position: fixed;
     z-index: 1;
     right: 0;
     left: 0;
     bottom: 0;
-    margin: 140px auto;
+    margin: 90px auto;
     width: fit-content;
 }

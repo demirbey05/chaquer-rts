@@ -215,8 +215,8 @@ contract NavalExtensionSystem is System {
     }
 
     if (
-      armyPart.numSwordsman != army.numSwordsman &&
-      armyPart.numArcher != army.numArcher &&
+      armyPart.numSwordsman != army.numSwordsman ||
+      armyPart.numArcher != army.numArcher ||
       armyPart.numCavalry != army.numCavalry
     ) {
       if (

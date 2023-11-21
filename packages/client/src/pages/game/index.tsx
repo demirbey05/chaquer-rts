@@ -35,6 +35,7 @@ import { ArmyMergeDrawer } from "../../components/ArmyComp/ArmyMergeDrawer";
 import { ChatMessageDrawer } from "../../components/ChatComp/ChatMessageDrawer";
 import { VersionInfo } from "../../components/TipsComp/VersionInfo";
 import { GameTutorial } from "../../components/TipsComp/GameTutorial";
+import { FleetLoadModal } from "../../components/SeaComp/FleetLoadModal";
 import { scrollToCenter } from "../../utils/helperFunctions/CustomFunctions/scrollToCenter";
 
 export const Game = () => {
@@ -76,6 +77,7 @@ export const Game = () => {
       {gameIsStarted && <DockSettleModal />}
       {gameIsStarted && <DockCaptureDrawer />}
       {gameIsStarted && <FleetSettleModal />}
+      {gameIsStarted && <FleetLoadModal />}
       {gameIsStarted && <FleetAttackDrawer />}
       {gameIsStarted && <SeaMineCaptureDrawer />}
       {gameIsStarted && <PriceListDrawer isInputFocused={isInputFocused} isSpectator={false} />}

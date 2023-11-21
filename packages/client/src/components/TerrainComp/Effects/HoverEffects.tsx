@@ -42,6 +42,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
             }).map((data) => {
                 if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                     canCastleBeSettle(values[data.x][data.y]) &&
+                        canCastleBeSettle(values[fromArmyPosition.x][fromArmyPosition.y]) &&
                         !isMyCastle(myCastlePosition, data.x, data.y) &&
                         !isMyArmy({ x: data.x, y: data.y }, myArmyPosition) &&
                         !isMyResource(data.x, data.y, myResourcePositions) &&
@@ -154,7 +155,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
 
     //Yellow hover effect when user moves a fleet
     useEffect(() => {
-        if (fromFleetPosition && isFleetMoveStage) {
+        if (fromFleetPosition && isFleetMoveStage && !isArmyMoveStage) {
             getManhattanPositions({
                 x: parseInt(fromFleetPosition.x),
                 y: parseInt(fromFleetPosition.y),
@@ -183,5 +184,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                 });
             }
         }
-    }, [fromFleetPosition, isFleetMoveStage, myFleetPositions, myResourcePositions, values]);
+    }, [fromFleetPosition, isFleetMoveStage, myFleetPositions, myResourcePositions, isArmyMoveStage, values]);
+
+
 }

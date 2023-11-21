@@ -153,7 +153,7 @@ const CreateGameWarning = ({ setIsCreateGameModalOpen, setIsOpen }: { setIsCreat
                 When creating a game, it is crucial to ensure that you can assemble a sufficient number of participants for the game to commence.
                 If you cannot, the game will be not started.
             </p>
-            <Button onClick={() => { setIsCreateGameModalOpen(true); setIsOpen(false) }} colorScheme={"facebook"} mt={3}>I Understood</Button>
+            <Button onClick={() => { setIsCreateGameModalOpen(true); setIsOpen(false) }} border={"2px"} colorScheme={"facebook"} mt={3}>I Understood</Button>
         </>
     )
 } 
