@@ -216,7 +216,7 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
       setArmyPosition({ x: getDataAtrX(e), y: getDataAtrY(e) });
     }
 
-    if (!fromFleetPosition && isMyFleet({ x: getDataAtrX(e), y: getDataAtrY(e) }, myFleetPositions) && !fleetSettleStage && !isArmyMoveStage) {
+    if (!fromFleetPosition && isMyFleet({ x: getDataAtrX(e), y: getDataAtrY(e) }, myFleetPositions) && !fleetSettleStage) {
       setFromFleetPosition({ x: getDataAtrX(e), y: getDataAtrY(e) });
       setIsFleetMoveStage(true);
       setIsFleetAttackStage(true)
@@ -398,7 +398,6 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
           toArmyPositionRef)
       }
       else if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y]) &&
-        canCastleBeSettle(values[fromArmyPositionRef.current.x][fromArmyPositionRef.current.y]) &&
         !isMyCastle(myCastlePosition, toArmyPositionRef.current.x, toArmyPositionRef.current.y) &&
         !isMyDock(Number(toArmyPositionRef.current.x), Number(toArmyPositionRef.current.y), myDockPositions)) {
         await ArmyMoveEvent(setIsFleetLoadStage,

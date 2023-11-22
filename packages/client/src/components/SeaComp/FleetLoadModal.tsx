@@ -22,9 +22,9 @@ export const FleetLoadModal = () => {
   const { setIsFleetLoadStage, setTargetLoadFleetPosition, targetLoadFleetPosition, loadArmyPosition, setLoadArmyPosition } = useFleet()
   const { setErrorMessage, setErrorTitle, setShowError } = useError();
 
-  const [swordsmanCount, setSwordsmanCount] = useState<number>(0);
-  const [archerCount, setArcherCount] = useState<number>(0);
-  const [cavalryCount, setCavalryCount] = useState<number>(0);
+  const [swordsmanCount, setSwordsmanCount] = useState<string>("");
+  const [archerCount, setArcherCount] = useState<string>("");
+  const [cavalryCount, setCavalryCount] = useState<string>("");
 
   const [maxCapacity, setMaxCapacity] = useState<number>(0)
   const [fleetConfig, setFleetConfig] = useState<any>();
@@ -46,11 +46,14 @@ export const FleetLoadModal = () => {
 
   useEffect(() => {
     if (armyConfig) {
-      if (Number(swordsmanCount) > armyConfig.numSwordsman) {
+      if (swordsmanCount.length + archerCount.length + cavalryCount.length === 0) {
+        setArmyCheck(false)
+      }
+      else if (Number(swordsmanCount) > armyConfig.numSwordsman) {
         setArmyCheck(false)
       } else if (Number(archerCount) > armyConfig.numArcher) {
         setArmyCheck(false)
-      } else if (Number(cavalryCount) > armyConfig.cavalryCount) {
+      } else if (Number(cavalryCount) > armyConfig.numCavalry) {
         setArmyCheck(false)
       } else {
         setArmyCheck(true)
@@ -88,8 +91,10 @@ export const FleetLoadModal = () => {
         const config = getMyFleetConfigByPosition({ x: targetLoadFleetPosition.x, y: targetLoadFleetPosition.y }, myFleets).myFleetConfig
         const max = config.numSmall + config.numMedium * 2 + config.numBig * 3;
         setMaxCapacity(max)
+        setFleetConfig(config)
       }
     } else {
+      setFleetConfig(undefined)
       setMaxCapacity(0)
     }
   }, [targetLoadFleetPosition])
@@ -125,30 +130,30 @@ export const FleetLoadModal = () => {
     }
 
     if ((document.getElementById('Swordsman') as HTMLInputElement).value === "") {
-      setSwordsmanCount(0);
+      setSwordsmanCount("0");
     }
 
     if ((document.getElementById('Cavalry') as HTMLInputElement).value === "") {
-      setCavalryCount(0);
+      setCavalryCount("0");
     }
 
     if ((document.getElementById('Archer') as HTMLInputElement).value === "") {
-      setArcherCount(0);
+      setArcherCount("0");
     }
 
     const tx = await systemCalls.loadFleet(
       fleetID[0],
       armyID[0],
-      swordsmanCount,
-      archerCount,
-      cavalryCount,
+      Number(swordsmanCount),
+      Number(archerCount),
+      Number(cavalryCount),
       gameID
     );
 
     if (tx) {
-      setSwordsmanCount(0);
-      setArcherCount(0);
-      setCavalryCount(0);
+      setSwordsmanCount("");
+      setArcherCount("");
+      setCavalryCount("");
 
       const isTask = localStorage.getItem("fleetLoadTask")
       !isTask && localStorage.setItem("fleetLoadTask", "true")
@@ -186,6 +191,12 @@ export const FleetLoadModal = () => {
           </div>
           <div className="modal-body">
             <div className="container-fluid">
+              {
+                warningMessage.length > 0 &&
+                <div className="row mt-2 text-warning">
+                  {warningMessage}
+                </div>
+              }
               <div className="row mt-2">
                 <ArmySettleInputBody imageSource={swordsmanImg}
                   soldierName={"Swordsman"}
@@ -240,7 +251,7 @@ interface ArmySettleInputBody {
   imageHeight: string,
   imageWidth: string,
   soldierName: string,
-  setSoliderCount: React.Dispatch<React.SetStateAction<number>>
+  setSoliderCount: React.Dispatch<React.SetStateAction<string>>
 }
 
 const ArmySettleInputBody = (props: ArmySettleInputBody) => {
