@@ -97,13 +97,13 @@ export const FleetEffects = (
 
     // Fleet Load Modal data-bs attributes
     useEffect(() => {
-        if (isFleetLoadStage && myArmyPositions && myArmyPositions.length > 0) {
+        if (isFleetLoadStage && myArmyPositions && myArmyPositions.length > 0 && fromArmyPosition) {
             myArmyPositions.map((position: any) => {
                 getManhattanPositions({ x: position.myArmyPosition.x, y: position.myArmyPosition.y }).map(
                     (data) => {
                         if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                             if (
-                                canCastleBeSettle(values[data.x][data.y]) &&
+                                !canCastleBeSettle(values[data.x][data.y]) &&
                                 isMyFleet({ x: data.x, y: data.y }, myFleetPositions)
                             ) {
                                 const element = document.getElementById(`${data.y},${data.x}`)!;
