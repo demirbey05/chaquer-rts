@@ -1,4 +1,4 @@
-import { getIDFromPosition } from "../../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
+import { getFleetIDFromPosition } from "../../../utils/helperFunctions/CustomFunctions/getFleetIDFromPosition";
 import fleetMoveSoundEffect from '../../../sounds/soundEffects/fleet-move-effect.mp3'
 
 export const FleetMoveEvent = async (
@@ -22,9 +22,10 @@ export const FleetMoveEvent = async (
     setSeaMineStage(false)
     setIsFleetAttackStage(false)
 
-    const _fleetID = getIDFromPosition(
+    const _fleetID = getFleetIDFromPosition(
         fromFleetPositionRef.current,
         components.Position,
+        components.FleetOwnable,
         gameID
     );
 
