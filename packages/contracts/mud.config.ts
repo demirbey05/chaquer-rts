@@ -92,21 +92,12 @@ export default mudConfig({
         userName:"string"    
       }
     },
-
     ResourceOwnable :{
       valueSchema:{
         sourceType:"MineType",
         owner:"address",
         gameID:"uint256"
       },
-    },
-    ResourceInited:{
-      keySchema:{
-        gameID:"uint256"
-      },
-      valueSchema:{
-        isInited:"bool"
-      }
     },
     GameMetaData:{
       keySchema:{
@@ -122,7 +113,8 @@ export default mudConfig({
         colorCursor:"uint256",
         numberOfPlayer:"uint256",
         limitOfPlayer:"uint256",
-        name:"string"
+        isInited:"bool",
+        name:"string",
       }
     },
     ResourceOwn : {
@@ -133,15 +125,7 @@ export default mudConfig({
       valueSchema:{
         numOfFood:"uint256",
         numOfWood:"uint256",
-        numOfGold:"uint256"
-      }
-    },
-    LastCollectTime:{
-      keySchema:{
-        owner:"address",
-        gameID:"uint256"
-      },
-      valueSchema:{
+        numOfGold:"uint256",
         lastCollect:"uint256"
       }
     },
