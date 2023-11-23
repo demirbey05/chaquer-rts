@@ -10,6 +10,7 @@ import { getDefenderArmyConfig } from "../../utils/helperFunctions/CustomFunctio
 import { getResourceTypeByPosition } from "../../utils/helperFunctions/ResourceFuntions/getResourceTypeByPosition";
 import { useResources } from "../../hooks/ResourceHooks/useResources";
 import { useGame } from "../../context/GameContext";
+import { getFleetIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getFleetIDFromPosition";
 
 export const SeaMineCaptureDrawer = () => {
     const { components, systemCalls } = useMUD();
@@ -42,9 +43,10 @@ export const SeaMineCaptureDrawer = () => {
     }, [targetSeaMinePosition])
 
     const handleCapture = async () => {
-        const attackFromFleetId = [...getIDFromPosition(
+        const attackFromFleetId = [...getFleetIDFromPosition(
             seaMineAttackerFleetPosition,
             components.Position,
+            components.FleetOwnable,
             gameID
         )];
 

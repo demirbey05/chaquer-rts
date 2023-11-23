@@ -155,9 +155,6 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
 
     //Yellow hover effect when user moves a fleet
     useEffect(() => {
-        console.log(fromFleetPosition)
-        console.log(isFleetMoveStage)
-        console.log(isArmyMoveStage)
         if (fromFleetPosition && isFleetMoveStage && isArmyMoveStage) {
             getManhattanPositions({
                 x: parseInt(fromFleetPosition.x),
