@@ -256,7 +256,8 @@ contract NavalExtensionSystem is System {
       revert FleetUnload__TooFar();
     }
 
-    moveCarriedArmy(fleetID, gameID, x, y);
+    bytes32 armyID = moveCarriedArmy(fleetID, gameID, x, y);
+    FleetCarry.deleteRecord(armyID);
   }
 
   function moveCarriedArmy(
@@ -264,7 +265,7 @@ contract NavalExtensionSystem is System {
     uint256 gameID,
     uint32 x,
     uint32 y
-  ) internal {
+  ) internal returns (bytes32) {
     bytes32 armyID = LibQueries.queryCarriedArmyIDs(IStore(_world()), fleetID, gameID)[0];
     Position.set(armyID, x, y, gameID);
   }
