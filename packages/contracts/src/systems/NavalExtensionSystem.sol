@@ -268,5 +268,6 @@ contract NavalExtensionSystem is System {
   ) internal returns (bytes32) {
     bytes32 armyID = LibQueries.queryCarriedArmyIDs(IStore(_world()), fleetID, gameID)[0];
     Position.set(armyID, x, y, gameID);
+    return armyID
   }
 }
