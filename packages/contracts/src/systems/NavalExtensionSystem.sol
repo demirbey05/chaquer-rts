@@ -209,7 +209,7 @@ contract NavalExtensionSystem is System {
     (uint32 x, uint32 y, ) = Position.get(fleetID);
     {
       (uint32 xArmy, uint32 yArmy, ) = Position.get(armyID);
-      if (LibMath.manhattan(x, y, xArmy, yArmy) > 3) {
+      if (LibMath.manhattan(x, y, xArmy, yArmy) > 1) {
         revert FleetLoad__TooFar();
       }
     }
@@ -252,7 +252,7 @@ contract NavalExtensionSystem is System {
     }
     // max 3 point away from the fleet position
     (uint32 xFleet, uint32 yFleet, ) = Position.get(fleetID);
-    if (LibMath.manhattan(x, y, xFleet, yFleet) > 3) {
+    if (LibMath.manhattan(x, y, xFleet, yFleet) > 1) {
       revert FleetUnload__TooFar();
     }
 
