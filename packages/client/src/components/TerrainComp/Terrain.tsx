@@ -63,6 +63,8 @@ import { ArmyMergeEvent } from './Events/ArmyMergeEvent';
 import { usePlayerIsValid } from '../../hooks/IdentityHooks/usePlayerIsValid';
 import { EventProgressBar } from '../ProgressComp/EventProgressBar';
 import { FleetLoadEvent } from './Events/FleetLoadEvent';
+import { FleetUnloadEvent } from './Events/FleetUnloadEvent';
+import { useLoadedFleets } from '../../hooks/SeaHooks/useLoadedFleets';
 
 export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpectator: boolean }) => {
   const { components, systemCalls } = useMUD();
@@ -142,7 +144,9 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
     isFleetLoadStage,
     setIsFleetLoadStage,
     setLoadArmyPosition,
-    setTargetLoadFleetPosition } = useFleet();
+    setTargetLoadFleetPosition,
+    setIsFleetUnloadStage,
+    isFleetUnloadStage } = useFleet();
 
   const { setShowError,
     setErrorMessage,
@@ -157,6 +161,7 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
   const fromFleetPositionRef = useRef<Coord | undefined>({ x: "-1", y: "-1" });
   const [isLoadingArmy, setIsLoadingArmy] = useState<boolean>(false);
   const [isLoadingFleet, setIsLoadingFleet] = useState<boolean>(false);
+  const [isUnloadFleet, setIsUnloadFleet] = useState<boolean>(false)
 
   const castlePositions = useCastlePositions(gameID);
   const myCastlePosition = useMyCastlePositions(userWallet, gameID);
@@ -169,6 +174,7 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
   const fleetPositions = useFleetPositions(gameID);
   const myFleetPositions = useMyFleetPositions(userWallet, gameID);
   const userValid = usePlayerIsValid(gameID, userWallet);
+  const isFleetLoaded = useLoadedFleets(gameID, fromFleetPosition)
 
   const handleClick = async (e: any) => {
     // Toggle orange tiles for army settlement
@@ -221,12 +227,15 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
       setIsFleetMoveStage(true);
       setIsFleetAttackStage(true)
       setSeaMineStage(true)
+      setIsFleetUnloadStage(true)
     } else if (fromFleetPosition && isUserClickedManhattanPosition(fromFleetPosition, getDataAtrX(e), getDataAtrY(e))) {
       toFleetPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
       fromFleetPositionRef.current = { x: fromFleetPosition.x.toString(), y: fromFleetPosition.y.toString() };
 
-      if (canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y]) && isEnemyFleet({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, myFleetPositions, fleetPositions)) {
+      if (canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y]) &&
+        isEnemyFleet({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, myFleetPositions, fleetPositions)) {
         FleetAttackEvent(setIsFleetMoveStage,
+          setIsFleetUnloadStage,
           setSeaMineStage,
           setFromFleetPosition,
           setAttackerFleetPosition,
@@ -240,6 +249,7 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
       }
       else if (isUserClickedMine(toFleetPositionRef.current.x, toFleetPositionRef.current.y, resources)) {
         SeaMineCaptureEvent(setIsFleetMoveStage,
+          setIsFleetUnloadStage,
           setFleetSettleStage,
           setIsFleetAttackStage,
           setFromFleetPosition,
@@ -250,8 +260,33 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
           setMyFleetConfig,
           myFleetPositions)
       }
-      else if (canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y])) { //Buraya toFleetPosition ın, kendi fleetine ait olup olmadgını check etmek lazım
+      else if (isMyFleet({ x: Number(fromFleetPositionRef.current.x), y: Number(fromFleetPositionRef.current.y) }, myFleetPositions) &&
+        canCastleBeSettle(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y])) {
+        FleetUnloadEvent(setIsFleetUnloadStage,
+          setIsFleetMoveStage,
+          setSeaMineStage,
+          setIsFleetAttackStage,
+          fromFleetPositionRef,
+          toFleetPositionRef,
+          isFleetMoveStage,
+          fromFleetPosition,
+          setFromFleetPosition,
+          components,
+          movingFleetId,
+          systemCalls,
+          setErrorMessage,
+          setErrorTitle,
+          setShowError,
+          setIsUnloadFleet,
+          isFleetLoaded,
+          gameID)
+      }
+      else if (isMyFleet({ x: Number(fromFleetPositionRef.current.x), y: Number(fromFleetPositionRef.current.y) }, myFleetPositions) &&
+        !isMyFleet({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, myFleetPositions) &&
+        canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y]) &&
+        canFleetBeSettled(values[Number(fromFleetPositionRef.current.x)][Number(fromFleetPositionRef.current.y)])) {
         await FleetMoveEvent(setIsFleetMoveStage,
+          setIsFleetUnloadStage,
           setSeaMineStage,
           setIsFleetAttackStage,
           fromFleetPositionRef,
@@ -273,6 +308,7 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
       setIsFleetMoveStage(false)
       setSeaMineStage(false)
       setIsFleetAttackStage(false)
+      setIsFleetUnloadStage(false)
       setFromFleetPosition(undefined);
       toFleetPositionRef.current = { x: -1, y: -1 };
       fromFleetPositionRef.current = { x: "-1", y: "-1" };
@@ -289,7 +325,7 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
       setIsArmyMergeStage(true);
       setIsFleetLoadStage(true);
     }
-    else if (fromArmyPosition && isUserClickedManhattanPosition(fromArmyPosition, getDataAtrX(e), getDataAtrY(e))) {
+    else if (fromArmyPosition && isUserClickedManhattanPosition(fromArmyPosition, getDataAtrX(e), getDataAtrY(e)) && !isMyFleet({ x: fromArmyPosition.x, y: fromArmyPosition.y }, myFleetPositions)) {
       toArmyPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
       fromArmyPositionRef.current = { x: fromArmyPosition.x, y: fromArmyPosition.y, };
 
@@ -385,7 +421,8 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
       }
       else if (isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition) &&
         isMyFleet({ x: toArmyPositionRef.current.x, y: toArmyPositionRef.current.y }, myFleetPositions)) {
-        FleetLoadEvent(setIsAttackStage,
+        FleetLoadEvent(setIsArmyMergeStage,
+          setIsAttackStage,
           setIsArmyMoveStage,
           setIsMineStage,
           setDockSettleStage,
@@ -397,6 +434,7 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
           toArmyPositionRef)
       }
       else if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y]) &&
+        canCastleBeSettle(values[Number(fromArmyPositionRef.current.x)][Number(fromArmyPositionRef.current.y)]) &&
         !isMyCastle(myCastlePosition, toArmyPositionRef.current.x, toArmyPositionRef.current.y) &&
         !isMyDock(Number(toArmyPositionRef.current.x), Number(toArmyPositionRef.current.y), myDockPositions)) {
         await ArmyMoveEvent(setIsFleetLoadStage,
@@ -489,7 +527,9 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
     fromArmyPosition,
     isArmyMoveStage,
     fleetSettleStage,
-    fleetPositions);
+    fleetPositions,
+    isFleetUnloadStage,
+    isFleetLoaded);
   DockEffects(isArmySettleStage,
     castlePositions,
     resources,
@@ -575,6 +615,7 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
       </div >
       {isLoadingArmy && <EventProgressBar text={"Soldiers are passing to new position..."} />}
       {isLoadingFleet && <EventProgressBar text={"Ships are passing to new position..."} />}
+      {isUnloadFleet && <EventProgressBar text={"Soldiers are being dropped off to the land..."} />}
     </ScrollContainer>
   );
 }

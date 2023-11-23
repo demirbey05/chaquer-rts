@@ -6,6 +6,7 @@ import { canCastleBeSettle } from '../../../utils/helperFunctions/CastleFunction
 import { isMyFleet } from '../../../utils/helperFunctions/SeaFunctions/isMyFleet';
 import { getArmyMovePositions } from '../../../utils/helperFunctions/ArmyFunctions/getArmyMovePositions';
 import { isManhattanPosition } from '../../../utils/helperFunctions/CustomFunctions/isManhattanPosition';
+import { getOneSquareAwayPositions } from '../../../utils/helperFunctions/CustomFunctions/getOneSquareAwayPositions';
 
 export const FleetEffects = (
     myFleetPositions: any[] | undefined,
@@ -99,11 +100,12 @@ export const FleetEffects = (
     useEffect(() => {
         if (isFleetLoadStage && myArmyPositions && myArmyPositions.length > 0 && fromArmyPosition) {
             myArmyPositions.map((position: any) => {
-                getManhattanPositions({ x: position.myArmyPosition.x, y: position.myArmyPosition.y }).map(
+                getOneSquareAwayPositions({ x: position.myArmyPosition.x, y: position.myArmyPosition.y }).map(
                     (data) => {
                         if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                             if (
                                 !canCastleBeSettle(values[data.x][data.y]) &&
+                                canCastleBeSettle(values[fromArmyPosition.x][fromArmyPosition.y]) &&
                                 isMyFleet({ x: data.x, y: data.y }, myFleetPositions)
                             ) {
                                 const element = document.getElementById(`${data.y},${data.x}`)!;
@@ -119,7 +121,7 @@ export const FleetEffects = (
             });
         } else if (!isFleetLoadStage && myArmyPositions && myArmyPositions.length > 0) {
             myArmyPositions.map((position: any) => {
-                getManhattanPositions({ x: position.myArmyPosition.x, y: position.myArmyPosition.y }).map(
+                getOneSquareAwayPositions({ x: position.myArmyPosition.x, y: position.myArmyPosition.y }).map(
                     (data) => {
                         if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                             if (getArmyMovePositions(data.x, data.y, myArmyPositions)) {

@@ -2,6 +2,7 @@ import { getMyFleetConfigByPosition } from "../../../utils/helperFunctions/SeaFu
 
 export const SeaMineCaptureEvent = (
     setIsFleetMoveStage: (value: boolean) => void,
+    setIsFleetUnloadStage: (value: boolean) => void,
     setFleetSettleStage: (value: boolean) => void,
     setIsFleetAttackStage: (value: boolean) => void,
     setFromFleetPosition: any,
@@ -15,6 +16,7 @@ export const SeaMineCaptureEvent = (
     setIsFleetMoveStage(false)
     setFleetSettleStage(false)
     setIsFleetAttackStage(false)
+    setIsFleetUnloadStage(false)
     setFromFleetPosition(undefined);
     setSeaMineAttackerFleetPosition(fromFleetPositionRef.current);
     setTargetSeaMinePosition(toFleetPositionRef.current);

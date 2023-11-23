@@ -1,9 +1,9 @@
 import { getFleetIDFromPosition } from "../../../utils/helperFunctions/CustomFunctions/getFleetIDFromPosition";
 import fleetMoveSoundEffect from '../../../sounds/soundEffects/fleet-move-effect.mp3'
 
-export const FleetMoveEvent = async (
-    setIsFleetMoveStage: (value: boolean) => void,
+export const FleetUnloadEvent = async (
     setIsFleetUnloadStage: (value: boolean) => void,
+    setIsFleetMoveStage: (value: boolean) => void,
     setSeaMineStage: (value: boolean) => void,
     setIsFleetAttackStage: (value: boolean) => void,
     fromFleetPositionRef: any,
@@ -18,11 +18,12 @@ export const FleetMoveEvent = async (
     setErrorTitle: any,
     setShowError: any,
     setIsLoading: (value: boolean) => void,
+    isFleetLoaded: boolean,
     gameID: number
 ) => {
     setSeaMineStage(false)
     setIsFleetAttackStage(false)
-    setIsFleetUnloadStage(false)
+    setIsFleetMoveStage(false);
 
     const _fleetID = getFleetIDFromPosition(
         fromFleetPositionRef.current,
@@ -35,36 +36,25 @@ export const FleetMoveEvent = async (
         movingFleetID.current = [..._fleetID][0];
     }
 
-    setIsFleetMoveStage(false);
+    setIsFleetUnloadStage(false)
 
-    if (toFleetPositionRef.current && isFleetMoveStage) {
+    if (toFleetPositionRef.current && isFleetMoveStage && isFleetLoaded) {
         setIsLoading(true)
-
-        const audio = new Audio(fleetMoveSoundEffect);
-        audio.volume = 0.4;
-        audio.play();
 
         var targetDiv = document.getElementById(`${toFleetPositionRef.current.y},${toFleetPositionRef.current.x}`);
         targetDiv?.classList.add("animate-border-fleet-move");
 
-        const tx = await systemCalls.moveFleet(
+        const tx = await systemCalls.unloadArmy(
             movingFleetID.current,
             toFleetPositionRef.current.x,
-            toFleetPositionRef.current.y
+            toFleetPositionRef.current.y,
+            gameID
         )
 
         if (tx) {
-            const isTask = localStorage.getItem("fleetMovementTask")
-            !isTask && localStorage.setItem("fleetMovementTask", "true")
-            window.dispatchEvent(new Event('localDataStorage'));
-
             setFromFleetPosition(undefined);
             toFleetPositionRef.current = { x: -1, y: -1 };
             fromFleetPositionRef.current = { x: "-1", y: "-1" };
-        } else {
-            setErrorMessage("You need 50 food + 50 diomand to move your fleet.")
-            setErrorTitle("Fleet Move Warning")
-            setShowError(true)
         }
 
         setIsLoading(false)

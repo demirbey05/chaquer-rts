@@ -12,6 +12,7 @@ import { isMyResource } from '../../../utils/helperFunctions/ResourceFuntions/is
 import { isMyDock } from '../../../utils/helperFunctions/SeaFunctions/isMyDock';
 import { isMyFleet } from '../../../utils/helperFunctions/SeaFunctions/isMyFleet';
 import { isEnemyDock } from '../../../utils/helperFunctions/SeaFunctions/isEnemyDock';
+import { getOneSquareAwayPositions } from '../../../utils/helperFunctions/CustomFunctions/getOneSquareAwayPositions';
 
 export const HoverEffects = (myFleetPositions: any[] | undefined,
     myDockPositions: any[] | undefined,
@@ -30,7 +31,9 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
     fromArmyPosition: { x: any, y: any } | undefined,
     isArmyMoveStage: boolean | undefined,
     fleetSettleStage: boolean,
-    fleetPositions: any[]
+    fleetPositions: any[],
+    isFleetUnloadStage: boolean,
+    isFleetLoaded: boolean
 ) => {
 
     //Blue hover effect when user moves an army
@@ -155,7 +158,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
 
     //Yellow hover effect when user moves a fleet
     useEffect(() => {
-        if (fromFleetPosition && isFleetMoveStage && isArmyMoveStage) {
+        if (fromFleetPosition && isFleetMoveStage) {
             getManhattanPositions({
                 x: parseInt(fromFleetPosition.x),
                 y: parseInt(fromFleetPosition.y),
@@ -184,7 +187,38 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                 });
             }
         }
-    }, [fromFleetPosition, isFleetMoveStage, myFleetPositions, myResourcePositions, isArmyMoveStage, values]);
+    }, [fromFleetPosition, isFleetMoveStage, myFleetPositions, myResourcePositions, values]);
 
+    //Yellow hover effect for one square away tiles when fleet unload the army
+    useEffect(() => {
+        if (fromFleetPosition && isFleetUnloadStage && isFleetLoaded) {
+            getOneSquareAwayPositions({
+                x: parseInt(fromFleetPosition.x),
+                y: parseInt(fromFleetPosition.y),
+            }).map((data) => {
+                if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
+                    canCastleBeSettle(values[data.x][data.y]) &&
+                        !isMyFleet({ x: data.x, y: data.y }, myFleetPositions) &&
+                        !isMyResource(data.x, data.y, myResourcePositions) &&
+                        document.getElementById(`${data.y},${data.x}`)?.classList.add("yellowTileEffect");
+                }
+            });
 
+        }
+
+        return () => {
+            if (fromFleetPosition) {
+                getOneSquareAwayPositions({
+                    x: parseInt(fromFleetPosition.x),
+                    y: parseInt(fromFleetPosition.y),
+                }).map((data) => {
+                    if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
+                        if (canCastleBeSettle(values[data.x][data.y])) {
+                            document.getElementById(`${data.y},${data.x}`)?.classList.remove("yellowTileEffect");
+                        }
+                    }
+                });
+            }
+        }
+    }, [fromFleetPosition, isFleetUnloadStage, myFleetPositions, myResourcePositions, values, isFleetLoaded]);
 }

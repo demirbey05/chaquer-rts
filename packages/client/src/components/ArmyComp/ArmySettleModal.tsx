@@ -108,15 +108,15 @@ export const ArmySettleModal = () => {
       setIsLoading(false)
     }
 
-    if ((document.getElementById('Swordsman') as HTMLInputElement).value === "") {
+    if ((document.getElementById('SwordsmanSettle') as HTMLInputElement).value === "") {
       setSwordsmanCount("0");
     }
 
-    if ((document.getElementById('Cavalry') as HTMLInputElement).value === "") {
+    if ((document.getElementById('CavalrySettle') as HTMLInputElement).value === "") {
       setCavalryCount("0");
     }
 
-    if ((document.getElementById('Archer') as HTMLInputElement).value === "") {
+    if ((document.getElementById('ArcherSettle') as HTMLInputElement).value === "") {
       setArcherCount("0");
     }
 
@@ -245,7 +245,7 @@ const ArmySettleInputBody = (props: ArmySettleInputBody) => {
         <input
           className="form-control w-75"
           type="number"
-          id={props.soldierName}
+          id={props.soldierName + "Settle"}
           onChange={(e: any) => props.setSoliderCount(e.target.value)}
           onClick={(e: any) => e.target.select()} />
       </div>

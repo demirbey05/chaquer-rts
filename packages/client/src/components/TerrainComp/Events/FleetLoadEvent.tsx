@@ -1,4 +1,5 @@
 export const FleetLoadEvent = (
+    setIsArmyMergeStage: (value: boolean) => void,
     setIsAttackStage: (value: boolean) => void,
     setIsArmyMoveStage: (value: boolean) => void,
     setIsMineStage: (value: boolean) => void,
@@ -10,6 +11,7 @@ export const FleetLoadEvent = (
     fromArmyPositionRef: any,
     toArmyPositionRef: any,
 ) => {
+    setIsArmyMergeStage(false);
     setIsAttackStage(false)
     setIsArmyMoveStage(false);
     setIsMineStage(false)

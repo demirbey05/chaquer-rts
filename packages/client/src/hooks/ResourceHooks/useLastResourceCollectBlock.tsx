@@ -13,8 +13,8 @@ export function useLastResourceCollectBlock(gameID: number, owner: string) {
     const [blockDifference, setBlockDifference] = useState<number>(0);
 
     const value = useComponentValue(
-        components.LastCollectTime,
-        encodeEntity(components.LastCollectTime.metadata.keySchema, { gameID: BigInt(gameID), owner: owner })
+        components.ResourceOwn,
+        encodeEntity(components.ResourceOwn.metadata.keySchema, { gameID: BigInt(gameID), owner: owner })
     );
 
     useEffect(() => {
