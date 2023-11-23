@@ -17,7 +17,6 @@ import { ResourceOwnable, ResourceOwnableData, ResourceOwnableTableId } from "./
 import { ResourceInited, ResourceInitedTableId } from "./tables/ResourceInited.sol";
 import { GameMetaData, GameMetaDataData, GameMetaDataTableId } from "./tables/GameMetaData.sol";
 import { ResourceOwn, ResourceOwnData, ResourceOwnTableId } from "./tables/ResourceOwn.sol";
-import { LastCollectTime, LastCollectTimeTableId } from "./tables/LastCollectTime.sol";
 import { ResourcesSold, ResourcesSoldData, ResourcesSoldTableId } from "./tables/ResourcesSold.sol";
 import { CreditOwn, CreditOwnTableId } from "./tables/CreditOwn.sol";
 import { SoldierCreated, SoldierCreatedTableId } from "./tables/SoldierCreated.sol";

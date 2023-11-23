@@ -133,15 +133,7 @@ export default mudConfig({
       valueSchema:{
         numOfFood:"uint256",
         numOfWood:"uint256",
-        numOfGold:"uint256"
-      }
-    },
-    LastCollectTime:{
-      keySchema:{
-        owner:"address",
-        gameID:"uint256"
-      },
-      valueSchema:{
+        numOfGold:"uint256",
         lastCollect:"uint256"
       }
     },
