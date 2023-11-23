@@ -29,7 +29,7 @@ ResourceId constant _tableId = ResourceId.wrap(
 ResourceId constant GameMetaDataTableId = _tableId;
 
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
-  0x00d6090120010120142020202000000000000000000000000000000000000000
+  0x00d70a0120010120142020202001000000000000000000000000000000000000
 );
 
 struct GameMetaDataData {
@@ -42,6 +42,7 @@ struct GameMetaDataData {
   uint256 colorCursor;
   uint256 numberOfPlayer;
   uint256 limitOfPlayer;
+  bool isInited;
   string name;
 }
 
@@ -70,7 +71,7 @@ library GameMetaData {
    * @return _valueSchema The value schema for the table.
    */
   function getValueSchema() internal pure returns (Schema) {
-    SchemaType[] memory _valueSchema = new SchemaType[](10);
+    SchemaType[] memory _valueSchema = new SchemaType[](11);
     _valueSchema[0] = SchemaType.UINT256;
     _valueSchema[1] = SchemaType.UINT8;
     _valueSchema[2] = SchemaType.UINT8;
@@ -80,7 +81,8 @@ library GameMetaData {
     _valueSchema[6] = SchemaType.UINT256;
     _valueSchema[7] = SchemaType.UINT256;
     _valueSchema[8] = SchemaType.UINT256;
-    _valueSchema[9] = SchemaType.STRING;
+    _valueSchema[9] = SchemaType.BOOL;
+    _valueSchema[10] = SchemaType.STRING;
 
     return SchemaLib.encode(_valueSchema);
   }
@@ -99,7 +101,7 @@ library GameMetaData {
    * @return fieldNames An array of strings with the names of value fields.
    */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
-    fieldNames = new string[](10);
+    fieldNames = new string[](11);
     fieldNames[0] = "mirror";
     fieldNames[1] = "state";
     fieldNames[2] = "mapId";
@@ -109,7 +111,8 @@ library GameMetaData {
     fieldNames[6] = "colorCursor";
     fieldNames[7] = "numberOfPlayer";
     fieldNames[8] = "limitOfPlayer";
-    fieldNames[9] = "name";
+    fieldNames[9] = "isInited";
+    fieldNames[10] = "name";
   }
 
   /**
@@ -505,6 +508,48 @@ library GameMetaData {
   }
 
   /**
+   * @notice Get isInited.
+   */
+  function getIsInited(uint256 gameID) internal view returns (bool isInited) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 9, _fieldLayout);
+    return (_toBool(uint8(bytes1(_blob))));
+  }
+
+  /**
+   * @notice Get isInited.
+   */
+  function _getIsInited(uint256 gameID) internal view returns (bool isInited) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 9, _fieldLayout);
+    return (_toBool(uint8(bytes1(_blob))));
+  }
+
+  /**
+   * @notice Set isInited.
+   */
+  function setIsInited(uint256 gameID, bool isInited) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 9, abi.encodePacked((isInited)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set isInited.
+   */
+  function _setIsInited(uint256 gameID, bool isInited) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32(uint256(gameID));
+
+    StoreCore.setStaticField(_tableId, _keyTuple, 9, abi.encodePacked((isInited)), _fieldLayout);
+  }
+
+  /**
    * @notice Get name.
    */
   function getName(uint256 gameID) internal view returns (string memory name) {
@@ -710,6 +755,7 @@ library GameMetaData {
     uint256 colorCursor,
     uint256 numberOfPlayer,
     uint256 limitOfPlayer,
+    bool isInited,
     string memory name
   ) internal {
     bytes memory _staticData = encodeStatic(
@@ -721,7 +767,8 @@ library GameMetaData {
       numberOfCastle,
       colorCursor,
       numberOfPlayer,
-      limitOfPlayer
+      limitOfPlayer,
+      isInited
     );
 
     PackedCounter _encodedLengths = encodeLengths(name);
@@ -747,6 +794,7 @@ library GameMetaData {
     uint256 colorCursor,
     uint256 numberOfPlayer,
     uint256 limitOfPlayer,
+    bool isInited,
     string memory name
   ) internal {
     bytes memory _staticData = encodeStatic(
@@ -758,7 +806,8 @@ library GameMetaData {
       numberOfCastle,
       colorCursor,
       numberOfPlayer,
-      limitOfPlayer
+      limitOfPlayer,
+      isInited
     );
 
     PackedCounter _encodedLengths = encodeLengths(name);
@@ -783,7 +832,8 @@ library GameMetaData {
       _table.numberOfCastle,
       _table.colorCursor,
       _table.numberOfPlayer,
-      _table.limitOfPlayer
+      _table.limitOfPlayer,
+      _table.isInited
     );
 
     PackedCounter _encodedLengths = encodeLengths(_table.name);
@@ -808,7 +858,8 @@ library GameMetaData {
       _table.numberOfCastle,
       _table.colorCursor,
       _table.numberOfPlayer,
-      _table.limitOfPlayer
+      _table.limitOfPlayer,
+      _table.isInited
     );
 
     PackedCounter _encodedLengths = encodeLengths(_table.name);
@@ -837,7 +888,8 @@ library GameMetaData {
       uint256 numberOfCastle,
       uint256 colorCursor,
       uint256 numberOfPlayer,
-      uint256 limitOfPlayer
+      uint256 limitOfPlayer,
+      bool isInited
     )
   {
     mirror = (uint256(Bytes.slice32(_blob, 0)));
@@ -857,6 +909,8 @@ library GameMetaData {
     numberOfPlayer = (uint256(Bytes.slice32(_blob, 150)));
 
     limitOfPlayer = (uint256(Bytes.slice32(_blob, 182)));
+
+    isInited = (_toBool(uint8(Bytes.slice1(_blob, 214))));
   }
 
   /**
@@ -891,7 +945,8 @@ library GameMetaData {
       _table.numberOfCastle,
       _table.colorCursor,
       _table.numberOfPlayer,
-      _table.limitOfPlayer
+      _table.limitOfPlayer,
+      _table.isInited
     ) = decodeStatic(_staticData);
 
     (_table.name) = decodeDynamic(_encodedLengths, _dynamicData);
@@ -930,7 +985,8 @@ library GameMetaData {
     uint256 numberOfCastle,
     uint256 colorCursor,
     uint256 numberOfPlayer,
-    uint256 limitOfPlayer
+    uint256 limitOfPlayer,
+    bool isInited
   ) internal pure returns (bytes memory) {
     return
       abi.encodePacked(
@@ -942,7 +998,8 @@ library GameMetaData {
         numberOfCastle,
         colorCursor,
         numberOfPlayer,
-        limitOfPlayer
+        limitOfPlayer,
+        isInited
       );
   }
 
@@ -981,6 +1038,7 @@ library GameMetaData {
     uint256 colorCursor,
     uint256 numberOfPlayer,
     uint256 limitOfPlayer,
+    bool isInited,
     string memory name
   ) internal pure returns (bytes memory, PackedCounter, bytes memory) {
     bytes memory _staticData = encodeStatic(
@@ -992,7 +1050,8 @@ library GameMetaData {
       numberOfCastle,
       colorCursor,
       numberOfPlayer,
-      limitOfPlayer
+      limitOfPlayer,
+      isInited
     );
 
     PackedCounter _encodedLengths = encodeLengths(name);
@@ -1009,5 +1068,17 @@ library GameMetaData {
     _keyTuple[0] = bytes32(uint256(gameID));
 
     return _keyTuple;
+  }
+}
+
+/**
+ * @notice Cast a value to a bool.
+ * @dev Boolean values are encoded as uint8 (1 = true, 0 = false), but Solidity doesn't allow casting between uint8 and bool.
+ * @param value The uint8 value to convert.
+ * @return result The boolean value.
+ */
+function _toBool(uint8 value) pure returns (bool result) {
+  assembly {
+    result := value
   }
 }

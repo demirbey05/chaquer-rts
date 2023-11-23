@@ -14,7 +14,6 @@ import { SeedInited, SeedInitedTableId } from "./tables/SeedInited.sol";
 import { AddressToUsername, AddressToUsernameTableId } from "./tables/AddressToUsername.sol";
 import { AddressToColorIndex, AddressToColorIndexData, AddressToColorIndexTableId } from "./tables/AddressToColorIndex.sol";
 import { ResourceOwnable, ResourceOwnableData, ResourceOwnableTableId } from "./tables/ResourceOwnable.sol";
-import { ResourceInited, ResourceInitedTableId } from "./tables/ResourceInited.sol";
 import { GameMetaData, GameMetaDataData, GameMetaDataTableId } from "./tables/GameMetaData.sol";
 import { ResourceOwn, ResourceOwnData, ResourceOwnTableId } from "./tables/ResourceOwn.sol";
 import { ResourcesSold, ResourcesSoldData, ResourcesSoldTableId } from "./tables/ResourcesSold.sol";
