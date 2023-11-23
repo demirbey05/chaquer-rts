@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { LastCollectTime, ResourceOwnData, ResourceOwn, GameMetaData, ResourcePrices, ArmyPrices } from "../codegen/index.sol";
+import { LastCollectTime, ResourceOwnData, ResourceOwn, GameMetaData} from "../codegen/index.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import "./Errors.sol";
