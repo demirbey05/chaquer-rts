@@ -10,8 +10,8 @@ import cornIcon from '../../images/resourceAssets/corn_icon.png'
 import woodIcon from '../../images/resourceAssets/wood_icon.png'
 import diomandIcon from '../../images/resourceAssets/diomand_icon.png'
 
-export const MarketDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
-    const { gameID } = useGame();
+export const MarketDrawer = () => {
+    const { gameID, isInputFocused } = useGame();
     const [isOpen, setIsOpen] = useState(false);
 
     const [isLoadingSell, setIsLoadingSell] = useState<boolean>(false);

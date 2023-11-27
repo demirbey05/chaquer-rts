@@ -19,10 +19,10 @@ function censorMessage(inputMessage: string, badWordsList: string[]) {
     return censoredMessage;
 }
 
-export const ChatMessageDrawer = ({ isInputFocused, setIsInputFocused, isSpectator }: { isInputFocused: boolean, setIsInputFocused: (value: boolean) => void, isSpectator: boolean }) => {
+export const ChatMessageDrawer = ({ isSpectator }: { isSpectator: boolean }) => {
     const { systemCalls } = useMUD();
     const { setErrorMessage, setErrorTitle, setShowError } = useError();
-    const { gameID } = useGame();
+    const { gameID, isInputFocused, setIsInputFocused } = useGame();
     const messages = useChatMessages(25, gameID);
 
     const [isOpen, setIsOpen] = useState(false);

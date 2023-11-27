@@ -22,9 +22,9 @@ const scrollToDiv = (targetId: any) => {
     }
 };
 
-export const ArmyInfoDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
+export const ArmyInfoDrawer = () => {
     const { userWallet } = usePlayer()
-    const { gameID } = useGame();
+    const { gameID, isInputFocused } = useGame();
     const [isOpen, setIsOpen] = useState(false);
 
     const myArmyPosition = useMyArmy(userWallet, gameID);

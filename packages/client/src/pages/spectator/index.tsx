@@ -16,11 +16,11 @@ export const Spectator = () => {
     return (
         <>
             <Terrain zoomLevel={zoomLevel} isSpectator={true} />
-            <SettingsDrawer isInputFocused={true} />
-            <PlayerListDrawer isInputFocused={true} isSpectator={true} />
-            <PriceListDrawer isInputFocused={true} isSpectator={true} />
-            <ChatMessageDrawer isInputFocused={true} setIsInputFocused={() => true} isSpectator={true} />
-            <ZoomHandler isInputFocused={true} zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />
+            <SettingsDrawer />
+            <PlayerListDrawer isSpectator={true} />
+            <PriceListDrawer isSpectator={true} />
+            <ChatMessageDrawer isSpectator={true} />
+            <ZoomHandler zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />
             <VersionInfo />
         </>
     )

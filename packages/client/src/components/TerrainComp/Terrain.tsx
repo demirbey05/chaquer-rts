@@ -447,7 +447,6 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
           setIsArmyMoveStage,
           toArmyPositionRef,
           isArmyMoveStage,
-          fromArmyPosition,
           setFromArmyPosition,
           components,
           movingArmyId,

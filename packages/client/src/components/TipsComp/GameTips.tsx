@@ -5,7 +5,7 @@ export const GameTips = () => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setIndex((prevIndex) => (prevIndex === 4 ? 0 : prevIndex + 1));
+            setIndex((prevIndex) => (prevIndex === 7 ? 0 : prevIndex + 1));
         }, 10000);
 
         return () => clearInterval(interval);
@@ -16,6 +16,9 @@ export const GameTips = () => {
     const tip3 = "In the beginning, your target should be resources";
     const tip4 = "To move your fleet, you need to pay 50 food and 50 diomand";
     const tip5 = "You can deploy as many fleet as number of docks that you have";
+    const tip6 = "You can load your fleets with armies if you need to across the sea"
+    const tip7 = "If your armies next to each other, you can merge them"
+    const tip8 = "You can update your armies by moving them to your castle's orange tiles"
 
     let tipToShow;
     if (index === 0) {
@@ -28,6 +31,12 @@ export const GameTips = () => {
         tipToShow = tip4;
     } else if (index === 4) {
         tipToShow = tip5;
+    } else if (index === 5) {
+        tipToShow = tip6;
+    } else if (index === 6) {
+        tipToShow = tip7;
+    } else if (index === 7) {
+        tipToShow = tip8;
     }
 
     return (

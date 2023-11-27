@@ -43,7 +43,6 @@ export const Game = () => {
   const { isPlayerLost, isPlayerWinner } = usePlayer();
 
   const [zoomLevel, setZoomLevel] = useState(1);
-  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const gameData = useGameData(gameID);
 
@@ -61,13 +60,13 @@ export const Game = () => {
       {gameIsStarted && <ArmyProgressBar />}
       {gameIsStarted && <MineProgressBar />}
       {gameIsStarted && <CreditProgressBar />}
-      {gameIsStarted && <ArmyInfoDrawer isInputFocused={isInputFocused} />}
-      {gameIsStarted && <FleetInfoDrawer isInputFocused={isInputFocused} />}
-      {gameIsStarted && <MarketDrawer isInputFocused={isInputFocused} />}
+      {gameIsStarted && <ArmyInfoDrawer />}
+      {gameIsStarted && <FleetInfoDrawer />}
+      {gameIsStarted && <MarketDrawer />}
       {gameIsStarted && <ShortCutTips />}
       {gameIsStarted && <GameTutorial />}
-      {gameIsStarted && <WarResultDrawer isInputFocused={isInputFocused} />}
-      {gameIsStarted && <ChatMessageDrawer isInputFocused={isInputFocused} setIsInputFocused={setIsInputFocused} isSpectator={false} />}
+      {gameIsStarted && <WarResultDrawer />}
+      {gameIsStarted && <ChatMessageDrawer isSpectator={false} />}
       {gameIsStarted && <ArmySettleModal />}
       {gameIsStarted && <ArmyUpdateModal />}
       {gameIsStarted && <ArmyMergeDrawer />}
@@ -80,15 +79,15 @@ export const Game = () => {
       {gameIsStarted && <FleetLoadModal />}
       {gameIsStarted && <FleetAttackDrawer />}
       {gameIsStarted && <SeaMineCaptureDrawer />}
-      {gameIsStarted && <PriceListDrawer isInputFocused={isInputFocused} isSpectator={false} />}
+      {gameIsStarted && <PriceListDrawer isSpectator={false} />}
       {isPlayerLost && <PlayerLostWarning />}
       {gameOver && <PlayerWonAnimation />}
 
       <Terrain zoomLevel={zoomLevel} isSpectator={false} />
-      <SettingsDrawer isInputFocused={isInputFocused} />
-      <PlayerListDrawer isInputFocused={isInputFocused} isSpectator={false} />
+      <SettingsDrawer />
+      <PlayerListDrawer isSpectator={false} />
       <VersionInfo />
-      <ZoomHandler isInputFocused={isInputFocused} zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />
+      <ZoomHandler zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />
     </>
   );
 }

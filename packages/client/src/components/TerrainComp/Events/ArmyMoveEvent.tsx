@@ -12,7 +12,6 @@ export const ArmyMoveEvent = async (
     setIsArmyMoveStage: (value: boolean) => void,
     toArmyPositionRef: any,
     isArmyMoveStage: boolean | undefined,
-    fromArmyPosition: any,
     setFromArmyPosition: any,
     components: any,
     movingArmyId: any,
@@ -59,8 +58,6 @@ export const ArmyMoveEvent = async (
         );
 
         if (tx) {
-
-
             const isTask = localStorage.getItem("armyMovementTask")
             !isTask && localStorage.setItem("armyMovementTask", "true")
             window.dispatchEvent(new Event('localDataStorage'));

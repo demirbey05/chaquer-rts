@@ -1,11 +1,9 @@
 import shipTile from '../../../images/shipAssets/small_ship.png'
 import { useEffect } from "react";
 import { getBorderColor } from "../../../utils/constants/getBorderColors";
-import { getManhattanPositions } from '../../../utils/helperFunctions/CustomFunctions/getManhattanPositions';
 import { canCastleBeSettle } from '../../../utils/helperFunctions/CastleFunctions/canCastleBeSettle';
 import { isMyFleet } from '../../../utils/helperFunctions/SeaFunctions/isMyFleet';
 import { getArmyMovePositions } from '../../../utils/helperFunctions/ArmyFunctions/getArmyMovePositions';
-import { isManhattanPosition } from '../../../utils/helperFunctions/CustomFunctions/isManhattanPosition';
 import { getOneSquareAwayPositions } from '../../../utils/helperFunctions/CustomFunctions/getOneSquareAwayPositions';
 
 export const FleetEffects = (

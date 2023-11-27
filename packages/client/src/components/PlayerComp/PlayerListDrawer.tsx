@@ -5,8 +5,8 @@ import { useGame } from '../../context/GameContext';
 import { useUsernameWithColors } from '../../hooks/IdentityHooks/useUsernamesWithColors';
 import { getBorderColor } from '../../utils/constants/getBorderColors';
 
-export const PlayerListDrawer = ({ isInputFocused, isSpectator }: { isInputFocused: boolean, isSpectator: boolean }) => {
-    const { gameID } = useGame();
+export const PlayerListDrawer = ({ isSpectator }: { isSpectator: boolean }) => {
+    const { gameID, isInputFocused } = useGame();
     const [isOpen, setIsOpen] = useState(true);
 
     const users = useUsernameWithColors(gameID);
