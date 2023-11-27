@@ -1,7 +1,9 @@
-import { getIDFromPosition } from "../../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
+import { getFleetIDFromPosition } from "../../../utils/helperFunctions/CustomFunctions/getFleetIDFromPosition";
+import fleetMoveSoundEffect from '../../../sounds/soundEffects/fleet-move-effect.mp3'
 
 export const FleetMoveEvent = async (
     setIsFleetMoveStage: (value: boolean) => void,
+    setIsFleetUnloadStage: (value: boolean) => void,
     setSeaMineStage: (value: boolean) => void,
     setIsFleetAttackStage: (value: boolean) => void,
     fromFleetPositionRef: any,
@@ -20,10 +22,12 @@ export const FleetMoveEvent = async (
 ) => {
     setSeaMineStage(false)
     setIsFleetAttackStage(false)
+    setIsFleetUnloadStage(false)
 
-    const _fleetID = getIDFromPosition(
+    const _fleetID = getFleetIDFromPosition(
         fromFleetPositionRef.current,
         components.Position,
+        components.FleetOwnable,
         gameID
     );
 
@@ -35,6 +39,11 @@ export const FleetMoveEvent = async (
 
     if (toFleetPositionRef.current && isFleetMoveStage) {
         setIsLoading(true)
+
+        const audio = new Audio(fleetMoveSoundEffect);
+        audio.volume = 0.4;
+        audio.play();
+
         var targetDiv = document.getElementById(`${toFleetPositionRef.current.y},${toFleetPositionRef.current.x}`);
         targetDiv?.classList.add("animate-border-fleet-move");
 
@@ -45,8 +54,9 @@ export const FleetMoveEvent = async (
         )
 
         if (tx) {
-            document.getElementById(`${fromFleetPosition.y},${fromFleetPosition.x}`)!.innerHTML = "";
-            document.getElementById(`${fromFleetPosition.y},${fromFleetPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
+            const isTask = localStorage.getItem("fleetMovementTask")
+            !isTask && localStorage.setItem("fleetMovementTask", "true")
+            window.dispatchEvent(new Event('localDataStorage'));
 
             setFromFleetPosition(undefined);
             toFleetPositionRef.current = { x: -1, y: -1 };

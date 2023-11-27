@@ -6,6 +6,7 @@ import { useAttack } from "../../context/AttackContext";
 import { useError } from "../../context/ErrorContext";
 import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 import { useGame } from "../../context/GameContext";
+import battleSoundEffect from '../../sounds/soundEffects/battle-effect.mp3'
 
 export const ArmyAttackDrawer = () => {
   const { components, systemCalls } = useMUD();
@@ -52,12 +53,21 @@ export const ArmyAttackDrawer = () => {
     }
 
     setIsLoading(true);
+
+    const audio = new Audio(battleSoundEffect);
+    audio.volume = 0.4;
+    audio.play();
+
     const tx = await systemCalls.attackToArmy(attackFromArmyId[0] as string, attackToArmyId[0] as string, gameID);
 
     if (tx === null) {
       setErrorMessage("An error occurred while attacking to army.");
       setErrorTitle("Army Attack Error");
       setShowError(true);
+    } else {
+      const isTask = localStorage.getItem("attackCaptureTask")
+      !isTask && localStorage.setItem("attackCaptureTask", "true")
+      window.dispatchEvent(new Event('localDataStorage'));
     }
 
     setIsLoading(false);

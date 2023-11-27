@@ -57,7 +57,7 @@ export const Menu = () => {
                     backgroundColor={"rgba(0,0,0,0.8)"}
                     textColor={'white'}
                     border={"2px"}
-                    borderRadius={"10px"}
+                    borderRadius={"25px"}
                     mb={0.5}>
                     <Tab _selected={{ color: 'white', bg: 'green.500' }}>Live Games</Tab>
                     <Tab _selected={{ color: 'white', bg: 'blue.500' }}>Completed Games</Tab>

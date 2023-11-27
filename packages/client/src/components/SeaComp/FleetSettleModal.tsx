@@ -12,7 +12,8 @@ import { useGame } from "../../context/GameContext";
 import { useCredit } from "../../hooks/EconomyHooks/useCredit";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
-import { useNumberOfResource } from "../../hooks/ResourceHooks/useNumberOfResource";
+import { useNumberOfWood } from "../../hooks/ResourceHooks/useNumberOfResource";
+import fleetSettleSoundEffect from '../../sounds/soundEffects/fleet-settle-effect.mp3'
 
 export const FleetSettleModal = () => {
     const { systemCalls, components } = useMUD();
@@ -43,7 +44,7 @@ export const FleetSettleModal = () => {
     }
 
     const myCredit = useCredit(gameID, userWallet);
-    const myResources = useNumberOfResource(userWallet, gameID);
+    const numberOfWood = useNumberOfWood()
 
     useEffect(() => {
         if (Number.isNaN(parseInt(smallShipCount))) {
@@ -84,10 +85,10 @@ export const FleetSettleModal = () => {
             setIsDisabled(true);
             setTotalCreditCharge(totalCharge);
             setTotalWoodCharge(totalWoodCharge)
-        } else if (!myCredit || !myResources) {
+        } else if (!myCredit) {
             setIsDisabled(true);
         } else {
-            if (totalWoodCharge >= myResources.numOfWood && totalCharge >= Number(getNumberFromBigInt(myCredit))) {
+            if (totalWoodCharge >= numberOfWood && totalCharge >= Number(getNumberFromBigInt(myCredit))) {
                 setIsDisabled(true);
                 setEnoughWood(false);
                 setEnoughCredit(false)
@@ -100,7 +101,7 @@ export const FleetSettleModal = () => {
                 setEnoughWood(true)
                 setTotalCreditCharge(totalCharge);
             }
-            else if (totalWoodCharge >= myResources.numOfWood) {
+            else if (totalWoodCharge >= numberOfWood) {
                 setIsDisabled(true);
                 setEnoughWood(false);
                 setEnoughCredit(true)
@@ -112,7 +113,7 @@ export const FleetSettleModal = () => {
                 setEnoughWood(true);
             }
         }
-    }, [smallShipCount, mediumShipCount, largeShipCount, myCredit, myResources]);
+    }, [smallShipCount, mediumShipCount, largeShipCount, myCredit, numberOfWood]);
 
 
     const handleClick = async () => {
@@ -132,6 +133,10 @@ export const FleetSettleModal = () => {
 
         setIsLoading(true)
 
+        const audio = new Audio(fleetSettleSoundEffect);
+        audio.volume = 0.4;
+        audio.play();
+
         const tx = await systemCalls.settleFleet(
             fleetPosition.x,
             fleetPosition.y,
@@ -145,6 +150,10 @@ export const FleetSettleModal = () => {
             setSmallShipCount('');
             setMediumShipCount('');
             setLargeShipCount('');
+
+            const isTask = localStorage.getItem("fleetSettlementTask")
+            !isTask && localStorage.setItem("fleetSettlementTask", "true")
+            window.dispatchEvent(new Event('localDataStorage'));
         } else {
             setErrorMessage("You have no enough credit!")
             setErrorTitle("Fleet Settlement Error")

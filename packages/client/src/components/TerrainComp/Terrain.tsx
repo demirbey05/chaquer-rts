@@ -62,8 +62,11 @@ import { SeaMineCaptureEvent } from "./Events/SeaMineCaptureEvent";
 import { ArmyMergeEvent } from './Events/ArmyMergeEvent';
 import { usePlayerIsValid } from '../../hooks/IdentityHooks/usePlayerIsValid';
 import { EventProgressBar } from '../ProgressComp/EventProgressBar';
+import { FleetLoadEvent } from './Events/FleetLoadEvent';
+import { FleetUnloadEvent } from './Events/FleetUnloadEvent';
+import { useLoadedFleets } from '../../hooks/SeaHooks/useLoadedFleets';
 
-export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBorder: boolean, zoomLevel: number, tileSize: number, isSpectator: boolean }) => {
+export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpectator: boolean }) => {
   const { components, systemCalls } = useMUD();
   const { width, height } = useTerrain();
 
@@ -137,7 +140,13 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
     setMyFleetConfig,
     setEnemyFleetConfig,
     setIsFleetAttackStage,
-    isFleetAttackStage } = useFleet();
+    isFleetAttackStage,
+    isFleetLoadStage,
+    setIsFleetLoadStage,
+    setLoadArmyPosition,
+    setTargetLoadFleetPosition,
+    setIsFleetUnloadStage,
+    isFleetUnloadStage } = useFleet();
 
   const { setShowError,
     setErrorMessage,
@@ -152,6 +161,7 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
   const fromFleetPositionRef = useRef<Coord | undefined>({ x: "-1", y: "-1" });
   const [isLoadingArmy, setIsLoadingArmy] = useState<boolean>(false);
   const [isLoadingFleet, setIsLoadingFleet] = useState<boolean>(false);
+  const [isUnloadFleet, setIsUnloadFleet] = useState<boolean>(false)
 
   const castlePositions = useCastlePositions(gameID);
   const myCastlePosition = useMyCastlePositions(userWallet, gameID);
@@ -164,6 +174,7 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
   const fleetPositions = useFleetPositions(gameID);
   const myFleetPositions = useMyFleetPositions(userWallet, gameID);
   const userValid = usePlayerIsValid(gameID, userWallet);
+  const isFleetLoaded = useLoadedFleets(gameID, fromFleetPosition)
 
   const handleClick = async (e: any) => {
     // Toggle orange tiles for army settlement
@@ -216,13 +227,15 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
       setIsFleetMoveStage(true);
       setIsFleetAttackStage(true)
       setSeaMineStage(true)
+      setIsFleetUnloadStage(true)
     } else if (fromFleetPosition && isUserClickedManhattanPosition(fromFleetPosition, getDataAtrX(e), getDataAtrY(e))) {
-
       toFleetPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
       fromFleetPositionRef.current = { x: fromFleetPosition.x.toString(), y: fromFleetPosition.y.toString() };
 
-      if (canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y]) && isEnemyFleet({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, myFleetPositions, fleetPositions)) {
+      if (canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y]) &&
+        isEnemyFleet({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, myFleetPositions, fleetPositions)) {
         FleetAttackEvent(setIsFleetMoveStage,
+          setIsFleetUnloadStage,
           setSeaMineStage,
           setFromFleetPosition,
           setAttackerFleetPosition,
@@ -236,6 +249,7 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
       }
       else if (isUserClickedMine(toFleetPositionRef.current.x, toFleetPositionRef.current.y, resources)) {
         SeaMineCaptureEvent(setIsFleetMoveStage,
+          setIsFleetUnloadStage,
           setFleetSettleStage,
           setIsFleetAttackStage,
           setFromFleetPosition,
@@ -246,8 +260,33 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
           setMyFleetConfig,
           myFleetPositions)
       }
-      else if (canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y])) { //Buraya toFleetPosition ın, kendi fleetine ait olup olmadgını check etmek lazım
+      else if (isMyFleet({ x: Number(fromFleetPositionRef.current.x), y: Number(fromFleetPositionRef.current.y) }, myFleetPositions) &&
+        canCastleBeSettle(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y])) {
+        FleetUnloadEvent(setIsFleetUnloadStage,
+          setIsFleetMoveStage,
+          setSeaMineStage,
+          setIsFleetAttackStage,
+          fromFleetPositionRef,
+          toFleetPositionRef,
+          isFleetMoveStage,
+          fromFleetPosition,
+          setFromFleetPosition,
+          components,
+          movingFleetId,
+          systemCalls,
+          setErrorMessage,
+          setErrorTitle,
+          setShowError,
+          setIsUnloadFleet,
+          isFleetLoaded,
+          gameID)
+      }
+      else if (isMyFleet({ x: Number(fromFleetPositionRef.current.x), y: Number(fromFleetPositionRef.current.y) }, myFleetPositions) &&
+        !isMyFleet({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, myFleetPositions) &&
+        canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y]) &&
+        canFleetBeSettled(values[Number(fromFleetPositionRef.current.x)][Number(fromFleetPositionRef.current.y)])) {
         await FleetMoveEvent(setIsFleetMoveStage,
+          setIsFleetUnloadStage,
           setSeaMineStage,
           setIsFleetAttackStage,
           fromFleetPositionRef,
@@ -269,6 +308,7 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
       setIsFleetMoveStage(false)
       setSeaMineStage(false)
       setIsFleetAttackStage(false)
+      setIsFleetUnloadStage(false)
       setFromFleetPosition(undefined);
       toFleetPositionRef.current = { x: -1, y: -1 };
       fromFleetPositionRef.current = { x: "-1", y: "-1" };
@@ -282,14 +322,16 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
       setIsMineStage(true)
       setDockSettleStage(true);
       setDockCaptureStage(true);
-      setIsArmyMergeStage(true)
+      setIsArmyMergeStage(true);
+      setIsFleetLoadStage(true);
     }
-    else if (fromArmyPosition && isUserClickedManhattanPosition(fromArmyPosition, getDataAtrX(e), getDataAtrY(e))) {
+    else if (fromArmyPosition && isUserClickedManhattanPosition(fromArmyPosition, getDataAtrX(e), getDataAtrY(e)) && !isMyFleet({ x: fromArmyPosition.x, y: fromArmyPosition.y }, myFleetPositions)) {
       toArmyPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
       fromArmyPositionRef.current = { x: fromArmyPosition.x, y: fromArmyPosition.y, };
 
       if (isEnemyArmy(toArmyPositionRef.current, armyPositions, myArmyPosition)) {
-        ArmyAttackEvent(setIsArmyMergeStage,
+        ArmyAttackEvent(setIsFleetLoadStage,
+          setIsArmyMergeStage,
           setIsArmyMoveStage,
           setIsMineStage,
           setDockSettleStage,
@@ -305,7 +347,8 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
           armyPositions);
       }
       else if (isEnemyCastle(toArmyPositionRef.current, myCastlePosition, castlePositions)) {
-        CastleAttackEvent(setIsArmyMergeStage,
+        CastleAttackEvent(setIsFleetLoadStage,
+          setIsArmyMergeStage,
           setIsArmyMoveStage,
           setIsMineStage,
           setDockSettleStage,
@@ -318,8 +361,10 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
           setMyArmyConfig,
           myArmyPosition)
       }
-      else if (isUserClickedMine(toArmyPositionRef.current.x, toArmyPositionRef.current.y, resources) && canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y])) {
-        MineCaptureEvent(setIsArmyMergeStage,
+      else if (isUserClickedMine(toArmyPositionRef.current.x, toArmyPositionRef.current.y, resources) &&
+        canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y])) {
+        MineCaptureEvent(setIsFleetLoadStage,
+          setIsArmyMergeStage,
           setIsArmyMoveStage,
           setIsAttackStage,
           setDockSettleStage,
@@ -333,7 +378,8 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
           myArmyPosition);
       }
       else if (isEnemyDock(toArmyPositionRef.current, dockPositions, myDockPositions)) {
-        DockCaptureEvent(setIsArmyMoveStage,
+        DockCaptureEvent(setIsFleetLoadStage,
+          setIsArmyMoveStage,
           setIsAttackStage,
           setDockSettleStage,
           setIsMineStage,
@@ -345,8 +391,11 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
           setMyArmyConfig,
           myArmyPosition)
       }
-      else if (isPositionNextToSea(toArmyPositionRef.current.x, toArmyPositionRef.current.y, values) && isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition) && getNumberOfSoldierInArmy(fromArmyPositionRef.current, myArmyPosition) >= 20) {
-        DockSettleEvent(setIsMineStage,
+      else if (isPositionNextToSea(toArmyPositionRef.current.x, toArmyPositionRef.current.y, values) &&
+        isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition) &&
+        getNumberOfSoldierInArmy(fromArmyPositionRef.current, myArmyPosition) >= 20) {
+        DockSettleEvent(setIsFleetLoadStage,
+          setIsMineStage,
           setIsAttackStage,
           setIsArmyMoveStage,
           setDockCaptureStage,
@@ -356,8 +405,10 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
           setDockPosition,
           toArmyPositionRef);
       }
-      else if (isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition) && isMyArmy({ x: toArmyPositionRef.current.x, y: toArmyPositionRef.current.y }, myArmyPosition)) {
-        ArmyMergeEvent(setIsAttackStage,
+      else if (isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition) &&
+        isMyArmy({ x: toArmyPositionRef.current.x, y: toArmyPositionRef.current.y }, myArmyPosition)) {
+        ArmyMergeEvent(setIsFleetLoadStage,
+          setIsAttackStage,
           setIsArmyMoveStage,
           setIsMineStage,
           setDockSettleStage,
@@ -368,8 +419,26 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
           fromArmyPositionRef,
           toArmyPositionRef)
       }
-      else if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y]) && !isMyCastle(myCastlePosition, toArmyPositionRef.current.x, toArmyPositionRef.current.y) && !isMyDock(Number(toArmyPositionRef.current.x), Number(toArmyPositionRef.current.y), myDockPositions)) {
-        await ArmyMoveEvent(setIsArmyMergeStage,
+      else if (isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition) &&
+        isMyFleet({ x: toArmyPositionRef.current.x, y: toArmyPositionRef.current.y }, myFleetPositions)) {
+        FleetLoadEvent(setIsArmyMergeStage,
+          setIsAttackStage,
+          setIsArmyMoveStage,
+          setIsMineStage,
+          setDockSettleStage,
+          setDockCaptureStage,
+          setFromArmyPosition,
+          setLoadArmyPosition,
+          setTargetLoadFleetPosition,
+          fromArmyPositionRef,
+          toArmyPositionRef)
+      }
+      else if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y]) &&
+        canCastleBeSettle(values[Number(fromArmyPositionRef.current.x)][Number(fromArmyPositionRef.current.y)]) &&
+        !isMyCastle(myCastlePosition, toArmyPositionRef.current.x, toArmyPositionRef.current.y) &&
+        !isMyDock(Number(toArmyPositionRef.current.x), Number(toArmyPositionRef.current.y), myDockPositions)) {
+        await ArmyMoveEvent(setIsFleetLoadStage,
+          setIsArmyMergeStage,
           setIsAttackStage,
           setIsMineStage,
           setDockSettleStage,
@@ -378,7 +447,6 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
           setIsArmyMoveStage,
           toArmyPositionRef,
           isArmyMoveStage,
-          fromArmyPosition,
           setFromArmyPosition,
           components,
           movingArmyId,
@@ -393,10 +461,11 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
     else {
       setIsArmyMoveStage(false);
       setIsAttackStage(false);
-      setIsMineStage(false)
+      setIsMineStage(false);
       setDockSettleStage(false);
-      setDockCaptureStage(false)
-      setIsArmyMergeStage(false)
+      setDockCaptureStage(false);
+      setIsArmyMergeStage(false);
+      setIsFleetLoadStage(false)
       setFromArmyPosition(undefined);
       toArmyPositionRef.current = { x: -1, y: -1 };
       fromArmyPositionRef.current = { x: "-1", y: "-1" };
@@ -418,7 +487,6 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
     fromArmyPosition);
   ArmyEffects(isArmyUpdateStage,
     values,
-    isBorder,
     myCastlePosition,
     dockPositions,
     castlePositions,
@@ -452,14 +520,15 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
     resources,
     numberOfArmy,
     isArmySettleStage,
-    isBorder,
     castlePositions,
     myCastlePosition,
     values,
     fromArmyPosition,
     isArmyMoveStage,
     fleetSettleStage,
-    fleetPositions);
+    fleetPositions,
+    isFleetUnloadStage,
+    isFleetLoaded);
   DockEffects(isArmySettleStage,
     castlePositions,
     resources,
@@ -474,13 +543,13 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
     columns,
     fromArmyPosition);
   FleetEffects(myFleetPositions,
-    fleetPositions);
+    fleetPositions,
+    values,
+    isFleetLoadStage,
+    myArmyPosition,
+    fromArmyPosition);
 
   const terrainContainer = {
-    zIndex: "-1",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
     height: "100vh",
     minWidth: "100vh",
     backgroundImage: `url(${gameBgImg})`,
@@ -490,18 +559,19 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
 
   return (
     <ScrollContainer
-      className={`${!isBorder && "scroll-container"}`}
-      style={isBorder === false ? terrainContainer : (isSpectator ? terrainContainer : {})}>
+      className="scroll-container"
+      style={terrainContainer}>
       <div
-        className={`inline-grid ${isBorder && "border-4 border-black"}`}
+        className="inline-grid"
         style={{
-          pointerEvents: isBorder === true ? "none" : "auto",
+          pointerEvents: isSpectator === true ? "none" : "auto",
           transform: `scale(${zoomLevel}) rotateX(60deg) rotateZ(45deg) rotateY(0deg)`,
           transition: "transform 0.2s ease-in-out",
           zIndex: "0",
           backgroundImage: `url(${chaquerMap})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
+          margin: "750px 1350px",
         }} >
         {
           rows.map((row) => {
@@ -515,8 +585,8 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
                   style={{
                     gridColumn: column + 1,
                     gridRow: row + 1,
-                    width: `${tileSize}px`,
-                    height: `${tileSize}px`,
+                    width: "40px",
+                    height: "40px",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
@@ -525,18 +595,15 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
                     handleClick(e);
                   }}
                   className={`
-                ${!isBorder &&
-                    isValidTerrainType(values[row][column]) &&
+                ${isValidTerrainType(values[row][column]) &&
                     "hoverTileEffect"
                     }`}
                   data-bs-toggle={`${canCastleBeSettle(values[row][column]) &&
-                    !isCastleSettled &&
-                    !isBorder
+                    !isCastleSettled
                     ? "modal" : ""
                     }`}
                   data-bs-target={`${canCastleBeSettle(values[row][column]) &&
-                    !isCastleSettled &&
-                    !isBorder
+                    !isCastleSettled
                     ? "#castleSettleModal" : ""
                     }`}
                 ></span>
@@ -547,6 +614,7 @@ export const Terrain = ({ isBorder, zoomLevel, tileSize, isSpectator }: { isBord
       </div >
       {isLoadingArmy && <EventProgressBar text={"Soldiers are passing to new position..."} />}
       {isLoadingFleet && <EventProgressBar text={"Ships are passing to new position..."} />}
+      {isUnloadFleet && <EventProgressBar text={"Soldiers are being dropped off to the land..."} />}
     </ScrollContainer>
   );
 }

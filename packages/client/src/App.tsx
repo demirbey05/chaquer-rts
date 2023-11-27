@@ -21,7 +21,7 @@ export const App = () => {
         <Route element={<ProtectedGame isUserValid={isUserValid} />}>
           <Route element={<Game />} path="/game/:gameID" />
         </Route>
-        <Route element={<ProtectedSpectator username={username} />}>
+        <Route element={<ProtectedSpectator username={username} isUserValid={isUserValid} />}>
           <Route element={<Spectator />} path="/spectator/:gameID" />
         </Route>
         <Route element={<Menu />} path="/" />

@@ -21,6 +21,18 @@ type FleetContextType = {
     setEnemyFleetConfig: (value: any) => void;
     isFleetAttackStage: boolean;
     setIsFleetAttackStage: (value: boolean) => void;
+    isFleetLoadStage: boolean;
+    setIsFleetLoadStage: (value: boolean) => void;
+    loadArmyPosition: { x: number, y: number };
+    setLoadArmyPosition: (value: { x: number, y: number }) => void;
+    targetLoadFleetPosition: { x: number, y: number };
+    setTargetLoadFleetPosition: (value: { x: number, y: number }) => void;
+    isFleetUnloadStage: boolean;
+    setIsFleetUnloadStage: (value: boolean) => void;
+    unloadArmyPosition: { x: number, y: number };
+    setUnloadArmyPosition: (value: { x: number, y: number }) => void;
+    fromLoadFleetPosition: { x: number, y: number };
+    setFromLoadFleetPosition: (value: { x: number, y: number }) => void;
 };
 
 const FleetContext = createContext<FleetContextType>({
@@ -43,7 +55,19 @@ const FleetContext = createContext<FleetContextType>({
     enemyFleetConfig: undefined,
     setEnemyFleetConfig: () => { },
     isFleetAttackStage: false,
-    setIsFleetAttackStage: () => { }
+    setIsFleetAttackStage: () => { },
+    isFleetLoadStage: false,
+    setIsFleetLoadStage: () => { },
+    loadArmyPosition: { x: -1, y: -1 },
+    setLoadArmyPosition: () => { },
+    targetLoadFleetPosition: { x: -1, y: -1 },
+    setTargetLoadFleetPosition: () => { },
+    isFleetUnloadStage: false,
+    setIsFleetUnloadStage: () => { },
+    unloadArmyPosition: { x: -1, y: -1 },
+    setUnloadArmyPosition: () => { },
+    fromLoadFleetPosition: { x: -1, y: -1 },
+    setFromLoadFleetPosition: () => { }
 });
 
 const FleetProvider: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode; }) => {
@@ -59,6 +83,14 @@ const FleetProvider: React.FC<{ children: ReactNode }> = ({ children }: { childr
     const [targetFleetPosition, setTargetFleetPosition] = useState<{ x: number, y: number } | undefined>();
     const [myFleetConfig, setMyFleetConfig] = useState<any>();
     const [enemyFleetConfig, setEnemyFleetConfig] = useState<any>();
+
+    const [isFleetLoadStage, setIsFleetLoadStage] = useState<boolean>(false)
+    const [loadArmyPosition, setLoadArmyPosition] = useState<{ x: number, y: number }>({ x: -1, y: -1 })
+    const [targetLoadFleetPosition, setTargetLoadFleetPosition] = useState<{ x: number, y: number }>({ x: -1, y: -1 })
+
+    const [isFleetUnloadStage, setIsFleetUnloadStage] = useState<boolean>(false)
+    const [unloadArmyPosition, setUnloadArmyPosition] = useState<{ x: number, y: number }>({ x: -1, y: -1 })
+    const [fromLoadFleetPosition, setFromLoadFleetPosition] = useState<{ x: number, y: number }>({ x: -1, y: -1 })
 
     const results: FleetContextType = {
         fleetSettleStage,
@@ -80,7 +112,19 @@ const FleetProvider: React.FC<{ children: ReactNode }> = ({ children }: { childr
         enemyFleetConfig,
         setEnemyFleetConfig,
         isFleetAttackStage,
-        setIsFleetAttackStage
+        setIsFleetAttackStage,
+        isFleetLoadStage,
+        setIsFleetLoadStage,
+        loadArmyPosition,
+        setLoadArmyPosition,
+        targetLoadFleetPosition,
+        setTargetLoadFleetPosition,
+        isFleetUnloadStage,
+        setIsFleetUnloadStage,
+        unloadArmyPosition,
+        setUnloadArmyPosition,
+        fromLoadFleetPosition,
+        setFromLoadFleetPosition,
     };
 
     return (

@@ -92,21 +92,12 @@ export default mudConfig({
         userName:"string"    
       }
     },
-
     ResourceOwnable :{
       valueSchema:{
         sourceType:"MineType",
         owner:"address",
         gameID:"uint256"
       },
-    },
-    ResourceInited:{
-      keySchema:{
-        gameID:"uint256"
-      },
-      valueSchema:{
-        isInited:"bool"
-      }
     },
     GameMetaData:{
       keySchema:{
@@ -122,7 +113,8 @@ export default mudConfig({
         colorCursor:"uint256",
         numberOfPlayer:"uint256",
         limitOfPlayer:"uint256",
-        name:"string"
+        isInited:"bool",
+        name:"string",
       }
     },
     ResourceOwn : {
@@ -133,15 +125,7 @@ export default mudConfig({
       valueSchema:{
         numOfFood:"uint256",
         numOfWood:"uint256",
-        numOfGold:"uint256"
-      }
-    },
-    LastCollectTime:{
-      keySchema:{
-        owner:"address",
-        gameID:"uint256"
-      },
-      valueSchema:{
+        numOfGold:"uint256",
         lastCollect:"uint256"
       }
     },
@@ -174,26 +158,6 @@ export default mudConfig({
         numOfCavalry:"uint256"
       },
       dataStruct:false
-    },
-    ResourcePrices:{
-      keySchema:{
-        gameID:"uint256"
-      },
-      valueSchema:{
-        priceFood:"uint256",
-        priceWood:"uint256",
-        priceGold:"uint256"
-      }
-    },
-    ArmyPrices:{
-      keySchema:{
-        gameID:"uint256"
-      },
-      valueSchema:{
-        priceSwordsman:"uint256",
-        priceArcher:"uint256",
-        priceCavalry:"uint256"
-      }
     },
     DockOwnable: {
       valueSchema: {
@@ -244,6 +208,12 @@ export default mudConfig({
       },
       offchainOnly:true,
     },
+    FleetCarry:{
+      valueSchema:{
+        carrierID:"bytes32",
+        gameID:"uint256",
+      }
+    },
     LastMessageTime:{
       keySchema:{
         gameID:"uint256",
@@ -292,6 +262,11 @@ export default mudConfig({
       name: "KeysWithValueModule",
       root: true,
       args: [resolveTableId("FleetOwnable")],
+    },
+    {
+      name: "KeysWithValueModule",
+      root: true,
+      args: [resolveTableId("FleetCarry")],
     },
   ],
 });

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useGame } from "../../context/GameContext";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Tooltip } from "@chakra-ui/react";
 import { ArmyPrices } from "./ArmyPrices";
 import { ResourcePrices } from "./ResourcePrices";
@@ -6,8 +7,9 @@ import { FleetPrices } from "./FleetPrices";
 import { ResourceBuyPrices } from "./ResourceBuyPrices";
 import { AiOutlineStock } from 'react-icons/ai'
 
-export const PriceListDrawer = ({ isInputFocused, isSpectator }: { isInputFocused: boolean, isSpectator: boolean }) => {
+export const PriceListDrawer = ({ isSpectator }: { isSpectator: boolean }) => {
     const [isOpen, setIsOpen] = useState(true);
+    const { isInputFocused } = useGame()
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen);
@@ -35,7 +37,7 @@ export const PriceListDrawer = ({ isInputFocused, isSpectator }: { isInputFocuse
             <Tooltip label='Prices' placement='top'>
                 <button
                     className={"price-list-button"}
-                    style={isSpectator ? { left: "42%" } : {}}
+                    style={isSpectator ? { left: "48%" } : {}}
                     onClick={toggleDrawer}>
                     <AiOutlineStock />
                 </button>

@@ -5,11 +5,11 @@ import { useWarResult } from '../../hooks/useWarResult';
 import { useMyUsername } from "../../hooks/IdentityHooks/useMyUsername";
 import { useGame } from '../../context/GameContext';
 
-export const WarResultDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
+export const WarResultDrawer = () => {
     const [isOpen, setIsOpen] = useState(true);
 
     const { userWallet } = usePlayer();
-    const { gameID } = useGame();
+    const { gameID, isInputFocused } = useGame();
 
     const warResults = useWarResult(4, gameID);
     const username = useMyUsername(userWallet)

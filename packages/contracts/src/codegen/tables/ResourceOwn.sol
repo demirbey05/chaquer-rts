@@ -26,13 +26,14 @@ ResourceId constant _tableId = ResourceId.wrap(
 ResourceId constant ResourceOwnTableId = _tableId;
 
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
-  0x0060030020202000000000000000000000000000000000000000000000000000
+  0x0080040020202020000000000000000000000000000000000000000000000000
 );
 
 struct ResourceOwnData {
   uint256 numOfFood;
   uint256 numOfWood;
   uint256 numOfGold;
+  uint256 lastCollect;
 }
 
 library ResourceOwn {
@@ -61,10 +62,11 @@ library ResourceOwn {
    * @return _valueSchema The value schema for the table.
    */
   function getValueSchema() internal pure returns (Schema) {
-    SchemaType[] memory _valueSchema = new SchemaType[](3);
+    SchemaType[] memory _valueSchema = new SchemaType[](4);
     _valueSchema[0] = SchemaType.UINT256;
     _valueSchema[1] = SchemaType.UINT256;
     _valueSchema[2] = SchemaType.UINT256;
+    _valueSchema[3] = SchemaType.UINT256;
 
     return SchemaLib.encode(_valueSchema);
   }
@@ -84,10 +86,11 @@ library ResourceOwn {
    * @return fieldNames An array of strings with the names of value fields.
    */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
-    fieldNames = new string[](3);
+    fieldNames = new string[](4);
     fieldNames[0] = "numOfFood";
     fieldNames[1] = "numOfWood";
     fieldNames[2] = "numOfGold";
+    fieldNames[3] = "lastCollect";
   }
 
   /**
@@ -243,6 +246,52 @@ library ResourceOwn {
   }
 
   /**
+   * @notice Get lastCollect.
+   */
+  function getLastCollect(address owner, uint256 gameID) internal view returns (uint256 lastCollect) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[1] = bytes32(uint256(gameID));
+
+    bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 3, _fieldLayout);
+    return (uint256(bytes32(_blob)));
+  }
+
+  /**
+   * @notice Get lastCollect.
+   */
+  function _getLastCollect(address owner, uint256 gameID) internal view returns (uint256 lastCollect) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[1] = bytes32(uint256(gameID));
+
+    bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 3, _fieldLayout);
+    return (uint256(bytes32(_blob)));
+  }
+
+  /**
+   * @notice Set lastCollect.
+   */
+  function setLastCollect(address owner, uint256 gameID, uint256 lastCollect) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[1] = bytes32(uint256(gameID));
+
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((lastCollect)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set lastCollect.
+   */
+  function _setLastCollect(address owner, uint256 gameID, uint256 lastCollect) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
+    _keyTuple[0] = bytes32(uint256(uint160(owner)));
+    _keyTuple[1] = bytes32(uint256(gameID));
+
+    StoreCore.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((lastCollect)), _fieldLayout);
+  }
+
+  /**
    * @notice Get the full data.
    */
   function get(address owner, uint256 gameID) internal view returns (ResourceOwnData memory _table) {
@@ -277,8 +326,15 @@ library ResourceOwn {
   /**
    * @notice Set the full data using individual values.
    */
-  function set(address owner, uint256 gameID, uint256 numOfFood, uint256 numOfWood, uint256 numOfGold) internal {
-    bytes memory _staticData = encodeStatic(numOfFood, numOfWood, numOfGold);
+  function set(
+    address owner,
+    uint256 gameID,
+    uint256 numOfFood,
+    uint256 numOfWood,
+    uint256 numOfGold,
+    uint256 lastCollect
+  ) internal {
+    bytes memory _staticData = encodeStatic(numOfFood, numOfWood, numOfGold, lastCollect);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -293,8 +349,15 @@ library ResourceOwn {
   /**
    * @notice Set the full data using individual values.
    */
-  function _set(address owner, uint256 gameID, uint256 numOfFood, uint256 numOfWood, uint256 numOfGold) internal {
-    bytes memory _staticData = encodeStatic(numOfFood, numOfWood, numOfGold);
+  function _set(
+    address owner,
+    uint256 gameID,
+    uint256 numOfFood,
+    uint256 numOfWood,
+    uint256 numOfGold,
+    uint256 lastCollect
+  ) internal {
+    bytes memory _staticData = encodeStatic(numOfFood, numOfWood, numOfGold, lastCollect);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -310,7 +373,7 @@ library ResourceOwn {
    * @notice Set the full data using the data struct.
    */
   function set(address owner, uint256 gameID, ResourceOwnData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.numOfFood, _table.numOfWood, _table.numOfGold);
+    bytes memory _staticData = encodeStatic(_table.numOfFood, _table.numOfWood, _table.numOfGold, _table.lastCollect);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -326,7 +389,7 @@ library ResourceOwn {
    * @notice Set the full data using the data struct.
    */
   function _set(address owner, uint256 gameID, ResourceOwnData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.numOfFood, _table.numOfWood, _table.numOfGold);
+    bytes memory _staticData = encodeStatic(_table.numOfFood, _table.numOfWood, _table.numOfGold, _table.lastCollect);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -343,12 +406,14 @@ library ResourceOwn {
    */
   function decodeStatic(
     bytes memory _blob
-  ) internal pure returns (uint256 numOfFood, uint256 numOfWood, uint256 numOfGold) {
+  ) internal pure returns (uint256 numOfFood, uint256 numOfWood, uint256 numOfGold, uint256 lastCollect) {
     numOfFood = (uint256(Bytes.slice32(_blob, 0)));
 
     numOfWood = (uint256(Bytes.slice32(_blob, 32)));
 
     numOfGold = (uint256(Bytes.slice32(_blob, 64)));
+
+    lastCollect = (uint256(Bytes.slice32(_blob, 96)));
   }
 
   /**
@@ -362,7 +427,7 @@ library ResourceOwn {
     PackedCounter,
     bytes memory
   ) internal pure returns (ResourceOwnData memory _table) {
-    (_table.numOfFood, _table.numOfWood, _table.numOfGold) = decodeStatic(_staticData);
+    (_table.numOfFood, _table.numOfWood, _table.numOfGold, _table.lastCollect) = decodeStatic(_staticData);
   }
 
   /**
@@ -391,8 +456,13 @@ library ResourceOwn {
    * @notice Tightly pack static (fixed length) data using this table's schema.
    * @return The static data, encoded into a sequence of bytes.
    */
-  function encodeStatic(uint256 numOfFood, uint256 numOfWood, uint256 numOfGold) internal pure returns (bytes memory) {
-    return abi.encodePacked(numOfFood, numOfWood, numOfGold);
+  function encodeStatic(
+    uint256 numOfFood,
+    uint256 numOfWood,
+    uint256 numOfGold,
+    uint256 lastCollect
+  ) internal pure returns (bytes memory) {
+    return abi.encodePacked(numOfFood, numOfWood, numOfGold, lastCollect);
   }
 
   /**
@@ -404,9 +474,10 @@ library ResourceOwn {
   function encode(
     uint256 numOfFood,
     uint256 numOfWood,
-    uint256 numOfGold
+    uint256 numOfGold,
+    uint256 lastCollect
   ) internal pure returns (bytes memory, PackedCounter, bytes memory) {
-    bytes memory _staticData = encodeStatic(numOfFood, numOfWood, numOfGold);
+    bytes memory _staticData = encodeStatic(numOfFood, numOfWood, numOfGold, lastCollect);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;

@@ -1,9 +1,18 @@
 import shipTile from '../../../images/shipAssets/small_ship.png'
 import { useEffect } from "react";
 import { getBorderColor } from "../../../utils/constants/getBorderColors";
+import { canCastleBeSettle } from '../../../utils/helperFunctions/CastleFunctions/canCastleBeSettle';
+import { isMyFleet } from '../../../utils/helperFunctions/SeaFunctions/isMyFleet';
+import { getArmyMovePositions } from '../../../utils/helperFunctions/ArmyFunctions/getArmyMovePositions';
+import { getOneSquareAwayPositions } from '../../../utils/helperFunctions/CustomFunctions/getOneSquareAwayPositions';
 
-export const FleetEffects = (myFleetPositions: any[] | undefined,
+export const FleetEffects = (
+    myFleetPositions: any[] | undefined,
     fleetPositions: any[],
+    values: number[][],
+    isFleetLoadStage: boolean,
+    myArmyPositions: any[],
+    fromArmyPosition: any
 ) => {
     // Deploy my ships
     useEffect(() => {
@@ -22,6 +31,7 @@ export const FleetEffects = (myFleetPositions: any[] | undefined,
                     imgElement.style.width = "75px"
                     imgElement.style.marginBottom = "15px"
                     imgElement.style.marginRight = "10px"
+                    imgElement.style.zIndex = "1"
                     imgElement.style.pointerEvents = "none"
 
                     element.appendChild(imgElement);
@@ -61,6 +71,7 @@ export const FleetEffects = (myFleetPositions: any[] | undefined,
                 imgElement.style.width = "75px"
                 imgElement.style.marginBottom = "15px"
                 imgElement.style.marginRight = "10px"
+                imgElement.style.zIndex = "1"
                 imgElement.style.pointerEvents = "none"
 
                 element.appendChild(imgElement);
@@ -82,4 +93,44 @@ export const FleetEffects = (myFleetPositions: any[] | undefined,
             }
         }
     }, [fleetPositions]);
+
+    // Fleet Load Modal data-bs attributes
+    useEffect(() => {
+        if (isFleetLoadStage && myArmyPositions && myArmyPositions.length > 0 && fromArmyPosition) {
+            myArmyPositions.map((position: any) => {
+                getOneSquareAwayPositions({ x: position.myArmyPosition.x, y: position.myArmyPosition.y }).map(
+                    (data) => {
+                        if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
+                            if (
+                                !canCastleBeSettle(values[data.x][data.y]) &&
+                                canCastleBeSettle(values[fromArmyPosition.x][fromArmyPosition.y]) &&
+                                isMyFleet({ x: data.x, y: data.y }, myFleetPositions)
+                            ) {
+                                const element = document.getElementById(`${data.y},${data.x}`)!;
+                                if (element) {
+                                    element.classList.add("greenTileEffect");
+                                    element.setAttribute("data-bs-toggle", "modal");
+                                    element.setAttribute("data-bs-target", "#fleetLoadModal");
+                                }
+                            }
+                        }
+                    }
+                );
+            });
+        } else if (!isFleetLoadStage && myArmyPositions && myArmyPositions.length > 0) {
+            myArmyPositions.map((position: any) => {
+                getOneSquareAwayPositions({ x: position.myArmyPosition.x, y: position.myArmyPosition.y }).map(
+                    (data) => {
+                        if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
+                            if (getArmyMovePositions(data.x, data.y, myArmyPositions)) {
+                                document.getElementById(`${data.y},${data.x}`)?.classList.remove("greenTileEffect");
+                                document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-toggle", "");
+                                document.getElementById(`${data.y},${data.x}`)?.setAttribute("data-bs-target", "");
+                            }
+                        }
+                    }
+                );
+            });
+        }
+    }, [myFleetPositions, isFleetLoadStage, myArmyPositions, values, fromArmyPosition]);
 }

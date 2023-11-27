@@ -1,12 +1,15 @@
 import soundTrack from '../../sounds/chaquerSoundTrack.mp3'
 import { useState, useEffect, useRef } from 'react'
+import { useGame } from '../../context/GameContext';
 import { useNavigate } from 'react-router-dom';
 import { Button, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Tooltip } from "@chakra-ui/react";
 import { FaPlay, FaStop } from 'react-icons/fa'
 import { RiArrowGoBackFill } from 'react-icons/ri'
 import { FiSettings } from 'react-icons/fi'
 
-export const SettingsDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
+export const SettingsDrawer = () => {
+    const { isInputFocused } = useGame()
+
     const [isPlaying, setIsPlaying] = useState(false);
     const [volume, setVolume] = useState<number>(0.1);
     const [isOpen, setIsOpen] = useState(false);

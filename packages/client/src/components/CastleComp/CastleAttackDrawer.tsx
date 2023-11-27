@@ -69,6 +69,10 @@ export const CastleAttackDrawer = () => {
       setErrorMessage("An error occurred while trying to attack to castle.")
       setErrorTitle("Castle Attack Error")
       setShowError(true)
+    } else {
+      const isTask = localStorage.getItem("attackCaptureTask")
+      !isTask && localStorage.setItem("attackCaptureTask", "true")
+      window.dispatchEvent(new Event('localDataStorage'));
     }
 
     setIsLoading(false)

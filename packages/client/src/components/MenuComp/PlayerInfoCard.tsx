@@ -21,13 +21,15 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                     {showUsername ? (
                         <>
                             <Tag
+                                padding={"10px"}
                                 size='lg'
                                 backgroundColor={"blue.800"}
                                 borderRadius='full'>
                                 Username: {username}
                             </Tag>
                             <Button
-                                size={"sm"}
+                                border={"2px"}
+                                padding={"10px"}
                                 ms={2}
                                 backgroundColor={"blue.800"}
                                 colorScheme={"facebook"}
@@ -38,7 +40,8 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                     ) : (
                         <div className='d-flex justify-content-center'>
                             <Button
-                                size={"sm"}
+                                border={"2px"}
+                                padding={"10px"}
                                 backgroundColor={"blue.800"}
                                 colorScheme={"facebook"}
                                 onClick={() => setIsUserModalOpen(true)}>
@@ -74,12 +77,17 @@ const PublicWallet = () => {
 
     return (
         <>
-            <Tag size='lg' backgroundColor={"blue.800"} borderRadius='full'>
+            <Tag
+                padding={"10px"}
+                size='lg'
+                backgroundColor={"blue.800"}
+                borderRadius='full'>
                 Public Wallet: {truncatedPublicWallet}
             </Tag>
             <Button
+                border={"2px"}
+                padding={"10px"}
                 ms={2}
-                size={"sm"}
                 colorScheme={"facebook"}
                 backgroundColor={"blue.800"}
                 onClick={onCopy}>

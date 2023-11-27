@@ -18,15 +18,6 @@ export const CastleSettleModal = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  /*useBeforeUnload(
-    useCallback((e) => {
-      const handleExit = async () => {
-        await systemCalls.exitGame(gameID)
-      }
-      handleExit();
-    }, [])
-  );*/
-
   const handleClick = async () => {
     setIsLoading(true)
     const tx = await systemCalls.settleCastle(tempCastle.x, tempCastle.y, gameID)

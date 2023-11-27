@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { PlayerSeeds, Players, GameMetaData, ResourcesSold, ResourceInited, ColorOwnable, SeedInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, ArmyConfig, ArmyOwnable, FleetOwnable } from "../codegen/index.sol";
+import { PlayerSeeds, Players, GameMetaData, ResourcesSold, ColorOwnable, SeedInited, ResourceOwnableData, Position, MapConfig, ResourceOwnable, ArmyConfig, ArmyOwnable, FleetOwnable } from "../codegen/index.sol";
 import { LibRandom, LibQueries, LibAttack, LibUtils, LibMath, LibNaval } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
@@ -52,7 +52,7 @@ contract MineInitSystem is System {
     if (playerSeeds.length < limit - 2) {
       revert MineSystem__NotAllUsersSubmitSeed();
     }
-    if (ResourceInited.get(gameID)) {
+    if (GameMetaData.getIsInited(gameID)) {
       revert MineSystem__ResourceInitialized();
     }
     for (uint i = 0; i < 4; i++) {
@@ -66,7 +66,7 @@ contract MineInitSystem is System {
         revert MineSystem__RandomizationError();
       }
     }
-    ResourceInited.set(gameID, true);
+    GameMetaData.setIsInited(gameID, true);
     GameMetaData.setState(gameID, State.Started);
     GameMetaData.setStartBlock(gameID, block.number);
     ResourcesSold.set(gameID, initialMarketSupply, initialMarketSupply, initialMarketSupply);

@@ -23,9 +23,9 @@ const scrollToDiv = (targetId: any) => {
     }
 };
 
-export const FleetInfoDrawer = ({ isInputFocused }: { isInputFocused: boolean }) => {
+export const FleetInfoDrawer = () => {
     const { userWallet } = usePlayer()
-    const { gameID } = useGame();
+    const { gameID, isInputFocused } = useGame();
 
     const [isOpen, setIsOpen] = useState(false);
 

@@ -7,6 +7,7 @@ import "./Errors.sol";
 import { MineType } from "../codegen/common.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
+import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 
 contract ExchangeSystem is System {
   function sellResource(
@@ -15,6 +16,7 @@ contract ExchangeSystem is System {
     MineType mineType
   ) public {
     address owner = _msgSender();
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).collectResource, (gameID)));
     ResourceOwnData memory resources = ResourceOwn.get(owner, gameID);
     uint256 startBlock = GameMetaData.getStartBlock(gameID);
     if (mineType == MineType.Food) {
@@ -52,6 +54,7 @@ contract ExchangeSystem is System {
     uint256 amount,
     MineType mineType
   ) public {
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).collectResource, (gameID)));
     address owner = _msgSender();
     ResourceOwnData memory resources = ResourceOwn.get(owner, gameID);
     uint256 balance = CreditOwn.get(gameID, owner);

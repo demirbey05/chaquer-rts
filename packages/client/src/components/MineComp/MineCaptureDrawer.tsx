@@ -61,19 +61,24 @@ export const MineCaptureDrawer = () => {
             return
         }
 
-        try {
-            setIsLoading(true)
-            await systemCalls.captureMine(attackFromArmyId[0], attackToMineId[0], 0)
-        } catch (error) {
+        setIsLoading(true)
+        const tx = await systemCalls.captureMine(attackFromArmyId[0], attackToMineId[0], 0)
+
+        if (tx) {
+            const isTask = localStorage.getItem("attackCaptureTask")
+            !isTask && localStorage.setItem("attackCaptureTask", "true")
+            window.dispatchEvent(new Event('localDataStorage'));
+        } else {
             setErrorMessage("An error occurred while trying to capture a mine.")
             setErrorTitle("Mine Capture Error")
             setShowError(true)
-        } finally {
-            setIsLoading(false)
-            setIsMineStage(false);
-            setMyArmyConfig(undefined);
-            setEnemyArmyConfig(undefined);
         }
+
+        setIsLoading(false)
+        setIsMineStage(false);
+        setMyArmyConfig(undefined);
+        setEnemyArmyConfig(undefined);
+
     };
 
     if (isLoading) {

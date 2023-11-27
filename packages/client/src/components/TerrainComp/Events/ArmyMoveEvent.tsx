@@ -1,6 +1,8 @@
 import { getIDFromPosition } from "../../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
+import armyMoveSoundEffect from '../../../sounds/soundEffects/army-move-effect.mp3'
 
 export const ArmyMoveEvent = async (
+    setIsFleetLoadStage: (value: boolean) => void,
     setIsArmyMergeStage: (value: boolean) => void,
     setIsAttackStage: (value: boolean) => void,
     setIsMineStage: (value: boolean) => void,
@@ -10,7 +12,6 @@ export const ArmyMoveEvent = async (
     setIsArmyMoveStage: (value: boolean) => void,
     toArmyPositionRef: any,
     isArmyMoveStage: boolean | undefined,
-    fromArmyPosition: any,
     setFromArmyPosition: any,
     components: any,
     movingArmyId: any,
@@ -21,6 +22,7 @@ export const ArmyMoveEvent = async (
     setIsLoading: (value: boolean) => void,
     gameID: number
 ) => {
+    setIsFleetLoadStage(false)
     setIsArmyMoveStage(false);
     setIsAttackStage(false);
     setIsMineStage(false);
@@ -40,6 +42,11 @@ export const ArmyMoveEvent = async (
 
     if (toArmyPositionRef.current && isArmyMoveStage) {
         setIsLoading(true);
+
+        const audio = new Audio(armyMoveSoundEffect);
+        audio.volume = 0.4;
+        audio.play();
+
         var targetDiv = document.getElementById(`${toArmyPositionRef.current.y},${toArmyPositionRef.current.x}`);
         targetDiv?.classList.add("animate-border-army-move");
 
@@ -51,8 +58,9 @@ export const ArmyMoveEvent = async (
         );
 
         if (tx) {
-            document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.innerHTML = "";
-            document.getElementById(`${fromArmyPosition.y},${fromArmyPosition.x}`)!.style.border = "0.5px solid rgba(0, 0, 0, 0.1)";
+            const isTask = localStorage.getItem("armyMovementTask")
+            !isTask && localStorage.setItem("armyMovementTask", "true")
+            window.dispatchEvent(new Event('localDataStorage'));
 
             setFromArmyPosition(undefined);
             toArmyPositionRef.current = { x: -1, y: -1 };

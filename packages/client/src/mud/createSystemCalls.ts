@@ -388,6 +388,7 @@ export function createSystemCalls({
       return null;
     }
   };
+
   const collectResource = async (gameID: number) => {
     try {
       const tx = await worldContract.write.collectResource([BigInt(gameID)]);
@@ -398,6 +399,50 @@ export function createSystemCalls({
       return null;
     }
   };
+
+  const loadFleet = async (
+    fleetID: string,
+    armyID: string,
+    numSwordsman: number,
+    numArcher: number,
+    numCavalry: number,
+    gameID: number
+  ) => {
+    try {
+      const tx = await worldContract.write.loadFleet([
+        fleetID,
+        armyID,
+        { numSwordsman, numArcher, numCavalry, gameID },
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
+  const unloadArmy = async (
+    fleetID: string,
+    x: number,
+    y: number,
+    gameID: number
+  ) => {
+    try {
+      const tx = await worldContract.write.unloadArmy([
+        fleetID,
+        x,
+        y,
+        BigInt(gameID),
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
   return {
     initGame,
     initUsername,
@@ -423,5 +468,7 @@ export function createSystemCalls({
     mergeArmy,
     sendMessage,
     collectResource,
+    loadFleet,
+    unloadArmy,
   };
 }

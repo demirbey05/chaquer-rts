@@ -13,8 +13,9 @@ import { LibUtils } from "../libraries/Utils.sol";
 import { State } from "../codegen/common.sol";
 import { maxArmyNum, armyMoveFoodCost, armyMoveGoldCost } from "./Constants.sol";
 import "./Errors.sol";
-import {SystemSwitch} from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
-import {IWorld} from "../codegen/world/IWorld.sol";
+import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
+import { IWorld } from "../codegen/world/IWorld.sol";
+
 
 error MoveArmy__UnsufficientFood();
 error MoveArmy__UnsufficientGold();
@@ -63,7 +64,7 @@ contract MapSystem is System {
     GameMetaData.setNumberOfCastle(gameID, numOfCastle + 1);
     ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(ownerCandidate, gameID), gameID);
     if (numOfCastle + 1 == GameMetaData.getLimitOfPlayer(gameID)) {
-      SystemSwitch.call(abi.encodeCall(IWorld(_world()).resourceSystemInit,(gameID)));
+      SystemSwitch.call(abi.encodeCall(IWorld(_world()).resourceSystemInit, (gameID)));
     }
 
     return entityID;
@@ -132,6 +133,7 @@ contract MapSystem is System {
   ) public {
     address ownerCandidate = _msgSender();
     uint32 width = MapConfig.getWidth(gameID);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).collectResource, (gameID)));
     (address armyOwner, uint256 gameIDArmy) = ArmyOwnable.get(armyID);
     (uint32 xArmy, uint32 yArmy, ) = Position.get(armyID);
     ResourceOwnData memory resourcesOfUser = ResourceOwn.get(ownerCandidate, gameID);

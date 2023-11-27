@@ -11,7 +11,6 @@ import armyTile from '../../../images/armyAssets/army.png';
 
 export const ArmyEffects = (isArmyUpdateStage: boolean,
     values: number[][],
-    isBorder: boolean,
     myCastlePosition: any[],
     dockPositions: any[],
     castlePositions: any[],
@@ -80,6 +79,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                     imgElement.style.width = "75px"
                     imgElement.style.marginBottom = "15px"
                     imgElement.style.marginRight = "15px"
+                    imgElement.style.zIndex = "1"
                     imgElement.style.pointerEvents = "none"
 
                     element.appendChild(imgElement);
@@ -125,6 +125,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                 imgElement.style.width = "75px";
                 imgElement.style.marginBottom = "15px";
                 imgElement.style.marginRight = "15px";
+                imgElement.style.zIndex = "1"
                 imgElement.style.pointerEvents = "none"
 
                 element.appendChild(imgElement);
@@ -157,7 +158,6 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                         if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                             if (
                                 canCastleBeSettle(values[data.x][data.y]) &&
-                                !isBorder &&
                                 isMyArmy({ x: data.x, y: data.y }, myArmyPosition)
                             ) {
                                 const element = document.getElementById(`${data.y},${data.x}`)!;
@@ -186,7 +186,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                 );
             });
         }
-    }, [myArmyPosition, isArmyUpdateStage, myCastlePosition, isBorder, values]);
+    }, [myArmyPosition, isArmyUpdateStage, myCastlePosition, values]);
 
     // Make armies unclickable during dock settlement
     useEffect(() => {

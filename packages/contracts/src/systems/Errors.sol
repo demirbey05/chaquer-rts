@@ -75,8 +75,6 @@ error MineCapture__TooFarToAttack();
 error MineCapture__NonMatchedGameID();
 
 // Economy System Errors
-
-error EconomySystem__DifferenceIsLess();
 error EconomySystem__InsufficientSource();
 error EconomySystem__InsufficientCredit();
 error EconomySystem__InsufficientSupply();
@@ -94,6 +92,7 @@ error NavalSystem__ArmySizeIsLow();
 error NavalSystem__NotSeaSide();
 error NavalSystem__TileIsNotEmpty();
 error NavalSystem__WrongTile();
+error NavalSystem__NoAuthorization();
 error NavalCapture__FriendFireNotAllowed();
 error NavalCapture__NoAuthorization();
 error NavalCapture__TooFarToAttack();
@@ -113,6 +112,8 @@ error FleetAttack__FriendFireNotAllowed();
 error FleetAttack__NoAuthorization();
 error FleetAttack__NonMatchedGameID();
 error FleetAttack__TooFar();
+
+
 
 // Army Update Errors
 

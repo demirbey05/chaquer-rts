@@ -15,8 +15,8 @@ import { IIdentitySystem } from "./IIdentitySystem.sol";
 import { IMapSystem } from "./IMapSystem.sol";
 import { IMineCaptureSystem } from "./IMineCaptureSystem.sol";
 import { IMineInitSystem } from "./IMineInitSystem.sol";
+import { INavalExtensionSystem } from "./INavalExtensionSystem.sol";
 import { INavalSystem } from "./INavalSystem.sol";
-import { ITestUtilSystem } from "./ITestUtilSystem.sol";
 
 /**
  * @title IWorld
@@ -36,8 +36,8 @@ interface IWorld is
   IMapSystem,
   IMineCaptureSystem,
   IMineInitSystem,
-  INavalSystem,
-  ITestUtilSystem
+  INavalExtensionSystem,
+  INavalSystem
 {
 
 }

@@ -6,10 +6,11 @@ import { useSea } from "../../context/SeaContext";
 import { useFleet } from "../../context/FleetContext";
 import { useMUD } from "../../context/MUDContext";
 import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
-import { getDefenderArmyConfig } from "../../utils/helperFunctions/CustomFunctions/getDefenderArmyConfig";
 import { getResourceTypeByPosition } from "../../utils/helperFunctions/ResourceFuntions/getResourceTypeByPosition";
 import { useResources } from "../../hooks/ResourceHooks/useResources";
 import { useGame } from "../../context/GameContext";
+import { getFleetIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getFleetIDFromPosition";
+import { getDefenderFleetConfig } from "../../utils/helperFunctions/CustomFunctions/getDefenderFleetConfig";
 
 export const SeaMineCaptureDrawer = () => {
     const { components, systemCalls } = useMUD();
@@ -37,14 +38,15 @@ export const SeaMineCaptureDrawer = () => {
                 gameID
             )];
 
-            setMineFleet(getDefenderArmyConfig(mineId[0], components.Position, components.ResourceOwnable, components.FleetOwnable, components.FleetConfig, gameID))
+            setMineFleet(getDefenderFleetConfig(mineId[0], components.Position, components.ResourceOwnable, components.FleetOwnable, components.FleetConfig, gameID))
         }
     }, [targetSeaMinePosition])
 
     const handleCapture = async () => {
-        const attackFromFleetId = [...getIDFromPosition(
+        const attackFromFleetId = [...getFleetIDFromPosition(
             seaMineAttackerFleetPosition,
             components.Position,
+            components.FleetOwnable,
             gameID
         )];
 
@@ -68,6 +70,10 @@ export const SeaMineCaptureDrawer = () => {
             setErrorMessage("An error occurred while trying to capture a sea mine.")
             setErrorTitle("Sea Mine Capture Error")
             setShowError(true)
+        } else {
+            const isTask = localStorage.getItem("attackCaptureTask")
+            !isTask && localStorage.setItem("attackCaptureTask", "true")
+            window.dispatchEvent(new Event('localDataStorage'));
         }
 
         setIsLoading(false)
@@ -96,9 +102,9 @@ export const SeaMineCaptureDrawer = () => {
                         numMedium={myFleetConfig && myFleetConfig.myFleetConfig.numMedium}
                         numBig={myFleetConfig && myFleetConfig.myFleetConfig.numBig} />
                     <SeaMineAttackFleetCard title={"Enemy Fleet"} titleBg={"danger"}
-                        numSmall={mineFleet && mineFleet.numSwordsman}
-                        numMedium={mineFleet && mineFleet.numArcher}
-                        numBig={mineFleet && mineFleet.numCavalry} />
+                        numSmall={mineFleet && mineFleet.numSmall}
+                        numMedium={mineFleet && mineFleet.numMedium}
+                        numBig={mineFleet && mineFleet.numBig} />
                 </div>
             </div>
             <div className="d-flex justify-content-evenly">

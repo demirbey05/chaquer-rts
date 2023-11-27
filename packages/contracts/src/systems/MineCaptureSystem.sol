@@ -56,7 +56,7 @@ contract MineCaptureSystem is System {
     if (attackerType == AttackerType.Army) {
       LibUtils.handleArmyAttack(attackerID, mineID, attackerOwner, mineOwner, ownerEntitesSurroundMine, gameID);
     } else if (attackerType == AttackerType.Fleet) {
-      LibUtils.handleFleetAttack(attackerID, mineID, attackerOwner, mineOwner, ownerEntitesSurroundMine, gameID);
+      LibUtils.handleFleetAttack(IStore(_world()),attackerID, mineID, attackerOwner, mineOwner, ownerEntitesSurroundMine, gameID);
     }
   }
 }

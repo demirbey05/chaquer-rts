@@ -53,6 +53,10 @@ export const FleetAttackDrawer = () => {
         if (tx) {
             document.getElementById(`${targetFleetPosition.y},${targetFleetPosition.x}`)!.setAttribute("data-bs-toggle", "");
             document.getElementById(`${targetFleetPosition.y},${targetFleetPosition.x}`)!.setAttribute("data-bs-target", "");
+
+            const isTask = localStorage.getItem("attackCaptureTask")
+            !isTask && localStorage.setItem("attackCaptureTask", "true")
+            window.dispatchEvent(new Event('localDataStorage'));
         } else {
             setErrorMessage("An error occurred while trying to attack to fleet.")
             setErrorTitle("Fleet Attack Error")
