@@ -122,25 +122,31 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
                             </TabList>
                             <TabPanels>
                                 <TabPanel>
-                                    <Image
-                                        boxSize='300px'
-                                        fit='cover'
-                                        src={map1}
-                                    />
+                                    <div className='d-flex justify-content-center'>
+                                        <Image
+                                            boxSize='250px'
+                                            fit={"fill"}
+                                            src={map1}
+                                        />
+                                    </div>
                                 </TabPanel>
                                 <TabPanel>
-                                    <Image
-                                        boxSize='300px'
-                                        fit='cover'
-                                        src={map2}
-                                    />
+                                    <div className='d-flex justify-content-center'>
+                                        <Image
+                                            boxSize='250px'
+                                            fit={"fill"}
+                                            src={map2}
+                                        />
+                                    </div>
                                 </TabPanel>
                                 <TabPanel>
-                                    <Image
-                                        boxSize='300px'
-                                        fit='cover'
-                                        src={map3}
-                                    />
+                                    <div className='d-flex justify-content-center'>
+                                        <Image
+                                            boxSize='250px'
+                                            fit={"fill"}
+                                            src={map3}
+                                        />
+                                    </div>
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>
