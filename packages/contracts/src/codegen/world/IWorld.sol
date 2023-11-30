@@ -6,6 +6,7 @@ pragma solidity >=0.8.21;
 import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 
 import { IArmyUpdateSystem } from "./IArmyUpdateSystem.sol";
+import { IArtillerySystem } from "./IArtillerySystem.sol";
 import { IAttackCaptureSystem } from "./IAttackCaptureSystem.sol";
 import { IChatSystem } from "./IChatSystem.sol";
 import { IEconomySystem } from "./IEconomySystem.sol";
@@ -27,6 +28,7 @@ import { INavalSystem } from "./INavalSystem.sol";
 interface IWorld is
   IBaseWorld,
   IArmyUpdateSystem,
+  IArtillerySystem,
   IAttackCaptureSystem,
   IChatSystem,
   IEconomySystem,

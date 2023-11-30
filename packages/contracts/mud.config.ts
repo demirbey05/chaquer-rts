@@ -155,7 +155,7 @@ export default mudConfig({
       valueSchema:{
         numOfSwordsman:"uint256",
         numOfArcher:"uint256",
-        numOfCavalry:"uint256"
+        numOfCavalry:"uint256",
       },
       dataStruct:false
     },
@@ -222,7 +222,25 @@ export default mudConfig({
         time:"uint256"
        }
     },
-    LatestGameID:"uint256"
+    LatestGameID:"uint256",
+    HPComponent:{
+      valueSchema:{
+        hp:"uint256",
+        gameID:"uint256",
+      }
+    },
+    ArtilleryOwnable:{
+      valueSchema:{
+        owner:"address",
+        gameID:"uint256",
+      }
+    },
+    ArtilleryConfig:{
+      valueSchema:{
+        numArtillery:"uint32",
+        gameID:"uint256",
+      }
+    },
 
   },
   
@@ -267,6 +285,11 @@ export default mudConfig({
       name: "KeysWithValueModule",
       root: true,
       args: [resolveTableId("FleetCarry")],
+    },
+    {
+      name: "KeysWithValueModule",
+      root: true,
+      args: [resolveTableId("ArtilleryOwnable")],
     },
   ],
 });

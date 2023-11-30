@@ -28,3 +28,6 @@ import { ChatMessages, ChatMessagesData, ChatMessagesTableId } from "./tables/Ch
 import { FleetCarry, FleetCarryData, FleetCarryTableId } from "./tables/FleetCarry.sol";
 import { LastMessageTime, LastMessageTimeTableId } from "./tables/LastMessageTime.sol";
 import { LatestGameID, LatestGameIDTableId } from "./tables/LatestGameID.sol";
+import { HPComponent, HPComponentData, HPComponentTableId } from "./tables/HPComponent.sol";
+import { ArtilleryOwnable, ArtilleryOwnableData, ArtilleryOwnableTableId } from "./tables/ArtilleryOwnable.sol";
+import { ArtilleryConfig, ArtilleryConfigData, ArtilleryConfigTableId } from "./tables/ArtilleryConfig.sol";

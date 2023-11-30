@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { wadMul, toWadUnsafe } from "solmate/src/utils/SignedWadMath.sol";
-import { MapConfig, Position, ResourceOwn, ResourceOwnData, ColorOwnable, AddressToColorIndex, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, Players, GameMetaData } from "../codegen/index.sol";
+import { MapConfig, Position, HPComponent, ResourceOwn, ResourceOwnData, ColorOwnable, AddressToColorIndex, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, Players, GameMetaData } from "../codegen/index.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
@@ -15,7 +15,6 @@ import { maxArmyNum, armyMoveFoodCost, armyMoveGoldCost } from "./Constants.sol"
 import "./Errors.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
-
 
 error MoveArmy__UnsufficientFood();
 error MoveArmy__UnsufficientGold();
@@ -63,6 +62,7 @@ contract MapSystem is System {
     CastleOwnable.set(entityID, ownerCandidate, gameID);
     GameMetaData.setNumberOfCastle(gameID, numOfCastle + 1);
     ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(ownerCandidate, gameID), gameID);
+    HPComponent.set(entityID, 100, gameID);
     if (numOfCastle + 1 == GameMetaData.getLimitOfPlayer(gameID)) {
       SystemSwitch.call(abi.encodeCall(IWorld(_world()).resourceSystemInit, (gameID)));
     }
