@@ -157,6 +157,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                     (data) => {
                         if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                             if (
+                                values.length > 0 &&
                                 canCastleBeSettle(values[data.x][data.y]) &&
                                 isMyArmy({ x: data.x, y: data.y }, myArmyPosition)
                             ) {

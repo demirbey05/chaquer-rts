@@ -79,7 +79,7 @@ export const DockEffects = (isArmySettleStage: boolean | undefined,
 
     /* Assign data-bs-toggle ve data-bs-target attributes to possible dock positions */
     useEffect(() => {
-        if (values && dockSettleStage && fromArmyPosition) {
+        if (values && values.length > 0 && dockSettleStage && fromArmyPosition) {
             rows.forEach((row) => {
                 columns.forEach((column) => {
                     const element = document.getElementById(`${column},${row}`);
@@ -104,7 +104,7 @@ export const DockEffects = (isArmySettleStage: boolean | undefined,
         }
 
         return () => {
-            if (values && !dockSettleStage) {
+            if (values && values.length > 0 && !dockSettleStage) {
                 rows.forEach((row) => {
                     columns.forEach((column) => {
                         const element = document.getElementById(`${column},${row}`);

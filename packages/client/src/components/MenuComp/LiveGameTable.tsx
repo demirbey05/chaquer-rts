@@ -1,7 +1,10 @@
-import chaquerMap from '../../images/backgrounds/chaquer-map.jpg';
+import map1 from '../../images/maps/map1.jpg'
+import map2 from '../../images/maps/map2.jpg'
+import map3 from '../../images/maps/map3.jpg'
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react'
 import { useGameList } from '../../hooks/GameHooks/useGameList';
 import { useGame } from '../../context/GameContext';
+import { getMapFromMapId } from '../../utils/helperFunctions/CustomFunctions/getMapFromMapId';
 
 export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameModalOpen, setIsSpectateGameModalOpen, username }:
     { selectedPlayers: number[], gameNameFilter: string, setIsJoinGameModalOpen: (value: boolean) => void, setIsSpectateGameModalOpen: (value: boolean) => void, username: string }) => {
@@ -40,7 +43,7 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
                                 <Tr key={key}>
                                     <Td>
                                         <img
-                                            src={chaquerMap}
+                                            src={getMapFromMapId(game.mapId)}
                                             alt="Map Image"
                                             width={"75"}
                                             height={"75"}

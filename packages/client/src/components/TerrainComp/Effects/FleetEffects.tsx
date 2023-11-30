@@ -102,6 +102,7 @@ export const FleetEffects = (
                     (data) => {
                         if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
                             if (
+                                values.length > 0 &&
                                 !canCastleBeSettle(values[data.x][data.y]) &&
                                 canCastleBeSettle(values[fromArmyPosition.x][fromArmyPosition.y]) &&
                                 isMyFleet({ x: data.x, y: data.y }, myFleetPositions)
