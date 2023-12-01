@@ -112,7 +112,7 @@ export const DockSettleModal = () => {
 
         if (dockPosition) {
             const audio = new Audio(armyMoveSoundEffect);
-            audio.volume = 0.4;
+            audio.volume = 0.2;
             audio.play();
 
             setIsLoadingMove(true)

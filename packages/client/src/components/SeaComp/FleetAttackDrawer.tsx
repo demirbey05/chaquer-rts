@@ -1,3 +1,4 @@
+import fleetBattleEffect from '../../sounds/soundEffects/fleet-battle-effect.mp3'
 import { useState } from "react";
 import { Button } from "@chakra-ui/react";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
@@ -48,11 +49,16 @@ export const FleetAttackDrawer = () => {
         }
 
         setIsLoading(true)
+
+        const audio = new Audio(fleetBattleEffect);
+        audio.volume = 0.2;
+        audio.play();
+
         const tx = await systemCalls.attackFleet(attackFromArmyId[0] as string, attackToArmyId[0] as string, gameID)
 
         if (tx) {
-            document.getElementById(`${targetFleetPosition.y},${targetFleetPosition.x}`)!.setAttribute("data-bs-toggle", "");
-            document.getElementById(`${targetFleetPosition.y},${targetFleetPosition.x}`)!.setAttribute("data-bs-target", "");
+            document.getElementById(`${targetFleetPosition!.y},${targetFleetPosition!.x}`)!.setAttribute("data-bs-toggle", "");
+            document.getElementById(`${targetFleetPosition!.y},${targetFleetPosition!.x}`)!.setAttribute("data-bs-target", "");
 
             const isTask = localStorage.getItem("attackCaptureTask")
             !isTask && localStorage.setItem("attackCaptureTask", "true")
