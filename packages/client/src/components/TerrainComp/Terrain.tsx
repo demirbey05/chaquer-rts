@@ -283,8 +283,6 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
         canCastleBeSettle(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y]) &&
         !isMyArmy({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, myArmyPosition) &&
         !isEnemyArmy({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, armyPositions, myArmyPosition) &&
-        !isMyCastle(myCastlePosition, toFleetPositionRef.current.x.toString(), toFleetPositionRef.current.y.toString()) &&
-        !isEnemyCastle({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, myCastlePosition, castlePositions) &&
         !isMyDock(toFleetPositionRef.current.x, toFleetPositionRef.current.y, myDockPositions) &&
         !isEnemyDock({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, dockPositions, myDockPositions)) {
         FleetUnloadEvent(setIsFleetUnloadStage,
