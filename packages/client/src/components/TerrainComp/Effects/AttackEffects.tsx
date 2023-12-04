@@ -20,10 +20,12 @@ export const AttackEffects = (myFleetPositions: any[] | undefined,
         armyPositions.map((data: any) => {
             if (isAttackStage && fromArmyPosition) {
                 isManhattanPosition(data.armyPosition, fromArmyPosition.x, fromArmyPosition.y) &&
+                    !isMyFleet({ x: fromArmyPosition.x, y: fromArmyPosition.y }, myFleetPositions) &&
                     !isMyArmy({ x: data.armyPosition.x, y: data.armyPosition.y }, myArmyPosition) &&
                     document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
 
                 isManhattanPosition(data.armyPosition, fromArmyPosition.x, fromArmyPosition.y) &&
+                    !isMyFleet({ x: fromArmyPosition.x, y: fromArmyPosition.y }, myFleetPositions) &&
                     !isMyArmy({ x: data.armyPosition.x, y: data.armyPosition.y }, myArmyPosition) &&
                     document.getElementById(`${data.armyPosition.y},${data.armyPosition.x}`)!.setAttribute("data-bs-target", "#armyAttackDrawer");
             }

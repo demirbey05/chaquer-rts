@@ -8,6 +8,7 @@ import { isEnemyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isEnem
 import { getArmyMergePositions } from "../../../utils/helperFunctions/ArmyFunctions/getArmyMergePositions";
 import { isArmyMergePosition } from "../../../utils/helperFunctions/ArmyFunctions/isArmyMergePositions";
 import armyTile from '../../../images/armyAssets/army.png';
+import { isMyFleet } from "../../../utils/helperFunctions/SeaFunctions/isMyFleet";
 
 export const ArmyEffects = (isArmyUpdateStage: boolean,
     values: number[][],
@@ -21,7 +22,8 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
     resources: any[],
     fleetSettleStage: boolean,
     isArmyMergeStage: boolean,
-    fromArmyPosition: any
+    fromArmyPosition: any,
+    myFleetPositions: any[] | undefined
 ) => {
     //Makes castle, army and resource positions unClickable to not cause bug during army settlement
     useEffect(() => {
@@ -212,12 +214,16 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
     useEffect(() => {
         myArmyPosition.map((position) => {
             getArmyMergePositions(position.myArmyPosition).map((mergePosition) => {
-                if (fromArmyPosition && isArmyMergeStage) {
+                if (fromArmyPosition && isArmyMergeStage && myFleetPositions && myArmyPosition) {
                     isArmyMergePosition(mergePosition.x, mergePosition.y, fromArmyPosition) &&
+                        !isMyFleet({ x: fromArmyPosition.x, y: fromArmyPosition.y }, myFleetPositions) &&
+                        !isMyFleet({ x: mergePosition.x, y: mergePosition.y }, myFleetPositions) &&
                         isMyArmy({ x: mergePosition.x, y: mergePosition.y }, myArmyPosition) &&
                         document.getElementById(`${mergePosition.y},${mergePosition.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
 
                     isArmyMergePosition(mergePosition.x, mergePosition.y, fromArmyPosition) &&
+                        !isMyFleet({ x: fromArmyPosition.x, y: fromArmyPosition.y }, myFleetPositions) &&
+                        !isMyFleet({ x: mergePosition.x, y: mergePosition.y }, myFleetPositions) &&
                         isMyArmy({ x: mergePosition.x, y: mergePosition.y }, myArmyPosition) &&
                         document.getElementById(`${mergePosition.y},${mergePosition.x}`)!.setAttribute("data-bs-target", "#armyMergeDrawer");
                 }
@@ -234,5 +240,5 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                 })
             }
         }
-    }, [isArmyMergeStage, fromArmyPosition, myArmyPosition])
+    }, [isArmyMergeStage, fromArmyPosition, myArmyPosition, myFleetPositions])
 }

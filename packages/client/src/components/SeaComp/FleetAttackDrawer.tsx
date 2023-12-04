@@ -5,8 +5,8 @@ import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useMUD } from "../../context/MUDContext";
 import { useError } from "../../context/ErrorContext";
 import { useFleet } from "../../context/FleetContext";
-import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 import { useGame } from "../../context/GameContext";
+import { getFleetIDFromPosition } from '../../utils/helperFunctions/CustomFunctions/getFleetIDFromPosition';
 
 export const FleetAttackDrawer = () => {
     const { components, systemCalls } = useMUD();
@@ -29,15 +29,17 @@ export const FleetAttackDrawer = () => {
     };
 
     const handleAttack = async () => {
-        const attackFromArmyId = [...getIDFromPosition(
+        const attackFromArmyId = [...getFleetIDFromPosition(
             attackerFleetPosition,
             components.Position,
+            components.FleetOwnable,
             gameID
         )];
 
-        const attackToArmyId = [...getIDFromPosition(
+        const attackToArmyId = [...getFleetIDFromPosition(
             targetFleetPosition,
             components.Position,
+            components.FleetOwnable,
             gameID
         )];
 

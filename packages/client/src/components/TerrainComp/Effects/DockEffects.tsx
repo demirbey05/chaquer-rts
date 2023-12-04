@@ -8,6 +8,8 @@ import { getBorderColor } from "../../../utils/constants/getBorderColors";
 import { isArmyPosition } from "../../../utils/helperFunctions/ArmyFunctions/isArmyPosition";
 import { getNumberOfSoldierInArmy } from "../../../utils/helperFunctions/ArmyFunctions/getNumberOfSoliderInArmy";
 import dockTile from '../../../images/shipAssets/dock.png'
+import { isMyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isMyArmy";
+import { isMyFleet } from "../../../utils/helperFunctions/SeaFunctions/isMyFleet";
 
 export const DockEffects = (isArmySettleStage: boolean | undefined,
     castlePositions: any[],
@@ -21,7 +23,8 @@ export const DockEffects = (isArmySettleStage: boolean | undefined,
     dockCaptureStage: boolean,
     rows: number[],
     columns: number[],
-    fromArmyPosition: any
+    fromArmyPosition: any,
+    myFleetPositions: any[] | undefined
 ) => {
     /* Deploy dock emojis */
     useEffect(() => {
@@ -120,12 +123,14 @@ export const DockEffects = (isArmySettleStage: boolean | undefined,
 
     // Handle Dock Capture OffCanvas
     useEffect(() => {
-        if (dockPositions && dockCaptureStage && fromArmyPosition && myDockPositions) {
+        if (dockPositions && dockCaptureStage && fromArmyPosition && myDockPositions && myFleetPositions) {
             dockPositions.map((data: any) => {
                 isManhattanPosition(data.dockPosition, fromArmyPosition.x, fromArmyPosition.y) &&
+                    !isMyFleet({ x: fromArmyPosition.x, y: fromArmyPosition.y }, myFleetPositions) &&
                     !isMyDock(data.dockPosition.x, data.dockPosition.y, myDockPositions) &&
                     document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
                 isManhattanPosition(data.dockPosition, fromArmyPosition.x, fromArmyPosition.y) &&
+                    !isMyFleet({ x: fromArmyPosition.x, y: fromArmyPosition.y }, myFleetPositions) &&
                     !isMyDock(data.dockPosition.x, data.dockPosition.y, myDockPositions) &&
                     document.getElementById(`${data.dockPosition.y},${data.dockPosition.x}`)!.setAttribute("data-bs-target", "#dockCaptureDrawer");
             });
@@ -141,7 +146,7 @@ export const DockEffects = (isArmySettleStage: boolean | undefined,
                 });
             }
         }
-    }, [dockPositions, myDockPositions, dockCaptureStage, fromArmyPosition])
+    }, [dockPositions, myDockPositions, dockCaptureStage, fromArmyPosition, myFleetPositions])
 
     // Make docks unclickable during castle settlement
     useEffect(() => {

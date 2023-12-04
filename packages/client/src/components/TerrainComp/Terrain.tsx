@@ -67,6 +67,9 @@ import { FleetUnloadEvent } from './Events/FleetUnloadEvent';
 import { useLoadedFleets } from '../../hooks/SeaHooks/useLoadedFleets';
 import { useGameData } from '../../hooks/useGameData';
 import { getMapFromMapId } from '../../utils/helperFunctions/CustomFunctions/getMapFromMapId';
+import { isArmyPosition } from '../../utils/helperFunctions/ArmyFunctions/isArmyPosition';
+import { isCastlePosition } from '../../utils/helperFunctions/CastleFunctions/isCastlePosition';
+import { isDockPosition } from '../../utils/helperFunctions/SeaFunctions/isDockPosition';
 
 export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpectator: boolean }) => {
   const { components, systemCalls } = useMUD();
@@ -277,7 +280,13 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
       }
       else if (values.length > 0 &&
         isMyFleet({ x: Number(fromFleetPositionRef.current.x), y: Number(fromFleetPositionRef.current.y) }, myFleetPositions) &&
-        canCastleBeSettle(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y])) {
+        canCastleBeSettle(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y]) &&
+        !isMyArmy({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, myArmyPosition) &&
+        !isEnemyArmy({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, armyPositions, myArmyPosition) &&
+        !isMyCastle(myCastlePosition, toFleetPositionRef.current.x.toString(), toFleetPositionRef.current.y.toString()) &&
+        !isEnemyCastle({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, myCastlePosition, castlePositions) &&
+        !isMyDock(toFleetPositionRef.current.x, toFleetPositionRef.current.y, myDockPositions) &&
+        !isEnemyDock({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, dockPositions, myDockPositions)) {
         FleetUnloadEvent(setIsFleetUnloadStage,
           setIsFleetMoveStage,
           setSeaMineStage,
@@ -518,7 +527,8 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
     resources,
     fleetSettleStage,
     isArmyMergeStage,
-    fromArmyPosition);
+    fromArmyPosition,
+    myFleetPositions);
   AttackEffects(myFleetPositions,
     fleetPositions,
     fromFleetPosition,
@@ -561,7 +571,8 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
     dockCaptureStage,
     rows,
     columns,
-    fromArmyPosition);
+    fromArmyPosition,
+    myFleetPositions);
   FleetEffects(myFleetPositions,
     fleetPositions,
     values,
