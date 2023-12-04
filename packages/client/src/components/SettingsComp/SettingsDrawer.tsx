@@ -1,4 +1,4 @@
-import soundTrack from '../../sounds/chaquerSoundTrack.mp3'
+import soundTrack from "../../sounds/soundTracks/chaquer-soundtrack.mp3"
 import { useState, useEffect, useRef } from 'react'
 import { useGame } from '../../context/GameContext';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ export const SettingsDrawer = () => {
     const { isInputFocused } = useGame()
 
     const [isPlaying, setIsPlaying] = useState(false);
-    const [volume, setVolume] = useState<number>(0.1);
+    const [volume, setVolume] = useState<number>(0.05);
     const [isOpen, setIsOpen] = useState(false);
 
     const audioRef = useRef<any>();
@@ -96,8 +96,8 @@ export const SettingsDrawer = () => {
                 <AudioControlCompHeader toggleDrawer={toggleDrawer} />
                 <div className='ms-2'>
                     <h5 className='mb-2'>Music</h5>
-                    <PlayMusicButton handlePlay={handlePlay} closeDrawer={toggleDrawer} />
-                    <PauseMusicButton handleStop={handleStop} closeDrawer={toggleDrawer} />
+                    <PlayMusicButton handlePlay={handlePlay} />
+                    <PauseMusicButton handleStop={handleStop} />
                     <hr className='mt-2 mb-2' />
                     <h5 className='mb-2'>Music Volume</h5>
                     <Slider
@@ -150,13 +150,12 @@ const BackToMenuButton = () => {
     )
 }
 
-const PlayMusicButton = ({ handlePlay, closeDrawer }: any) => {
+const PlayMusicButton = ({ handlePlay }: any) => {
     return (
         <Button colorScheme='whatsapp'
             variant='outline'
             style={{ height: "40px", marginRight: "10px" }}
             onClick={() => {
-                closeDrawer();
                 handlePlay();
             }}
             aria-label="Close">
@@ -165,13 +164,12 @@ const PlayMusicButton = ({ handlePlay, closeDrawer }: any) => {
     )
 }
 
-const PauseMusicButton = ({ handleStop, closeDrawer }: any) => {
+const PauseMusicButton = ({ handleStop }: any) => {
     return (
         <Button colorScheme='red'
             variant='outline'
             style={{ height: "40px" }}
             onClick={() => {
-                closeDrawer();
                 handleStop();
             }}
             aria-label="Close">

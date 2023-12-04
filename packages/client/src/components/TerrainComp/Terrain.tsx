@@ -1,8 +1,8 @@
 import gameBgImg from '../../images/backgrounds/game-page-background.jpg'
-import chaquerMap from '../../images/backgrounds/chaquer-map.jpg'
-import map from "../../../map.json";
+import map1Data from "../../../map1.json";
+import map2Data from "../../../map2.json";
+import map3Data from "../../../map3.json";
 import ScrollContainer from 'react-indiana-drag-scroll'
-import { TerrainType } from "../../terrain-helper/types";
 import { useRef, useState } from "react";
 import { Entity } from "@latticexyz/recs";
 import { useCastle } from "../../context/CastleContext";
@@ -65,12 +65,18 @@ import { EventProgressBar } from '../ProgressComp/EventProgressBar';
 import { FleetLoadEvent } from './Events/FleetLoadEvent';
 import { FleetUnloadEvent } from './Events/FleetUnloadEvent';
 import { useLoadedFleets } from '../../hooks/SeaHooks/useLoadedFleets';
+import { useGameData } from '../../hooks/useGameData';
+import { getMapFromMapId } from '../../utils/helperFunctions/CustomFunctions/getMapFromMapId';
+import { isArmyPosition } from '../../utils/helperFunctions/ArmyFunctions/isArmyPosition';
+import { isCastlePosition } from '../../utils/helperFunctions/CastleFunctions/isCastlePosition';
+import { isDockPosition } from '../../utils/helperFunctions/SeaFunctions/isDockPosition';
 
 export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpectator: boolean }) => {
   const { components, systemCalls } = useMUD();
   const { width, height } = useTerrain();
 
-  const values: Array<Array<TerrainType>> = map;
+  let values: number[][] = []
+
   const rows = Array.from({ length: height }, (v, i) => i);
   const columns = Array.from({ length: width }, (v, i) => i);
 
@@ -175,6 +181,17 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
   const myFleetPositions = useMyFleetPositions(userWallet, gameID);
   const userValid = usePlayerIsValid(gameID, userWallet);
   const isFleetLoaded = useLoadedFleets(gameID, fromFleetPosition)
+  const gameData = useGameData(gameID)
+
+  if (gameData) {
+    if (gameData.mapId === 1) {
+      values = map1Data
+    } else if (gameData.mapId === 2) {
+      values = map2Data
+    } else {
+      values = map3Data
+    }
+  }
 
   const handleClick = async (e: any) => {
     // Toggle orange tiles for army settlement
@@ -232,7 +249,8 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
       toFleetPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
       fromFleetPositionRef.current = { x: fromFleetPosition.x.toString(), y: fromFleetPosition.y.toString() };
 
-      if (canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y]) &&
+      if (values.length > 0 &&
+        canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y]) &&
         isEnemyFleet({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, myFleetPositions, fleetPositions)) {
         FleetAttackEvent(setIsFleetMoveStage,
           setIsFleetUnloadStage,
@@ -260,8 +278,13 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
           setMyFleetConfig,
           myFleetPositions)
       }
-      else if (isMyFleet({ x: Number(fromFleetPositionRef.current.x), y: Number(fromFleetPositionRef.current.y) }, myFleetPositions) &&
-        canCastleBeSettle(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y])) {
+      else if (values.length > 0 &&
+        isMyFleet({ x: Number(fromFleetPositionRef.current.x), y: Number(fromFleetPositionRef.current.y) }, myFleetPositions) &&
+        canCastleBeSettle(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y]) &&
+        !isMyArmy({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, myArmyPosition) &&
+        !isEnemyArmy({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, armyPositions, myArmyPosition) &&
+        !isMyDock(toFleetPositionRef.current.x, toFleetPositionRef.current.y, myDockPositions) &&
+        !isEnemyDock({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, dockPositions, myDockPositions)) {
         FleetUnloadEvent(setIsFleetUnloadStage,
           setIsFleetMoveStage,
           setSeaMineStage,
@@ -281,7 +304,8 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
           isFleetLoaded,
           gameID)
       }
-      else if (isMyFleet({ x: Number(fromFleetPositionRef.current.x), y: Number(fromFleetPositionRef.current.y) }, myFleetPositions) &&
+      else if (values.length > 0 &&
+        isMyFleet({ x: Number(fromFleetPositionRef.current.x), y: Number(fromFleetPositionRef.current.y) }, myFleetPositions) &&
         !isMyFleet({ x: toFleetPositionRef.current.x, y: toFleetPositionRef.current.y }, myFleetPositions) &&
         canFleetBeSettled(values[toFleetPositionRef.current.x][toFleetPositionRef.current.y]) &&
         canFleetBeSettled(values[Number(fromFleetPositionRef.current.x)][Number(fromFleetPositionRef.current.y)])) {
@@ -361,7 +385,8 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
           setMyArmyConfig,
           myArmyPosition)
       }
-      else if (isUserClickedMine(toArmyPositionRef.current.x, toArmyPositionRef.current.y, resources) &&
+      else if (values.length > 0 &&
+        isUserClickedMine(toArmyPositionRef.current.x, toArmyPositionRef.current.y, resources) &&
         canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y])) {
         MineCaptureEvent(setIsFleetLoadStage,
           setIsArmyMergeStage,
@@ -391,7 +416,8 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
           setMyArmyConfig,
           myArmyPosition)
       }
-      else if (isPositionNextToSea(toArmyPositionRef.current.x, toArmyPositionRef.current.y, values) &&
+      else if (values.length > 0 &&
+        isPositionNextToSea(toArmyPositionRef.current.x, toArmyPositionRef.current.y, values) &&
         isMyArmy({ x: parseInt(fromArmyPositionRef.current.x), y: parseInt(fromArmyPositionRef.current.y) }, myArmyPosition) &&
         getNumberOfSoldierInArmy(fromArmyPositionRef.current, myArmyPosition) >= 20) {
         DockSettleEvent(setIsFleetLoadStage,
@@ -433,7 +459,8 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
           fromArmyPositionRef,
           toArmyPositionRef)
       }
-      else if (canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y]) &&
+      else if (values.length > 0 &&
+        canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y]) &&
         canCastleBeSettle(values[Number(fromArmyPositionRef.current.x)][Number(fromArmyPositionRef.current.y)]) &&
         !isMyCastle(myCastlePosition, toArmyPositionRef.current.x, toArmyPositionRef.current.y) &&
         !isMyDock(Number(toArmyPositionRef.current.x), Number(toArmyPositionRef.current.y), myDockPositions)) {
@@ -498,7 +525,8 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
     resources,
     fleetSettleStage,
     isArmyMergeStage,
-    fromArmyPosition);
+    fromArmyPosition,
+    myFleetPositions);
   AttackEffects(myFleetPositions,
     fleetPositions,
     fromFleetPosition,
@@ -541,7 +569,8 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
     dockCaptureStage,
     rows,
     columns,
-    fromArmyPosition);
+    fromArmyPosition,
+    myFleetPositions);
   FleetEffects(myFleetPositions,
     fleetPositions,
     values,
@@ -568,7 +597,7 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
           transform: `scale(${zoomLevel}) rotateX(60deg) rotateZ(45deg) rotateY(0deg)`,
           transition: "transform 0.2s ease-in-out",
           zIndex: "0",
-          backgroundImage: `url(${chaquerMap})`,
+          backgroundImage: `url(${gameData && getMapFromMapId(gameData.mapId)})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           margin: "750px 1350px",
@@ -595,14 +624,17 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
                     handleClick(e);
                   }}
                   className={`
-                ${isValidTerrainType(values[row][column]) &&
+                ${values.length > 0
+                    && isValidTerrainType(values[row][column]) &&
                     "hoverTileEffect"
                     }`}
-                  data-bs-toggle={`${canCastleBeSettle(values[row][column]) &&
+                  data-bs-toggle={`${values.length > 0 &&
+                    canCastleBeSettle(values[row][column]) &&
                     !isCastleSettled
                     ? "modal" : ""
                     }`}
-                  data-bs-target={`${canCastleBeSettle(values[row][column]) &&
+                  data-bs-target={`${values.length > 0 &&
+                    canCastleBeSettle(values[row][column]) &&
                     !isCastleSettled
                     ? "#castleSettleModal" : ""
                     }`}

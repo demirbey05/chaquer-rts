@@ -1,6 +1,7 @@
 import archerImg from "../../images/armyAssets/archer.png";
 import cavalryImg from "../../images/armyAssets/cavalry.png";
 import swordsmanImg from "../../images/armyAssets/swordsman.png";
+import armySettleEffect from '../../sounds/soundEffects/army-deploy-effect.mp3'
 import { useMUD } from "../../context/MUDContext";
 import { Button, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
@@ -119,6 +120,10 @@ export const ArmySettleModal = () => {
     if ((document.getElementById('ArcherSettle') as HTMLInputElement).value === "") {
       setArcherCount("0");
     }
+
+    const audio = new Audio(armySettleEffect);
+    audio.volume = 0.2;
+    audio.play();
 
     const tx = await systemCalls.settleArmy(
       armyPosition.x,

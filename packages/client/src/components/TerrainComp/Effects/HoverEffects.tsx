@@ -197,7 +197,8 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                 y: parseInt(fromFleetPosition.y),
             }).map((data) => {
                 if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
-                    canCastleBeSettle(values[data.x][data.y]) &&
+                    values.length > 0 &&
+                        canCastleBeSettle(values[data.x][data.y]) &&
                         !isMyFleet({ x: data.x, y: data.y }, myFleetPositions) &&
                         !isMyResource(data.x, data.y, myResourcePositions) &&
                         document.getElementById(`${data.y},${data.x}`)?.classList.add("yellowTileEffect");
@@ -213,7 +214,7 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
                     y: parseInt(fromFleetPosition.y),
                 }).map((data) => {
                     if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
-                        if (canCastleBeSettle(values[data.x][data.y])) {
+                        if (values.length > 0 && canCastleBeSettle(values[data.x][data.y])) {
                             document.getElementById(`${data.y},${data.x}`)?.classList.remove("yellowTileEffect");
                         }
                     }

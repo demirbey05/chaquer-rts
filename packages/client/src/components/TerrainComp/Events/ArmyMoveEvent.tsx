@@ -44,7 +44,7 @@ export const ArmyMoveEvent = async (
         setIsLoading(true);
 
         const audio = new Audio(armyMoveSoundEffect);
-        audio.volume = 0.4;
+        audio.volume = 0.2;
         audio.play();
 
         var targetDiv = document.getElementById(`${toArmyPositionRef.current.y},${toArmyPositionRef.current.x}`);

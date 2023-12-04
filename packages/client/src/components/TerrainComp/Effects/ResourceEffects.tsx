@@ -118,11 +118,13 @@ export const ResourceEffects = (values: number[][],
     useEffect(() => {
         if (isMineStage && fromArmyPosition) {
             resources.map((data: any) => {
-                isManhattanPosition(data.positions, fromArmyPosition.x, fromArmyPosition.y) &&
+                values.length > 0 &&
+                    isManhattanPosition(data.positions, fromArmyPosition.x, fromArmyPosition.y) &&
                     !isMyResource(data.positions.x, data.positions.y, myResourcePositions) &&
                     canCastleBeSettle(values[data.positions.x][data.positions.y]) &&
                     document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
                 isManhattanPosition(data.positions, fromArmyPosition.x, fromArmyPosition.y) &&
+                    values.length > 0 &&
                     !isMyResource(data.positions.x, data.positions.y, myResourcePositions) &&
                     canCastleBeSettle(values[data.positions.x][data.positions.y]) &&
                     document.getElementById(`${data.positions.y},${data.positions.x}`)!.setAttribute("data-bs-target", "#mineCaptureDrawer");
@@ -168,7 +170,7 @@ export const ResourceEffects = (values: number[][],
 
     // Mountain Asset Deploy
     useEffect(() => {
-        if (values) {
+        if (values && values.length > 0) {
             values.map((row, x) => {
                 row.map((data, y) => {
                     if (data === 3) {
@@ -192,7 +194,7 @@ export const ResourceEffects = (values: number[][],
         }
 
         return () => {
-            if (values) {
+            if (values && values.length > 0) {
                 values.map((row, x) => {
                     row.map((data, y) => {
                         if (data === 3) {

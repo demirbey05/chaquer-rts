@@ -1,9 +1,12 @@
-import chaquerMap from '../../images/backgrounds/chaquer-map.jpg';
+import map1 from '../../images/maps/map1.jpg'
+import map2 from '../../images/maps/map2.jpg'
+import map3 from '../../images/maps/map3.jpg'
 import { useMUD } from '../../context/MUDContext';
 import { getComponentValueStrict } from '@latticexyz/recs';
 import { encodeEntity } from '@latticexyz/store-sync/recs';
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react'
 import { useGameList } from '../../hooks/GameHooks/useGameList';
+import { getMapFromMapId } from '../../utils/helperFunctions/CustomFunctions/getMapFromMapId';
 
 export const CompletedGameTable = ({ gameNameFilter }: { gameNameFilter: string }) => {
     const { components } = useMUD();
@@ -34,7 +37,7 @@ export const CompletedGameTable = ({ gameNameFilter }: { gameNameFilter: string 
                                 <Tr key={key}>
                                     <Td>
                                         <img
-                                            src={chaquerMap}
+                                            src={getMapFromMapId(game.mapId)}
                                             alt="Map Image"
                                             width={"75"}
                                             height={"75"}

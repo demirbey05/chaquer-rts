@@ -14,6 +14,7 @@ import { usePlayer } from "../../context/PlayerContext";
 import { getMyFleetConfigByPosition } from "../../utils/helperFunctions/SeaFunctions/getFleetConfigByPosition";
 import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
 import { getMyArmyConfigByPosition } from "../../utils/helperFunctions/ArmyFunctions/getArmyConfigByPosition";
+import { getFleetIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getFleetIDFromPosition";
 
 export const FleetLoadModal = () => {
   const { systemCalls, components } = useMUD();
@@ -110,9 +111,10 @@ export const FleetLoadModal = () => {
     var targetDiv = document.getElementById(`${targetLoadFleetPosition.y},${targetLoadFleetPosition.x}`);
     targetDiv?.classList.add("animate-border-settle");
 
-    const fleetID = [...getIDFromPosition(
+    const fleetID = [...getFleetIDFromPosition(
       targetLoadFleetPosition,
       components.Position,
+      components.FleetOwnable,
       gameID
     )];
 
