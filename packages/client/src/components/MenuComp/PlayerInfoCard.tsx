@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { Avatar, WrapItem, Button, Tag, useClipboard } from '@chakra-ui/react';
 import { usePlayer } from '../../context/PlayerContext';
-import { WarningTwoIcon, EditIcon } from "@chakra-ui/icons";
+import { IoMdWarning } from "react-icons/io";
+import { FaEdit } from "react-icons/fa";
 
 export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: string, setIsUserModalOpen: (value: boolean) => void }) => {
     const showUsername = username;
@@ -24,6 +25,7 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                                 padding={"10px"}
                                 size='lg'
                                 backgroundColor={"blue.800"}
+                                textColor={"white"}
                                 borderRadius='full'>
                                 Username: {username}
                             </Tag>
@@ -34,7 +36,7 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                                 backgroundColor={"blue.800"}
                                 colorScheme={"facebook"}
                                 onClick={() => setIsUserModalOpen(true)}>
-                                <EditIcon />
+                                <FaEdit />
                             </Button>
                         </>
                     ) : (
@@ -53,7 +55,7 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                 {!showUsername && (
                     <div className='mt-2'>
                         <p className='d-flex justify-content-center align-items-center'>
-                            <WarningTwoIcon me={3} textColor={"red.500"} />
+                            <IoMdWarning className="me-2 text-danger text-2xl" />
                             You must assign username to play the game
                         </p>
                     </div>
@@ -81,6 +83,7 @@ const PublicWallet = () => {
                 padding={"10px"}
                 size='lg'
                 backgroundColor={"blue.800"}
+                textColor={"white"}
                 borderRadius='full'>
                 Public Wallet: {truncatedPublicWallet}
             </Tag>

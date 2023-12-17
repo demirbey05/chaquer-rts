@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="keywords" content="Chaquer, Nakamo, MUD" />
-    <meta name="application-name" content="Chaquer" />
+    <meta name="keywords" content="chaquer, chaquer-rts, nakamo, mud" />
+    <meta name="application-name" content="chaquer" />
     <meta
       name="description"
-      content="Chaquer-RTS fully on-chain real-time strategy game"
+      content="chaquer fully onchain real-time strategy game"
     />
 
     <link
@@ -26,6 +26,20 @@
     <script type="module">
       import { Buffer } from "buffer";
       globalThis.Buffer = Buffer;
+    </script>
+
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-VKTRV6VJMB"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-VKTRV6VJMB");
     </script>
 
     <title>Chaquer</title>

@@ -5,7 +5,12 @@ import { latticeTestnet } from "@latticexyz/common/chains";
 import { altlayer } from "../mud/altlayer";
 
 export function useCurrentBlockNumber() {
-    const chain = foundry
+    let chain;
+    if (import.meta.env.DEV) {
+        chain = foundry
+    } else {
+        chain = latticeTestnet
+    }
 
     const publicClient = createPublicClient({
         chain: chain,
