@@ -1,5 +1,5 @@
 import { mudConfig } from "@latticexyz/world/register";
-import { resolveTableId } from "@latticexyz/config";
+import { resolveTableId } from "@latticexyz/config/library";
 
 
 export default mudConfig({

@@ -1,52 +1,18 @@
-/*
- * The MUD client code is built on top of viem
- * (https://viem.sh/docs/getting-started.html).
- * This line imports the functions we need from it.
- */
-import {
-  createPublicClient,
-  fallback,
-  webSocket,
-  http,
-  createWalletClient,
-  Hex,
-  parseEther,
-  ClientConfig,
-} from "viem";
-import { createFaucetService } from "@latticexyz/services/faucet";
+import { createPublicClient, fallback, webSocket, http, createWalletClient, Hex, ClientConfig } from "viem";
 import { encodeEntity, syncToRecs } from "@latticexyz/store-sync/recs";
-
 import { getNetworkConfig } from "./getNetworkConfig";
 import { world } from "./world";
 import IWorldAbi from "contracts/out/IWorld.sol/IWorld.abi.json";
-import {
-  createBurnerAccount,
-  getContract,
-  transportObserver,
-  ContractWrite,
-} from "@latticexyz/common";
-
+import { ContractWrite, createBurnerAccount, getContract, resourceToHex, transportObserver } from "@latticexyz/common";
 import { Subject, share } from "rxjs";
-
-/*
- * Import our MUD config, which includes strong types for
- * our tables and other config options. We use this to generate
- * things like RECS components and get back strong types for them.
- *
- * See https://mud.dev/tutorials/walkthrough/minimal-onchain#mudconfigts
- * for the source of this information.
- */
 import mudConfig from "contracts/mud.config";
+import { createClient as createFaucetClient } from "@latticexyz/faucet";
 
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
 export async function setupNetwork() {
   const networkConfig = await getNetworkConfig();
 
-  /*
-   * Create a viem public (read only) client
-   * (https://viem.sh/docs/clients/public.html)
-   */
   const clientOptions = {
     chain: networkConfig.chain,
     transport: transportObserver(fallback([webSocket(), http()])),
@@ -55,84 +21,62 @@ export async function setupNetwork() {
 
   const publicClient = createPublicClient(clientOptions);
 
-  /*
-   * Create a temporary wallet and a viem client for it
-   * (see https://viem.sh/docs/clients/wallet.html).
-   */
   const burnerAccount = createBurnerAccount(networkConfig.privateKey as Hex);
   const burnerWalletClient = createWalletClient({
     ...clientOptions,
     account: burnerAccount,
   });
 
-  /*
-   * Create an observable for contract writes that we can
-   * pass into MUD dev tools for transaction observability.
-   */
   const write$ = new Subject<ContractWrite>();
-
-  /*
-   * Create an object for communicating with the deployed World.
-   */
   const worldContract = getContract({
     address: networkConfig.worldAddress as Hex,
     abi: IWorldAbi,
-    publicClient,
-    walletClient: burnerWalletClient,
+    client: { public: publicClient, wallet: burnerWalletClient },
     onWrite: (write) => write$.next(write),
   });
 
-  /*
-   * Sync on-chain state into RECS and keeps our client in sync.
-   * Uses the MUD indexer if available, otherwise falls back
-   * to the viem publicClient to make RPC calls to fetch MUD
-   * events from the chain.
-   */
-  const { components, latestBlock$, storedBlockLogs$, waitForTransaction } =
-    await syncToRecs({
-      indexerUrl: "https://chaquer-indexer.dash.ardasevinc.xyz/trpc",
-      world,
-      config: mudConfig,
-      address: networkConfig.worldAddress as Hex,
-      publicClient,
-      startBlock: BigInt(networkConfig.initialBlockNumber),
-    });
+  const { components, latestBlock$, storedBlockLogs$, waitForTransaction } = await syncToRecs({
+    world,
+    indexerUrl: "https://chaquer-indexer.dash.ardasevinc.xyz/trpc",
+    config: mudConfig,
+    tables: {
+      KeysWithValue: {
+        namespace: "keywval",
+        name: "Inventory",
+        tableId: resourceToHex({ type: "table", namespace: "keywval", name: "Inventory" }),
+        keySchema: {
+          valueHash: { type: "bytes32" },
+        },
+        valueSchema: {
+          keysWithValue: { type: "bytes32[]" },
+        },
+      },
+    },
+    address: networkConfig.worldAddress as Hex,
+    publicClient,
+    startBlock: BigInt(networkConfig.initialBlockNumber),
+  } as const);
 
-  /*
-   * If there is a faucet, request (test) ETH if you have
-   * less than 1 ETH. Repeat every 20 seconds to ensure you don't
-   * run out.
-   */
-  if (networkConfig.faucetServiceUrl) {
-    const address = burnerAccount.address;
-    console.info("[Dev Faucet]: Player address -> ", address);
+  try {
+    console.log("creating faucet client");
+    const faucet = createFaucetClient({ url: "http://localhost:3002/trpc" });
 
-    const faucet = createFaucetService(networkConfig.faucetServiceUrl);
-
-    const requestDrip = async () => {
-      const balance = await publicClient.getBalance({ address });
-      console.info(`[Dev Faucet]: Player balance -> ${balance}`);
-      const lowBalance = balance < parseEther("1");
-      if (lowBalance) {
-        console.info("[Dev Faucet]: Balance is low, dripping funds to player");
-        // Double drip
-        await faucet.dripDev({ address });
-        await faucet.dripDev({ address });
-      }
+    const drip = async () => {
+      console.log("dripping");
+      const tx = await faucet.drip.mutate({ address: burnerAccount.address });
+      console.log("got drip", tx);
     };
 
-    requestDrip();
-    // Request a drip every 20 seconds
-    setInterval(requestDrip, 20000);
+    drip();
+    setInterval(drip, 20_000);
+  } catch (e) {
+    console.error(e);
   }
 
   return {
     world,
     components,
-    playerEntity: encodeEntity(
-      { address: "address" },
-      { address: burnerWalletClient.account.address }
-    ),
+    playerEntity: encodeEntity({ address: "address" }, { address: burnerWalletClient.account.address }),
     publicClient,
     walletClient: burnerWalletClient,
     latestBlock$,
