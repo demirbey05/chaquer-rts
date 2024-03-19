@@ -25,4 +25,4 @@ eth_rpc_url = "https://testnet.rpc.lootchain.com/http"
 eth_rpc_url = "https://flashlayer.alt.technology/chaquer281c1962f"
 
 [profile.skale]
-eth_rpc_url = "https://staging-v3.skalenodes.com/v1/staging-fast-active-bellatrix"
+eth_rpc_url = "https://testnet.skalenodes.com/v1/lanky-ill-funny-testnet"

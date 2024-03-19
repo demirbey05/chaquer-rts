@@ -9,7 +9,7 @@
     "build:abi-ts": "mud abi-ts --input 'abi/IWorld.sol/IWorld.abi.json' && prettier --write '**/*.abi.json.d.ts'",
     "build:mud": "mud tablegen && mud worldgen",
     "deploy:local": "pnpm run build && mud deploy",
-    "deploy:testnet": "pnpm run build && mud deploy --profile=lattice-testnet",
+    "deploy:testnet": "pnpm run build && mud deploy --profile=skale --deployerAddress=0x647a4a371397dfca08829ef628641d7330bb0f07",
     "dev": "pnpm mud dev-contracts",
     "lint": "pnpm run prettier && pnpm run solhint",
     "prettier": "prettier --write 'src/**/*.sol'",
