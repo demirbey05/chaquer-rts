@@ -54,6 +54,26 @@ export default mudConfig({
         userValid:"bool"
       }
     },
+    GarrisonOwnable:{
+      valueSchema:{
+        numSwordsman:"uint32",
+        numArcher:"uint32",
+        numCavalry:"uint32",
+        gameID:"uint256"
+      }
+    },
+    CastleHP:{
+      valueSchema:{
+        castleHP:"uint256",
+        gameID:"uint256"
+      }
+    },
+    ArtilleryConfig:{
+      valueSchema:{
+        numArtillery:"uint32",
+        gameID:"uint256"
+      }
+    },
     PlayerSeeds:{
       keySchema:{
         gameId:"uint256"

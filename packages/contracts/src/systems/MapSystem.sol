@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { wadMul, toWadUnsafe } from "solmate/src/utils/SignedWadMath.sol";
-import { MapConfig, Position, ResourceOwn, ResourceOwnData, ColorOwnable, AddressToColorIndex, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, Players, GameMetaData } from "../codegen/index.sol";
+import { MapConfig, ArtilleryConfigData,Position, ResourceOwn, ResourceOwnData, ColorOwnable, AddressToColorIndex, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, Players, GameMetaData } from "../codegen/index.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
@@ -123,6 +123,18 @@ contract MapSystem is System {
     ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(ownerCandidate, config.gameID), config.gameID);
 
     return entityID;
+  }
+
+
+  function settleArtillery(
+  uint32 x,
+  uint32 y,
+  ArtilleryConfigData calldata config,
+  bytes32 castleID
+
+  ) public{
+    
+
   }
 
   function armyMove(
