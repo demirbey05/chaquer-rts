@@ -72,8 +72,8 @@ export const UserNameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
 const JoinToGameButton = ({ disable, onClick, isLoading }: any) => {
     return <Button
         colorScheme="whatsapp"
-        border="solid"
-        textColor="dark"
+        borderRadius={"15px"}
+        boxShadow={"0px 5px 0px 0px #33550F"}
         isDisabled={disable}
         isLoading={isLoading}
         loadingText='Assigning'
@@ -87,9 +87,9 @@ const BackMapButton = ({ toggleDrawer, isLoading }: { toggleDrawer: () => void, 
     return (
         <Button
             colorScheme="red"
+            borderRadius={"15px"}
+            boxShadow={"0px 5px 0px 0px #7E2918"}
             isDisabled={isLoading}
-            border="solid"
-            textColor="dark"
             onClick={toggleDrawer}
         >
             Back to Menu

@@ -8,49 +8,51 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
     const showUsername = username;
 
     return (
-        <div className='row d-flex justify-center playerCardMargin'>
+        <div className='d-flex justify-center playerCardMargin'>
             <div className="player-card-info-modal">
                 <div className='d-flex justify-content-center mb-2'>
                     <WrapItem>
                         <Avatar name={username} />
                     </WrapItem>
                 </div>
-                <div className='d-flex justify-content-center align-items-center mt-2 mb-2'>
-                    <PublicWallet />
-                </div>
-                <div className='d-flex justify-content-center align-items-center'>
-                    {showUsername ? (
-                        <>
-                            <Tag
-                                padding={"10px"}
-                                size='lg'
-                                backgroundColor={"blue.800"}
-                                textColor={"white"}
-                                borderRadius='full'>
-                                Username: {username}
-                            </Tag>
-                            <Button
-                                border={"2px"}
-                                padding={"10px"}
-                                ms={2}
-                                backgroundColor={"blue.800"}
-                                colorScheme={"facebook"}
-                                onClick={() => setIsUserModalOpen(true)}>
-                                <FaEdit />
-                            </Button>
-                        </>
-                    ) : (
-                        <div className='d-flex justify-content-center'>
-                            <Button
-                                border={"2px"}
-                                padding={"10px"}
-                                backgroundColor={"blue.800"}
-                                colorScheme={"facebook"}
-                                onClick={() => setIsUserModalOpen(true)}>
-                                Assign Username
-                            </Button>
-                        </div>
-                    )}
+                <div className='d-flex flex-column align-items-center'>
+                    {
+                        showUsername ? (
+                            <>
+                                <Tag
+                                    size='lg'
+                                    backgroundColor={" #0E3C4B"}
+                                    textColor={"white"}
+                                    justifyContent={"center"}
+                                    width={"100%"}
+                                    clipPath={"polygon(100% 0, 100% 100%, 0% 100%, 10% 52%, 0% 0%)"}
+                                >
+                                    {username.toLocaleUpperCase()}
+                                </Tag>
+                                <Button
+                                    mt={2}
+                                    borderRadius={"15px"}
+                                    boxShadow={"0px 5px 0px 0px #0E3C4B"}
+                                    backgroundColor={"#17667F"}
+                                    colorScheme={"facebook"}
+                                    onClick={() => setIsUserModalOpen(true)}
+                                >
+                                    <FaEdit />
+                                </Button>
+                            </>
+                        ) : (
+                            <div className='d-flex justify-content-center'>
+                                <Button
+                                    borderRadius={"15px"}
+                                    boxShadow={"0px 5px 0px 0px #0E3C4B"}
+                                    backgroundColor={"#17667F"}
+                                    colorScheme={"facebook"}
+                                    onClick={() => setIsUserModalOpen(true)}
+                                >
+                                    Assign Username
+                                </Button>
+                            </div>
+                        )}
                 </div>
                 {!showUsername && (
                     <div className='mt-2'>
@@ -69,7 +71,7 @@ const PublicWallet = () => {
     const { userWallet } = usePlayer();
     const { onCopy, setValue, hasCopied } = useClipboard("");
 
-    const truncatedPublicWallet = userWallet ? (userWallet.length > 10 ? userWallet.substring(0, 10) + '...' : userWallet) : "";
+    const truncatedPublicWallet = userWallet ? (userWallet.length > 20 ? userWallet.substring(0, 20) + '...' : userWallet) : "";
 
     useEffect(() => {
         if (userWallet) {
@@ -80,20 +82,20 @@ const PublicWallet = () => {
     return (
         <>
             <Tag
-                padding={"10px"}
-                size='lg'
-                backgroundColor={"blue.800"}
+                size={"lg"}
+                backgroundColor={"#0E3C4B"}
                 textColor={"white"}
-                borderRadius='full'>
-                Public Wallet: {truncatedPublicWallet}
+            >
+                {truncatedPublicWallet}
             </Tag>
             <Button
-                border={"2px"}
-                padding={"10px"}
-                ms={2}
+                mt={2}
+                boxShadow={"0px 5px 0px 0px #0E3C4B"}
+                borderRadius={"15px"}
+                backgroundColor={"#17667F"}
                 colorScheme={"facebook"}
-                backgroundColor={"blue.800"}
-                onClick={onCopy}>
+                onClick={onCopy}
+            >
                 {hasCopied ? "Copied!" : "Copy"}
             </Button>
         </>

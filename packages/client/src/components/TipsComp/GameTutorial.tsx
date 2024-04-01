@@ -50,7 +50,7 @@ export const GameTutorial = () => {
 
     return (
         <>
-            <Popover isLazy defaultIsOpen={true}>
+            <Popover isLazy defaultIsOpen={true} placement='top'>
                 <PopoverTrigger>
                     <button className="game-tutorial-button">
                         <IoGameControllerOutline />

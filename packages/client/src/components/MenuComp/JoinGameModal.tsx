@@ -109,8 +109,8 @@ export const JoinGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
 const JoinToGameButton = ({ disable, onClick, isLoading }: any) => {
     return <Button
         colorScheme="whatsapp"
-        border="solid"
-        textColor="dark"
+        borderRadius={"15px"}
+        boxShadow={"0px 5px 0px 0px #33550F"}
         isDisabled={disable}
         isLoading={isLoading}
         loadingText='Connecting'
@@ -124,9 +124,9 @@ const BackMapButton = ({ toggleDrawer, isLoading, setGameID }: { toggleDrawer: (
     return (
         <Button
             colorScheme="red"
+            borderRadius={"15px"}
+            boxShadow={"0px 5px 0px 0px #7E2918"}
             isDisabled={isLoading}
-            border="solid"
-            textColor="dark"
             onClick={() => {
                 setGameID(0)
                 toggleDrawer();

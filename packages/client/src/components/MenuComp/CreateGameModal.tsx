@@ -174,8 +174,8 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
 const CreateGameButton = ({ disable, onClick, isLoading }: any) => {
     return <Button
         colorScheme="whatsapp"
-        border="solid"
-        textColor="dark"
+        borderRadius={"15px"}
+        boxShadow={"0px 5px 0px 0px #33550F"}
         isDisabled={disable}
         isLoading={isLoading}
         loadingText='Creating'
@@ -189,9 +189,9 @@ const BackMapButton = ({ toggleDrawer, isLoading }: { toggleDrawer: () => void, 
     return (
         <Button
             colorScheme="red"
+            borderRadius={"15px"}
+            boxShadow={"0px 5px 0px 0px #7E2918"}
             isDisabled={isLoading}
-            border="solid"
-            textColor="dark"
             onClick={toggleDrawer}
         >
             Back to Menu
@@ -212,10 +212,13 @@ const CreateGameWarning = ({ setIsCreateGameModalOpen, setIsOpen }: { setIsCreat
                 To find players, you can use our discord.
             </p>
             <Button
-                onClick={() => { setIsCreateGameModalOpen(true); setIsOpen(false) }}
-                border={"2px"}
+                borderRadius={"15px"}
+                boxShadow={"0px 5px 0px 0px #0E3C4B"}
+                backgroundColor={"#17667F"}
                 colorScheme={"facebook"}
-                mt={3}>
+                mt={3}
+                onClick={() => { setIsCreateGameModalOpen(true); setIsOpen(false) }}
+            >
                 I Understood
             </Button>
         </>
