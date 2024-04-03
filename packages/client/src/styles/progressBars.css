@@ -3,18 +3,19 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 450px;
+    width: 40vw;
     height: 50px;
     border-radius: 10px;
     overflow: hidden;
-    left: 50%;
-    right: 0;
+    font-weight: bolder;
+    right: 0%;
     top: 0;
-    margin: 25px auto;
+    margin: 2vh 2vw;
     padding: 20px;
     z-index: 1;
     position: absolute;
     background-image: url("../images/interfaceAssets/progress_bar.png");
+    background-size: contain;
     background-position: center;
     color: rgb(255, 255, 255);
 }
@@ -22,8 +23,8 @@
 .mine-progress-bar-col {
     display: flex;
     align-items: center;
-    width: 150px;
-    font-weight: bolder
+    width: 13.3vw;
+    font-weight: bolder;
 }
 
 /*Credit progress bar*/
@@ -31,18 +32,20 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 200px;
+    width: 10vw;
     height: 50px;
     border-radius: 10px;
     overflow: hidden;
+    font-weight: bolder;
     left: 0%;
-    right: 0;
+    right: 0%;
     top: 0;
-    margin: 25px auto;
-    padding: 20px;
+    margin: 2vh auto;
+    padding: 5px;
     z-index: 1;
     position: absolute;
     background-image: url("../images/interfaceAssets/credit_bar.png");
+    background-size: cover;
     background-position: center;
     color: rgb(255, 255, 255);
 }
@@ -57,19 +60,21 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    width: 450px;
+    width: 40vw;
     height: 50px;
     border-radius: 15px;
     overflow: hidden;
     flex-direction: row;
-    left: 0;
+    font-weight: bolder;
+    left: 0%;
     right: 50%;
     top: 0;
-    margin: 25px auto;
+    margin: 2vh 2vw;
     padding: 10px;
     z-index: 1;
     position: absolute;
     background-image: url("../images/interfaceAssets/progress_bar.png");
+    background-size: contain;
     background-position: center;
     color: rgb(255, 255, 255);
 }

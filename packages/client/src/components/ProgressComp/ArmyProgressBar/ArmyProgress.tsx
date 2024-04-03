@@ -32,7 +32,8 @@ export const ArmyProgress = () => {
                     value={numberOfArmy}
                     max={maxArmySize}
                     borderRadius="10px"
-                    colorScheme={"whatsapp"}>
+                    colorScheme={"whatsapp"}
+                >
                     <ProgressLabel fontSize="15px" className='text-white'>
                         ⚔️ {numberOfArmy} / {maxArmySize} ⚔️
                     </ProgressLabel>

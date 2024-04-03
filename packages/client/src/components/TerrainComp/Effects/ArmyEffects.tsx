@@ -7,6 +7,7 @@ import { isMyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isMyArmy"
 import { isEnemyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isEnemyArmy";
 import { getArmyMergePositions } from "../../../utils/helperFunctions/ArmyFunctions/getArmyMergePositions";
 import { isArmyMergePosition } from "../../../utils/helperFunctions/ArmyFunctions/isArmyMergePositions";
+import ottomanAsset from '../../../images/armyAssets/ottoman-soldier.png'
 import armyTile from '../../../images/armyAssets/army.png';
 import { isMyFleet } from "../../../utils/helperFunctions/SeaFunctions/isMyFleet";
 
@@ -75,7 +76,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                     }
 
                     const imgElement = document.createElement("img");
-                    imgElement.src = armyTile;
+                    imgElement.src = ottomanAsset;
                     imgElement.style.transform = "rotateX(-60deg) rotateZ(-25deg) rotateY(45deg)"
                     imgElement.style.height = "100px"
                     imgElement.style.width = "75px"
@@ -121,7 +122,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                 }
 
                 const imgElement = document.createElement("img");
-                imgElement.src = armyTile;
+                imgElement.src = ottomanAsset;
                 imgElement.style.transform = "rotateX(-60deg) rotateZ(-25deg) rotateY(45deg)";
                 imgElement.style.height = "100px";
                 imgElement.style.width = "75px";

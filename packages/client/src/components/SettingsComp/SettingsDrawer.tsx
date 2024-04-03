@@ -2,7 +2,7 @@ import soundTrack from "../../sounds/soundTracks/chaquer-soundtrack.mp3"
 import { useState, useEffect, useRef } from 'react'
 import { useGame } from '../../context/GameContext';
 import { useNavigate } from 'react-router-dom';
-import { Button, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Tooltip } from "@chakra-ui/react";
+import { Button, IconButton, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Tooltip } from "@chakra-ui/react";
 import { FaPlay, FaStop } from 'react-icons/fa'
 import { RiArrowGoBackFill } from 'react-icons/ri'
 import { FiSettings } from 'react-icons/fi'
@@ -138,42 +138,46 @@ const AudioControlCompHeader = ({ toggleDrawer }: { toggleDrawer: () => void }) 
 const BackToMenuButton = () => {
     const navigate = useNavigate();
     return (
-        <Button colorScheme='blue'
+        <IconButton
+            size={"lg"}
+            colorScheme='blue'
             variant='outline'
-            style={{ height: "40px" }}
+            aria-label="back"
             onClick={() => {
                 navigate("/")
             }}
-            aria-label="Close">
-            <RiArrowGoBackFill />
-        </Button>
+            icon={<RiArrowGoBackFill />}
+        />
     )
 }
 
 const PlayMusicButton = ({ handlePlay }: any) => {
     return (
-        <Button colorScheme='whatsapp'
+        <IconButton
+            size={"lg"}
+            me={2}
+            colorScheme='whatsapp'
             variant='outline'
-            style={{ height: "40px", marginRight: "10px" }}
+            aria-label="play"
             onClick={() => {
                 handlePlay();
             }}
-            aria-label="Close">
-            <FaPlay />
-        </Button>
+            icon={<FaPlay />}
+        />
     )
 }
 
 const PauseMusicButton = ({ handleStop }: any) => {
     return (
-        <Button colorScheme='red'
+        <IconButton
+            size={"lg"}
+            colorScheme='red'
             variant='outline'
-            style={{ height: "40px" }}
+            aria-label="stop"
             onClick={() => {
                 handleStop();
             }}
-            aria-label="Close">
-            <FaStop />
-        </Button>
+            icon={<FaStop />}
+        />
     )
 }

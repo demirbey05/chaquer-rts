@@ -37,7 +37,7 @@ export const Menu = () => {
       <>
         <MenuTitle />
         <VersionInfo />
-        <div className='container' style={refresh === 0 ? { justifyContent: "center" } : {}}>
+        <div className={`${refresh === 0 ? "justify-content-center" : ""}`}>
           {
             refresh === 0 &&
             <div id="menu-items">
@@ -48,7 +48,7 @@ export const Menu = () => {
           {
             refresh !== 0 &&
             <div className='menu-row'>
-              <div className='col-8 pe-4 ps-4'>
+              <div className='d-lg-inline w-75 p-3'>
                 <Tabs
                   isFitted
                   variant={"soft-rounded"}
@@ -58,7 +58,8 @@ export const Menu = () => {
                     textColor={'white'}
                     border={"2px"}
                     borderRadius={"25px"}
-                    mb={0.5}>
+                    mb={0.5}
+                  >
                     <Tab _selected={{ color: 'white', bg: 'green.500' }}>Live Games</Tab>
                     <Tab _selected={{ color: 'white', bg: 'blue.500' }}>Completed Games</Tab>
                   </TabList>
@@ -78,7 +79,7 @@ export const Menu = () => {
                   </TabPanels>
                 </Tabs>
               </div>
-              <div className='col-4 pe-4'>
+              <div className='d-lg-inline p-3'>
                 <PlayerInfoCard
                   username={username}
                   setIsUserModalOpen={setIsUserModalOpen} />
@@ -160,7 +161,7 @@ const GameTutorialButton = () => {
 
 const MenuTitle = () => {
   return (
-    <div className='row justify-content-center'>
+    <div className='d-flex justify-content-center'>
       <h2 className="menu-title">
         Chaquer
       </h2>

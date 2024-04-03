@@ -19,7 +19,7 @@ import { FaInfo } from 'react-icons/fa'
 
 export const ShortCutTips = () => {
     return (
-        <Popover isLazy>
+        <Popover isLazy placement='top'>
             <PopoverTrigger>
                 <button className="tips-button">
                     <FaInfo />
