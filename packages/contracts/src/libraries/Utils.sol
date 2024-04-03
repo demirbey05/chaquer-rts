@@ -6,7 +6,7 @@ import "./Libraries.sol";
 import "../systems/Errors.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
 import { AttackerType, ClashType } from "../codegen/common.sol";
-import { CastleOwnable, CreditOwn, Position,ArtilleryConfigData, ResourceOwnable, SoldierCreated, DockOwnable, ArmyConfig, ArmyConfigData, ArmyOwnable, ClashResult, ColorOwnable, AddressToColorIndex, Players, GameMetaData } from "../codegen/index.sol";
+import { CastleOwnable,ArtilleryOwnable, CreditOwn, Position,ArtilleryConfigData, ResourceOwnable, SoldierCreated, DockOwnable, ArmyConfig, ArmyConfigData, ArmyOwnable, ClashResult, ColorOwnable, AddressToColorIndex, Players, GameMetaData } from "../codegen/index.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 error ErrorInCalculatingBattleScores();
@@ -140,6 +140,8 @@ library LibUtils {
       owner = ResourceOwnable.getOwner(entityID);
     } else if (entityType == EntityType.Dock) {
       owner = DockOwnable.getOwner(entityID);
+    } else if (entityType == EntityType.Artillery) {
+      owner = ArtilleryOwnable.getOwner(entityID);
     }
 
     bytes32[] memory allEntities = (attackerType == AttackerType.Army)

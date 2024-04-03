@@ -3,27 +3,23 @@ pragma solidity ^0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
-import { ArmyOwnable, ClashResult, FleetOwnable, FleetConfigData, FleetConfig, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, ResourceOwnable, Players, GameMetaData, DockOwnable, AddressToColorIndex, ColorOwnable } from "../codegen/index.sol";
+import { ArmyOwnable,ArtilleryConfig, ArtilleryOwnable,ClashResult, FleetOwnable, FleetConfigData, FleetConfig, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, ResourceOwnable, Players, GameMetaData, DockOwnable, AddressToColorIndex, ColorOwnable } from "../codegen/index.sol";
 import { LibMath, LibAttack, BattleScore, LibUtils, LibQueries, LibNaval } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
-import { MineType, ClashType } from "../codegen/common.sol";
+import { MineType, ClashType ,AttackerType} from "../codegen/common.sol";
 
 contract AttackCaptureSystem is System {
-  function attackToArmy(
-    bytes32 armyOne,
-    bytes32 armyTwo,
-    uint256 gameID
-  ) public returns (uint256) {
+  function attackToArmy(bytes32 armyOne, bytes32 armyTwo, uint256 gameID) public returns (uint256) {
     (address owner, uint256 gameIDArmy) = ArmyOwnable.get(armyOne);
     (address ownerTwo, uint256 gameIDArmyTwo) = ArmyOwnable.get(armyTwo);
     ArmyConfigData memory armyOneConfig = ArmyConfig.get(armyOne);
     ArmyConfigData memory armyTwoConfig = ArmyConfig.get(armyTwo);
     {
-    address sender = _msgSender();
-    if ((owner != sender) || (gameIDArmy != gameID)) {
-      revert AttackSystem__ArmyNotBelongYou();
-    }
+      address sender = _msgSender();
+      if ((owner != sender) || (gameIDArmy != gameID)) {
+        revert AttackSystem__ArmyNotBelongYou();
+      }
     }
     if (ArmyOwnable.getOwner(armyTwo) == address(0)) {
       revert AttackSystem__NoArmy();
@@ -156,11 +152,7 @@ contract AttackCaptureSystem is System {
     LibUtils.emitClashTableEvent(uint8(result), armyID, castleID, gameID, armyOwner, castleOwner, ClashType.Castle);
   }
 
-  function attackFleet(
-    bytes32 fleetOne,
-    bytes32 fleetTwo,
-    uint256 gameID
-  ) public {
+  function attackFleet(bytes32 fleetOne, bytes32 fleetTwo, uint256 gameID) public {
     address fleetOneOwner = FleetOwnable.getOwner(fleetOne);
     address fleetTwoOwner = FleetOwnable.getOwner(fleetTwo);
     {
@@ -188,11 +180,53 @@ contract AttackCaptureSystem is System {
     (uint8 winner, FleetConfigData memory winnerNew) = LibNaval.fightTwoFleet(fleetOneConfig, fleetTwoConfig);
     LibUtils.emitClashTableEvent(winner, fleetOne, fleetTwo, gameID, fleetOneOwner, fleetTwoOwner, ClashType.NavalWar);
     if (winner == 0) {
-      LibNaval.deleteFleet(IStore(_world()),fleetOne,gameID);
-      LibNaval.deleteFleet(IStore(_world()),fleetTwo,gameID);
+      LibNaval.deleteFleet(IStore(_world()), fleetOne, gameID);
+      LibNaval.deleteFleet(IStore(_world()), fleetTwo, gameID);
       return;
     }
     FleetConfig.set(winner == 1 ? fleetOne : fleetTwo, winnerNew);
-    LibNaval.deleteFleet(IStore(_world()),winner == 1 ? fleetTwo : fleetOne,gameID);
+    LibNaval.deleteFleet(IStore(_world()), winner == 1 ? fleetTwo : fleetOne, gameID);
+  }
+
+  function attackToArtillery(bytes32 attackerID, bytes32 artilleryID) public {
+    address attackerOwner = ArmyOwnable.getOwner(attackerID);
+    address artilleryOwner = ArtilleryOwnable.getOwner(artilleryID);
+    address requester = _msgSender();
+
+    if (attackerOwner == artilleryOwner) {
+      revert AttackSystem__NoFriendFire();
+    }
+    if (attackerOwner != requester) {
+      revert MineCapture__NoAuthorization();
+    }
+    (uint32 xArmy, uint32 yArmy, uint256 gameID) = Position.get(attackerID);
+    (uint32 xArt, uint32 yArt, uint256 gameIDTwo) = Position.get(artilleryID);
+
+    uint32 distanceBetween = LibMath.manhattan(xArmy, yArmy, xArt, yArt);
+
+    if (!(distanceBetween <= 3)) {
+      revert AttackSystem__TooAwayToAttack();
+    }
+    if (gameID != gameIDTwo) {
+      revert AttackSystem__WrongGameID();
+    }
+
+    bytes32[] memory ownerEntitiesSurroundMine = LibUtils.findSurroundingAttackerEntities(
+      IStore(_world()),
+      artilleryID,
+      gameID,
+      EntityType.Artillery,
+      AttackerType.Army
+    );
+
+    uint result = LibAttack.warCaptureCastle(attackerID, ownerEntitiesSurroundMine);
+    if (result == 1) {
+      ArtilleryOwnable.deleteRecord(artilleryID);
+      ArtilleryConfig.deleteRecord(artilleryID);
+      ColorOwnable.deleteRecord(artilleryID);
+      Position.deleteRecord(artilleryID);
+    }
+ 
+
   }
 }

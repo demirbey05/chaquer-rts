@@ -14,4 +14,6 @@ interface IAttackCaptureSystem {
   function captureCastle(bytes32 armyID, bytes32 castleID) external returns (uint256 result);
 
   function attackFleet(bytes32 fleetOne, bytes32 fleetTwo, uint256 gameID) external;
+
+  function attackToArtillery(bytes32 attackerID, bytes32 artilleryID) external;
 }
