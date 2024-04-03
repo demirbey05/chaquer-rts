@@ -5,6 +5,7 @@ pragma solidity >=0.8.24;
 
 import { ArmyConfig, ArmyConfigData } from "./tables/ArmyConfig.sol";
 import { ArmyOwnable } from "./tables/ArmyOwnable.sol";
+import { ArtilleryOwnable } from "./tables/ArtilleryOwnable.sol";
 import { CastleOwnable } from "./tables/CastleOwnable.sol";
 import { MapConfig } from "./tables/MapConfig.sol";
 import { Position } from "./tables/Position.sol";

@@ -15,7 +15,12 @@ interface IMapSystem {
 
   function settleArmy(uint32 x, uint32 y, ArmyConfigData calldata config, bytes32 castleID) external returns (bytes32);
 
-  function settleArtillery(uint32 x, uint32 y, ArtilleryConfigData calldata config, bytes32 castleID) external;
+  function settleArtillery(
+    uint32 x,
+    uint32 y,
+    ArtilleryConfigData calldata config,
+    bytes32 castleID
+  ) external returns (bytes32);
 
   function armyMove(bytes32 armyID, uint32 x, uint32 y, uint256 gameID) external;
 

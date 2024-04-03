@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { wadMul, toWadUnsafe } from "solmate/src/utils/SignedWadMath.sol";
-import { MapConfig, ArtilleryConfigData,Position, ResourceOwn, ResourceOwnData, ColorOwnable, AddressToColorIndex, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, Players, GameMetaData } from "../codegen/index.sol";
+import { MapConfig, ArtilleryConfigData,ArtilleryConfig,ArtilleryOwnable, Position, ResourceOwn, ResourceOwnData, ColorOwnable, AddressToColorIndex, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, Players, GameMetaData } from "../codegen/index.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
@@ -11,21 +11,16 @@ import { LibMath } from "../libraries/LibMath.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
 import { LibUtils } from "../libraries/Utils.sol";
 import { State } from "../codegen/common.sol";
-import { maxArmyNum, armyMoveFoodCost, armyMoveGoldCost } from "./Constants.sol";
+import { maxArmyNum, armyMoveFoodCost, armyMoveGoldCost, maxArtilleryNum } from "./Constants.sol";
 import "./Errors.sol";
 import { SystemSwitch } from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
-
 
 error MoveArmy__UnsufficientFood();
 error MoveArmy__UnsufficientGold();
 
 contract MapSystem is System {
-  function settleCastle(
-    uint32 x,
-    uint32 y,
-    uint256 gameID
-  ) public returns (bytes32) {
+  function settleCastle(uint32 x, uint32 y, uint256 gameID) public returns (bytes32) {
     // Get control parameters
     address ownerCandidate = _msgSender();
     uint32 width = MapConfig.getWidth(gameID);
@@ -70,12 +65,7 @@ contract MapSystem is System {
     return entityID;
   }
 
-  function settleArmy(
-    uint32 x,
-    uint32 y,
-    ArmyConfigData calldata config,
-    bytes32 castleID
-  ) public returns (bytes32) {
+  function settleArmy(uint32 x, uint32 y, ArmyConfigData calldata config, bytes32 castleID) public returns (bytes32) {
     // Get control parameters
 
     address ownerCandidate = _msgSender();
@@ -125,24 +115,55 @@ contract MapSystem is System {
     return entityID;
   }
 
+  function settleArtillery(uint32 x, uint32 y, ArtilleryConfigData calldata config, bytes32 castleID) public returns(bytes32) {
+    address ownerCandidate = _msgSender();
+    uint32 width = MapConfig.getWidth(config.gameID);
+    uint32 height = MapConfig.getHeight(config.gameID);
 
-  function settleArtillery(
-  uint32 x,
-  uint32 y,
-  ArtilleryConfigData calldata config,
-  bytes32 castleID
+    if (MapConfig.getItemTerrain(config.gameID, x * width + y)[0] != hex"01") {
+      revert ArmySettle__WrongTerrainType();
+    }
+    // If there is an another entity at that coordinate
+    if (LibQueries.queryPositionEntity(IStore(_world()), x, y, config.gameID) > 0) {
+      revert ArmySettle__TileIsNotEmpty();
+    }
+    if (LibQueries.queryNumArtillery(IStore(_world()), ownerCandidate, config.gameID) >= maxArtilleryNum) {
+      revert ArmySettle__NoArmyRight();
+    }
+    if (CastleOwnable.getOwner(castleID) != ownerCandidate) {
+      revert ArmySettle__NoCastle();
+    }
+    if (GameMetaData.getState(config.gameID) != State.Started) {
+      revert ArmySettle__WrongState();
+    }
+    {
+      (uint32 x_castle, uint32 y_castle, ) = Position.get(castleID);
+      uint32 distanceBetween = LibMath.manhattan(x_castle, y_castle, x, y);
+      if (distanceBetween > 3) {
+        revert ArmySettle__TooFarToSettle();
+      }
+    }
+    if (config.numArtillery > 30) {
+      revert ArmySettle__TooManySoldier();
+    }
+     // Economy System Integration
+    LibUtils.handleEconomyCheck(IWorld(_world()), ownerCandidate, config);
 
-  ) public{
-    
+
+
+    bytes32 entityID = keccak256(abi.encodePacked(x, y, "Artillery", ownerCandidate, config.gameID, block.timestamp));
+
+    Position.set(entityID, x, y, config.gameID);
+    ArtilleryOwnable.set(entityID, ownerCandidate, config.gameID);
+    ArtilleryConfig.set(entityID, config.numArtillery, config.gameID);
+    ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(ownerCandidate, config.gameID), config.gameID);
+
+    return entityID;
+
 
   }
 
-  function armyMove(
-    bytes32 armyID,
-    uint32 x,
-    uint32 y,
-    uint256 gameID
-  ) public {
+  function armyMove(bytes32 armyID, uint32 x, uint32 y, uint256 gameID) public {
     address ownerCandidate = _msgSender();
     uint32 width = MapConfig.getWidth(gameID);
     SystemSwitch.call(abi.encodeCall(IWorld(_world()).collectResource, (gameID)));

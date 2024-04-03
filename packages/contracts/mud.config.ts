@@ -20,6 +20,13 @@ export default mudConfig({
       },
       dataStruct: false,
     },
+    ArtilleryOwnable: {
+      valueSchema: {
+        owner:"address",
+        gameID:"uint256",
+      },
+      dataStruct: false
+    },
     CastleOwnable: {
       valueSchema: {
         owner: "address",

@@ -6,7 +6,7 @@ import "./Libraries.sol";
 import "../systems/Errors.sol";
 import { LibVRGDA } from "../libraries/LibVRGDA.sol";
 import { AttackerType, ClashType } from "../codegen/common.sol";
-import { CastleOwnable, CreditOwn, Position, ResourceOwnable, SoldierCreated, DockOwnable, ArmyConfig, ArmyConfigData, ArmyOwnable, ClashResult, ColorOwnable, AddressToColorIndex, Players, GameMetaData } from "../codegen/index.sol";
+import { CastleOwnable, CreditOwn, Position,ArtilleryConfigData, ResourceOwnable, SoldierCreated, DockOwnable, ArmyConfig, ArmyConfigData, ArmyOwnable, ClashResult, ColorOwnable, AddressToColorIndex, Players, GameMetaData } from "../codegen/index.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
 error ErrorInCalculatingBattleScores();
@@ -312,6 +312,25 @@ library LibUtils {
       SoldierCreated.getNumOfSwordsman(config.gameID) + config.numSwordsman,
       SoldierCreated.getNumOfArcher(config.gameID) + config.numArcher,
       SoldierCreated.getNumOfCavalry(config.gameID) + config.numCavalry
+    );
+  }
+  function handleEconomyCheck(
+    IWorld world,
+    address owner,
+    ArtilleryConfigData memory config
+  ) internal {
+    uint256 startBlock = GameMetaData.getStartBlock(config.gameID);
+    uint256 ownerBalance = CreditOwn.get(config.gameID, owner);
+
+    uint256 costArtillery = 10e18 * config.numArtillery;
+    if (costArtillery > ownerBalance) {
+      revert ArmySettle__UnsufficientBalance();
+    }
+
+    CreditOwn.set(
+      config.gameID,
+      owner,
+      CreditOwn.get(config.gameID, owner) - costArtillery
     );
   }
 
