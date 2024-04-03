@@ -1,9 +1,10 @@
 import archerImg from "../../images/armyAssets/archer.png";
 import cavalryImg from "../../images/armyAssets/cavalry.png";
 import swordsmanImg from "../../images/armyAssets/swordsman.png";
+import artilleryImg from '../../images/armyAssets/artillery.png'
 import armySettleEffect from '../../sounds/soundEffects/army-deploy-effect.mp3'
 import { useMUD } from "../../context/MUDContext";
-import { Button, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
+import { Button, Alert, AlertIcon, AlertTitle, Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
 import { useArmy } from "../../context/ArmyContext";
@@ -28,14 +29,53 @@ export const ArmySettleModal = () => {
   const [archerCount, setArcherCount] = useState<string>("");
   const [cavalryCount, setCavalryCount] = useState<string>("");
 
+  const [artilleryCount, setArtilleryCount] = useState<string>("")
+
   const [isDisabled, setIsDisabled] = useState(true);
   const [enoughCredit, setEnoughCredit] = useState(true);
   const [totalCharge, setTotalCharge] = useState<number>(0);
 
+  const [isDisabledArtillery, setIsDisabledArtillery] = useState(true);
+  const [enoughCreditArtillery, setEnoughCreditArtillery] = useState(true);
+  const [totalChargeArtillery, setTotalChargeArtillery] = useState<number>(0);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingArtillery, setIsLoadingArtillery] = useState<boolean>(false);
 
   const armyPrices = useArmyPrices();
   const myCredit = useCredit(gameID, userWallet);
+
+  useEffect(() => {
+    if (Number.isNaN(parseInt(artilleryCount))) {
+      setArtilleryCount("0")
+    }
+
+    if (artilleryCount.length === 0 && Number(artilleryCount) === 0) {
+      setIsDisabledArtillery(true);
+      setEnoughCreditArtillery(true);
+      return;
+    }
+
+    const ArtillaryCount = Number(artilleryCount);
+
+    if (armyPrices) {
+      const totalCharge = ArtillaryCount * 10
+
+      if (ArtillaryCount <= 0 || ArtillaryCount > 30) {
+        setIsDisabledArtillery(true);
+        setTotalChargeArtillery(totalCharge);
+      } else if (!armyPrices || !myCredit) {
+        setIsDisabledArtillery(true);
+      } else if (totalCharge > Number(getNumberFromBigInt(myCredit))) {
+        setIsDisabledArtillery(true);
+        setEnoughCreditArtillery(false);
+        setTotalChargeArtillery(totalCharge);
+      } else {
+        setIsDisabledArtillery(false);
+        setEnoughCreditArtillery(true);
+      }
+    }
+  }, [artilleryCount])
 
   useEffect(() => {
     if (Number.isNaN(parseInt(swordsmanCount))) {
@@ -88,7 +128,7 @@ export const ArmySettleModal = () => {
   }, [swordsmanCount, archerCount, cavalryCount, armyPrices, myCredit]);
 
 
-  const handleClick = async () => {
+  const handleArmySettlement = async () => {
     setIsArmySettleStage(false);
     setIsArmyUpdateStage(false)
     setIsLoading(true);
@@ -153,8 +193,61 @@ export const ArmySettleModal = () => {
     targetDiv?.classList.remove("animate-border-settle");
   };
 
+  const handleArtillerySettlement = async () => {
+    setIsArmySettleStage(false);
+    setIsArmyUpdateStage(false)
+    setIsLoadingArtillery(true);
+
+    var targetDiv = document.getElementById(`${armyPosition.y},${armyPosition.x}`);
+    targetDiv?.classList.add("animate-border-settle");
+
+    const castleID = [...getIDFromPosition(
+      castlePosition,
+      components.Position,
+      gameID
+    )];
+
+    if (castleID.length != 1) {
+      setErrorMessage("An error occurred while trying to settle artillery.")
+      setErrorTitle("Artillery Settle Error")
+      setShowError(true)
+      setIsLoadingArtillery(false)
+    }
+
+    if ((document.getElementById('ArtillerySettle') as HTMLInputElement).value === "") {
+      setSwordsmanCount("0");
+    }
+
+    const audio = new Audio(armySettleEffect);
+    audio.volume = 0.2;
+    audio.play();
+
+    const tx = await systemCalls.settleArtillery(
+      armyPosition.x,
+      armyPosition.y,
+      gameID,
+      Number(artilleryCount),
+      castleID.toString()
+    );
+
+    if (tx) {
+      setArtilleryCount('');
+    } else {
+      setErrorMessage("An error occurred during artillery settlement.");
+      setErrorTitle("Artillery Settlement Error");
+      setShowError(true);
+    }
+
+    setIsLoadingArtillery(false);
+    targetDiv?.classList.remove("animate-border-settle");
+  }
+
   if (isLoading) {
     return <EventProgressBar text="Army is moving to the map..." />
+  }
+
+  if (isLoadingArtillery) {
+    return <EventProgressBar text="Artillery is moving to the map..." />
   }
 
   return (
@@ -166,60 +259,109 @@ export const ArmySettleModal = () => {
       aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content bg-dark text-white">
-          <div className="modal-header justify-center">
-            <h1 className="modal-title text-2xl" id="armySettleModalLabel">
-              Army Settlement
-            </h1>
-          </div>
-          <div className="modal-body">
-            <div className="container-fluid">
-              {
-                !enoughCredit &&
-                <Alert status='warning' color={"black"}>
-                  <AlertIcon />
-                  <AlertTitle>You have no enough credit, sell some resources! Total Charge: {totalCharge} 💰</AlertTitle>
-                </Alert>
-              }
-              <div className="row mt-2">
-                <ArmySettleInputBody imageSource={swordsmanImg}
-                  soldierName={"Swordsman"}
-                  setSoliderCount={setSwordsmanCount}
-                  imageHeight={"100px"}
-                  imageWidth={"75px"} />
-                <ArmySettleInputBody imageSource={archerImg}
-                  soldierName={"Archer"}
-                  setSoliderCount={setArcherCount}
-                  imageHeight={"100px"}
-                  imageWidth={"85px"} />
-                <ArmySettleInputBody imageSource={cavalryImg}
-                  soldierName={"Cavalry"}
-                  setSoliderCount={setCavalryCount}
-                  imageHeight={"100px"}
-                  imageWidth={"125px"} />
-              </div>
-            </div>
-          </div>
-          <div className="modal-footer">
-            <Button
-              colorScheme="whatsapp"
-              border="solid"
-              textColor="dark"
-              data-bs-dismiss="modal"
-              isDisabled={isDisabled}
-              onClick={() => handleClick()}
-            >
-              Settle Army
-            </Button>
-            <Button
-              colorScheme="red"
-              border="solid"
-              textColor="dark"
-              data-bs-dismiss="modal"
-            >
-              Back to Map
-            </Button>
-          </div>
+        <div className="modal-content bg-dark text-white pt-3">
+          <Tabs
+            isFitted
+            variant={"solid-rounded"}
+          >
+            <TabList ps={3} pe={3}>
+              <Tab >Army Settlement</Tab>
+              <Tab>Artillery Settlement</Tab>
+            </TabList>
+
+            <TabPanels>
+              <TabPanel>
+                <div className="modal-body">
+                  <div className="container-fluid">
+                    {
+                      !enoughCredit &&
+                      <Alert status='warning' color={"black"}>
+                        <AlertIcon />
+                        <AlertTitle>You have no enough credit, sell some resources! Total Charge: {totalCharge} 💰</AlertTitle>
+                      </Alert>
+                    }
+                    <div className="row mt-2">
+                      <ArmySettleInputBody imageSource={swordsmanImg}
+                        soldierName={"Swordsman"}
+                        setSoliderCount={setSwordsmanCount}
+                        imageHeight={"100px"}
+                        imageWidth={"75px"} />
+                      <ArmySettleInputBody imageSource={archerImg}
+                        soldierName={"Archer"}
+                        setSoliderCount={setArcherCount}
+                        imageHeight={"100px"}
+                        imageWidth={"85px"} />
+                      <ArmySettleInputBody imageSource={cavalryImg}
+                        soldierName={"Cavalry"}
+                        setSoliderCount={setCavalryCount}
+                        imageHeight={"100px"}
+                        imageWidth={"125px"} />
+                    </div>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <Button
+                    colorScheme="whatsapp"
+                    border="solid"
+                    textColor="dark"
+                    data-bs-dismiss="modal"
+                    isDisabled={isDisabled}
+                    onClick={handleArmySettlement}
+                  >
+                    Settle Army
+                  </Button>
+                  <Button
+                    colorScheme="red"
+                    border="solid"
+                    textColor="dark"
+                    data-bs-dismiss="modal"
+                  >
+                    Back to Map
+                  </Button>
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <div className="modal-body">
+                  <div className="container-fluid">
+                    {
+                      !enoughCreditArtillery &&
+                      <Alert status='warning' color={"black"}>
+                        <AlertIcon />
+                        <AlertTitle>You have no enough credit, sell some resources! Total Charge: {totalChargeArtillery} 💰</AlertTitle>
+                      </Alert>
+                    }
+                    <div className="row mt-2">
+                      <ArmySettleInputBody imageSource={artilleryImg}
+                        soldierName={"Artillery"}
+                        setSoliderCount={setArtilleryCount}
+                        imageHeight={"100px"}
+                        imageWidth={"150px"} />
+                    </div>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <Button
+                    colorScheme="whatsapp"
+                    border="solid"
+                    textColor="dark"
+                    data-bs-dismiss="modal"
+                    isDisabled={isDisabledArtillery}
+                    onClick={handleArtillerySettlement}
+                  >
+                    Settle Artillery
+                  </Button>
+                  <Button
+                    colorScheme="red"
+                    border="solid"
+                    textColor="dark"
+                    data-bs-dismiss="modal"
+                  >
+                    Back to Map
+                  </Button>
+                </div>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </div>
       </div>
     </div>

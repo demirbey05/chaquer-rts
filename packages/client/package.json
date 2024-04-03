@@ -5,8 +5,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "dev": "wait-port localhost:8545 && vite",
+    "build": "vite build --mode production",
+    "dev": "wait-port localhost:8545 && vite --mode development",
     "initialize": "pnpm build",
     "preview": "vite preview",
     "test": "tsc --noEmit"

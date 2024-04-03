@@ -77,14 +77,13 @@ export const JoinGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
                             </h1>
                         </div>
                         {
-                            userValid === undefined && gameData && (gameData.state === 2 || gameData.state === 3 || Number(gameData.numberOfPlayer) === Number(gameData.limitOfPlayer)) ?
-                                <p className="text-warning d-flex justify-content-center align-items-center font-bolder">
-                                    <AiFillWarning className="me-3" />
-                                    Seems game is full or started. You cannot join.
-                                </p> :
-                                <div className="modal-header justify-center mb-2">
-                                    <p>Click to Join Game button to join game.</p>
-                                </div>
+                            userValid === undefined &&
+                            gameData &&
+                            (gameData.state === 2 || gameData.state === 3 || Number(gameData.numberOfPlayer) === Number(gameData.limitOfPlayer)) &&
+                            <p className="text-warning d-flex justify-content-center align-items-center font-bolder">
+                                <AiFillWarning className="me-3" />
+                                Seems game is full or started. You cannot join.
+                            </p>
                         }
                         <div className="modal-footer justify-content-around mt-3">
                             <BackMapButton

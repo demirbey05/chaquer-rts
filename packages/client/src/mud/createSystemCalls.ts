@@ -443,6 +443,28 @@ export function createSystemCalls({
     }
   };
 
+  const settleArtillery = async (
+    x: number,
+    y: number,
+    gameID: number,
+    numArtillery: number,
+    castleID: string
+  ) => {
+    try {
+      const tx = await worldContract.write.settleArtillery([
+        x,
+        y,
+        { numArtillery, gameID },
+        castleID,
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
   return {
     initGame,
     initUsername,
@@ -470,5 +492,6 @@ export function createSystemCalls({
     collectResource,
     loadFleet,
     unloadArmy,
+    settleArtillery,
   };
 }
