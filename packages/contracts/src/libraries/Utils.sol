@@ -324,7 +324,7 @@ library LibUtils {
     uint256 startBlock = GameMetaData.getStartBlock(config.gameID);
     uint256 ownerBalance = CreditOwn.get(config.gameID, owner);
 
-    uint256 costArtillery = 10e18 * config.numArtillery;
+    uint256 costArtillery = 10e18 * uint256(config.numArtillery);
     if (costArtillery > ownerBalance) {
       revert ArmySettle__UnsufficientBalance();
     }

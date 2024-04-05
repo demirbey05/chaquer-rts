@@ -226,7 +226,6 @@ contract AttackCaptureSystem is System {
       ColorOwnable.deleteRecord(artilleryID);
       Position.deleteRecord(artilleryID);
     }
- 
 
   }
 }
