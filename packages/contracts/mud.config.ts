@@ -295,5 +295,10 @@ export default mudConfig({
       root: true,
       args: [resolveTableId("FleetCarry")],
     },
+    {
+      name: "KeysWithValueModule",
+      root: true,
+      args: [resolveTableId("ArtilleryOwnable")],
+    },
   ],
 });
