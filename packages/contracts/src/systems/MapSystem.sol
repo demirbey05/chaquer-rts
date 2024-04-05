@@ -212,7 +212,7 @@ contract MapSystem is System {
     address ownerCandidate = _msgSender();
     uint32 width = MapConfig.getWidth(gameID);
     SystemSwitch.call(abi.encodeCall(IWorld(_world()).collectResource, (gameID)));
-    (address armyOwner, uint256 gameIDArmy) = ArmyOwnable.get(armyID);
+    (address armyOwner, uint256 gameIDArmy) = ArtilleryOwnable.get(armyID);
     (uint32 xArmy, uint32 yArmy, ) = Position.get(armyID);
     ResourceOwnData memory resourcesOfUser = ResourceOwn.get(ownerCandidate, gameID);
     if (resourcesOfUser.numOfFood < armyMoveFoodCost) {
