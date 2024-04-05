@@ -207,4 +207,36 @@ contract MapSystem is System {
     GameMetaData.setWinner(gameID, winnerCandidate);
     GameMetaData.setState(gameID, State.Completed);
   }
+
+  function artilleryMove(bytes32 armyID, uint32 x, uint32 y, uint256 gameID) public {
+    address ownerCandidate = _msgSender();
+    uint32 width = MapConfig.getWidth(gameID);
+    SystemSwitch.call(abi.encodeCall(IWorld(_world()).collectResource, (gameID)));
+    (address armyOwner, uint256 gameIDArmy) = ArmyOwnable.get(armyID);
+    (uint32 xArmy, uint32 yArmy, ) = Position.get(armyID);
+    ResourceOwnData memory resourcesOfUser = ResourceOwn.get(ownerCandidate, gameID);
+    if (resourcesOfUser.numOfFood < armyMoveFoodCost) {
+      revert MoveArmy__UnsufficientFood();
+    }
+    if (resourcesOfUser.numOfGold < armyMoveGoldCost) {
+      revert MoveArmy__UnsufficientGold();
+    }
+
+    if ((armyOwner != ownerCandidate) || (gameIDArmy != gameID)) {
+      revert MoveArmy__NoAuthorized();
+    }
+    if (MapConfig.getItemTerrain(gameID, x * width + y)[0] != hex"01") {
+      revert MoveArmy__WrongTerrainType();
+    }
+    if (LibMath.manhattan(x, y, xArmy, yArmy) > 3) {
+      revert MoveArmy__TooFar();
+    }
+    if (LibQueries.queryPositionEntity(IStore(_world()), x, y, gameID) > 0) {
+      revert MoveArmy__TileIsNotEmpty();
+    }
+    Position.set(armyID, x, y, gameID);
+    ResourceOwn.setNumOfFood(ownerCandidate, gameID, resourcesOfUser.numOfFood - armyMoveFoodCost);
+    ResourceOwn.setNumOfGold(ownerCandidate, gameID, resourcesOfUser.numOfGold - armyMoveGoldCost);
+
+  }
 }
