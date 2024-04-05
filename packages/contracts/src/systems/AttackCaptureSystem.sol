@@ -219,6 +219,14 @@ contract AttackCaptureSystem is System {
       AttackerType.Army
     );
 
+    if (ownerEntitiesSurroundMine.length == 0) {
+      ArtilleryOwnable.deleteRecord(artilleryID);
+      ArtilleryConfig.deleteRecord(artilleryID);
+      ColorOwnable.deleteRecord(artilleryID);
+      Position.deleteRecord(artilleryID);
+      return;
+    }
+
     uint result = LibAttack.warCaptureCastle(attackerID, ownerEntitiesSurroundMine);
     if (result == 1) {
       ArtilleryOwnable.deleteRecord(artilleryID);
