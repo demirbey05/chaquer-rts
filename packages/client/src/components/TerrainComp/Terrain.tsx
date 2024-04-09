@@ -70,6 +70,8 @@ import { getMapFromMapId } from '../../utils/helperFunctions/CustomFunctions/get
 import { isArmyPosition } from '../../utils/helperFunctions/ArmyFunctions/isArmyPosition';
 import { isCastlePosition } from '../../utils/helperFunctions/CastleFunctions/isCastlePosition';
 import { isDockPosition } from '../../utils/helperFunctions/SeaFunctions/isDockPosition';
+import { useArtilleryPositions } from '../../hooks/ArmyHooks/useArtilleryPositions';
+import { useMyArtillery } from '../../hooks/ArmyHooks/useMyArtillery';
 
 export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpectator: boolean }) => {
   const { components, systemCalls } = useMUD();
@@ -179,6 +181,8 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
   const myDockPositions = useMyDockPositions(userWallet, gameID)
   const fleetPositions = useFleetPositions(gameID);
   const myFleetPositions = useMyFleetPositions(userWallet, gameID);
+  const artilleryPositions = useArtilleryPositions(gameID)
+  const myArtilleryPositions = useMyArtillery(userWallet, gameID)
   const userValid = usePlayerIsValid(gameID, userWallet);
   const isFleetLoaded = useLoadedFleets(gameID, fromFleetPosition)
   const gameData = useGameData(gameID)
@@ -526,7 +530,9 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
     fleetSettleStage,
     isArmyMergeStage,
     fromArmyPosition,
-    myFleetPositions);
+    myFleetPositions,
+    myArtilleryPositions,
+    artilleryPositions);
   AttackEffects(myFleetPositions,
     fleetPositions,
     fromFleetPosition,
