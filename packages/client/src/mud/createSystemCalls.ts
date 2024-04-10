@@ -488,7 +488,10 @@ export function createSystemCalls({
 
   const attackToArtillery = async (armyID: string, artilleryID: string) => {
     try {
-      const tx = await worldContract.write.artilleryMove([armyID, artilleryID]);
+      const tx = await worldContract.write.attackToArtillery([
+        armyID,
+        artilleryID,
+      ]);
       await waitForTransaction(tx);
       return tx;
     } catch (e) {

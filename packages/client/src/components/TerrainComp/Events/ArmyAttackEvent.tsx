@@ -2,6 +2,7 @@ import { getMyArmyConfigByPosition } from "../../../utils/helperFunctions/ArmyFu
 import { getEnemyArmyConfigByPosition } from "../../../utils/helperFunctions/ArmyFunctions/getArmyConfigByPosition";
 
 export const ArmyAttackEvent = (
+    setArtilleryCaptureStage: (value: boolean) => void,
     setIsFleetLoadStage: (value: boolean) => void,
     setIsArmyMergeStage: (value: boolean) => void,
     setIsArmyMoveStage: (value: boolean) => void,
@@ -18,6 +19,7 @@ export const ArmyAttackEvent = (
     myArmyPosition: any[],
     armyPositions: any
 ) => {
+    setArtilleryCaptureStage(false)
     setIsArmyMoveStage(false);
     setIsMineStage(false)
     setDockSettleStage(false);

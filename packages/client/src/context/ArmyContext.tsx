@@ -25,6 +25,12 @@ type ArmyContextType = {
     setFromArtilleryPosition: (value: any) => void;
     isArtilleryMoveStage: boolean;
     setIsArtilleryMoveStage: (value: boolean) => void;
+    artilleryCaptureStage: boolean;
+    setArtilleryCaptureStage: (value: boolean) => void;
+    targetArtilleryPosition: any;
+    setTargetArtilleryPosition: (value: any) => void;
+    artilleryAttackerArmyPosition: any;
+    setArtilleryAttackerArmyPosition: (value: any) => void;
 };
 
 const ArmyContext = createContext<ArmyContextType>({
@@ -51,7 +57,13 @@ const ArmyContext = createContext<ArmyContextType>({
     fromArtilleryPosition: null,
     setFromArtilleryPosition: () => { },
     isArtilleryMoveStage: false,
-    setIsArtilleryMoveStage: () => { }
+    setIsArtilleryMoveStage: () => { },
+    artilleryCaptureStage: false,
+    setArtilleryCaptureStage: () => { },
+    targetArtilleryPosition: null,
+    setTargetArtilleryPosition: () => { },
+    artilleryAttackerArmyPosition: null,
+    setArtilleryAttackerArmyPosition: () => { }
 });
 
 const ArmyProvider: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode; }) => {
@@ -71,6 +83,10 @@ const ArmyProvider: React.FC<{ children: ReactNode }> = ({ children }: { childre
 
     const [fromArtilleryPosition, setFromArtilleryPosition] = useState<any>()
     const [isArtilleryMoveStage, setIsArtilleryMoveStage] = useState<any>();
+
+    const [artilleryCaptureStage, setArtilleryCaptureStage] = useState<boolean>(false);
+    const [targetArtilleryPosition, setTargetArtilleryPosition] = useState<any>();
+    const [artilleryAttackerArmyPosition, setArtilleryAttackerArmyPosition] = useState<any>();
 
     const results: ArmyContextType = {
         isArmySettleStage,
@@ -96,7 +112,13 @@ const ArmyProvider: React.FC<{ children: ReactNode }> = ({ children }: { childre
         fromArtilleryPosition,
         setFromArtilleryPosition,
         isArtilleryMoveStage,
-        setIsArtilleryMoveStage
+        setIsArtilleryMoveStage,
+        artilleryCaptureStage,
+        setArtilleryCaptureStage,
+        targetArtilleryPosition,
+        setTargetArtilleryPosition,
+        artilleryAttackerArmyPosition,
+        setArtilleryAttackerArmyPosition
     };
 
     return (

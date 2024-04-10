@@ -75,7 +75,7 @@ export const ArmySettleModal = () => {
         setEnoughCreditArtillery(true);
       }
     }
-  }, [artilleryCount])
+  }, [artilleryCount, myCredit])
 
   useEffect(() => {
     if (Number.isNaN(parseInt(swordsmanCount))) {

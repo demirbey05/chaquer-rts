@@ -1,6 +1,6 @@
 import { stringifyWrapper } from "../../stringifyWrapper";
 
-export const isEnemyArmy = (
+export const isEnemyArtillery = (
   position: any,
   artilleryPositions: any[],
   myArtilleryPositions: any[]

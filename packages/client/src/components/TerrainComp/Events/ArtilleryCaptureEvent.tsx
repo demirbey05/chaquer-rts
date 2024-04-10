@@ -1,30 +1,30 @@
 import { getMyArmyConfigByPosition } from "../../../utils/helperFunctions/ArmyFunctions/getArmyConfigByPosition"
 
-export const CastleAttackEvent = (
-    setArtilleryCaptureStage: (value: boolean) => void,
+export const ArtilleryCaptureEvent = (
     setIsFleetLoadStage: (value: boolean) => void,
-    setIsArmyMergeStage: (value: boolean) => void,
     setIsArmyMoveStage: (value: boolean) => void,
-    setIsMineStage: (value: boolean) => void,
+    setIsAttackStage: (value: boolean) => void,
     setDockSettleStage: (value: boolean) => void,
-    setDockCaptureStage: (value: boolean) => void,
+    setIsMineStage: (value: boolean) => void,
+    setIsDockCapture: (value: boolean) => void,
     setFromArmyPosition: any,
-    setAttackFromArmyPositionToCastle: any,
-    setAttackToArmyPositionToCastle: any,
+    setArtilleryAttackerArmyPosition: any,
     fromArmyPositionRef: any,
+    setTargetArtilleryPosition: any,
     toArmyPositionRef: any,
     setMyArmyConfig: any,
-    myArmyPosition: any[]) => {
-    setArtilleryCaptureStage(false)
+    myArmyPosition: any[]
+) => {
     setIsFleetLoadStage(false)
     setIsArmyMoveStage(false)
-    setIsMineStage(false)
+    setIsMineStage(false);
+    setIsAttackStage(false)
     setDockSettleStage(false)
-    setDockCaptureStage(false)
-    setIsArmyMergeStage(false)
+    setIsDockCapture(false)
     setFromArmyPosition(undefined);
-    setAttackFromArmyPositionToCastle(fromArmyPositionRef.current);
-    setAttackToArmyPositionToCastle(toArmyPositionRef.current);
+
+    setArtilleryAttackerArmyPosition(fromArmyPositionRef.current);
+    setTargetArtilleryPosition(toArmyPositionRef.current);
     setMyArmyConfig(
         getMyArmyConfigByPosition({ x: fromArmyPositionRef.current.x, y: fromArmyPositionRef.current.y, }, myArmyPosition)
     );

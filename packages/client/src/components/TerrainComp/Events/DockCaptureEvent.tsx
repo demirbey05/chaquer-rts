@@ -1,6 +1,7 @@
 import { getMyArmyConfigByPosition } from "../../../utils/helperFunctions/ArmyFunctions/getArmyConfigByPosition"
 
 export const DockCaptureEvent = (
+    setArtilleryCaptureStage: (value: boolean) => void,
     setIsFleetLoadStage: (value: boolean) => void,
     setIsArmyMoveStage: (value: boolean) => void,
     setIsAttackStage: (value: boolean) => void,
@@ -14,6 +15,7 @@ export const DockCaptureEvent = (
     setMyArmyConfig: any,
     myArmyPosition: any[]
 ) => {
+    setArtilleryCaptureStage(false)
     setIsFleetLoadStage(false)
     setIsArmyMoveStage(false)
     setIsMineStage(false);
