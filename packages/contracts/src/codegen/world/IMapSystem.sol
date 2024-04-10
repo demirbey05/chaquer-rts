@@ -25,4 +25,6 @@ interface IMapSystem {
   function armyMove(bytes32 armyID, uint32 x, uint32 y, uint256 gameID) external;
 
   function claimWinner(address winnerCandidate, uint256 gameID) external;
+
+  function artilleryMove(bytes32 armyID, uint32 x, uint32 y, uint256 gameID) external;
 }

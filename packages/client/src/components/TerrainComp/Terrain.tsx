@@ -72,6 +72,8 @@ import { isCastlePosition } from '../../utils/helperFunctions/CastleFunctions/is
 import { isDockPosition } from '../../utils/helperFunctions/SeaFunctions/isDockPosition';
 import { useArtilleryPositions } from '../../hooks/ArmyHooks/useArtilleryPositions';
 import { useMyArtillery } from '../../hooks/ArmyHooks/useMyArtillery';
+import { isMyArtillery } from '../../utils/helperFunctions/ArmyFunctions/isMyArtillery';
+import { ArtilleryMoveEvent } from './Events/ArtilleryMoveEvent';
 
 export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpectator: boolean }) => {
   const { components, systemCalls } = useMUD();
@@ -108,7 +110,11 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
     setIsArmyMergeStage,
     isArmyMergeStage,
     setMergeTargetArmyPosition,
-    setMergeFromArmyPosition } = useArmy();
+    setMergeFromArmyPosition,
+    setFromArtilleryPosition,
+    fromArtilleryPosition,
+    isArtilleryMoveStage,
+    setIsArtilleryMoveStage } = useArmy();
 
   const { userWallet } = usePlayer();
 
@@ -164,10 +170,15 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
   const toArmyPositionRef = useRef<{ x: number, y: number }>({ x: -1, y: -1 });
   const fromArmyPositionRef = useRef<Coord | undefined>({ x: "-1", y: "-1" });
 
+  const movingArtilleryId = useRef<Entity>("0" as Entity);
+  const toArtilleryPositionRef = useRef<{ x: number, y: number }>({ x: -1, y: -1 });
+  const fromArtilleryPositionRef = useRef<Coord | undefined>({ x: "-1", y: "-1" });
+
   const movingFleetId = useRef<string>("0");
   const toFleetPositionRef = useRef<{ x: number, y: number }>({ x: -1, y: -1 });
   const fromFleetPositionRef = useRef<Coord | undefined>({ x: "-1", y: "-1" });
   const [isLoadingArmy, setIsLoadingArmy] = useState<boolean>(false);
+  const [isLoadingArtillery, setIsLoadingArtillery] = useState<boolean>(false);
   const [isLoadingFleet, setIsLoadingFleet] = useState<boolean>(false);
   const [isUnloadFleet, setIsUnloadFleet] = useState<boolean>(false)
 
@@ -331,8 +342,7 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
           setIsLoadingFleet,
           gameID);
       }
-    }
-    else {
+    } else {
       setIsFleetMoveStage(false)
       setSeaMineStage(false)
       setIsFleetAttackStage(false)
@@ -340,6 +350,49 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
       setFromFleetPosition(undefined);
       toFleetPositionRef.current = { x: -1, y: -1 };
       fromFleetPositionRef.current = { x: "-1", y: "-1" };
+    }
+
+    // Logic of Artillery
+    if (!fromArtilleryPosition && isCastleSettled && !isArmySettleStage && !isArmyUpdateStage && !isArmyMoveStage && myArtilleryPositions && isMyArtillery({ x: getDataAtrX(e), y: getDataAtrY(e) }, myArtilleryPositions)) {
+      setFromArtilleryPosition({ x: getDataAtrX(e), y: getDataAtrY(e) });
+      setIsArtilleryMoveStage(true)
+    } else if (fromArtilleryPosition && isUserClickedManhattanPosition(fromArtilleryPosition, getDataAtrX(e), getDataAtrY(e))) {
+      toArtilleryPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
+      fromArtilleryPositionRef.current = { x: fromArtilleryPosition.x, y: fromArtilleryPosition.y };
+
+      if (
+        isMyArtillery({ x: parseInt(fromArtilleryPositionRef.current.x), y: parseInt(fromArtilleryPositionRef.current.y) }, myArtilleryPositions) &&
+        canCastleBeSettle(values[toArtilleryPositionRef.current.x][toArtilleryPositionRef.current.y]) &&
+        !isMyCastle(myCastlePosition, toArtilleryPositionRef.current.x, toArtilleryPositionRef.current.y) &&
+        !isMyDock(Number(toArtilleryPositionRef.current.x), Number(toArtilleryPositionRef.current.y), myDockPositions)
+      ) {
+        await ArtilleryMoveEvent(
+          fromArtilleryPositionRef,
+          setIsArtilleryMoveStage,
+          toArtilleryPositionRef,
+          isArtilleryMoveStage,
+          setFromArtilleryPosition,
+          components,
+          movingArtilleryId,
+          systemCalls,
+          setErrorMessage,
+          setErrorTitle,
+          setShowError,
+          setIsLoadingArtillery,
+          gameID
+        )
+      }
+      else {
+        setIsArtilleryMoveStage(false)
+        setFromArtilleryPosition(undefined);
+        toArtilleryPositionRef.current = { x: -1, y: -1 };
+        fromArtilleryPositionRef.current = { x: "-1", y: "-1" };
+      }
+    } else {
+      setIsArtilleryMoveStage(false)
+      setFromArtilleryPosition(undefined);
+      toArtilleryPositionRef.current = { x: -1, y: -1 };
+      fromArtilleryPositionRef.current = { x: "-1", y: "-1" };
     }
 
     // Logic of Army-Castle-Mine-Dock Attack and Dock Settle
@@ -355,7 +408,7 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
     }
     else if (fromArmyPosition && isUserClickedManhattanPosition(fromArmyPosition, getDataAtrX(e), getDataAtrY(e)) && !isMyFleet({ x: fromArmyPosition.x, y: fromArmyPosition.y }, myFleetPositions)) {
       toArmyPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
-      fromArmyPositionRef.current = { x: fromArmyPosition.x, y: fromArmyPosition.y, };
+      fromArmyPositionRef.current = { x: fromArmyPosition.x, y: fromArmyPosition.y };
 
       if (isEnemyArmy(toArmyPositionRef.current, armyPositions, myArmyPosition)) {
         ArmyAttackEvent(setIsFleetLoadStage,
@@ -462,8 +515,7 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
           setTargetLoadFleetPosition,
           fromArmyPositionRef,
           toArmyPositionRef)
-      }
-      else if (values.length > 0 &&
+      } else if (values.length > 0 &&
         canCastleBeSettle(values[toArmyPositionRef.current.x][toArmyPositionRef.current.y]) &&
         canCastleBeSettle(values[Number(fromArmyPositionRef.current.x)][Number(fromArmyPositionRef.current.y)]) &&
         !isMyCastle(myCastlePosition, toArmyPositionRef.current.x, toArmyPositionRef.current.y) &&
@@ -562,7 +614,9 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
     fleetSettleStage,
     fleetPositions,
     isFleetUnloadStage,
-    isFleetLoaded);
+    isFleetLoaded,
+    fromArtilleryPosition,
+    isArtilleryMoveStage);
   DockEffects(isArmySettleStage,
     castlePositions,
     resources,
@@ -653,6 +707,7 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
       {isLoadingArmy && <EventProgressBar text={"Soldiers are passing to new position..."} />}
       {isLoadingFleet && <EventProgressBar text={"Ships are passing to new position..."} />}
       {isUnloadFleet && <EventProgressBar text={"Soldiers are being dropped off to the land..."} />}
+      {isLoadingArtillery && <EventProgressBar text={"Artilleries are being dropped off to the land..."} />}
     </ScrollContainer>
   );
 }

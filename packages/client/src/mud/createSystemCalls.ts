@@ -465,6 +465,38 @@ export function createSystemCalls({
     }
   };
 
+  const moveArtillery = async (
+    artilleryID: string,
+    x: number,
+    y: number,
+    gameID: number
+  ) => {
+    try {
+      const tx = await worldContract.write.artilleryMove([
+        artilleryID,
+        x,
+        y,
+        BigInt(gameID),
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
+  const attackToArtillery = async (armyID: string, artilleryID: string) => {
+    try {
+      const tx = await worldContract.write.artilleryMove([armyID, artilleryID]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
   return {
     initGame,
     initUsername,
@@ -493,5 +525,7 @@ export function createSystemCalls({
     loadFleet,
     unloadArmy,
     settleArtillery,
+    moveArtillery,
+    attackToArtillery,
   };
 }

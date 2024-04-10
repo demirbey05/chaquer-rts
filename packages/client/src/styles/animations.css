@@ -112,3 +112,35 @@
         border-color: rgba(250, 130, 4, 0.5);
     }
 }
+
+/* Artillery move position show effect*/
+.animate-artillery-move {
+    animation: borderAnimation-artillery-move 1s infinite alternate;
+}
+
+@keyframes borderAnimation-artillery-move {
+    0% {
+        border-width: 5px;
+        border-color: rgba(255, 25, 25, 0.5);
+    }
+
+    25% {
+        border-width: 10px;
+        border-color: rgba(255, 25, 25, 0.5);
+    }
+
+    50% {
+        border-width: 15px;
+        border-color: rgba(255, 25, 25, 0.5);
+    }
+
+    75% {
+        border-width: 10px;
+        border-color: rgba(255, 25, 25, 0.5);
+    }
+
+    100% {
+        border-width: 0px;
+        border-color: rgba(255, 25, 25, 0.5);
+    }
+}

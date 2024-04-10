@@ -21,6 +21,10 @@ type ArmyContextType = {
     setMergeTargetArmyPosition: (value: any) => void;
     mergeFromArmyPosition: any;
     setMergeFromArmyPosition: (value: any) => void;
+    fromArtilleryPosition: any;
+    setFromArtilleryPosition: (value: any) => void;
+    isArtilleryMoveStage: boolean;
+    setIsArtilleryMoveStage: (value: boolean) => void;
 };
 
 const ArmyContext = createContext<ArmyContextType>({
@@ -43,7 +47,11 @@ const ArmyContext = createContext<ArmyContextType>({
     mergeTargetArmyPosition: undefined,
     setMergeTargetArmyPosition: () => { },
     mergeFromArmyPosition: undefined,
-    setMergeFromArmyPosition: () => { }
+    setMergeFromArmyPosition: () => { },
+    fromArtilleryPosition: null,
+    setFromArtilleryPosition: () => { },
+    isArtilleryMoveStage: false,
+    setIsArtilleryMoveStage: () => { }
 });
 
 const ArmyProvider: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode; }) => {
@@ -60,6 +68,9 @@ const ArmyProvider: React.FC<{ children: ReactNode }> = ({ children }: { childre
     const [isArmyMergeStage, setIsArmyMergeStage] = useState<boolean>(false);
     const [mergeTargetArmyPosition, setMergeTargetArmyPosition] = useState<any>();
     const [mergeFromArmyPosition, setMergeFromArmyPosition] = useState<any>();
+
+    const [fromArtilleryPosition, setFromArtilleryPosition] = useState<any>()
+    const [isArtilleryMoveStage, setIsArtilleryMoveStage] = useState<any>();
 
     const results: ArmyContextType = {
         isArmySettleStage,
@@ -81,7 +92,11 @@ const ArmyProvider: React.FC<{ children: ReactNode }> = ({ children }: { childre
         mergeTargetArmyPosition,
         setMergeTargetArmyPosition,
         mergeFromArmyPosition,
-        setMergeFromArmyPosition
+        setMergeFromArmyPosition,
+        fromArtilleryPosition,
+        setFromArtilleryPosition,
+        isArtilleryMoveStage,
+        setIsArtilleryMoveStage
     };
 
     return (
