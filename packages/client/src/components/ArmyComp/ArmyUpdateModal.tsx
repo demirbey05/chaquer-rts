@@ -1,6 +1,6 @@
-import archerImg from "../../images/armyAssets/archer.png"
-import cavalryImg from "../../images/armyAssets/cavalry.png";
-import swordsmanImg from "../../images/armyAssets/swordsman.png";
+import archerImg from "../../images/armyAssets/custom/archer.png"
+import cavalryImg from "../../images/armyAssets/custom/cavalry.png";
+import swordsmanImg from "../../images/armyAssets/custom/swordsman.png";
 import { useState, useEffect } from "react";
 import { Button, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
@@ -261,8 +261,8 @@ export const ArmyUpdateModal = () => {
                     <div className="modal-footer">
                         <Button
                             colorScheme="whatsapp"
-                            border="solid"
-                            textColor="dark"
+                            borderRadius={"15px"}
+                            boxShadow={"0px 5px 0px 0px #33550F"}
                             data-bs-dismiss="modal"
                             isDisabled={isDisabled}
                             onClick={() => handleClick()}
@@ -271,8 +271,8 @@ export const ArmyUpdateModal = () => {
                         </Button>
                         <Button
                             colorScheme="red"
-                            border="solid"
-                            textColor="dark"
+                            borderRadius={"15px"}
+                            boxShadow={"0px 5px 0px 0px #7E2918"}
                             data-bs-dismiss="modal"
                             onClick={() => handleBackMap()}
                         >

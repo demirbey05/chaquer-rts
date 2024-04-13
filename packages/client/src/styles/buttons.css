@@ -141,35 +141,6 @@
 }
 
 /*Circle Button for tips*/
-.tips-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 25px;
-    cursor: pointer;
-    position: fixed;
-    bottom: 25px;
-    left: 25px;
-    z-index: 1;
-    border: 2px solid rgba(0, 0, 0, 0.5);
-    border-radius: 25px;
-    padding: 5px;
-}
-
-.game-tutorial-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 25px;
-    cursor: pointer;
-    position: fixed;
-    bottom: 25px;
-    left: 80px;
-    z-index: 1;
-    border: 2px solid rgba(0, 0, 0, 0.5);
-    border-radius: 25px;
-    padding: 5px;
-}
 
 .menu-buttons {
     width: 225px;

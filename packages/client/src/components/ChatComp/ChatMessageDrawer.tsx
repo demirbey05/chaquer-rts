@@ -1,5 +1,5 @@
 import badWordsData from "../../../badWords.json";
-import { Tooltip } from "@chakra-ui/react";
+import { Tooltip, Text } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from 'react';
 import { useMUD } from '../../context/MUDContext';
 import { useError } from '../../context/ErrorContext';
@@ -117,7 +117,7 @@ export const ChatMessageDrawer = ({ isSpectator }: { isSpectator: boolean }) => 
             </Tooltip>
             <div id="chatDrawer" className={`chat-drawer ${isOpen ? "open" : ""}`} style={isSpectator ? { marginTop: "225px" } : {}}>
                 <div className="d-flex justify-between border-bottom mb-1 p-2">
-                    <h4 className="font-extrabold ms-3">Chat</h4>
+                    <Text fontSize={"20px"}>Chat</Text>
                     <button className="me-3" type="button" onClick={toggleOffcanvas}>&#10008;</button>
                 </div>
                 <div className='row'>

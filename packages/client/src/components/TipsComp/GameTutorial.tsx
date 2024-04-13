@@ -11,6 +11,7 @@ import {
     AccordionButton,
     AccordionPanel,
     AccordionIcon,
+    IconButton,
     Box
 } from '@chakra-ui/react'
 import { FaCheck } from "react-icons/fa";
@@ -52,9 +53,18 @@ export const GameTutorial = () => {
         <>
             <Popover isLazy defaultIsOpen={true} placement='top'>
                 <PopoverTrigger>
-                    <button className="game-tutorial-button">
-                        <IoGameControllerOutline />
-                    </button>
+                    <IconButton
+                        isRound
+                        zIndex={1}
+                        colorScheme={"white"}
+                        pos={"fixed"}
+                        bottom={"25px"}
+                        left={"80px"}
+                        backgroundColor={"transparent"}
+                        border={"2px solid white"}
+                        aria-label='game-tutorial-button'
+                        icon={<IoGameControllerOutline fontSize={"25px"} />}
+                    />
                 </PopoverTrigger>
                 <PopoverContent backgroundColor={"blackAlpha.700"} color={"white"}>
                     <PopoverArrow />

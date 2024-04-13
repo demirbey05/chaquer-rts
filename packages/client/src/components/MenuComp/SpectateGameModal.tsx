@@ -20,12 +20,12 @@ export const SpectateGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setI
             <div className="join-game-modal-overlay">
                 <div className="join-game-modal-container">
                     <div className="join-game-modal">
-                        <div className="modal-header justify-center mb-2">
+                        <div className="modal-header justify-center mb-4">
                             <h1 className="modal-title text-2xl" id="userNameModalLabel">
                                 Spectate Game
                             </h1>
                         </div>
-                        <div className="modal-header justify-center mb-2">
+                        <div className="modal-header justify-center mb-4">
                             <p>Click to Spectate Game button to join as a spectator.</p>
                         </div>
                         <div className="modal-footer justify-content-around mt-3">
@@ -45,8 +45,8 @@ export const SpectateGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setI
 const SpectateGameButton = ({ onClick }: any) => {
     return <Button
         colorScheme="whatsapp"
-        border="solid"
-        textColor="dark"
+        borderRadius={"15px"}
+        boxShadow={"0px 5px 0px 0px #33550F"}
         onClick={() => onClick()}
     >
         Spectate Game
@@ -57,8 +57,8 @@ const BackMapButton = ({ toggleDrawer, setGameID }: { toggleDrawer: () => void, 
     return (
         <Button
             colorScheme="red"
-            border="solid"
-            textColor="dark"
+            borderRadius={"15px"}
+            boxShadow={"0px 5px 0px 0px #7E2918"}
             onClick={() => {
                 setGameID(0)
                 toggleDrawer();

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useGame } from "../../context/GameContext";
-import { Tabs, TabList, TabPanels, Tab, TabPanel, Tooltip } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Tooltip, Text } from "@chakra-ui/react";
 import { ArmyPrices } from "./ArmyPrices";
 import { ResourcePrices } from "./ResourcePrices";
 import { FleetPrices } from "./FleetPrices";
@@ -38,14 +38,17 @@ export const PriceListDrawer = ({ isSpectator }: { isSpectator: boolean }) => {
                 <button
                     className={"price-list-button"}
                     style={isSpectator ? { left: "48%" } : {}}
-                    onClick={toggleDrawer}>
+                    onClick={toggleDrawer}
+                >
                     <AiOutlineStock />
                 </button>
             </Tooltip>
             <div id="prices-drawer-body" className={`prices-drawer ${isOpen ? "open" : ""}`} style={isSpectator ? { marginTop: "95px" } : {}}>
                 <div className='d-flex justify-between align-items-center border-bottom mb-2 p-2'>
-                    <h4 className="ms-4 font-extrabold">Current Prices</h4>
-                    <button type="button" className="me-4" onClick={toggleDrawer}>&#10008;</button>
+                    <Text fontSize={"20px"}>
+                        Current Prices
+                    </Text>
+                    <button type="button" onClick={toggleDrawer}>&#10008;</button>
                 </div>
                 <Tabs isFitted variant='enclosed'>
                     <TabList>

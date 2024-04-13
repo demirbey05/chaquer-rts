@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Tooltip } from "@chakra-ui/react";
+import { Tooltip, Text } from "@chakra-ui/react";
 import { usePlayer } from '../../context/PlayerContext';
 import { useWarResult } from '../../hooks/useWarResult';
 import { useMyUsername } from "../../hooks/IdentityHooks/useMyUsername";
@@ -44,7 +44,7 @@ export const WarResultDrawer = () => {
             </Tooltip>
             <div id="warResultDrawer" className={`my-war-result-drawer ${isOpen ? "open" : ""}`}>
                 <div className='d-flex justify-between align-items-center border-bottom mb-3 p-2'>
-                    <h4 className="font-extrabold ms-4">War Results</h4>
+                    <Text fontSize={"20px"}>War Results</Text>
                     <button type="button" className="me-4" onClick={toggleOffcanvas}>&#10008;</button>
                 </div>
                 <div>

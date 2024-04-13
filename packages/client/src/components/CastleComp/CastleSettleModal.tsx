@@ -56,10 +56,10 @@ export const CastleSettleModal = () => {
             <div className="modal-footer">
               <Button
                 colorScheme="whatsapp"
+                borderRadius={"15px"}
+                boxShadow={"0px 5px 0px 0px #33550F"}
                 isLoading={isLoading}
                 loadingText={"Settling"}
-                border="solid"
-                textColor="dark"
                 isDisabled={!(userValid && userValid === true)}
                 onClick={() => handleClick()}
               >
@@ -67,9 +67,9 @@ export const CastleSettleModal = () => {
               </Button>
               <Button
                 colorScheme="red"
+                borderRadius={"15px"}
+                boxShadow={"0px 5px 0px 0px #7E2918"}
                 isDisabled={isLoading}
-                border="solid"
-                textColor="dark"
                 data-bs-dismiss="modal"
               >
                 Back to Map

@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { Avatar, WrapItem, Button, Tag, useClipboard } from '@chakra-ui/react';
 import { usePlayer } from '../../context/PlayerContext';
 import { IoMdWarning } from "react-icons/io";
-import { FaEdit } from "react-icons/fa";
 
 export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: string, setIsUserModalOpen: (value: boolean) => void }) => {
     const showUsername = username;
@@ -10,9 +9,14 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
     return (
         <div className='d-flex justify-center playerCardMargin'>
             <div className="player-card-info-modal">
-                <div className='d-flex justify-content-center mb-2'>
+                <div className='d-flex justify-content-center mb-3'>
                     <WrapItem>
-                        <Avatar name={username} />
+                        <Avatar
+                            borderColor={"#DCBF9D"}
+                            borderWidth={"3px"}
+                            size={"lg"}
+                            name={username}
+                        />
                     </WrapItem>
                 </div>
                 <div className='d-flex flex-column align-items-center'>
@@ -21,10 +25,10 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                             <>
                                 <Tag
                                     size='lg'
-                                    backgroundColor={" #0E3C4B"}
-                                    textColor={"white"}
+                                    mb={3}
+                                    backgroundColor={"#DCBF9D"}
                                     justifyContent={"center"}
-                                    width={"100%"}
+                                    width={"75%"}
                                     clipPath={"polygon(100% 0, 100% 100%, 0% 100%, 10% 52%, 0% 0%)"}
                                 >
                                     {username.toLocaleUpperCase()}
@@ -37,7 +41,7 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                                     colorScheme={"facebook"}
                                     onClick={() => setIsUserModalOpen(true)}
                                 >
-                                    <FaEdit />
+                                    Change Username
                                 </Button>
                             </>
                         ) : (

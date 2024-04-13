@@ -57,30 +57,6 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
         const initGameTx = await systemCalls.initGame(numberOfPlayer, width, height, data, gameName, mapID, buf[0]);
         if (initGameTx) {
             setGameID(Number(initGameTx.result))
-            const options = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    content: "<@&1146814229312188477>",
-                    embeds: [
-                        {
-                            fields: [
-                                { name: "Game Name", value: `${gameName}`, inline: true },
-                                { name: "Player Limit", value: `${numberOfPlayer}`, inline: true },
-                            ],
-                            title: "New Game Created!",
-                            description: "[Go to game](https://go.chaquer.xyz)",
-                            color: 10025880,
-                        },
-                    ],
-                }),
-            };
-
-            try {
-                !import.meta.env.DEV && await fetch(discordAPIURI, options)
-            } catch (e) {
-                console.log(e)
-            }
 
             setIsLoading(false)
             toggleDrawer();

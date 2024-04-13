@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { getBorderColor } from "../../../utils/constants/getBorderColors";
-import castle from '../../../images/mapAssets/castle.png'
-import ottomanCastle from '../../../images/armyAssets/ottoman/ottoman_castle.png'
+import customCastle from '../../../images/castleAssets/custom-castle.png'
 
 export const CastleEffects = (fleetSettleStage: boolean,
     myCastlePosition: any[],
@@ -53,7 +52,7 @@ export const CastleEffects = (fleetSettleStage: boolean,
                 const element = document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`);
                 if (element) {
                     const imgElement = document.createElement("img");
-                    imgElement.src = ottomanCastle;
+                    imgElement.src = customCastle;
                     imgElement.style.transform = "rotateX(-60deg) rotateZ(-25deg) rotateY(45deg)"
                     imgElement.style.height = "100px"
                     imgElement.style.width = "75px"

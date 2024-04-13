@@ -1,9 +1,9 @@
-import archerImg from "../../images/armyAssets/archer.png";
-import cavalryImg from "../../images/armyAssets/cavalry.png";
-import swordsmanImg from "../../images/armyAssets/swordsman.png";
+import archerImg from "../../images/armyAssets/custom/archer.png";
+import cavalryImg from "../../images/armyAssets/custom/cavalry.png";
+import swordsmanImg from "../../images/armyAssets/custom/swordsman.png";
 import React, { useState, useEffect } from "react";
 import { MdLocationPin } from 'react-icons/md'
-import { Button, Tooltip } from "@chakra-ui/react";
+import { Button, Text, Tooltip } from "@chakra-ui/react";
 import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
 import { usePlayer } from "../../context/PlayerContext";
 import { useGame } from "../../context/GameContext";
@@ -72,7 +72,7 @@ export const ArmyInfoDrawer = () => {
             </Tooltip>
             <div id="army-info-drawer" className={`army-info-drawer ${isOpen ? "open" : ""}`}>
                 <div className="d-flex justify-between border-bottom mb-2 p-2">
-                    <h5 className="font-extrabold">My Army Details</h5>
+                    <Text fontSize={"20px"}>My Army Details</Text>
                     <button type="button" onClick={() => setIsOpen(false)}>&#10008;</button>
                 </div>
                 {myArmyPosition.length !== 0 ?
@@ -98,7 +98,10 @@ export const ArmyInfoDrawer = () => {
                                 </div>
                                 <div className="row mt-1 mb-1 justify-content-center">
                                     <Button
-                                        colorScheme="linkedin"
+                                        borderRadius={"15px"}
+                                        boxShadow={"0px 5px 0px 0px #0E3C4B"}
+                                        backgroundColor={"#17667F"}
+                                        colorScheme={"linkedin"}
                                         className="w-50"
                                         onClick={() => {
                                             handleClick(`${army.myArmyPosition.y},${army.myArmyPosition.x}`);

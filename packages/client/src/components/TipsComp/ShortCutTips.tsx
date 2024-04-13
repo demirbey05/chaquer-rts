@@ -7,7 +7,8 @@ import {
     PopoverArrow,
     PopoverCloseButton,
     ListItem,
-    UnorderedList
+    UnorderedList,
+    IconButton
 } from '@chakra-ui/react'
 import { FiSettings } from 'react-icons/fi'
 import { GiShipBow } from 'react-icons/gi'
@@ -21,9 +22,18 @@ export const ShortCutTips = () => {
     return (
         <Popover isLazy placement='top'>
             <PopoverTrigger>
-                <button className="tips-button">
-                    <FaInfo />
-                </button>
+                <IconButton
+                    isRound
+                    zIndex={1}
+                    colorScheme={"white"}
+                    pos={"fixed"}
+                    bottom={"25px"}
+                    left={"25px"}
+                    backgroundColor={"transparent"}
+                    border={"2px solid white"}
+                    aria-label='tips-button'
+                    icon={<FaInfo fontSize={"25px"} />}
+                />
             </PopoverTrigger>
             <PopoverContent backgroundColor={"blackAlpha.700"} color={"white"}>
                 <PopoverArrow />

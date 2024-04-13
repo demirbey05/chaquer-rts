@@ -117,16 +117,16 @@ export const ArmyAttackDrawer = () => {
       <div className="d-flex justify-content-evenly">
         <Button
           colorScheme="whatsapp"
-          border="solid"
-          textColor="dark"
+          borderRadius={"15px"}
+          boxShadow={"0px 5px 0px 0px #33550F"}
           data-bs-dismiss="offcanvas"
           onClick={handleAttack}>
           Attack to the Army
         </Button>
         <Button
           colorScheme="red"
-          border="solid"
-          textColor="dark"
+          borderRadius={"15px"}
+          boxShadow={"0px 5px 0px 0px #7E2918"}
           data-bs-dismiss="offcanvas"
           onClick={handleAttackLater}>
           Wait and Attack Later

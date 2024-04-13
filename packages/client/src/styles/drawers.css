@@ -1,11 +1,13 @@
 /* War Result Drawer styles*/
 .my-war-result-drawer {
     background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 15px 0px 0px 15px;
     color: white;
     z-index: 2;
-    height: 200px;
+    height: 225px;
     width: 300px;
     margin-top: 80px;
+    padding: 10px;
     overflow: hidden;
     text-align: center;
     position: fixed;
@@ -22,11 +24,13 @@
 /* Prices Drawer styles */
 .prices-drawer {
     background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 15px 0px 0px 15px;
     color: white;
     z-index: 2;
-    height: 450px;
+    height: 460px;
     width: 300px;
     margin-top: 300px;
+    padding: 10px;
     position: fixed;
     top: 0;
     right: -300px;
@@ -41,10 +45,11 @@
 /* Settings Drawer styles */
 .settings-drawer {
     background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 0px 15px 15px 0px;
     overflow-x: hidden;
     color: white;
     z-index: 7;
-    height: 300px;
+    height: 310px;
     width: 250px;
     padding: 10px;
     margin-top: 90px;
@@ -62,6 +67,7 @@
 /* Army Info Drawer styles */
 .army-info-drawer {
     background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 0px 15px 15px 0px;
     overflow-y: auto;
     overflow-x: hidden;
     color: white;
@@ -98,6 +104,7 @@
 /* Fleet Info Drawer styles */
 .fleet-info-drawer {
     background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 0px 15px 15px 0px;
     overflow-y: auto;
     overflow-x: hidden;
     color: white;
@@ -134,6 +141,7 @@
 /* Market Drawer styles */
 .market-drawer {
     background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 0px 15px 15px 0px;
     color: white;
     z-index: 7;
     height: 600px;
@@ -154,6 +162,7 @@
 /* Players in the game Drawer styles */
 .players-in-game-drawer {
     background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 0px 15px 15px 0px;
     color: white;
     overflow-y: auto;
     overflow-x: hidden;
@@ -204,11 +213,13 @@
 /* Chat Drawer styles*/
 .chat-drawer {
     background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 0px 15px 15px 0px;
     color: white;
     z-index: 2;
-    height: 300px;
+    height: 325px;
     width: 300px;
     margin-top: 290px;
+    padding: 10px;
     overflow: hidden;
     position: fixed;
     top: 0;
