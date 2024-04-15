@@ -137,7 +137,7 @@ const CreateGameButton = ({ setIsCreateGameModalOpen, username }: { setIsCreateG
       boxShadow={"0px 5px 0px 0px #99866F"}
       borderRadius={"25px"}
       mt={5}
-      disabled={!username}
+      isDisabled={!username}
       onClick={() => setIsCreateGameModalOpen(true)}
     >
       Create a Game
@@ -162,7 +162,7 @@ const EnterGameButton = () => {
       boxShadow={"0px 5px 0px 0px #99866F"}
       borderRadius={"25px"}
       onClick={handleRefresh}
-      disabled={progressStep !== "live"}
+      isDisabled={progressStep !== "live"}
     >
       Enter the Game
     </Button>

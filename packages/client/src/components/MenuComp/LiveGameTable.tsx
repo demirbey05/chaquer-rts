@@ -87,7 +87,7 @@ const JoinGameButtom = ({ isDisabled, setIsJoinGameModalOpen, setGameID, gameID 
             borderRadius={"25px"}
             boxShadow={"0px 5px 0px 0px #99866F"}
             me={3}
-            disabled={isDisabled}
+            isDisabled={isDisabled}
             onClick={() => {
                 setIsJoinGameModalOpen(true)
                 setGameID(gameID)
@@ -104,7 +104,7 @@ const SpectatorButton = ({ gameState, setIsSpectateGameModalOpen, setGameID, gam
             backgroundColor={"#DCBF9D"}
             borderRadius={"25px"}
             boxShadow={"0px 5px 0px 0px #99866F"}
-            disabled={(gameState !== 2 && gameState !== 3) || !username}
+            isDisabled={(gameState !== 2 && gameState !== 3) || !username}
             onClick={() => {
                 setIsSpectateGameModalOpen(true)
                 setGameID(gameID)
