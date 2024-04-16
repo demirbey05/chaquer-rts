@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import "./Errors.sol";
-import { ArmyOwnable,ArtilleryConfig, ArtilleryOwnable,ClashResult, FleetOwnable, FleetConfigData, FleetConfig, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, ResourceOwnable, Players, GameMetaData, DockOwnable, AddressToColorIndex, ColorOwnable } from "../codegen/index.sol";
+import { ArmyOwnable,ArtilleryConfig, ArtilleryOwnable,ClashResult,CastleHP, FleetOwnable, FleetConfigData, FleetConfig, ArmyOwnable, Position, ArmyConfig, ArmyConfigData, CastleOwnable, ResourceOwnable, Players, GameMetaData, DockOwnable, AddressToColorIndex, ColorOwnable } from "../codegen/index.sol";
 import { LibMath, LibAttack, BattleScore, LibUtils, LibQueries, LibNaval } from "../libraries/Libraries.sol";
 import { EntityType } from "../libraries/Types.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
@@ -107,8 +107,8 @@ contract AttackCaptureSystem is System {
     AddressToColorIndex.deleteRecord(castleOwner, gameID);
   }
 
-  function captureCastle(bytes32 armyID, bytes32 castleID) public returns (uint256 result) {
-    address armyOwner = ArmyOwnable.getOwner(armyID);
+  function captureCastle(bytes32 artilleryID, bytes32 castleID) public  {
+    address armyOwner = ArtilleryOwnable.getOwner(artilleryID);
     address castleOwner = CastleOwnable.getOwner(castleID);
 
     // Some Checks
@@ -120,7 +120,7 @@ contract AttackCaptureSystem is System {
       revert CaptureSystem__NoAuthorization();
     }
 
-    (uint32 xArmy, uint32 yArmy, uint256 gameID) = Position.get(armyID);
+    (uint32 xArmy, uint32 yArmy, uint256 gameID) = Position.get(artilleryID);
     (uint32 xCastle, uint32 yCastle, uint256 gameIDTwo) = Position.get(castleID);
 
     uint32 distanceBetween = LibMath.manhattan(xArmy, yArmy, xCastle, yCastle);
@@ -131,13 +131,58 @@ contract AttackCaptureSystem is System {
     if (gameID != gameIDTwo) {
       revert CaptureSystem__NonMatchedGameID();
     }
+
+    uint256 currentHP = CastleHP.getCastleHP(castleID);
+    uint256 newHP;
+    if (currentHP > 5) {
+      newHP = currentHP - 5;
+    } else {
+      newHP = 0;
+    }
+    CastleHP.setCastleHP(castleID, newHP);
+  }
+
+  function garrisonAttack(bytes32 armyID,bytes32 castleID) public returns (uint256) {
+    address armyOwner = ArmyOwnable.getOwner(armyID);
+    address castleOwner = CastleOwnable.getOwner(castleID);
+
+    // Some Checks
+    if (armyOwner == castleOwner) {
+      revert CaptureSystem__FriendFireNotAllowed();
+    }
+
+    if (armyOwner != msg.sender) {
+      revert CaptureSystem__NoAuthorization();
+    }
+    (uint32 xArmy, uint32 yArmy, uint256 gameID) = Position.get(armyID);
+    
+    {
+
+    
+    (uint32 xCastle, uint32 yCastle, uint256 gameIDTwo) = Position.get(castleID);
+    uint32 distanceBetween = LibMath.manhattan(xArmy, yArmy, xCastle, yCastle);
+
+    if (!(distanceBetween <= 3)) {
+      revert CaptureSystem__TooFarToAttack();
+    }
+    if (gameID != gameIDTwo) {
+      revert CaptureSystem__NonMatchedGameID();
+    }
+
+    uint256 currentHP = CastleHP.getCastleHP(castleID);
+
+    if (currentHP > 0) {
+      revert CaptureSystem__CastleWallAlive();
+    }
+    }
+
     bytes32[] memory ownerArmiesSurroundCastle = LibUtils.findSurroundingArmies(
       IStore(_world()),
       castleID,
       gameID,
       EntityType.Castle
     );
-    result = LibAttack.warCaptureCastle(armyID, ownerArmiesSurroundCastle);
+    uint256 result = LibAttack.warCaptureCastle(armyID, ownerArmiesSurroundCastle,true);
 
     if (result == 1) {
       CastleOwnable.setOwner(castleID, armyOwner);
@@ -150,6 +195,8 @@ contract AttackCaptureSystem is System {
     }
 
     LibUtils.emitClashTableEvent(uint8(result), armyID, castleID, gameID, armyOwner, castleOwner, ClashType.Castle);
+    
+
   }
 
   function attackFleet(bytes32 fleetOne, bytes32 fleetTwo, uint256 gameID) public {
@@ -227,7 +274,7 @@ contract AttackCaptureSystem is System {
       return;
     }
 
-    uint result = LibAttack.warCaptureCastle(attackerID, ownerEntitiesSurroundMine);
+    uint result = LibAttack.warCaptureCastle(attackerID, ownerEntitiesSurroundMine,false);
     if (result == 1) {
       ArtilleryOwnable.deleteRecord(artilleryID);
       ArtilleryConfig.deleteRecord(artilleryID);

@@ -29,7 +29,7 @@ library LibAttack {
     result.scoreArmyTwo = calculateArmyScore(firstResultTwo, remainingsTwo);
   }
 
-  function warCaptureCastle(bytes32 attackerArmyID, bytes32[] memory defenderArmies) internal returns (uint256) {
+  function warCaptureCastle(bytes32 attackerArmyID, bytes32[] memory defenderArmies,bool isCastle) internal returns (uint256) {
     ArmyConfigData memory attackerArmy = ArmyConfig.get(attackerArmyID);
     ArmyConfigData memory defenderArmy = ArmyConfigData(0, 0, 0, attackerArmy.gameID);
 
@@ -48,6 +48,9 @@ library LibAttack {
     if (battleScore.scoreArmyOne > battleScore.scoreArmyTwo) {
       for (uint i = 0; i < defenderArmies.length; i++) {
         if (defenderArmies[i] == bytes32(0)) {
+          continue;
+        }
+        if (isCastle && (i == defenderArmies.length - 1)) {
           continue;
         }
         LibUtils.deleteArmy(defenderArmies[i]);

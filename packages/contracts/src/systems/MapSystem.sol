@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { wadMul, toWadUnsafe } from "solmate/src/utils/SignedWadMath.sol";
-import { MapConfig, ArtilleryConfigData,ArtilleryConfig,ArtilleryOwnable, Position, ResourceOwn, ResourceOwnData, ColorOwnable, AddressToColorIndex, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, Players, GameMetaData } from "../codegen/index.sol";
+import { MapConfig, ArtilleryConfigData,CastleHP,ArtilleryConfig,ArtilleryOwnable, Position, ResourceOwn, ResourceOwnData, ColorOwnable, AddressToColorIndex, CastleOwnable, ArmyOwnable, ArmyConfig, ArmyConfigData, Players, GameMetaData } from "../codegen/index.sol";
 import { LibQueries } from "../libraries/LibQueries.sol";
 import { IStore } from "@latticexyz/store/src/IStore.sol";
 import { IWorld } from "../codegen/world/IWorld.sol";
@@ -58,6 +58,8 @@ contract MapSystem is System {
     CastleOwnable.set(entityID, ownerCandidate, gameID);
     GameMetaData.setNumberOfCastle(gameID, numOfCastle + 1);
     ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(ownerCandidate, gameID), gameID);
+    CastleHP.set(entityID,100,gameID);
+    ArmyConfig.set(entityID,0,0,0,gameID);
     if (numOfCastle + 1 == GameMetaData.getLimitOfPlayer(gameID)) {
       SystemSwitch.call(abi.encodeCall(IWorld(_world()).resourceSystemInit, (gameID)));
     }

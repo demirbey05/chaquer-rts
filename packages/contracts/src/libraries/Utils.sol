@@ -147,7 +147,14 @@ library LibUtils {
     bytes32[] memory allEntities = (attackerType == AttackerType.Army)
       ? LibQueries.getOwnedArmyIDs(world, owner, gameID)
       : LibQueries.getOwnedFleetIDs(world, owner, gameID);
-    bytes32[] memory attackersSurroundingEntity = new bytes32[](allEntities.length);
+    uint256 allEntitiesLength = allEntities.length;
+    if (entityType == EntityType.Castle) {
+      allEntitiesLength = allEntities.length + 1;
+    }
+    bytes32[] memory attackersSurroundingEntity = new bytes32[](allEntitiesLength);
+    if (entityType == EntityType.Castle) {
+      attackersSurroundingEntity[allEntitiesLength-1] = entityID;
+    }
     (uint32 xEntity, uint32 yEntity, ) = Position.get(entityID);
     uint current = 0;
     for (uint i = 0; i < allEntities.length; i++) {
@@ -157,6 +164,7 @@ library LibUtils {
         current++;
       }
     }
+
     return attackersSurroundingEntity;
   }
 
@@ -207,7 +215,7 @@ library LibUtils {
     bytes32[] memory ownerEntitiesSurrondMine,
     uint256 gameID
   ) internal {
-    uint result = LibAttack.warCaptureCastle(attackerID, ownerEntitiesSurrondMine);
+    uint result = LibAttack.warCaptureCastle(attackerID, ownerEntitiesSurrondMine,false);
 
     if (result == 1) {
       ResourceOwnable.setOwner(mineID, attackerOwner);

@@ -40,7 +40,7 @@ contract NavalSystem is System {
       gameID,
       EntityType.Dock
     );
-    uint result = LibAttack.warCaptureCastle(armyID, ownerArmiesSurroundDock);
+    uint result = LibAttack.warCaptureCastle(armyID, ownerArmiesSurroundDock,false);
 
     if (result == 1) {
       DockOwnable.setOwner(dockID, armyOwner);

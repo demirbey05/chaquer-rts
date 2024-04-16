@@ -48,6 +48,7 @@ error CaptureSystem__TooFarToAttack();
 error CaptureSystem__NoAuthorization();
 error CaptureSystem__FriendFireNotAllowed();
 error CaptureSystem__NonMatchedGameID();
+error CaptureSystem__CastleWallAlive();
 
 // MineInitSystem Errors
 error MineSystem__NoAuthorized();

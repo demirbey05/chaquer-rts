@@ -10,7 +10,6 @@ import { CastleOwnable } from "./tables/CastleOwnable.sol";
 import { MapConfig } from "./tables/MapConfig.sol";
 import { Position } from "./tables/Position.sol";
 import { Players } from "./tables/Players.sol";
-import { GarrisonOwnable, GarrisonOwnableData } from "./tables/GarrisonOwnable.sol";
 import { CastleHP, CastleHPData } from "./tables/CastleHP.sol";
 import { ArtilleryConfig, ArtilleryConfigData } from "./tables/ArtilleryConfig.sol";
 import { PlayerSeeds } from "./tables/PlayerSeeds.sol";
