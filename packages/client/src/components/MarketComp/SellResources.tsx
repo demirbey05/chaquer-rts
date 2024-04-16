@@ -360,10 +360,8 @@ const ManualButton = (props: ManualButtonPropTypes) => {
     return (
         <Button
             colorScheme="whatsapp"
-            border="solid"
-            fontSize="13px"
-            textColor="dark"
-            className="w-75"
+            borderRadius={"15px"}
+            boxShadow={"0px 5px 0px 0px #33550F"}
             mt={3}
             isDisabled={props.isDisabled || props.isLoading}
             onClick={() => props.handleSell()}
@@ -387,10 +385,9 @@ const AutoButton = (props: AutoButtonPropTypes) => {
     return (
         <Button
             colorScheme="orange"
-            border="solid"
+            borderRadius={"15px"}
+            boxShadow={"0px 5px 0px 0px #AC5E00"}
             fontSize="13px"
-            textColor="dark"
-            className="w-75"
             mt={3}
             isDisabled={props.isDisabled || props.isLoading}
             onClick={() => props.handleSell({ resourceType: props.resourceType })}

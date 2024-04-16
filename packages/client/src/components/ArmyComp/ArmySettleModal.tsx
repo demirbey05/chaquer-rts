@@ -1,6 +1,6 @@
-import archerImg from "../../images/armyAssets/archer.png";
-import cavalryImg from "../../images/armyAssets/cavalry.png";
-import swordsmanImg from "../../images/armyAssets/swordsman.png";
+import archerImg from "../../images/armyAssets/custom/archer.png";
+import cavalryImg from "../../images/armyAssets/custom/cavalry.png";
+import swordsmanImg from "../../images/armyAssets/custom/swordsman.png";
 import artilleryImg from '../../images/armyAssets/artillery.png'
 import armySettleEffect from '../../sounds/soundEffects/army-deploy-effect.mp3'
 import { useMUD } from "../../context/MUDContext";
@@ -75,7 +75,7 @@ export const ArmySettleModal = () => {
         setEnoughCreditArtillery(true);
       }
     }
-  }, [artilleryCount])
+  }, [artilleryCount, myCredit])
 
   useEffect(() => {
     if (Number.isNaN(parseInt(swordsmanCount))) {
@@ -302,8 +302,8 @@ export const ArmySettleModal = () => {
                 <div className="modal-footer">
                   <Button
                     colorScheme="whatsapp"
-                    border="solid"
-                    textColor="dark"
+                    borderRadius={"15px"}
+                    boxShadow={"0px 5px 0px 0px #33550F"}
                     data-bs-dismiss="modal"
                     isDisabled={isDisabled}
                     onClick={handleArmySettlement}
@@ -312,8 +312,8 @@ export const ArmySettleModal = () => {
                   </Button>
                   <Button
                     colorScheme="red"
-                    border="solid"
-                    textColor="dark"
+                    borderRadius={"15px"}
+                    boxShadow={"0px 5px 0px 0px #7E2918"}
                     data-bs-dismiss="modal"
                   >
                     Back to Map
@@ -342,8 +342,8 @@ export const ArmySettleModal = () => {
                 <div className="modal-footer">
                   <Button
                     colorScheme="whatsapp"
-                    border="solid"
-                    textColor="dark"
+                    borderRadius={"15px"}
+                    boxShadow={"0px 5px 0px 0px #33550F"}
                     data-bs-dismiss="modal"
                     isDisabled={isDisabledArtillery}
                     onClick={handleArtillerySettlement}
@@ -352,8 +352,8 @@ export const ArmySettleModal = () => {
                   </Button>
                   <Button
                     colorScheme="red"
-                    border="solid"
-                    textColor="dark"
+                    borderRadius={"15px"}
+                    boxShadow={"0px 5px 0px 0px #7E2918"}
                     data-bs-dismiss="modal"
                   >
                     Back to Map

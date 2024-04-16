@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Accordion, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
+import { Accordion, Tabs, TabList, TabPanels, Tab, TabPanel, Button } from '@chakra-ui/react'
 import { FaCirclePlus, FaEnvelopeOpenText } from 'react-icons/fa6'
 import { useTerrain } from "../../context/TerrainContext"
 import { usePlayer } from "../../context/PlayerContext"
@@ -60,8 +60,18 @@ export const Menu = () => {
                     borderRadius={"25px"}
                     mb={0.5}
                   >
-                    <Tab _selected={{ color: 'white', bg: 'green.500' }}>Live Games</Tab>
-                    <Tab _selected={{ color: 'white', bg: 'blue.500' }}>Completed Games</Tab>
+                    <Tab
+                      _selected={{ color: 'white', bg: 'green.500' }}
+                      color={"white"}
+                    >
+                      Live Games
+                    </Tab>
+                    <Tab
+                      _selected={{ color: 'white', bg: 'blue.500' }}
+                      color={"white"}
+                    >
+                      Completed Games
+                    </Tab>
                   </TabList>
                   <TabPanels>
                     <TabPanel p={0}>
@@ -79,7 +89,7 @@ export const Menu = () => {
                   </TabPanels>
                 </Tabs>
               </div>
-              <div className='d-lg-inline p-3'>
+              <div className='d-lg-inline w50 p-3'>
                 <PlayerInfoCard
                   username={username}
                   setIsUserModalOpen={setIsUserModalOpen} />
@@ -120,12 +130,19 @@ export const Menu = () => {
 
 const CreateGameButton = ({ setIsCreateGameModalOpen, username }: { setIsCreateGameModalOpen: (value: boolean) => void, username: any }) => {
   return (
-    <button className='btn btn-dark menu-buttons mt-5'
+    <Button
+      size={"lg"}
+      width={"250px"}
+      backgroundColor={"#DCBF9D"}
+      boxShadow={"0px 5px 0px 0px #99866F"}
+      borderRadius={"25px"}
+      mt={5}
+      isDisabled={!username}
       onClick={() => setIsCreateGameModalOpen(true)}
-      disabled={!username}>
+    >
       Create a Game
       <FaCirclePlus className='inline align-text-bottom ms-2 text-xl' />
-    </button>
+    </Button>
   )
 }
 
@@ -138,23 +155,34 @@ const EnterGameButton = () => {
     setRefresh(refresh + 1);
   };
   return (
-    <button
-      className='btn btn-dark menu-buttons mb-4'
+    <Button
+      size={"lg"}
+      width={"250px"}
+      backgroundColor={"#DCBF9D"}
+      boxShadow={"0px 5px 0px 0px #99866F"}
+      borderRadius={"25px"}
       onClick={handleRefresh}
-      disabled={progressStep !== "live"}>
+      isDisabled={progressStep !== "live"}
+    >
       Enter the Game
-    </button>
+    </Button>
   )
 }
 
 const GameTutorialButton = () => {
   return (
     <a href="https://docs.chaquer.xyz/basics/read-before-playing" target={"_blank"}>
-      <button
-        className='btn btn-dark menu-buttons mt-2'>
+      <Button
+        size={"lg"}
+        width={"250px"}
+        backgroundColor={"#DCBF9D"}
+        boxShadow={"0px 5px 0px 0px #99866F"}
+        borderRadius={"25px"}
+        mt={4}
+      >
         Game Tutorial
         <FaEnvelopeOpenText className='inline align-text-bottom ms-2 text-xl' />
-      </button>
+      </Button>
     </a>
   )
 }

@@ -179,9 +179,10 @@ export const DockSettleModal = () => {
                     </div>
                     <div className="modal-footer d-flex justify-between">
                         <Button
-                            colorScheme="linkedin"
-                            border="solid"
-                            textColor="dark"
+                            borderRadius={"15px"}
+                            boxShadow={"0px 5px 0px 0px #0E3C4B"}
+                            backgroundColor={"#17667F"}
+                            colorScheme={"linkedin"}
                             data-bs-dismiss="modal"
                             onClick={() => handleMove()}
                         >
@@ -189,8 +190,8 @@ export const DockSettleModal = () => {
                         </Button>
                         <Button
                             colorScheme="red"
-                            border="solid"
-                            textColor="dark"
+                            borderRadius={"15px"}
+                            boxShadow={"0px 5px 0px 0px #7E2918"}
                             data-bs-dismiss="modal"
                             onClick={() => handleBackMap()}
                         >
@@ -198,8 +199,8 @@ export const DockSettleModal = () => {
                         </Button>
                         <Button
                             colorScheme="whatsapp"
-                            border="solid"
-                            textColor="dark"
+                            borderRadius={"15px"}
+                            boxShadow={"0px 5px 0px 0px #33550F"}
                             data-bs-dismiss="modal"
                             isDisabled={isDisabled}
                             onClick={() => handleSettle()}

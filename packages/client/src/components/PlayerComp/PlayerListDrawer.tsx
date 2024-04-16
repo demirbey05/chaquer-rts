@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Tooltip } from '@chakra-ui/react';
+import { Tooltip, Text } from '@chakra-ui/react';
 import { FaUsers } from 'react-icons/fa'
 import { useGame } from '../../context/GameContext';
 import { useUsernameWithColors } from '../../hooks/IdentityHooks/useUsernamesWithColors';
@@ -61,7 +61,7 @@ export const PlayerListDrawer = ({ isSpectator }: { isSpectator: boolean }) => {
 const UserInGameDrawerHeader = ({ toggleDrawer }: { toggleDrawer: () => void }) => {
     return (
         <div className='d-flex justify-between border-bottom mb-2 p-2'>
-            <h5 className="font-extrabold">Players</h5>
+            <Text fontSize={"20px"}>Players</Text>
             <button type="button" onClick={toggleDrawer}>&#10008;</button>
         </div>
     )

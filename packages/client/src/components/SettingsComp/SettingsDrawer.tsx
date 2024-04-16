@@ -2,7 +2,7 @@ import soundTrack from "../../sounds/soundTracks/chaquer-soundtrack.mp3"
 import { useState, useEffect, useRef } from 'react'
 import { useGame } from '../../context/GameContext';
 import { useNavigate } from 'react-router-dom';
-import { Button, IconButton, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Tooltip } from "@chakra-ui/react";
+import { IconButton, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Tooltip, Text } from "@chakra-ui/react";
 import { FaPlay, FaStop } from 'react-icons/fa'
 import { RiArrowGoBackFill } from 'react-icons/ri'
 import { FiSettings } from 'react-icons/fi'
@@ -129,7 +129,7 @@ export const SettingsDrawer = () => {
 const AudioControlCompHeader = ({ toggleDrawer }: { toggleDrawer: () => void }) => {
     return (
         <div className='d-flex justify-between border-bottom mb-2 p-2'>
-            <h5 className="font-extrabold">Settings</h5>
+            <Text fontSize={"20px"}>Settings</Text>
             <button type="button" onClick={toggleDrawer}>&#10008;</button>
         </div>
     )

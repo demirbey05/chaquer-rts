@@ -1,4 +1,5 @@
 export const DockSettleEvent = (
+    setArtilleryCaptureStage: (value: boolean) => void,
     setIsFleetLoadStage: (value: boolean) => void,
     setIsMineStage: (value: boolean) => void,
     setIsAttackStage: (value: boolean) => void,
@@ -10,6 +11,7 @@ export const DockSettleEvent = (
     setDockPosition: any,
     toArmyPositionRef: any,
 ) => {
+    setArtilleryCaptureStage(false)
     setIsFleetLoadStage(false)
     setIsMineStage(false)
     setIsAttackStage(false)

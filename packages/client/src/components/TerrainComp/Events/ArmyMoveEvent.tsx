@@ -2,6 +2,7 @@ import { getIDFromPosition } from "../../../utils/helperFunctions/CustomFunction
 import armyMoveSoundEffect from '../../../sounds/soundEffects/army-move-effect.mp3'
 
 export const ArmyMoveEvent = async (
+    setArtilleryCaptureStage: (value: boolean) => void,
     setIsFleetLoadStage: (value: boolean) => void,
     setIsArmyMergeStage: (value: boolean) => void,
     setIsAttackStage: (value: boolean) => void,
@@ -22,6 +23,7 @@ export const ArmyMoveEvent = async (
     setIsLoading: (value: boolean) => void,
     gameID: number
 ) => {
+    setArtilleryCaptureStage(false)
     setIsFleetLoadStage(false)
     setIsArmyMoveStage(false);
     setIsAttackStage(false);

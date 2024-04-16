@@ -40,16 +40,17 @@ export const UserNameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
             <div className='username-modal-overlay'>
                 <div className='username-modal-container'>
                     <div className="username-modal">
-                        <div className="modal-header justify-center mb-2">
+                        <div className="modal-header justify-center mb-4">
                             <h1 className="modal-title text-2xl" id="userNameModalLabel">
                                 Username
                             </h1>
                         </div>
-                        < input onChange={(e: any) => handleInput(e)}
+                        <input onChange={(e: any) => handleInput(e)}
                             type="text"
-                            className="form-control dark-input bg-dark text-white"
+                            className="form-control dark-input bg-dark text-white mb-4"
                             id="usernameinput"
-                            placeholder="Min 3 Char - Max 32 Char" />
+                            placeholder="Min 3 Char - Max 32 Char"
+                        />
                         <div className="modal-footer justify-content-around mt-3">
                             <BackMapButton
                                 toggleDrawer={toggleDrawer}

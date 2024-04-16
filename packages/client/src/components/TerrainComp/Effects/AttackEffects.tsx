@@ -3,8 +3,14 @@ import { isManhattanPosition } from "../../../utils/helperFunctions/CustomFuncti
 import { isMyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isMyArmy";
 import { isEnemyCastle } from "../../../utils/helperFunctions/CastleFunctions/isEnemyCastle";
 import { isMyFleet } from "../../../utils/helperFunctions/SeaFunctions/isMyFleet";
+import { isMyArtillery } from "../../../utils/helperFunctions/ArmyFunctions/isMyArtillery";
 
-export const AttackEffects = (myFleetPositions: any[] | undefined,
+export const AttackEffects = (
+    artilleryPositions: any[],
+    myArtilleryPositions: any[],
+    artilleryCaptureStage: boolean,
+    fromArtilleryPosition: any,
+    myFleetPositions: any[] | undefined,
     fleetPositions: any[],
     fromFleetPosition: any,
     isFleetAttackStage: boolean,
@@ -93,4 +99,29 @@ export const AttackEffects = (myFleetPositions: any[] | undefined,
             }
         }
     }, [isFleetAttackStage, fleetPositions, myFleetPositions, fromFleetPosition]);
+
+    // Handle Artillery Capture OffCanvas
+    useEffect(() => {
+        if (artilleryPositions && artilleryCaptureStage && fromArmyPosition && myArtilleryPositions) {
+            artilleryPositions.map((data: any) => {
+                isManhattanPosition(data.artilleryPosition, fromArmyPosition.x, fromArmyPosition.y) &&
+                    !isMyArtillery({ x: data.artilleryPosition.x, y: data.artilleryPosition.y }, myArtilleryPositions) &&
+                    document.getElementById(`${data.artilleryPosition.y},${data.artilleryPosition.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
+                isManhattanPosition(data.artilleryPosition, fromArmyPosition.x, fromArmyPosition.y) &&
+                    !isMyArtillery({ x: data.artilleryPosition.x, y: data.artilleryPosition.y }, myArtilleryPositions) &&
+                    document.getElementById(`${data.artilleryPosition.y},${data.artilleryPosition.x}`)!.setAttribute("data-bs-target", "#artilleryCaptureDrawer");
+            });
+        }
+
+        return () => {
+            if (artilleryPositions && !artilleryCaptureStage) {
+                artilleryPositions.map((data: any) => {
+                    if (document.getElementById(`${data.artilleryPosition.y},${data.artilleryPosition.x}`) !== null) {
+                        document.getElementById(`${data.artilleryPosition.y},${data.artilleryPosition.x}`)!.setAttribute("data-bs-toggle", "");
+                        document.getElementById(`${data.artilleryPosition.y},${data.artilleryPosition.x}`)!.setAttribute("data-bs-target", "");
+                    }
+                });
+            }
+        }
+    }, [artilleryPositions, myArtilleryPositions, artilleryCaptureStage, fromArmyPosition])
 }

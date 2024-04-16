@@ -33,7 +33,9 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
     fleetSettleStage: boolean,
     fleetPositions: any[],
     isFleetUnloadStage: boolean,
-    isFleetLoaded: boolean
+    isFleetLoaded: boolean,
+    fromArtilleryPosition: any,
+    isArtilleryMoveStage: boolean,
 ) => {
 
     //Blue hover effect when user moves an army
@@ -71,6 +73,42 @@ export const HoverEffects = (myFleetPositions: any[] | undefined,
             }
         }
     }, [fromArmyPosition, isArmyMoveStage, myCastlePosition, myArmyPosition, myResourcePositions, myDockPositions, values]);
+
+    //Red hover effect when user moves an artillery
+    useEffect(() => {
+        if (fromArtilleryPosition && isArtilleryMoveStage && myCastlePosition) {
+            getManhattanPositions({
+                x: parseInt(fromArtilleryPosition.x),
+                y: parseInt(fromArtilleryPosition.y),
+            }).map((data) => {
+                if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
+                    canCastleBeSettle(values[data.x][data.y]) &&
+                        canCastleBeSettle(values[fromArtilleryPosition.x][fromArtilleryPosition.y]) &&
+                        !isMyCastle(myCastlePosition, data.x, data.y) &&
+                        !isMyArmy({ x: data.x, y: data.y }, myArmyPosition) &&
+                        !isMyResource(data.x, data.y, myResourcePositions) &&
+                        !isMyDock(data.x, data.y, myDockPositions) &&
+                        document.getElementById(`${data.y},${data.x}`)?.classList.add("redTileEffect");
+                }
+            });
+
+        }
+
+        return () => {
+            if (fromArtilleryPosition) {
+                getManhattanPositions({
+                    x: parseInt(fromArtilleryPosition.x),
+                    y: parseInt(fromArtilleryPosition.y),
+                }).map((data) => {
+                    if (data.x >= 0 && data.y >= 0 && data.x < 25 && data.y < 25) {
+                        if (canCastleBeSettle(values[data.x][data.y])) {
+                            document.getElementById(`${data.y},${data.x}`)?.classList.remove("redTileEffect");
+                        }
+                    }
+                });
+            }
+        }
+    }, [fromArtilleryPosition, isArtilleryMoveStage, myCastlePosition, myArmyPosition, myResourcePositions, myDockPositions, values]);
 
     //Orange hover effect and Army Settle data-bs
     useEffect(() => {

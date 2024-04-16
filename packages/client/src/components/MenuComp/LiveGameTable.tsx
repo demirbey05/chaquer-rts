@@ -1,7 +1,7 @@
 import map1 from '../../images/maps/map1.jpg'
 import map2 from '../../images/maps/map2.jpg'
 import map3 from '../../images/maps/map3.jpg'
-import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react'
+import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Button } from '@chakra-ui/react'
 import { useGameList } from '../../hooks/GameHooks/useGameList';
 import { useGame } from '../../context/GameContext';
 import { getMapFromMapId } from '../../utils/helperFunctions/CustomFunctions/getMapFromMapId';
@@ -81,29 +81,36 @@ export const LiveGameTable = ({ selectedPlayers, gameNameFilter, setIsJoinGameMo
 
 const JoinGameButtom = ({ isDisabled, setIsJoinGameModalOpen, setGameID, gameID }: { isDisabled: boolean, setIsJoinGameModalOpen: (value: boolean) => void, setGameID: (value: number) => void, gameID: number }) => {
     return (
-        <button
-            className='btn btn-dark menu-game-list-button me-2'
-            disabled={isDisabled}
+        <Button
+            size={"lg"}
+            backgroundColor={"#DCBF9D"}
+            borderRadius={"25px"}
+            boxShadow={"0px 5px 0px 0px #99866F"}
+            me={3}
+            isDisabled={isDisabled}
             onClick={() => {
                 setIsJoinGameModalOpen(true)
                 setGameID(gameID)
             }}>
             Join
-        </button>
+        </Button>
     )
 }
 
 const SpectatorButton = ({ gameState, setIsSpectateGameModalOpen, setGameID, gameID, username }: { gameState: any, setIsSpectateGameModalOpen: (value: boolean) => void, setGameID: (value: number) => void, gameID: number, username: string }) => {
     return (
-        <button
-            className='btn btn-dark menu-game-list-button'
-            disabled={(gameState !== 2 && gameState !== 3) || !username}
+        <Button
+            size={"lg"}
+            backgroundColor={"#DCBF9D"}
+            borderRadius={"25px"}
+            boxShadow={"0px 5px 0px 0px #99866F"}
+            isDisabled={(gameState !== 2 && gameState !== 3) || !username}
             onClick={() => {
                 setIsSpectateGameModalOpen(true)
                 setGameID(gameID)
             }}>
             Spectate
-        </button>
+        </Button>
     )
 }
 
