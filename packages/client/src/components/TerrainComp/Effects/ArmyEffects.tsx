@@ -137,6 +137,11 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                 element.style.border = "2px solid";
                 element.style.borderColor = getBorderColor(Number(data.armyColor.colorIndex));
                 element.classList.add("army-emoji");
+                element.setAttribute("data-toggle", "tooltip");
+                element.setAttribute("data-placement", "top");
+                element.setAttribute("title", "Swordsman: " + data.armyConfig.numSwordsman +
+                    "\n" + "Archer: " + data.armyConfig.numArcher +
+                    "\n" + "Cavalry: " + data.armyConfig.numCavalry);
             }
         });
 

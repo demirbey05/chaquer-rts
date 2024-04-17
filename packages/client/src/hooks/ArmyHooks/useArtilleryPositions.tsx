@@ -10,7 +10,7 @@ export function useArtilleryPositions(gameID: number) {
         HasValue(components.ArtilleryOwnable, { gameID: BigInt(gameID) }),
     ]);
     const valuePos = useObservableValue(components.Position.update$);
-    const valueCfg = useObservableValue(components.ArmyConfig.update$);
+    const valueCfg = useObservableValue(components.ArtilleryConfig.update$);
     const valueCol = useObservableValue(components.ColorOwnable.update$);
 
     const [artillery, setArtillery] = useState<any[]>([]);
@@ -18,7 +18,7 @@ export function useArtilleryPositions(gameID: number) {
     useEffect(() => {
         const army = artilleryEntities.map((entityIndex) => {
             const artilleryPosition = getComponentValue(components.Position, entityIndex);
-            const artilleryConfig = getComponentValue(components.ArmyConfig, entityIndex);
+            const artilleryConfig = getComponentValue(components.ArtilleryConfig, entityIndex);
             const artilleryColor = getComponentValue(components.ColorOwnable, entityIndex);
             return { artilleryPosition, artilleryConfig, artilleryColor };
         });

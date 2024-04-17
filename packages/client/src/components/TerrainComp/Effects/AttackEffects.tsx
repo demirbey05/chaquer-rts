@@ -19,7 +19,8 @@ export const AttackEffects = (
     armyPositions: any[],
     myArmyPosition: any[],
     isAttackStage: boolean | undefined,
-    fromArmyPosition: { x: any, y: any } | undefined
+    fromArmyPosition: { x: any, y: any } | undefined,
+    isArtilleryAttackStage: boolean
 ) => {
     // Handle Army Attack OffCanvas
     useEffect(() => {
@@ -48,6 +49,33 @@ export const AttackEffects = (
             }
         }
     }, [isAttackStage, armyPositions, fromArmyPosition])
+
+    // Handle Artillery to Castle Attack OffCanvas
+    useEffect(() => {
+        castlePositions.map((data: any) => {
+            if (isArtilleryAttackStage && fromArtilleryPosition) {
+                isManhattanPosition(data.castlePosition, fromArtilleryPosition.x, fromArtilleryPosition.y) &&
+                    isEnemyCastle({ x: data.castlePosition.x, y: data.castlePosition.y }, myCastlePosition, castlePositions) &&
+                    Number(data.castleHP.castleHP) > 0 &&
+                    document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
+                isManhattanPosition(data.castlePosition, fromArtilleryPosition.x, fromArtilleryPosition.y) &&
+                    isEnemyCastle({ x: data.castlePosition.x, y: data.castlePosition.y }, myCastlePosition, castlePositions) &&
+                    Number(data.castleHP.castleHP) > 0 &&
+                    document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.setAttribute("data-bs-target", "#attackArtilleryToCastleDrawer");
+            }
+        });
+
+        return () => {
+            if (castlePositions.length > 0) {
+                castlePositions.map((data: any) => {
+                    if (document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`) !== null) {
+                        document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.setAttribute("data-bs-toggle", "");
+                        document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.setAttribute("data-bs-target", "");
+                    }
+                });
+            }
+        }
+    }, [isArtilleryAttackStage, castlePositions, fromArtilleryPosition])
 
     // Handle Castle Attack OffCanvas
     useEffect(() => {

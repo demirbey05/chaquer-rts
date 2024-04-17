@@ -65,7 +65,9 @@ export const CastleEffects = (fleetSettleStage: boolean,
                     element.appendChild(imgElement);
                     element.style.border = "4px solid";
                     element.style.borderColor = getBorderColor(Number(data.castleColor.colorIndex));
-                    element.style.pointerEvents = "none";
+                    element.setAttribute("data-toggle", "tooltip");
+                    element.setAttribute("data-placement", "top");
+                    element.setAttribute("title", Number(data.castleHP.castleHP).toString() + " HP");
                 }
             });
         }

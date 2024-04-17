@@ -120,16 +120,7 @@ export function createSystemCalls({
       return null;
     }
   };
-  const castleCapture = async (armyID: string, castleID: string) => {
-    try {
-      const tx = await worldContract.write.captureCastle([armyID, castleID]);
-      await waitForTransaction(tx);
-      return tx;
-    } catch (e) {
-      console.log(e);
-      return null;
-    }
-  };
+
   const joinGame = async (gameID: number, seedValue: number) => {
     try {
       const tx = await worldContract.write.joinGame([
@@ -500,6 +491,31 @@ export function createSystemCalls({
     }
   };
 
+  const captureCastle = async (artilleryID: string, castleID: string) => {
+    try {
+      const tx = await worldContract.write.captureCastle([
+        artilleryID,
+        castleID,
+      ]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
+  const garissonAttack = async (armyID: string, castleID: string) => {
+    try {
+      const tx = await worldContract.write.garrisonAttack([armyID, castleID]);
+      await waitForTransaction(tx);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
   return {
     initGame,
     initUsername,
@@ -507,7 +523,6 @@ export function createSystemCalls({
     settleArmy,
     moveArmy,
     attackToArmy,
-    castleCapture,
     joinGame,
     commitSeed,
     resourceSystemInit,
@@ -530,5 +545,7 @@ export function createSystemCalls({
     settleArtillery,
     moveArtillery,
     attackToArtillery,
+    captureCastle,
+    garissonAttack,
   };
 }

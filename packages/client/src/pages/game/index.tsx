@@ -38,6 +38,7 @@ import { GameTutorial } from "../../components/TipsComp/GameTutorial";
 import { FleetLoadModal } from "../../components/SeaComp/FleetLoadModal";
 import { scrollToCenter } from "../../utils/helperFunctions/CustomFunctions/scrollToCenter";
 import { ArtilleryCaptureDrawer } from "../../components/ArmyComp/ArtilleryCaptureDrawer";
+import { ArtilleryAttackDrawer } from "../../components/ArmyComp/ArtilleryAttackDrawer";
 
 export const Game = () => {
   const { gameID } = useGame();
@@ -75,6 +76,7 @@ export const Game = () => {
       {gameIsStarted && <CastleAttackDrawer />}
       {gameIsStarted && <MineCaptureDrawer />}
       {gameIsStarted && <ArtilleryCaptureDrawer />}
+      {gameIsStarted && <ArtilleryAttackDrawer />}
       {gameIsStarted && <DockSettleModal />}
       {gameIsStarted && <DockCaptureDrawer />}
       {gameIsStarted && <FleetSettleModal />}

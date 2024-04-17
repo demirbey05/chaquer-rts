@@ -19,7 +19,7 @@ export function useMyArtillery(address: any, gameID: number) {
     useEffect(() => {
         const artillery = armyEntities.map((entityIndex) => {
             const myArtilleryPosition = getComponentValue(components.Position, entityIndex);
-            const myArtilleryConfig = getComponentValue(components.ArmyConfig, entityIndex);
+            const myArtilleryConfig = getComponentValue(components.ArtilleryConfig, entityIndex);
             const myArtilleryColor = getComponentValue(components.ColorOwnable, entityIndex);
             return { myArtilleryPosition, myArtilleryConfig, myArtilleryColor };
         });

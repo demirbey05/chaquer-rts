@@ -15,6 +15,14 @@ type AttackContextType = {
     setMyArmyConfig: (value: any | undefined) => void;
     enemyArmyConfig: any | undefined;
     setEnemyArmyConfig: (value: any | undefined) => void;
+    artilleryAttackStage: boolean;
+    setArtilleryAttackStage: (value: boolean) => void;
+    myArtilleryConfig: number;
+    setMyArtilleryConfig: (value: number) => void;
+    attackFromArtilleryPositionToCastle: any;
+    setAttackFromArtilleryPositionToCastle: (value: any) => void;
+    attackToArtilleryPositionToCastle: any;
+    setAttackToArtilleryPositionToCastle: (value: any) => void;
 };
 
 const AttackContext = createContext<AttackContextType>({
@@ -32,6 +40,14 @@ const AttackContext = createContext<AttackContextType>({
     setMyArmyConfig: () => { },
     enemyArmyConfig: undefined,
     setEnemyArmyConfig: () => { },
+    artilleryAttackStage: false,
+    setArtilleryAttackStage: () => { },
+    myArtilleryConfig: 0,
+    setMyArtilleryConfig: () => { },
+    attackFromArtilleryPositionToCastle: undefined,
+    setAttackFromArtilleryPositionToCastle: () => { },
+    attackToArtilleryPositionToCastle: undefined,
+    setAttackToArtilleryPositionToCastle: () => { }
 });
 
 const AttackProvider: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode; }) => {
@@ -45,6 +61,11 @@ const AttackProvider: React.FC<{ children: ReactNode }> = ({ children }: { child
 
     const [myArmyConfig, setMyArmyConfig] = useState<any>();
     const [enemyArmyConfig, setEnemyArmyConfig] = useState<any>();
+
+    const [artilleryAttackStage, setArtilleryAttackStage] = useState(false)
+    const [myArtilleryConfig, setMyArtilleryConfig] = useState<number>(0)
+    const [attackFromArtilleryPositionToCastle, setAttackFromArtilleryPositionToCastle] = useState<any>()
+    const [attackToArtilleryPositionToCastle, setAttackToArtilleryPositionToCastle] = useState<any>()
 
     const results: AttackContextType = {
         isAttackStage,
@@ -60,7 +81,15 @@ const AttackProvider: React.FC<{ children: ReactNode }> = ({ children }: { child
         attackFromArmyPositionToCastle,
         setAttackFromArmyPositionToCastle,
         attackToArmyPositionToCastle,
-        setAttackToArmyPositionToCastle
+        setAttackToArmyPositionToCastle,
+        artilleryAttackStage,
+        setArtilleryAttackStage,
+        myArtilleryConfig,
+        setMyArtilleryConfig,
+        attackFromArtilleryPositionToCastle,
+        setAttackFromArtilleryPositionToCastle,
+        attackToArtilleryPositionToCastle,
+        setAttackToArtilleryPositionToCastle
     };
 
     return (

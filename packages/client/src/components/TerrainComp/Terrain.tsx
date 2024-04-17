@@ -77,6 +77,7 @@ import { ArtilleryMoveEvent } from './Events/ArtilleryMoveEvent';
 import { ArtilleryCaptureDrawer } from '../ArmyComp/ArtilleryCaptureDrawer';
 import { isEnemyArtillery } from '../../utils/helperFunctions/ArmyFunctions/isEnemyArtillery';
 import { ArtilleryCaptureEvent } from './Events/ArtilleryCaptureEvent';
+import { ArtilleryAttackEvent } from './Events/ArtilleryAttackEvent';
 
 export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpectator: boolean }) => {
   const { components, systemCalls } = useMUD();
@@ -96,7 +97,12 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
     isAttackStage,
     setIsAttackStage,
     setMyArmyConfig,
-    setEnemyArmyConfig } = useAttack();
+    setEnemyArmyConfig,
+    setArtilleryAttackStage,
+    artilleryAttackStage,
+    setMyArtilleryConfig,
+    setAttackFromArtilleryPositionToCastle,
+    setAttackToArtilleryPositionToCastle } = useAttack();
 
   const { setIsArmyMoveStage,
     isArmyMoveStage,
@@ -121,7 +127,8 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
     artilleryCaptureStage,
     setArtilleryCaptureStage,
     setArtilleryAttackerArmyPosition,
-    setTargetArtilleryPosition } = useArmy();
+    setTargetArtilleryPosition
+  } = useArmy();
 
   const { userWallet } = usePlayer();
 
@@ -363,11 +370,22 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
     if (!fromArtilleryPosition && isCastleSettled && !isArmySettleStage && !isArmyUpdateStage && !isArmyMoveStage && myArtilleryPositions && isMyArtillery({ x: getDataAtrX(e), y: getDataAtrY(e) }, myArtilleryPositions)) {
       setFromArtilleryPosition({ x: getDataAtrX(e), y: getDataAtrY(e) });
       setIsArtilleryMoveStage(true)
+      setArtilleryAttackStage(true)
     } else if (fromArtilleryPosition && isUserClickedManhattanPosition(fromArtilleryPosition, getDataAtrX(e), getDataAtrY(e))) {
       toArtilleryPositionRef.current = { x: getDataAtrX(e), y: getDataAtrY(e) };
       fromArtilleryPositionRef.current = { x: fromArtilleryPosition.x, y: fromArtilleryPosition.y };
 
-      if (
+      if (isEnemyCastle(toArtilleryPositionRef.current, myCastlePosition, castlePositions)) {
+        ArtilleryAttackEvent(
+          setIsArtilleryMoveStage,
+          setAttackFromArtilleryPositionToCastle,
+          setAttackToArtilleryPositionToCastle,
+          fromArtilleryPositionRef,
+          toArtilleryPositionRef,
+          setMyArtilleryConfig,
+          myArtilleryPositions
+        )
+      } else if (
         isMyArtillery({ x: parseInt(fromArtilleryPositionRef.current.x), y: parseInt(fromArtilleryPositionRef.current.y) }, myArtilleryPositions) &&
         canCastleBeSettle(values[toArtilleryPositionRef.current.x][toArtilleryPositionRef.current.y]) &&
         !isMyCastle(myCastlePosition, toArtilleryPositionRef.current.x, toArtilleryPositionRef.current.y) &&
@@ -631,7 +649,8 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
     armyPositions,
     myArmyPosition,
     isAttackStage,
-    fromArmyPosition);
+    fromArmyPosition,
+    artilleryAttackStage);
 
   HoverEffects(myFleetPositions,
     myDockPositions,
@@ -747,7 +766,7 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
       {isLoadingArmy && <EventProgressBar text={"Soldiers are passing to new position..."} />}
       {isLoadingFleet && <EventProgressBar text={"Ships are passing to new position..."} />}
       {isUnloadFleet && <EventProgressBar text={"Soldiers are being dropped off to the land..."} />}
-      {isLoadingArtillery && <EventProgressBar text={"Artilleries are being dropped off to the land..."} />}
+      {isLoadingArtillery && <EventProgressBar text={"Artilleries are passing to new position..."} />}
     </ScrollContainer>
   );
 }
