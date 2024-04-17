@@ -7,8 +7,10 @@ export const ArtilleryAttackEvent = (
     fromArtilleryPositionRef: any,
     toArtilleryPositionRef: any,
     setMyArtilleryConfig: any,
+    setFromArtilleryPosition: any,
     myArtilleryPositions: any[]) => {
     setIsArtilleryMoveStage(false)
+    setFromArtilleryPosition(undefined)
     setAttackFromArtilleryPositionToCastle(fromArtilleryPositionRef.current);
     setAttackToArtilleryPositionToCastle(toArtilleryPositionRef.current);
     setMyArtilleryConfig(

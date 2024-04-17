@@ -83,9 +83,11 @@ export const AttackEffects = (
             if (isAttackStage && fromArmyPosition) {
                 isManhattanPosition(data.castlePosition, fromArmyPosition.x, fromArmyPosition.y) &&
                     isEnemyCastle({ x: data.castlePosition.x, y: data.castlePosition.y }, myCastlePosition, castlePositions) &&
+                    Number(data.castleHP.castleHP) === 0 &&
                     document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.setAttribute("data-bs-toggle", "offcanvas");
                 isManhattanPosition(data.castlePosition, fromArmyPosition.x, fromArmyPosition.y) &&
                     isEnemyCastle({ x: data.castlePosition.x, y: data.castlePosition.y }, myCastlePosition, castlePositions) &&
+                    Number(data.castleHP.castleHP) === 0 &&
                     document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`)!.setAttribute("data-bs-target", "#castleAttackDrawer");
             }
         });

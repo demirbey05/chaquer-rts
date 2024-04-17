@@ -383,6 +383,7 @@ export const Terrain = ({ zoomLevel, isSpectator }: { zoomLevel: number, isSpect
           fromArtilleryPositionRef,
           toArtilleryPositionRef,
           setMyArtilleryConfig,
+          setFromArtilleryPosition,
           myArtilleryPositions
         )
       } else if (

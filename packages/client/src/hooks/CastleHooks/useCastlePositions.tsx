@@ -19,7 +19,8 @@ export function useCastlePositions(gameID: number) {
       const castlePosition = getComponentValue(components.Position, entityIndex);
       const castleColor = getComponentValue(components.ColorOwnable, entityIndex);
       const castleHP = getComponentValue(components.CastleHP, entityIndex)
-      return { castlePosition, castleColor, castleHP }
+      const castleArmy = getComponentValue(components.ArmyConfig, entityIndex)
+      return { castlePosition, castleColor, castleHP, castleArmy }
     });
 
     setCastle(positions);

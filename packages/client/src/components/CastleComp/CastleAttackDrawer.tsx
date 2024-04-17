@@ -7,6 +7,8 @@ import { useError } from "../../context/ErrorContext";
 import { useGame } from "../../context/GameContext";
 import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 import { getDefenderArmyConfig } from "../../utils/helperFunctions/CustomFunctions/getDefenderArmyConfig";
+import { getCastleArmyByPosition } from "../../utils/helperFunctions/CastleFunctions/getCastleArmyByPosition";
+import { useCastlePositions } from "../../hooks/CastleHooks/useCastlePositions";
 
 export const CastleAttackDrawer = () => {
   const { components, systemCalls } = useMUD();
@@ -20,6 +22,8 @@ export const CastleAttackDrawer = () => {
     attackFromArmyPositionToCastle,
     setAttackFromArmyPositionToCastle,
     setIsAttackStage } = useAttack();
+
+  const castlePositions = useCastlePositions(gameID)
 
   const [castleArmy, setCastleArmy] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -38,7 +42,14 @@ export const CastleAttackDrawer = () => {
         gameID
       )];
 
-      setCastleArmy(getDefenderArmyConfig(castleId[0], components.Position, components.CastleOwnable, components.ArmyOwnable, components.ArmyConfig, gameID))
+      const castleArmy = getCastleArmyByPosition(castlePositions, attackToArmyPositionToCastle)
+      const defenderArmies = getDefenderArmyConfig(castleId[0], components.Position, components.CastleOwnable, components.ArmyOwnable, components.ArmyConfig, gameID)
+      setCastleArmy(
+        {
+          numSwordsman: castleArmy.numSwordsman + defenderArmies.numSwordsman,
+          numArcher: castleArmy.numArcher + defenderArmies.numArcher,
+          numCavalry: castleArmy.numCavalry + defenderArmies.numCavalry
+        })
     }
   }, [attackToArmyPositionToCastle])
 
@@ -63,7 +74,7 @@ export const CastleAttackDrawer = () => {
     }
 
     setIsLoading(true)
-    const tx = await systemCalls.castleCapture(attackFromArmyId[0], attackToCastleId[0])
+    const tx = await systemCalls.garissonAttack(attackFromArmyId[0], attackToCastleId[0])
 
     if (tx === null) {
       setErrorMessage("An error occurred while trying to attack to castle.")
