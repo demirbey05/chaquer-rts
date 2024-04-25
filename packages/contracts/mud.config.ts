@@ -108,7 +108,9 @@ export default mudConfig({
       valueSchema:{
         mirror:"uint256",
         colorIndex:"uint256",
-        userName:"string"    
+        nation: "uint256",
+        userName:"string",
+           
       }
     },
     ResourceOwnable :{
@@ -214,6 +216,7 @@ export default mudConfig({
     ColorOwnable:{
       valueSchema:{
         colorIndex:"uint256",
+        nation:"uint256",
         gameID:"uint256"
       }
     },

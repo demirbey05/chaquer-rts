@@ -76,7 +76,7 @@ contract NavalExtensionSystem is System {
 
     Position.set(entityID, coord_x, coord_y, gameID);
     DockOwnable.set(entityID, sender, gameID);
-    ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(sender, gameID), gameID);
+    ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(sender, gameID),AddressToColorIndex.getNation(sender,gameID), gameID);
     CreditOwn.set(gameID, sender, totalCredit - (creditCost * 1e18));
     ResourceOwn.setNumOfWood(sender, gameID, totalWood - woodCost);
     return entityID;
@@ -129,7 +129,7 @@ contract NavalExtensionSystem is System {
     Position.set(entityID, x, y, fleet.gameID);
     FleetConfig.set(entityID, fleet);
     FleetOwnable.set(entityID, ownerCandidate, fleet.gameID);
-    ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(ownerCandidate, fleet.gameID), fleet.gameID);
+    ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(ownerCandidate, fleet.gameID),AddressToColorIndex.getNation(ownerCandidate,fleet.gameID),fleet.gameID);
     ResourceOwn.setNumOfWood(ownerCandidate, fleet.gameID, totalWood - woodCost);
     CreditOwn.set(fleet.gameID, ownerCandidate, totalCredit - (costCredit * 1e18));
     return entityID;

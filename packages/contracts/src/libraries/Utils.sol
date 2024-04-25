@@ -350,7 +350,7 @@ library LibUtils {
 
     ArmyConfig.set(newArmyID, partition.numSwordsman, partition.numArcher, partition.numCavalry, army.gameID);
     ArmyOwnable.set(newArmyID, ArmyOwnable.getOwner(armyID), army.gameID);
-    ColorOwnable.set(newArmyID, ColorOwnable.getColorIndex(armyID), army.gameID); 
+    ColorOwnable.set(newArmyID, ColorOwnable.getColorIndex(armyID),ColorOwnable.getNation(armyID), army.gameID); 
 
     ArmyConfig.set(armyID,army.numSwordsman - partition.numSwordsman, army.numArcher - partition.numArcher, army.numCavalry - partition.numCavalry, army.gameID);
     return newArmyID;

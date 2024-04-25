@@ -57,7 +57,7 @@ contract MapSystem is System {
     Position.set(entityID, x, y, gameID);
     CastleOwnable.set(entityID, ownerCandidate, gameID);
     GameMetaData.setNumberOfCastle(gameID, numOfCastle + 1);
-    ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(ownerCandidate, gameID), gameID);
+    ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(ownerCandidate, gameID),AddressToColorIndex.getNation(ownerCandidate,gameID),gameID);
     CastleHP.set(entityID,100,gameID);
     ArmyConfig.set(entityID,0,0,0,gameID);
     if (numOfCastle + 1 == GameMetaData.getLimitOfPlayer(gameID)) {
@@ -112,7 +112,7 @@ contract MapSystem is System {
     Position.set(entityID, x, y, config.gameID);
     ArmyOwnable.set(entityID, ownerCandidate, config.gameID);
     ArmyConfig.set(entityID, config.numSwordsman, config.numArcher, config.numCavalry, config.gameID);
-    ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(ownerCandidate, config.gameID), config.gameID);
+    ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(ownerCandidate, config.gameID),AddressToColorIndex.getNation(ownerCandidate,config.gameID),config.gameID);
 
     return entityID;
   }
@@ -158,7 +158,7 @@ contract MapSystem is System {
     Position.set(entityID, x, y, config.gameID);
     ArtilleryOwnable.set(entityID, ownerCandidate, config.gameID);
     ArtilleryConfig.set(entityID, config.numArtillery, config.gameID);
-    ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(ownerCandidate, config.gameID), config.gameID);
+    ColorOwnable.set(entityID, AddressToColorIndex.getColorIndex(ownerCandidate, config.gameID),AddressToColorIndex.getNation(ownerCandidate,config.gameID),config.gameID);
 
     return entityID;
 

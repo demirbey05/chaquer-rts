@@ -38,7 +38,7 @@ contract CastleSystem is System {
         if (credit < amount * 100 *1e18) {
             revert InsufficientCredit();
         }
-        CreditOwn.setAmout(gameID,owner,credit - amount * 100 * 1e18);
+        CreditOwn.setAmount(gameID,owner,credit - amount * 100 * 1e18);
         CastleHP.setCastleHP(castleID, hp + amount);
     }
 }

@@ -62,7 +62,8 @@ contract GameInitSystem is System {
     bytes calldata terrain,
     string memory name,
     uint8 mapId,
-    uint256 firstSeed
+    uint256 firstSeed,
+    uint256 nationID
   ) public returns (uint256) {
     uint256 gameID = LatestGameID.get(keccak256("gameID")) + 1;
     initMapData(gameID, width, height, terrain);
@@ -70,7 +71,7 @@ contract GameInitSystem is System {
     GameMetaData.setName(gameID, name);
     GameMetaData.setMapId(gameID, mapId);
     GameMetaData.setMirror(gameID, gameID);
-    joinGame(gameID,firstSeed);
+    joinGame(gameID,firstSeed,nationID);
     LatestGameID.set(keccak256("gameID"), gameID);
     return gameID;
   }
@@ -85,7 +86,7 @@ contract GameInitSystem is System {
   }
 
   //@dev - if user has not username
-  function joinGame(uint256 gameID,uint256 seed) public {
+  function joinGame(uint256 gameID,uint256 seed,uint256 nationID) public {
     address sender = _msgSender();
     uint256 limit = GameMetaData.getLimitOfPlayer(gameID);
     uint256 currentNumOfUser = GameMetaData.getNumberOfPlayer(gameID);
@@ -108,7 +109,7 @@ contract GameInitSystem is System {
     }
     {
       uint256 colorCursor = GameMetaData.getColorCursor(gameID);
-      AddressToColorIndex.set(sender, gameID, gameID, colorCursor + 1, AddressToUsername.get(sender));
+      AddressToColorIndex.set(sender, gameID, gameID, colorCursor + 1,nationID, AddressToUsername.get(sender));
       GameMetaData.setColorCursor(gameID, colorCursor + 1);
     }
 

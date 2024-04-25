@@ -114,7 +114,7 @@ contract MineInitSystem is System {
       bytes32 entityID = keccak256(abi.encodePacked(x, y, "Mine", gameID));
       Position.set(entityID, x, y, gameID);
       ResourceOwnable.set(entityID, ResourceOwnableData(mineType, address(0), gameID));
-      ColorOwnable.set(entityID, 0, gameID);
+      ColorOwnable.set(entityID, 0,0, gameID);
       i++;
     }
     return i;
