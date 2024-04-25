@@ -7,6 +7,7 @@ import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.
 
 import { IArmyUpdateSystem } from "./IArmyUpdateSystem.sol";
 import { IAttackCaptureSystem } from "./IAttackCaptureSystem.sol";
+import { ICastleSystem } from "./ICastleSystem.sol";
 import { IChatSystem } from "./IChatSystem.sol";
 import { IEconomySystem } from "./IEconomySystem.sol";
 import { IExchangeSystem } from "./IExchangeSystem.sol";
@@ -29,6 +30,7 @@ interface IWorld is
   IBaseWorld,
   IArmyUpdateSystem,
   IAttackCaptureSystem,
+  ICastleSystem,
   IChatSystem,
   IEconomySystem,
   IExchangeSystem,

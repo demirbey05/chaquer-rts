@@ -110,6 +110,7 @@ contract AttackCaptureSystem is System {
   function captureCastle(bytes32 artilleryID, bytes32 castleID) public  {
     address armyOwner = ArtilleryOwnable.getOwner(artilleryID);
     address castleOwner = CastleOwnable.getOwner(castleID);
+    uint32 artilleryConfig = ArtilleryConfig.getNumArtillery(artilleryID);
 
     // Some Checks
     if (armyOwner == castleOwner) {
@@ -134,8 +135,8 @@ contract AttackCaptureSystem is System {
 
     uint256 currentHP = CastleHP.getCastleHP(castleID);
     uint256 newHP;
-    if (currentHP > 5) {
-      newHP = currentHP - 5;
+    if (currentHP > artilleryConfig) {
+      newHP = currentHP - artilleryConfig;
     } else {
       newHP = 0;
     }
