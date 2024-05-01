@@ -8,8 +8,8 @@ import { isEnemyArmy } from "../../../utils/helperFunctions/ArmyFunctions/isEnem
 import { getArmyMergePositions } from "../../../utils/helperFunctions/ArmyFunctions/getArmyMergePositions";
 import { isArmyMergePosition } from "../../../utils/helperFunctions/ArmyFunctions/isArmyMergePositions";
 import artillery from '../../../images/armyAssets/artillery.png'
-import customArmy from '../../../images/armyAssets/custom/army.png'
 import { isMyFleet } from "../../../utils/helperFunctions/SeaFunctions/isMyFleet";
+import { getArmyCivilizationAsset } from "../../../utils/constants/getCivilizationAsset";
 
 export const ArmyEffects = (isArmyUpdateStage: boolean,
     values: number[][],
@@ -68,6 +68,7 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
     // Deploy and handle my army tiles
     useEffect(() => {
         if (myArmyPosition) {
+            console.log(myArmyPosition)
             myArmyPosition.forEach((data: any) => {
                 const element = document.getElementById(
                     `${data.myArmyPosition.y},${data.myArmyPosition.x}`
@@ -78,8 +79,8 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                     }
 
                     const imgElement = document.createElement("img");
-                    imgElement.src = customArmy;
-                    imgElement.style.transform = "rotateX(-60deg) rotateZ(-25deg) rotateY(45deg)"
+                    imgElement.src = getArmyCivilizationAsset(Number(data.myArmyColor.nation));
+                    imgElement.style.transform = "rotateX(-60deg) rotateZ(-25deg) rotateY(45deg) scale(0.8)"
                     imgElement.style.height = "100px"
                     imgElement.style.width = "75px"
                     imgElement.style.marginBottom = "15px"
@@ -124,8 +125,8 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
                 }
 
                 const imgElement = document.createElement("img");
-                imgElement.src = customArmy;
-                imgElement.style.transform = "rotateX(-60deg) rotateZ(-25deg) rotateY(45deg)";
+                imgElement.src = getArmyCivilizationAsset(Number(data.armyColor.nation));
+                imgElement.style.transform = "rotateX(-60deg) rotateZ(-25deg) rotateY(45deg) scale(0.8)";
                 imgElement.style.height = "100px";
                 imgElement.style.width = "75px";
                 imgElement.style.marginBottom = "15px";
@@ -264,12 +265,12 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
 
                     const imgElement = document.createElement("img");
                     imgElement.src = artillery;
-                    imgElement.style.transform = "rotateX(-60deg) rotateZ(-25deg) rotateY(45deg)"
-                    imgElement.style.height = "75px"
-                    imgElement.style.width = "80px"
+                    imgElement.style.transform = "rotateX(-60deg) rotateZ(-25deg) rotateY(45deg) scale(0.75)"
+                    imgElement.style.height = "90px"
+                    imgElement.style.width = "75px"
                     imgElement.style.scale = "1.25"
-                    imgElement.style.marginBottom = "10px"
-                    imgElement.style.marginRight = "15px"
+                    imgElement.style.marginBottom = "0px"
+                    imgElement.style.marginRight = "10px"
                     imgElement.style.zIndex = "1"
                     imgElement.style.pointerEvents = "none"
 
@@ -308,11 +309,12 @@ export const ArmyEffects = (isArmyUpdateStage: boolean,
 
                 const imgElement = document.createElement("img");
                 imgElement.src = artillery;
-                imgElement.style.transform = "rotateX(-60deg) rotateZ(-25deg) rotateY(45deg)";
-                imgElement.style.height = "75px";
-                imgElement.style.width = "80px";
-                imgElement.style.marginBottom = "10px";
-                imgElement.style.marginRight = "15px";
+                imgElement.style.transform = "rotateX(-60deg) rotateZ(-25deg) rotateY(45deg) scale(0.75)"
+                imgElement.style.height = "90px"
+                imgElement.style.width = "75px"
+                imgElement.style.scale = "1.25"
+                imgElement.style.marginBottom = "0px"
+                imgElement.style.marginRight = "10px"
                 imgElement.style.zIndex = "1"
                 imgElement.style.pointerEvents = "none"
 

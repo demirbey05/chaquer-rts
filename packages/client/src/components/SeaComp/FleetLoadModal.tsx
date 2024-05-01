@@ -15,6 +15,8 @@ import { getMyFleetConfigByPosition } from "../../utils/helperFunctions/SeaFunct
 import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
 import { getMyArmyConfigByPosition } from "../../utils/helperFunctions/ArmyFunctions/getArmyConfigByPosition";
 import { getFleetIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getFleetIDFromPosition";
+import { useCivilization } from "../../hooks/ArmyHooks/useCivilization";
+import { getArcherCivilizationAsset, getCavalryCivilizationAsset, getSwordsmanCivilizationAsset } from "../../utils/constants/getCivilizationAsset";
 
 export const FleetLoadModal = () => {
   const { systemCalls, components } = useMUD();
@@ -40,6 +42,7 @@ export const FleetLoadModal = () => {
 
   const myFleets = useMyFleetPositions(userWallet, gameID)
   const myArmies = useMyArmy(userWallet, gameID)
+  const myCivilization = useCivilization(gameID, userWallet)
 
   useEffect(() => {
     setIsDisabled(!(armyCheck && totalSizeCheck))
@@ -200,17 +203,17 @@ export const FleetLoadModal = () => {
                 </div>
               }
               <div className="row mt-2">
-                <ArmySettleInputBody imageSource={swordsmanImg}
+                <ArmySettleInputBody imageSource={getSwordsmanCivilizationAsset(myCivilization)}
                   soldierName={"Swordsman"}
                   setSoliderCount={setSwordsmanCount}
                   imageHeight={"100px"}
-                  imageWidth={"75px"} />
-                <ArmySettleInputBody imageSource={archerImg}
+                  imageWidth={"100px"} />
+                <ArmySettleInputBody imageSource={getArcherCivilizationAsset(myCivilization)}
                   soldierName={"Archer"}
                   setSoliderCount={setArcherCount}
                   imageHeight={"100px"}
-                  imageWidth={"85px"} />
-                <ArmySettleInputBody imageSource={cavalryImg}
+                  imageWidth={"100px"} />
+                <ArmySettleInputBody imageSource={getCavalryCivilizationAsset(myCivilization)}
                   soldierName={"Cavalry"}
                   setSoliderCount={setCavalryCount}
                   imageHeight={"100px"}

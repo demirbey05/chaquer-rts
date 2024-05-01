@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { getBorderColor } from "../../../utils/constants/getBorderColors";
-import customCastle from '../../../images/castleAssets/custom-castle.png'
+import { getCastleCivilizationAsset } from "../../../utils/constants/getCivilizationAsset";
 
 export const CastleEffects = (fleetSettleStage: boolean,
     myCastlePosition: any[],
@@ -52,7 +52,7 @@ export const CastleEffects = (fleetSettleStage: boolean,
                 const element = document.getElementById(`${data.castlePosition.y},${data.castlePosition.x}`);
                 if (element) {
                     const imgElement = document.createElement("img");
-                    imgElement.src = customCastle;
+                    imgElement.src = getCastleCivilizationAsset(Number(data.castleColor.nation));
                     imgElement.style.transform = "rotateX(-60deg) rotateZ(-25deg) rotateY(45deg)"
                     imgElement.style.height = "100px"
                     imgElement.style.width = "75px"

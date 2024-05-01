@@ -11,8 +11,7 @@ import { flatten2D } from "../../utils/terrainArray";
 import map1 from '../../images/maps/map1.jpg'
 import map2 from '../../images/maps/map2.jpg'
 import map3 from '../../images/maps/map3.jpg'
-
-const discordAPIURI = 'https://discord.com/api/webhooks/1164497192879411211/hXwMgsEiM-ldEx28QJo5Oqoj1rgeV3_R6DjnvmRAKZKsT7Q3dKMAGKPbY-fg8qrwAqvM';
+import { getArmyCivilizationAsset } from '../../utils/constants/getCivilizationAsset';
 
 export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: boolean, setIsOpen: (value: boolean) => void, setIsJoinOpen: (value: boolean) => void }) => {
     const { systemCalls } = useMUD();
@@ -22,6 +21,7 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
     const [numberOfPlayer, setNumberOfPlayer] = useState<number>(3);
     const [gameName, setGameName] = useState<string>("");
     const [mapID, setMapID] = useState<number>(1);
+    const [civilization, setCivilization] = useState(0)
 
     const [isCreateGameModalOpen, setIsCreateGameModelOpen] = useState<boolean>(false);
 
@@ -54,7 +54,7 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
             data = ethers.utils.hexlify(flatten2D(map3Data));
         }
 
-        const initGameTx = await systemCalls.initGame(numberOfPlayer, width, height, data, gameName, mapID, buf[0]);
+        const initGameTx = await systemCalls.initGame(numberOfPlayer, width, height, data, gameName, mapID, buf[0], civilization);
         if (initGameTx) {
             setGameID(Number(initGameTx.result))
 
@@ -71,36 +71,38 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
             <div className='menu-create-game-overlay'>
                 <div className='menu-create-game-container'>
                     <div className="menu-create-game-modal">
-                        <p className="text-xl mb-2">Game Name</p>
+                        <p className="text-xl mb-2" style={{ color: "#DCBF9D" }}>Game Name</p>
                         <input onChange={(e) => setGameName(e.target.value)}
                             type="text"
                             className="form-control dark-input bg-dark text-white mb-3"
                             id="gameNameInput"
                             placeholder="Game Name (Required)"
                             required />
-                        <p className="text-xl mb-2">Number of Players</p>
+
+                        <p className="text-xl mb-2" style={{ color: "#DCBF9D" }}>Number of Players</p>
                         <RadioGroup
                             className="d-flex justify-content-center mb-3"
                             onChange={(value) => setNumberOfPlayer(Number(value))}
                             value={numberOfPlayer.toString()}>
                             <Stack direction='row' spacing={5}>
-                                <Radio colorScheme='green' size='lg' value='3'>3</Radio>
-                                <Radio colorScheme='green' size='lg' value='4'>4</Radio>
-                                <Radio colorScheme='green' size='lg' value='5'>5</Radio>
+                                <Radio colorScheme={"black-alpha"} backgroundColor={"#99866F"} size='lg' value='3'>3</Radio>
+                                <Radio colorScheme={"black-alpha"} backgroundColor={"#99866F"} size='lg' value='4'>4</Radio>
+                                <Radio colorScheme={"black-alpha"} backgroundColor={"#99866F"} size='lg' value='5'>5</Radio>
                             </Stack>
                         </RadioGroup>
-                        <p className="text-xl mb-2">Map Selection</p>
+
+                        <p className="text-xl mb-2" style={{ color: "#DCBF9D" }}>Map Selection</p>
                         <Tabs defaultIndex={mapID - 1} isFitted variant='enclosed' onChange={(value) => setMapID(value + 1)}>
                             <TabList>
-                                <Tab _selected={{ color: 'white', bg: 'green.500' }}>King's Crest</Tab>
-                                <Tab _selected={{ color: 'white', bg: 'green.500' }}>Iron Valley</Tab>
-                                <Tab _selected={{ color: 'white', bg: 'green.500' }}>Mystic Highlands</Tab>
+                                <Tab _selected={{ bg: '#99866F' }}>King's Crest</Tab>
+                                <Tab _selected={{ bg: '#99866F' }}>Iron Valley</Tab>
+                                <Tab _selected={{ bg: '#99866F' }}>Mystic Highlands</Tab>
                             </TabList>
                             <TabPanels>
                                 <TabPanel>
                                     <div className='d-flex justify-content-center'>
                                         <Image
-                                            boxSize='250px'
+                                            boxSize='200px'
                                             fit={"fill"}
                                             src={map1}
                                         />
@@ -109,7 +111,7 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
                                 <TabPanel>
                                     <div className='d-flex justify-content-center'>
                                         <Image
-                                            boxSize='250px'
+                                            boxSize='200px'
                                             fit={"fill"}
                                             src={map2}
                                         />
@@ -118,9 +120,67 @@ export const CreateGameModal = ({ isOpen, setIsOpen, setIsJoinOpen }: { isOpen: 
                                 <TabPanel>
                                     <div className='d-flex justify-content-center'>
                                         <Image
-                                            boxSize='250px'
+                                            boxSize='200px'
                                             fit={"fill"}
                                             src={map3}
+                                        />
+                                    </div>
+                                </TabPanel>
+                            </TabPanels>
+                        </Tabs>
+
+                        <p className="text-xl mb-2" style={{ color: "#DCBF9D" }}>Civilization Selection</p>
+                        <Tabs defaultIndex={civilization} isFitted variant='enclosed' onChange={(value) => setCivilization(value)}>
+                            <TabList>
+                                <Tab _selected={{ bg: '#99866F' }}>Russian</Tab>
+                                <Tab _selected={{ bg: '#99866F' }}>Ottoman</Tab>
+                                <Tab _selected={{ bg: '#99866F' }}>English</Tab>
+                                <Tab _selected={{ bg: '#99866F' }}>French</Tab>
+                                <Tab _selected={{ bg: '#99866F' }}>Chinese</Tab>
+                            </TabList>
+                            <TabPanels>
+                                <TabPanel>
+                                    <div className='d-flex justify-content-center'>
+                                        <Image
+                                            boxSize='125px'
+                                            fit={"fill"}
+                                            src={getArmyCivilizationAsset(0)}
+                                        />
+                                    </div>
+                                </TabPanel>
+                                <TabPanel>
+                                    <div className='d-flex justify-content-center'>
+                                        <Image
+                                            boxSize='125px'
+                                            fit={"fill"}
+                                            src={getArmyCivilizationAsset(1)}
+                                        />
+                                    </div>
+                                </TabPanel>
+                                <TabPanel>
+                                    <div className='d-flex justify-content-center'>
+                                        <Image
+                                            boxSize='125px'
+                                            fit={"fill"}
+                                            src={getArmyCivilizationAsset(2)}
+                                        />
+                                    </div>
+                                </TabPanel>
+                                <TabPanel>
+                                    <div className='d-flex justify-content-center'>
+                                        <Image
+                                            boxSize='125px'
+                                            fit={"fill"}
+                                            src={getArmyCivilizationAsset(3)}
+                                        />
+                                    </div>
+                                </TabPanel>
+                                <TabPanel>
+                                    <div className='d-flex justify-content-center'>
+                                        <Image
+                                            boxSize='125px'
+                                            fit={"fill"}
+                                            src={getArmyCivilizationAsset(4)}
                                         />
                                     </div>
                                 </TabPanel>

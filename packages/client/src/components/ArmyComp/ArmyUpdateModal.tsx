@@ -1,6 +1,3 @@
-import archerImg from "../../images/armyAssets/custom/archer.png"
-import cavalryImg from "../../images/armyAssets/custom/cavalry.png";
-import swordsmanImg from "../../images/armyAssets/custom/swordsman.png";
 import { useState, useEffect } from "react";
 import { Button, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
@@ -16,6 +13,8 @@ import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
 import { getNumberFromBigInt } from "../../utils/helperFunctions/CustomFunctions/getNumberFromBigInt";
 import { getIDFromPosition } from "../../utils/helperFunctions/CustomFunctions/getIDFromPosition";
 import { getMyArmyConfigByPosition } from "../../utils/helperFunctions/ArmyFunctions/getArmyConfigByPosition";
+import { useCivilization } from "../../hooks/ArmyHooks/useCivilization";
+import { getArcherCivilizationAsset, getCavalryCivilizationAsset, getSwordsmanCivilizationAsset } from "../../utils/constants/getCivilizationAsset";
 
 export const ArmyUpdateModal = () => {
     const { systemCalls, components } = useMUD();
@@ -24,6 +23,8 @@ export const ArmyUpdateModal = () => {
     const { setErrorMessage, setErrorTitle, setShowError } = useError();
     const { setCastlePosition, castlePosition } = useCastle();
     const { gameID } = useGame();
+
+    const myCivilization = useCivilization(gameID, userWallet)
 
     const [swordsmanCount, setSwordsmanCount] = useState<string>("");
     const [archerCount, setArcherCount] = useState<string>("");
@@ -240,17 +241,17 @@ export const ArmyUpdateModal = () => {
                                 </Alert>
                             }
                             <div className="row mt-2">
-                                <ArmySettleInputBody imageSource={swordsmanImg}
+                                <ArmySettleInputBody imageSource={getSwordsmanCivilizationAsset(myCivilization)}
                                     soldierName={"Swordsman"}
                                     setSoliderCount={setSwordsmanCount}
                                     imageHeight={"100px"}
-                                    imageWidth={"75px"} />
-                                <ArmySettleInputBody imageSource={archerImg}
+                                    imageWidth={"100px"} />
+                                <ArmySettleInputBody imageSource={getArcherCivilizationAsset(myCivilization)}
                                     soldierName={"Archer"}
                                     setSoliderCount={setArcherCount}
                                     imageHeight={"100px"}
-                                    imageWidth={"85px"} />
-                                <ArmySettleInputBody imageSource={cavalryImg}
+                                    imageWidth={"130px"} />
+                                <ArmySettleInputBody imageSource={getCavalryCivilizationAsset(myCivilization)}
                                     soldierName={"Cavalry"}
                                     setSoliderCount={setCavalryCount}
                                     imageHeight={"100px"}

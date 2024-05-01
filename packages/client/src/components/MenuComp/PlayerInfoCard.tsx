@@ -26,6 +26,7 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                                 <Tag
                                     size='lg'
                                     mb={3}
+                                    fontWeight={"900"}
                                     backgroundColor={"#DCBF9D"}
                                     justifyContent={"center"}
                                     width={"75%"}

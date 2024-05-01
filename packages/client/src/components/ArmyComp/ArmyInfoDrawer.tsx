@@ -1,12 +1,11 @@
-import archerImg from "../../images/armyAssets/custom/archer.png";
-import cavalryImg from "../../images/armyAssets/custom/cavalry.png";
-import swordsmanImg from "../../images/armyAssets/custom/swordsman.png";
 import React, { useState, useEffect } from "react";
 import { MdLocationPin } from 'react-icons/md'
 import { Button, Text, Tooltip } from "@chakra-ui/react";
 import { useMyArmy } from "../../hooks/ArmyHooks/useMyArmy";
 import { usePlayer } from "../../context/PlayerContext";
 import { useGame } from "../../context/GameContext";
+import { useCivilization } from "../../hooks/ArmyHooks/useCivilization";
+import { getArcherCivilizationAsset, getCavalryCivilizationAsset, getSwordsmanCivilizationAsset } from "../../utils/constants/getCivilizationAsset";
 
 // Scroll to div by id as middle of the screen
 const scrollToDiv = (targetId: any) => {
@@ -28,6 +27,7 @@ export const ArmyInfoDrawer = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const myArmyPosition = useMyArmy(userWallet, gameID);
+    const myCivilization = useCivilization(gameID, userWallet)
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen);
@@ -80,17 +80,17 @@ export const ArmyInfoDrawer = () => {
                         return (
                             <React.Fragment key={index}>
                                 <div className="row mt-1 p-2">
-                                    <ArmyInfoModalCard imageSource={swordsmanImg}
+                                    <ArmyInfoModalCard imageSource={getSwordsmanCivilizationAsset(myCivilization)}
                                         soldierName={"Swordsman"}
                                         soldierCount={army.myArmyConfig.numSwordsman}
                                         imageHeight={"75px"}
-                                        imageWidth={"65px"} />
-                                    <ArmyInfoModalCard imageSource={archerImg}
+                                        imageWidth={"75px"} />
+                                    <ArmyInfoModalCard imageSource={getArcherCivilizationAsset(myCivilization)}
                                         soldierName={"Archer"}
                                         soldierCount={army.myArmyConfig.numArcher}
                                         imageHeight={"75px"}
-                                        imageWidth={"65px"} />
-                                    <ArmyInfoModalCard imageSource={cavalryImg}
+                                        imageWidth={"75px"} />
+                                    <ArmyInfoModalCard imageSource={getCavalryCivilizationAsset(myCivilization)}
                                         soldierName={"Cavalry"}
                                         soldierCount={army.myArmyConfig.numCavalry}
                                         imageHeight={"75px"}

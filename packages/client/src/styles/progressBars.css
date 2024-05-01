@@ -41,7 +41,7 @@
     right: 0%;
     top: 0;
     margin: 2vh auto;
-    padding: 5px;
+    padding: 5px 50px;
     z-index: 1;
     position: absolute;
     background-image: url("../images/interfaceAssets/credit_bar.png");
