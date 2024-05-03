@@ -33,7 +33,6 @@ import { ArmyUpdateModal } from "../../components/ArmyComp/ArmyUpdateModal";
 import { FleetInfoDrawer } from "../../components/SeaComp/FleetInfoDrawer";
 import { ArmyMergeDrawer } from "../../components/ArmyComp/ArmyMergeDrawer";
 import { ChatMessageDrawer } from "../../components/ChatComp/ChatMessageDrawer";
-import { VersionInfo } from "../../components/TipsComp/VersionInfo";
 import { GameTutorial } from "../../components/TipsComp/GameTutorial";
 import { FleetLoadModal } from "../../components/SeaComp/FleetLoadModal";
 import { scrollToCenter } from "../../utils/helperFunctions/CustomFunctions/scrollToCenter";
@@ -90,7 +89,6 @@ export const Game = () => {
       <Terrain zoomLevel={zoomLevel} isSpectator={false} />
       <SettingsDrawer />
       <PlayerListDrawer isSpectator={false} />
-      <VersionInfo />
       <ZoomHandler zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />
     </>
   );

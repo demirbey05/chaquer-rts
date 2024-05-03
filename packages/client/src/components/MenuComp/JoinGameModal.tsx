@@ -80,7 +80,7 @@ export const JoinGameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
                                 <>
                                     <div className="modal-header justify-center mb-4">
                                         <h1 className="modal-title text-2xl" id="userNameModalLabel">
-                                            Spectate Game
+                                            Join Game
                                         </h1>
                                     </div>
                                     <p className="mb-2">You are going to join to the game. Are you sure?</p>

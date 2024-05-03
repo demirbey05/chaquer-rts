@@ -1,18 +1,25 @@
 import { useEffect, useState } from 'react';
 import { Button } from "@chakra-ui/react";
 import { useMUD } from '../../context/MUDContext';
+import { useMyUsername } from '../../hooks/IdentityHooks/useMyUsername';
+import { usePlayer } from '../../context/PlayerContext';
 
 export const UserNameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (value: boolean) => void }) => {
     const { systemCalls } = useMUD()
+    const { userWallet } = usePlayer()
+
+    const myUsername = useMyUsername(userWallet!)
 
     const [username, setUsername] = useState<string>("");
 
     const [disable, setDisable] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const toggleDrawer = () => {
-        setIsOpen(!isOpen);
-    };
+    useEffect(() => {
+        if (myUsername) {
+            setUsername(myUsername)
+        }
+    }, [myUsername])
 
     useEffect(() => {
         if (username && username.length >= 3 && username.length < 32) {
@@ -23,6 +30,10 @@ export const UserNameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
         }
     }, [username]);
 
+    const toggleDrawer = () => {
+        setIsOpen(!isOpen);
+    };
+
     const handleInput = (e: any) => {
         setUsername(e.target.value)
     }
@@ -31,7 +42,6 @@ export const UserNameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
         setIsLoading(true)
         await systemCalls.initUsername(username);
         setIsLoading(false)
-        setUsername("")
         toggleDrawer();
     }
 
@@ -45,7 +55,9 @@ export const UserNameModal = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpe
                                 Username
                             </h1>
                         </div>
-                        <input onChange={(e: any) => handleInput(e)}
+                        <input
+                            value={username}
+                            onChange={(e: any) => handleInput(e)}
                             type="text"
                             className="form-control dark-input bg-dark text-white mb-4"
                             id="usernameinput"
