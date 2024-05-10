@@ -1,5 +1,5 @@
 export const VersionInfo = () => {
     return (
-        <div className="version-tag">v0.3 alpha</div>
+        <div className="version-tag">v1.0.0</div>
     )
 }
