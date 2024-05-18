@@ -237,7 +237,7 @@ export const SellResources = (props: SellResourcesPropTypes) => {
     }
 
     return (
-        <div className="d-flex align-middle justify-center mt-2 mb-2">
+        <div className="d-flex justify-content-center mb-2">
             <ResourceCard resourceEmoji={cornIcon}
                 resourceName={"Food"}
                 setResourceCount={setNumFood}
@@ -299,16 +299,16 @@ interface ResourceCardPropTypes {
 
 const ResourceCard = (props: ResourceCardPropTypes) => {
     return (
-        <div className="col align-items-center ps-2">
-            <div className="row w-100">
+        <div className="col align-items-center me-2">
+            <div className="w-100">
                 <div className="d-flex justify-content-center">
                     <img src={props.resourceEmoji} width={"30px"} height={"30px"} alt={props.resourceName} />
                 </div>
             </div>
-            <div className="row justify-content-center text-center border-1 mt-2 w-100">
+            <div className="text-center border-1 mt-2 w-100">
                 {props.resourceName}
             </div>
-            <div className="row mt-2 w-100">
+            <div className="mt-2 w-100">
                 <input
                     className="form-control dark-input bg-dark text-white"
                     placeholder={`# of ${props.resourceName}`}
@@ -359,9 +359,11 @@ interface ManualButtonPropTypes {
 const ManualButton = (props: ManualButtonPropTypes) => {
     return (
         <Button
+            w={"100%"}
             colorScheme="whatsapp"
             borderRadius={"15px"}
             boxShadow={"0px 5px 0px 0px #33550F"}
+            fontSize={"14px"}
             mt={3}
             isDisabled={props.isDisabled || props.isLoading}
             onClick={() => props.handleSell()}
@@ -384,10 +386,11 @@ interface AutoButtonPropTypes {
 const AutoButton = (props: AutoButtonPropTypes) => {
     return (
         <Button
+            w={"100%"}
             colorScheme="orange"
             borderRadius={"15px"}
             boxShadow={"0px 5px 0px 0px #AC5E00"}
-            fontSize="13px"
+            fontSize={"14px"}
             mt={3}
             isDisabled={props.isDisabled || props.isLoading}
             onClick={() => props.handleSell({ resourceType: props.resourceType })}

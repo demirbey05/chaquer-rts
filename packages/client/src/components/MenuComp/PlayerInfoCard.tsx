@@ -2,9 +2,12 @@ import { useEffect } from 'react';
 import { Avatar, WrapItem, Button, Tag, useClipboard } from '@chakra-ui/react';
 import { usePlayer } from '../../context/PlayerContext';
 import { IoMdWarning } from "react-icons/io";
+import { useMyUsername } from '../../hooks/IdentityHooks/useMyUsername';
 
-export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: string, setIsUserModalOpen: (value: boolean) => void }) => {
-    const showUsername = username;
+export const PlayerInfoCard = ({ setIsUserModalOpen }: { setIsUserModalOpen: (value: boolean) => void }) => {
+    const { userWallet } = usePlayer()
+
+    const myUsername = useMyUsername(userWallet!)
 
     return (
         <div className='d-flex justify-center playerCardMargin'>
@@ -15,13 +18,13 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                             borderColor={"#DCBF9D"}
                             borderWidth={"3px"}
                             size={"lg"}
-                            name={username}
+                            name={myUsername}
                         />
                     </WrapItem>
                 </div>
                 <div className='d-flex flex-column align-items-center'>
                     {
-                        showUsername ? (
+                        myUsername ? (
                             <>
                                 <Tag
                                     size='lg'
@@ -32,7 +35,7 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                                     width={"75%"}
                                     clipPath={"polygon(100% 0, 100% 100%, 0% 100%, 10% 52%, 0% 0%)"}
                                 >
-                                    {username.toLocaleUpperCase()}
+                                    {myUsername.toLocaleUpperCase()}
                                 </Tag>
                                 <Button
                                     mt={2}
@@ -59,7 +62,7 @@ export const PlayerInfoCard = ({ username, setIsUserModalOpen }: { username: str
                             </div>
                         )}
                 </div>
-                {!showUsername && (
+                {!myUsername && (
                     <div className='mt-2'>
                         <p className='d-flex justify-content-center align-items-center'>
                             <IoMdWarning className="me-2 text-danger text-2xl" />

@@ -21,7 +21,7 @@ export const Menu = () => {
   const { userWallet } = usePlayer();
   const { refresh } = useTerrain();
 
-  const username = useMyUsername(userWallet);
+  const username = useMyUsername(userWallet!);
 
   const [isUserModalOpen, setIsUserModalOpen] = useState<boolean>(false);
   const [isCreateGameModalOpen, setIsCreateGameModalOpen] = useState<boolean>(false);
@@ -90,9 +90,7 @@ export const Menu = () => {
                 </Tabs>
               </div>
               <div className='d-lg-inline w50 p-3'>
-                <PlayerInfoCard
-                  username={username}
-                  setIsUserModalOpen={setIsUserModalOpen} />
+                <PlayerInfoCard setIsUserModalOpen={setIsUserModalOpen} />
                 <div id="menu-items">
                   <span className='text-white mt-3'>QUICK FILTER</span>
                   <Accordion defaultIndex={[0]} allowMultiple>

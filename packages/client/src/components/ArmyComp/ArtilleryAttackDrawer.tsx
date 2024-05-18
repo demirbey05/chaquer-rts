@@ -1,7 +1,7 @@
 import artilleryShootEffect from '../../sounds/soundEffects/artillery-shoot-effect.mp3'
 import { useEffect, useState } from "react";
 import { EventProgressBar } from "../ProgressComp/EventProgressBar";
-import { Button } from "@chakra-ui/react";
+import { Button, Tag } from "@chakra-ui/react";
 import { useMUD } from "../../context/MUDContext";
 import { useAttack } from "../../context/AttackContext";
 import { useError } from "../../context/ErrorContext";
@@ -93,13 +93,18 @@ export const ArtilleryAttackDrawer = () => {
         >
             <ArtilleryAttackModalHeader />
             <div className="offcanvas-body small">
-                <div className="row justify-conten-center ">
-                    <div className="col text-center text-2xl">
-                        Artillery: {myArtilleryConfig}
-                    </div>
-                    <div className="col text-center text-2xl">
-                        Castle HP: {castleHP}
-                    </div>
+                <div className="d-flex flex-column align-items-center">
+                    <Tag
+                        size='lg'
+                        mb={3}
+                        fontWeight={"900"}
+                        backgroundColor={"#DCBF9D"}
+                        justifyContent={"center"}
+                        width={"75%"}
+                        clipPath={"polygon(100% 0, 100% 100%, 0% 100%, 10% 52%, 0% 0%)"}
+                    >
+                        {castleHP} HP {"->"} {castleHP - myArtilleryConfig} HP
+                    </Tag>
                 </div>
             </div>
             <div className="d-flex justify-content-evenly">
@@ -129,7 +134,7 @@ export const ArtilleryAttackDrawer = () => {
 const ArtilleryAttackModalHeader = () => {
     return (
         <h5 className="offcanvas-title text-center" id="attackArtilleryToCastleDrawerLabel">
-            Castle Capture | Artillery Information
+            Castle Attack | Castle HP Change
         </h5>
     )
 }
