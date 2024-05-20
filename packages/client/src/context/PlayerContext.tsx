@@ -15,7 +15,7 @@ type PlayerContextType = {
 const PlayerContext = createContext<PlayerContextType>({
   userWallet: undefined,
   isPlayerLost: false,
-  isPlayerWinner: false,
+  isPlayerWinner: false
 });
 
 const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children, }: { children: ReactNode; }) => {

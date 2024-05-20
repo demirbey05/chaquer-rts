@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { Accordion, Tabs, TabList, TabPanels, Tab, TabPanel, Button } from '@chakra-ui/react'
-import { FaCirclePlus, FaEnvelopeOpenText } from 'react-icons/fa6'
+import { useEffect, useState } from 'react';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { Accordion, Tabs, TabList, TabPanels, Tab, TabPanel, Button, useDisclosure } from '@chakra-ui/react'
+import { FaCirclePlus, FaEthereum } from 'react-icons/fa6'
 import { useTerrain } from "../../context/TerrainContext"
 import { usePlayer } from "../../context/PlayerContext"
 import { useSyncProgress } from "../../hooks/useSyncProgress";
@@ -16,12 +17,25 @@ import { LiveGameTable } from '../../components/MenuComp/LiveGameTable';
 import { SpectateGameModal } from '../../components/MenuComp/SpectateGameModal';
 import { CompletedGameTable } from '../../components/MenuComp/CompletedGameTable';
 import { VersionInfo } from '../../components/TipsComp/VersionInfo';
+import { AddBalanceModal } from '../../components/Balance/AddBalanceModal'
+import { useAccount } from 'wagmi';
 
 export const Menu = () => {
+  const account = useAccount()
+
   const { userWallet } = usePlayer();
-  const { refresh } = useTerrain();
+  const { setRefresh, refresh } = useTerrain();
 
   const username = useMyUsername(userWallet!);
+
+  const progress = useSyncProgress();
+  const progressStep = progress ? progress.step : "";
+
+  useEffect(() => {
+    if (account.isConnected) {
+      setRefresh(refresh + 1);
+    }
+  }, [account.isConnected])
 
   const [isUserModalOpen, setIsUserModalOpen] = useState<boolean>(false);
   const [isCreateGameModalOpen, setIsCreateGameModalOpen] = useState<boolean>(false);
@@ -42,7 +56,7 @@ export const Menu = () => {
             refresh === 0 &&
             <div id="menu-items">
               {refresh === 0 && <DataFetchProgress />}
-              {refresh === 0 && <EnterGameButton />}
+              {progressStep === "live" && <ConnectButton label="Connect Wallet" />}
             </div>
           }
           {
@@ -102,7 +116,7 @@ export const Menu = () => {
                   <CreateGameButton
                     setIsCreateGameModalOpen={setIsCreateGameModalOpen}
                     username={username} />
-                  <GameTutorialButton />
+                  <AddBalanceButton />
                 </div>
               </div>
             </div>
@@ -144,32 +158,10 @@ const CreateGameButton = ({ setIsCreateGameModalOpen, username }: { setIsCreateG
   )
 }
 
-const EnterGameButton = () => {
-  const { setRefresh, refresh } = useTerrain();
-  const progress = useSyncProgress();
-  const progressStep = progress ? progress.step : "";
-
-  const handleRefresh = (event: any) => {
-    setRefresh(refresh + 1);
-  };
+const AddBalanceButton = () => {
+  const { isOpen, onClose, onOpen } = useDisclosure()
   return (
-    <Button
-      size={"lg"}
-      width={"250px"}
-      backgroundColor={"#DCBF9D"}
-      boxShadow={"0px 5px 0px 0px #99866F"}
-      borderRadius={"25px"}
-      onClick={handleRefresh}
-      isDisabled={progressStep !== "live"}
-    >
-      Enter the Game
-    </Button>
-  )
-}
-
-const GameTutorialButton = () => {
-  return (
-    <a href="https://docs.chaquer.xyz/basics/read-before-playing" target={"_blank"}>
+    <>
       <Button
         size={"lg"}
         width={"250px"}
@@ -177,11 +169,13 @@ const GameTutorialButton = () => {
         boxShadow={"0px 5px 0px 0px #99866F"}
         borderRadius={"25px"}
         mt={4}
+        onClick={onOpen}
       >
-        Game Tutorial
-        <FaEnvelopeOpenText className='inline align-text-bottom ms-2 text-xl' />
+        Add Balance
+        <FaEthereum className='inline align-text-bottom ms-2 text-xl' />
       </Button>
-    </a>
+      <AddBalanceModal isOpen={isOpen} onClose={onClose} />
+    </>
   )
 }
 

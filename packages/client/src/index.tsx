@@ -8,6 +8,7 @@ import './styles/warnings.css';
 import './styles/modals.css';
 import './styles/animations.css';
 import './styles/menu.css';
+import './polyfills';
 import ReactDOM from "react-dom/client";
 import mudConfig from "contracts/mud.config";
 import { App } from "./App";
@@ -24,6 +25,10 @@ import { ErrorProvider } from "./context/ErrorContext";
 import { SeaProvider } from "./context/SeaContext";
 import { FleetProvider } from './context/FleetContext';
 import { GameProvider } from "./context/GameContext";
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import { WagmiProvider } from 'wagmi';
+import { QueryClientProvider } from "@tanstack/react-query";
+import { config, queryClient } from "./wallet";
 
 const rootElement = document.getElementById("react-root");
 if (!rootElement) throw new Error("React root not found");
@@ -33,29 +38,35 @@ const root = ReactDOM.createRoot(rootElement);
 setup().then(async (result) => {
   root.render(
     <MUDProvider value={result}>
-      <ChakraProvider>
-        <ErrorProvider>
-          <GameProvider>
-            <TerrainProvider>
-              <AttackProvider>
-                <SeaProvider>
-                  <FleetProvider>
-                    <MineProvider>
-                      <ArmyProvider>
-                        <CastleProvider>
-                          <PlayerProvider>
-                            <App />
-                          </PlayerProvider>
-                        </CastleProvider>
-                      </ArmyProvider>
-                    </MineProvider>
-                  </FleetProvider>
-                </SeaProvider>
-              </AttackProvider>
-            </TerrainProvider>
-          </GameProvider>
-        </ErrorProvider>
-      </ChakraProvider>
+      <WagmiProvider config={config}>
+        <QueryClientProvider client={queryClient}>
+          <RainbowKitProvider>
+            <ChakraProvider>
+              <ErrorProvider>
+                <GameProvider>
+                  <TerrainProvider>
+                    <AttackProvider>
+                      <SeaProvider>
+                        <FleetProvider>
+                          <MineProvider>
+                            <ArmyProvider>
+                              <CastleProvider>
+                                <PlayerProvider>
+                                  <App />
+                                </PlayerProvider>
+                              </CastleProvider>
+                            </ArmyProvider>
+                          </MineProvider>
+                        </FleetProvider>
+                      </SeaProvider>
+                    </AttackProvider>
+                  </TerrainProvider>
+                </GameProvider>
+              </ErrorProvider>
+            </ChakraProvider>
+          </RainbowKitProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
     </MUDProvider >
   );
 
