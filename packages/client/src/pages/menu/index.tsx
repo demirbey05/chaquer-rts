@@ -19,6 +19,7 @@ import { CompletedGameTable } from '../../components/MenuComp/CompletedGameTable
 import { VersionInfo } from '../../components/TipsComp/VersionInfo';
 import { AddBalanceModal } from '../../components/Balance/AddBalanceModal'
 import { useAccount } from 'wagmi';
+import { MyBalance } from '../../myBalance'
 
 export const Menu = () => {
   const account = useAccount()
@@ -160,6 +161,7 @@ const CreateGameButton = ({ setIsCreateGameModalOpen, username }: { setIsCreateG
 
 const AddBalanceButton = () => {
   const { isOpen, onClose, onOpen } = useDisclosure()
+  MyBalance()
   return (
     <>
       <Button

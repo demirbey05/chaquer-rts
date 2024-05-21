@@ -1,11 +1,15 @@
 import soundTrack from "../../sounds/soundTracks/chaquer-soundtrack.mp3"
+import { FaEthereum } from "react-icons/fa6";
 import { useState, useEffect, useRef } from 'react'
 import { useGame } from '../../context/GameContext';
 import { useNavigate } from 'react-router-dom';
-import { IconButton, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Tooltip, Text } from "@chakra-ui/react";
+import { IconButton, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Tooltip, Text, useDisclosure } from "@chakra-ui/react";
 import { FaPlay, FaStop } from 'react-icons/fa'
 import { RiArrowGoBackFill } from 'react-icons/ri'
 import { FiSettings } from 'react-icons/fi'
+import { AddBalanceModal } from "../Balance/AddBalanceModal";
+import { useAccount, useBalance } from "wagmi";
+import { usePlayer } from "../../context/PlayerContext";
 
 export const SettingsDrawer = () => {
     const { isInputFocused } = useGame()
@@ -115,6 +119,9 @@ export const SettingsDrawer = () => {
                         <SliderThumb />
                     </Slider>
                     <hr className='mt-2 mb-2' />
+
+                    <AddBalanceButton />
+                    <hr className='mt-2 mb-2' />
                     <h5 className="mb-2 mt-2">Back to Menu</h5>
                     <BackToMenuButton />
                 </div>
@@ -179,5 +186,32 @@ const PauseMusicButton = ({ handleStop }: any) => {
             }}
             icon={<FaStop />}
         />
+    )
+}
+
+const AddBalanceButton = () => {
+    const { userWallet } = usePlayer()
+
+    const { isOpen, onClose, onOpen } = useDisclosure()
+
+    const account = useAccount()
+    const { data } = useBalance({
+        address: userWallet!,
+        chainId: account.chainId
+    })
+
+    return (
+        <>
+            <h5 className='mb-2'>Balance: {data ? Number(data?.value) : 0} ETH</h5>
+            <IconButton
+                size={"lg"}
+                colorScheme='orange'
+                variant='outline'
+                aria-label="add-balance"
+                onClick={onOpen}
+                icon={<FaEthereum />}
+            />
+            <AddBalanceModal isOpen={isOpen} onClose={onClose} />
+        </>
     )
 }

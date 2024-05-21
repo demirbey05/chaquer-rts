@@ -2,9 +2,7 @@ import { FaEthereum } from 'react-icons/fa'
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, Button, Input, Text } from '@chakra-ui/react'
 import { usePlayer } from '../../context/PlayerContext'
 import { useState } from 'react'
-import { useAccount } from 'wagmi'
-import { useBalance } from 'wagmi'
-import { useSendTransaction } from 'wagmi'
+import { useAccount, useSendTransaction, useBalance } from 'wagmi'
 import { parseEther } from 'viem'
 
 export const AddBalanceModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
@@ -12,7 +10,10 @@ export const AddBalanceModal = ({ isOpen, onClose }: { isOpen: boolean, onClose:
     const { userWallet } = usePlayer()
 
     const account = useAccount()
-    const balance = useBalance({ address: userWallet!, chainId: account.chainId })
+    const { data, isError, isLoading } = useBalance({
+        address: userWallet!,
+        chainId: account.chainId
+    })
 
     const [addBalance, setAddBalance] = useState<number>(0)
 
@@ -40,7 +41,7 @@ export const AddBalanceModal = ({ isOpen, onClose }: { isOpen: boolean, onClose:
                     Balance <FaEthereum className='ms-2' />
                 </ModalHeader>
                 <ModalBody>
-                    <Text textAlign={"center"} mb={3}>Current Balance: {balance.data?.value}</Text>
+                    <Text textAlign={"center"} mb={3}>Current Balance: {data?.value ? Number(data?.value) : 0}</Text>
 
                     <Text>Burner Wallet</Text>
                     <Input value={userWallet} mb={3} readOnly />
